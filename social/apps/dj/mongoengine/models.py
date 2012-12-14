@@ -5,7 +5,7 @@ Requires MongoEngine 0.6.10
 """
 from mongoengine import DictField, Document, IntField, ReferenceField, \
                         StringField
-from mongoengine.dj.auth import User
+from mongoengine.django.auth import User
 
 from social.storage.dj import DjangoUserMixin, \
                               DjangoAssociationMixin, \
