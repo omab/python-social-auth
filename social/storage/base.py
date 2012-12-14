@@ -3,21 +3,16 @@ import base64
 import time
 from datetime import datetime, timedelta
 
-from openid.association import Association as OIDAssociation
+from openid.association import Association as OpenIdAssociation
 
 from social.utils import utc
 
 
-# django.contrib.auth and mongoengine.django.auth regex to validate usernames
-# '^[\w@.+-_]+$', we use the opposite to clean invalid characters
-
-class UserSocialAuthMixin(object):
+class UserMixin(object):
     user = ''
     provider = ''
-
-    def __unicode__(self):
-        """Return associated user unicode representation"""
-        return u'%s - %s' % (unicode(self.user), self.provider.title())
+    uid = None
+    extra_data = None
 
     def get_backend(self):
         # Make import here to avoid recursive imports :-/
@@ -29,7 +24,7 @@ class UserSocialAuthMixin(object):
         """Return access_token stored in extra_data or None"""
         backend = self.get_backend()
         if backend:
-            return backend.AUTH_BACKEND.tokens(self)
+            return backend.tokens(self)
         else:
             return {}
 
@@ -41,8 +36,7 @@ class UserSocialAuthMixin(object):
                 token = data.get('refresh_token') or data.get('access_token')
                 response = backend.refresh_token(token)
                 self.extra_data.update(
-                    backend.AUTH_BACKEND.extra_data(self.user, self.uid,
-                                                    response)
+                    backend.extra_data(self.user, self.uid, response)
                 )
                 self.save()
 
@@ -71,6 +65,22 @@ class UserSocialAuthMixin(object):
             else:  # expires is a timedelta
                 return timedelta(seconds=expires)
 
+    def set_extra_data(self, extra_data=None):
+        if extra_data and self.extra_data != extra_data:
+            if self.extra_data:
+                self.extra_data.update(extra_data)
+            else:
+                self.extra_data = extra_data
+            return True
+
+    @classmethod
+    def changed(cls, user):
+        raise NotImplementedError('Implement in subclass')
+
+    @classmethod
+    def get_username(cls, user):
+        raise NotImplementedError('Implement in subclass')
+
     @classmethod
     def user_model(cls):
         raise NotImplementedError('Implement in subclass')
@@ -85,6 +95,10 @@ class UserSocialAuthMixin(object):
 
     @classmethod
     def allowed_to_disconnect(cls, user, backend_name, association_id=None):
+        raise NotImplementedError('Implement in subclass')
+
+    @classmethod
+    def disconnect(cls, name, user, association_id=None):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
@@ -115,37 +129,6 @@ class UserSocialAuthMixin(object):
     def create_social_auth(cls, user, uid, provider):
         raise NotImplementedError('Implement in subclass')
 
-    @classmethod
-    def store_association(cls, server_url, association):
-        raise NotImplementedError('Implement in subclass')
-
-    @classmethod
-    def get_oid_associations(cls, server_url, handle=None):
-        kwargs = {'server_url': server_url}
-        if handle is not None:
-            kwargs['handle'] = handle
-        return sorted([
-                (assoc.id,
-                 OIDAssociation(assoc.handle,
-                                base64.decodestring(assoc.secret),
-                                assoc.issued,
-                                assoc.lifetime,
-                                assoc.assoc_type))
-                for assoc in cls.get_associations(**kwargs)
-        ], key=lambda x: x[1].issued, reverse=True)
-
-    @classmethod
-    def get_associations(cls, *args, **kwargs):
-        raise NotImplementedError('Implement in subclass')
-
-    @classmethod
-    def delete_associations(cls, ids_to_delete):
-        raise NotImplementedError('Implement in subclass')
-
-    @classmethod
-    def use_nonce(cls, server_url, timestamp, salt):
-        raise NotImplementedError('Implement in subclass')
-
 
 class NonceMixin(object):
     """One use numbers"""
@@ -153,9 +136,9 @@ class NonceMixin(object):
     timestamp = 0
     salt = ''
 
-    def __unicode__(self):
-        """Unicode representation"""
-        return self.server_url
+    @classmethod
+    def use(cls, server_url, timestamp, salt):
+        raise NotImplementedError('Implement in subclass')
 
 
 class AssociationMixin(object):
@@ -167,6 +150,35 @@ class AssociationMixin(object):
     lifetime = 0
     assoc_type = ''
 
-    def __unicode__(self):
-        """Unicode representation"""
-        return '%s %s' % (self.handle, self.issued)
+    @classmethod
+    def store(cls, server_url, association):
+        raise NotImplementedError('Implement in subclass')
+
+    @classmethod
+    def get(cls, *args, **kwargs):
+        raise NotImplementedError('Implement in subclass')
+
+    @classmethod
+    def remove(cls, ids_to_delete):
+        raise NotImplementedError('Implement in subclass')
+
+    @classmethod
+    def oids(cls, server_url, handle=None):
+        kwargs = {'server_url': server_url}
+        if handle is not None:
+            kwargs['handle'] = handle
+        return sorted([
+                (assoc.id,
+                 OpenIdAssociation(assoc.handle,
+                                   base64.decodestring(assoc.secret),
+                                   assoc.issued,
+                                   assoc.lifetime,
+                                   assoc.assoc_type))
+                for assoc in cls.get_associations(**kwargs)
+        ], key=lambda x: x[1].issued, reverse=True)
+
+
+class BaseStorage(object):
+    user = UserMixin
+    nonce = NonceMixin
+    association = AssociationMixin

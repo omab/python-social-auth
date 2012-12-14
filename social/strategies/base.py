@@ -2,14 +2,7 @@ import time
 import random
 import hashlib
 
-
-SETTING_PREFIX = 'SOCIAL_AUTH'
-
-try:
-    random = random.SystemRandom()
-    using_sysrandom = True
-except NotImplementedError:
-    using_sysrandom = False
+from social.utils import setting_name
 
 
 class BaseStrategy(object):
@@ -17,21 +10,28 @@ class BaseStrategy(object):
                     'ABCDEFGHIJKLMNOPQRSTUVWXYZ' \
                     '0123456789'
 
-    def __init__(self, backend, storage, request):
-        self.backend = backend
-        self.storage = storage
+    def __init__(self, backend=None, storage=None, request=None,
+                 *args, **kwargs):
         self.request = request
+        self.storage = storage
+        if backend:
+            self.backend = backend(strategy=self, *args, **kwargs)
+        else:
+            self.backend = backend
 
     def setting(self, name, default=None):
-        setting_name = '_'.join((SETTING_PREFIX, self.backend.titled_name,
-                                 name))
-        setting = self.get_setting(setting_name, default)
-        if not setting:
-            setting = self.get_setting('%s_%s' % (SETTING_PREFIX, name),
-                                       default)
+        setting = default
+        names = (setting_name(self.backend.titled_name, name),
+                 setting_name(name),
+                 name)
+        for name in names:
+            try:
+                setting = self.get_setting(name)
+            except AttributeError:
+                pass
         return setting
 
-    def get_setting(self, name, default=None):
+    def get_setting(self, name):
         raise NotImplementedError('Implement in subclass')
 
     def request_data(self):
@@ -43,24 +43,26 @@ class BaseStrategy(object):
         return self.request.META.get('QUERY_STRING', '')
 
     def start(self):
+        # Clean any partial pipeline info before starting the process
+        self.clean_partial_pipeline()
         if self.backend.uses_redirect():
             return self.redirect(self.backend.auth_url())
         else:
             return self.html(self.backend.auth_html())
 
-    def complete_login(self, *args, **kwargs):
+    def complete(self, *args, **kwargs):
         return self.backend.auth_complete(*args, **kwargs)
 
-    def complete_associate(self, user, *args, **kwargs):
-        return self.backend.auth_complete(user=user, *args, **kwargs)
-
-    def continue_pipeline(self):
-        raise NotImplementedError('Implement in subclass')
+    def continue_pipeline(self, *args, **kwargs):
+        return self.backend.continue_pipeline(*args, **kwargs)
 
     def disconnect(self, *args, **kwargs):
-        self.storage.disconnect(name=self.backend.name, *args, **kwargs)
+        self.storage.user.disconnect(name=self.backend.name, *args, **kwargs)
 
     def authenticate(self, *args, **kwargs):
+        kwargs['strategy'] = self
+        kwargs['storage'] = self.storage
+        kwargs['backend'] = self.backend
         return self.backend.authenticate(*args, **kwargs)
 
     def redirect(self, url):
@@ -70,10 +72,10 @@ class BaseStrategy(object):
         return content
 
     def create_user(self, *args, **kwargs):
-        return self.storage.create_user(*args, **kwargs)
+        return self.storage.user.create_user(*args, **kwargs)
 
     def get_user(self, *args, **kwargs):
-        return self.storage.get_user(*args, **kwargs)
+        return self.storage.user.get_user(*args, **kwargs)
 
     def get_current_user(self, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
@@ -87,10 +89,10 @@ class BaseStrategy(object):
     def session_setdefault(self, name, value):
         self.session_set(name, value)
 
-    def to_session_dict(self, next_idx, *args, **kwargs):
+    def to_session(self, next_idx, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
 
-    def from_session_dict(self, next_idx, *args, **kwargs):
+    def from_session(self, next_idx, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
 
     def build_absolute_uri(self, path=None):
@@ -104,12 +106,12 @@ class BaseStrategy(object):
 
     def get_pipeline(self):
         return self.setting('PIPELINE', (
-            'social.pipeline.social.social_auth_user',
+            'social.pipeline.social_auth.social_user',
             'social.pipeline.user.get_username',
             'social.pipeline.user.create_user',
-            'social.pipeline.social.associate_user',
-            'social.pipeline.social.load_extra_data',
-            'social.pipeline.user.update_user_details'
+            'social.pipeline.social_auth.associate_user',
+            'social.pipeline.social_auth.load_extra_data',
+            'social.pipeline.user.user_details'
        ))
 
     def random_string(self, length=12, chars=ALLOWED_CHARS):

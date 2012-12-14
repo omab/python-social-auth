@@ -1,27 +1,27 @@
-"""OpenId storage that saves to django models"""
 import time
 
 from openid.store.interface import OpenIDStore
 from openid.store.nonce import SKEW
 
-from social_auth.models import UserSocialAuth
 
-
-class DjangoOpenIDStore(OpenIDStore):
+class OpenIDStore(OpenIDStore):
     """Storage class"""
-    def __init__(self):
+    def __init__(self, strategy):
         """Init method"""
-        super(DjangoOpenIDStore, self).__init__()
+        super(OpenIDStore, self).__init__()
+        self.strategy = strategy
+        self.storage = strategy.storage
+        self.assoc = self.storage.associations
+        self.nonce = self.storage.nonce
         self.max_nonce_age = 6 * 60 * 60  # Six hours
 
     def storeAssociation(self, server_url, association):
         """Store new assocition if doesn't exist"""
-        UserSocialAuth.store_association(server_url, association)
+        self.assoc.store(server_url, association)
 
     def getAssociation(self, server_url, handle=None):
         """Return stored assocition"""
-        oid_associations = UserSocialAuth.get_oid_associations(server_url,
-                                                               handle)
+        oid_associations = self.assoc.oids(server_url, handle)
         associations = [association
                         for assoc_id, association in oid_associations
                         if association.getExpiresIn() > 0]
@@ -29,7 +29,7 @@ class DjangoOpenIDStore(OpenIDStore):
                    if association.getExpiresIn() == 0]
 
         if expired:  # clear expired associations
-            UserSocialAuth.delete_associations(expired)
+            self.assoc.remove(expired)
 
         if associations:  # return most recet association
             return associations[0]
@@ -38,4 +38,4 @@ class DjangoOpenIDStore(OpenIDStore):
         """Generate one use number and return *if* it was created"""
         if abs(timestamp - time.time()) > SKEW:
             return False
-        return UserSocialAuth.use_nonce(server_url, timestamp, salt)
+        return self.nonce.use(server_url, timestamp, salt)

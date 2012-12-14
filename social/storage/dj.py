@@ -3,14 +3,23 @@ import re
 import base64
 
 from social.exceptions import NotAllowedToDisconnect
-from social.storage.base import UserSocialAuthMixin
+from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
+                                BaseStorage
 
 
 CLEAN_USERNAME_REGEX = re.compile(r'[^\w.@+-_]+', re.UNICODE)
 
 
-class DjangoUserSocialAuthMixin(UserSocialAuthMixin):
+class DjangoUserMixin(UserMixin):
     """Social Auth association model"""
+    @classmethod
+    def changed(cls, user):
+        user.save()
+
+    def set_extra_data(self, extra_data=None):
+        if super(DjangoUserMixin, self).set_extra_data(extra_data):
+            self.save()
+
     @classmethod
     def clean_username(cls, value):
         return CLEAN_USERNAME_REGEX.sub('', value)
@@ -49,6 +58,10 @@ class DjangoUserSocialAuthMixin(UserSocialAuthMixin):
         return cls.user_model().objects.filter(*args, **kwargs).count() > 0
 
     @classmethod
+    def get_username(cls, user):
+        return getattr(user, 'username', None)
+
+    @classmethod
     def create_user(cls, username, email=None):
         return cls.user_model().objects.create_user(username=username,
                                                     email=email)
@@ -79,14 +92,20 @@ class DjangoUserSocialAuthMixin(UserSocialAuthMixin):
             uid = str(uid)
         return cls.objects.create(user=user, uid=uid, provider=provider)
 
+
+class DjangoNonceMixin(NonceMixin):
     @classmethod
-    def store_association(cls, server_url, association):
-        from social.models import Association
-        args = {'server_url': server_url, 'handle': association.handle}
-        try:
-            assoc = Association.objects.get(**args)
-        except Association.DoesNotExist:
-            assoc = Association(**args)
+    def use(cls, server_url, timestamp, salt):
+        return cls.objects.get_or_create(server_url=server_url,
+                                         timestamp=timestamp,
+                                         salt=salt)[1]
+
+
+class DjangoAssociationMixin(AssociationMixin):
+    @classmethod
+    def store(cls, server_url, association):
+        assoc = cls.objects.get_or_create(server_url=server_url,
+                                          handle=association.handle)[1]
         assoc.secret = base64.encodestring(association.secret)
         assoc.issued = association.issued
         assoc.lifetime = association.lifetime
@@ -94,18 +113,15 @@ class DjangoUserSocialAuthMixin(UserSocialAuthMixin):
         assoc.save()
 
     @classmethod
-    def get_associations(cls, *args, **kwargs):
-        from social.models import Association
-        return Association.objects.filter(*args, **kwargs)
+    def get(cls, *args, **kwargs):
+        return cls.objects.filter(*args, **kwargs)
 
     @classmethod
-    def delete_associations(cls, ids_to_delete):
-        from social.models import Association
-        Association.objects.filter(pk__in=ids_to_delete).delete()
+    def remove(cls, ids_to_delete):
+        cls.objects.filter(pk__in=ids_to_delete).delete()
 
-    @classmethod
-    def use_nonce(cls, server_url, timestamp, salt):
-        from social.models import Nonce
-        return Nonce.objects.get_or_create(server_url=server_url,
-                                           timestamp=timestamp,
-                                           salt=salt)[1]
+
+class BaseDjangoStorage(BaseStorage):
+    user = DjangoUserMixin
+    nonce = DjangoNonceMixin
+    association = DjangoAssociationMixin

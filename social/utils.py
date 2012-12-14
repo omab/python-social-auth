@@ -4,13 +4,19 @@ import urllib
 from cgi import parse_qsl
 from datetime import timedelta, tzinfo
 
-from oauth2 import Consumer as OAuthConsumer, Request as OAuthRequest, \
-                   SignatureMethod_HMAC_SHA1, HTTP_METHOD
+
+SETTING_PREFIX = 'SOCIAL_AUTH'
 
 
 def import_module(name):
     __import__(name)
     return sys.modules[name]
+
+
+def module_member(name):
+    mod, member = name.rsplit('.', 1)
+    module = import_module(mod)
+    return getattr(module, member)
 
 
 def url_add_parameters(url, params):
@@ -21,27 +27,6 @@ def url_add_parameters(url, params):
                                         params.items())
         url = urlparse.urlunparse(fragments)
     return url
-
-
-def build_consumer_oauth_request(backend, token, url, redirect_uri='/',
-                                 oauth_verifier=None, extra_params=None,
-                                 method=HTTP_METHOD):
-    """Builds a Consumer OAuth request."""
-    params = {'oauth_callback': redirect_uri}
-    if extra_params:
-        params.update(extra_params)
-
-    if oauth_verifier:
-        params['oauth_verifier'] = oauth_verifier
-
-    consumer = OAuthConsumer(*backend.get_key_and_secret())
-    request = OAuthRequest.from_consumer_and_token(consumer,
-                                                   token=token,
-                                                   http_method=method,
-                                                   http_url=url,
-                                                   parameters=params)
-    request.sign_request(SignatureMethod_HMAC_SHA1(), consumer, token)
-    return request
 
 
 class UTC(tzinfo):
@@ -59,3 +44,7 @@ class UTC(tzinfo):
         return timedelta(0)
 
 utc = UTC()
+
+
+def setting_name(*names):
+    return '_'.join((SETTING_PREFIX,) + tuple(names))

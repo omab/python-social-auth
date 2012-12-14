@@ -5,13 +5,13 @@ from django.db.utils import IntegrityError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
 
-from social.strategies.store import DjangoOpenIDStore
+from social.strategies.store import OpenIDStore
 from social.strategies.base import BaseStrategy
 
 
 class DjangoStrategy(BaseStrategy):
-    def get_setting(self, name, default=None):
-        return getattr(settings, name, default)
+    def get_setting(self, name):
+        return getattr(settings, name)
 
     def request_data(self):
         # Use request because some auth providers use POST urls with needed
@@ -28,6 +28,9 @@ class DjangoStrategy(BaseStrategy):
         return self.request.user
 
     def authenticate(self, *args, **kwargs):
+        kwargs['strategy'] = self
+        kwargs['storage'] = self.storage
+        kwargs['backend'] = self.backend
         return authenticate(*args, **kwargs)
 
     def session_get(self, name, default=None):
@@ -67,7 +70,7 @@ class DjangoStrategy(BaseStrategy):
         self.request.session.pop(name, None)
 
     def openid_store(self):
-        return DjangoOpenIDStore()
+        return OpenIDStore(self)
 
     def random_string(self, length=12, chars=BaseStrategy.ALLOWED_CHARS):
         try:

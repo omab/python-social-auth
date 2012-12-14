@@ -2,18 +2,21 @@
 from django.db import models
 from django.conf import settings
 
-from social.storage.base import UserSocialAuthMixin, AssociationMixin, \
-                                NonceMixin
-from social.storage.django.fields import JSONField
+from social.utils import setting_name
+from social.storage.dj import DjangoUserMixin, \
+                              DjangoAssociationMixin, \
+                              DjangoNonceMixin, \
+                              BaseDjangoStorage
+from social.apps.dj.default.fields import JSONField
 
 
-USER_MODEL = getattr(settings, 'SOCIAL_AUTH_USER_MODEL', None) or \
+USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \
              getattr(settings, 'AUTH_USER_MODEL', None) or \
              'auth.User'
-UID_LENGTH = getattr(settings, 'SOCIAL_AUTH_UID_LENGTH', 255)
+UID_LENGTH = getattr(settings, setting_name('UID_LENGTH'), 255)
 
 
-class UserSocialAuth(models.Model, UserSocialAuthMixin):
+class UserSocialAuth(models.Model, DjangoUserMixin):
     """Social Auth association model"""
     user = models.ForeignKey(USER_MODEL, related_name='social_auth')
     provider = models.CharField(max_length=32)
@@ -23,7 +26,7 @@ class UserSocialAuth(models.Model, UserSocialAuthMixin):
     class Meta:
         """Meta data"""
         unique_together = ('provider', 'uid')
-        app_label = 'social_auth'
+        db_table = 'social_auth_usersocialauth'
 
     @classmethod
     def get_social_auth(cls, provider, uid):
@@ -34,21 +37,26 @@ class UserSocialAuth(models.Model, UserSocialAuthMixin):
             return None
 
     @classmethod
+    def username_max_length(cls):
+        field = UserSocialAuth.user_model()._meta.get_field('username')
+        return field.max_length
+
+    @classmethod
     def user_model(cls):
         return UserSocialAuth._meta.get_field('user').rel.to
 
 
-class Nonce(models.Model, NonceMixin):
+class Nonce(models.Model, DjangoNonceMixin):
     """One use numbers"""
     server_url = models.CharField(max_length=255)
     timestamp = models.IntegerField()
     salt = models.CharField(max_length=40)
 
     class Meta:
-        app_label = 'social_auth'
+        db_table = 'social_auth_nonce'
 
 
-class Association(models.Model, AssociationMixin):
+class Association(models.Model, DjangoAssociationMixin):
     """OpenId account association"""
     server_url = models.CharField(max_length=255)
     handle = models.CharField(max_length=255)
@@ -58,4 +66,10 @@ class Association(models.Model, AssociationMixin):
     assoc_type = models.CharField(max_length=64)
 
     class Meta:
-        app_label = 'social_auth'
+        db_table = 'social_auth_association'
+
+
+class DjangoStorage(BaseDjangoStorage):
+    user = UserSocialAuth
+    nonce = Nonce
+    association = Association

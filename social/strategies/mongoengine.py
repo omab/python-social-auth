@@ -1,6 +1,6 @@
 from mongoengine.queryset import OperationError
 
-from social.strategies.django import DjangoStrategy
+from social.strategies.dj import DjangoStrategy
 
 
 class MongoengineStrategy(DjangoStrategy):

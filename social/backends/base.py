@@ -9,7 +9,9 @@ Also the modules *must* define a BACKENDS dictionary with the backend name
 (which is used for URLs matching) and Auth class, otherwise it won't be
 enabled.
 """
-from social.utils import import_module
+from urllib2 import urlopen
+
+from social.utils import module_member
 from social.exceptions import StopPipeline
 
 
@@ -19,13 +21,15 @@ class BaseAuth(object):
     name = ''  # provider name, it's stored in database
     supports_inactive_user = False  # Django auth
 
-    def __init__(self, strategy=None, redirect=None):
+    def __init__(self, strategy=None, redirect_uri=None):
         self.titled_name = self.name.upper().replace('-', '_')
         self.strategy = strategy
-        self.redirect = redirect
+        self.redirect_uri = redirect_uri
         if strategy:
             self.data = self.strategy.request_data()
-            self.redirect = self.strategy.build_absolute_uri(self.redirect)
+            self.redirect_uri = self.strategy.build_absolute_uri(
+                self.redirect_uri
+            )
         else:
             self.data = {}
 
@@ -52,45 +56,45 @@ class BaseAuth(object):
         # response be passed in as a keyword argument, to make sure we
         # don't match the username/password calling conventions of
         # authenticate.
-        if not self.name in kwargs or not 'response' in kwargs:
+        if 'backend' not in kwargs or kwargs['backend'].name != self.name or \
+           'strategy' not in kwargs or 'response' not in kwargs:
             return None
 
         self.strategy = self.strategy or kwargs.get('strategy')
-        self.redirect = self.redirect or kwargs.get('redirect')
+        self.redirect_uri = self.redirect_uri or kwargs.get('redirect_uri')
         self.data = self.strategy.request_data()
         pipeline = self.strategy.get_pipeline()
 
         if 'pipeline_index' in kwargs:
             return self.pipeline(pipeline[kwargs['pipeline_index']:],
-                                 backend=self, strategy=self.strategy,
                                  *args, **kwargs)
         else:
             details = self.get_user_details(kwargs['response'])
             uid = self.get_user_id(details, kwargs['response'])
-            return self.pipeline(pipeline, backend=self, details=details,
-                                 strategy=self.strategy, uid=uid, is_new=False,
-                                 *args, **kwargs)
+            return self.pipeline(pipeline, details=details, uid=uid,
+                                 is_new=False, *args, **kwargs)
 
     def pipeline(self, pipeline, pipeline_index=0, *args, **kwargs):
-        """Pipeline"""
+        kwargs['strategy'] = self.strategy
+
         out = kwargs.copy()
+        out.pop(self.name, None)
+
         for idx, name in enumerate(pipeline):
             out['pipeline_index'] = pipeline_index + idx
-            mod_name, func_name = name.rsplit('.', 1)
-            mod = import_module(mod_name)
-            func = getattr(mod, func_name, None)
+            func = module_member(name)
 
             try:
                 result = func(*args, **out) or {}
             except StopPipeline:
                 self.strategy.clean_partial_pipeline()
                 break
-
-            if isinstance(result, dict):
-                out.update(result)
-            else:
+            if not isinstance(result, dict):
                 return result
-        return out
+            out.update(result)
+        user = out['user']
+        setattr(user, 'social_user', out['social_user'])
+        return user
 
     def extra_data(self, user, uid, response, details):
         """Return default blank user extra data"""
@@ -109,17 +113,6 @@ class BaseAuth(object):
              'last_name': <user last name if any>}
         """
         raise NotImplementedError('Implement in subclass')
-
-    @classmethod
-    def tokens(cls, instance):
-        """Return the tokens needed to authenticate the access to any API the
-        service might provide. The return value will be a dictionary with the
-        token type name as key and the token value.
-        """
-        if instance.extra_data and 'access_token' in instance.extra_data:
-            return {'access_token': instance.extra_data['access_token']}
-        else:
-            return {}
 
     def get_user(self, user_id):
         """
@@ -144,7 +137,7 @@ class BaseAuth(object):
 
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""
-        kwargs[self.name] = True
+        kwargs.update({self.name: True})
         return self.strategy.authenticate(*args, **kwargs)
 
     def request_token_extra_arguments(self):
@@ -164,12 +157,25 @@ class BaseAuth(object):
         otherwise return false."""
         return True
 
-    def enabled(self):
-        """Return backend enabled status, all enabled by default"""
-        return True
-
     def disconnect(self, user, association_id=None):
         """Deletes current backend from user if associated.
         Override if extra operations are needed.
         """
         self.strategy.disconnect(user, association_id)
+
+    def urlopen(self, *args, **kwargs):
+        timeout = self.strategy.setting('URLOPEN_TIMEOUT')
+        if timeout and 'timeout' not in kwargs:
+            kwargs['timeout'] = timeout
+        return urlopen(*args, **kwargs)
+
+    @classmethod
+    def tokens(cls, instance):
+        """Return the tokens needed to authenticate the access to any API the
+        service might provide. The return value will be a dictionary with the
+        token type name as key and the token value.
+        """
+        if instance.extra_data and 'access_token' in instance.extra_data:
+            return {'access_token': instance.extra_data['access_token']}
+        else:
+            return {}

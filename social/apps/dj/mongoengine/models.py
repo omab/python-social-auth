@@ -3,22 +3,20 @@ MongoEngine models for Social Auth
 
 Requires MongoEngine 0.6.10
 """
-try:
-    from django.contrib.auth.hashers import UNUSABLE_PASSWORD as unusable
-except (ImportError, AttributeError):
-    unusable = '!'
-
 from mongoengine import DictField, Document, IntField, ReferenceField, \
                         StringField
-from mongoengine.django.auth import User
-from social.storage.base import AssociationMixin, NonceMixin
-from social.storage.django.base import DjangoUserSocialAuthMixin
+from mongoengine.dj.auth import User
+
+from social.storage.dj import DjangoUserMixin, \
+                              DjangoAssociationMixin, \
+                              DjangoNonceMixin, \
+                              BaseDjangoStorage
 
 
-UNUSABLE_PASSWORD = unusable
+UNUSABLE_PASSWORD = '!'  # Borrowed from django 1.4
 
 
-class UserSocialAuth(Document, DjangoUserSocialAuthMixin):
+class UserSocialAuth(Document, DjangoUserMixin):
     """Social Auth association model"""
     user = ReferenceField(User)
     provider = StringField(max_length=32)
@@ -46,8 +44,7 @@ class UserSocialAuth(Document, DjangoUserSocialAuthMixin):
     @classmethod
     def create_user(cls, username, email=None):
         # Empty string makes email regex validation fail
-        if email == '':
-            email = None
+        email = email or None
         return cls.user_model().create_user(username=username,
                                             password=UNUSABLE_PASSWORD,
                                             email=email)
@@ -67,14 +64,14 @@ class UserSocialAuth(Document, DjangoUserSocialAuthMixin):
         return valid_password or qs.count() > 0
 
 
-class Nonce(Document, NonceMixin):
+class Nonce(Document, DjangoNonceMixin):
     """One use numbers"""
     server_url = StringField(max_length=255)
     timestamp = IntField()
     salt = StringField(max_length=40)
 
 
-class Association(Document, AssociationMixin):
+class Association(Document, DjangoAssociationMixin):
     """OpenId account association"""
     server_url = StringField(max_length=255)
     handle = StringField(max_length=255)
@@ -82,3 +79,9 @@ class Association(Document, AssociationMixin):
     issued = IntField()
     lifetime = IntField()
     assoc_type = StringField(max_length=64)
+
+
+class DjangoStorage(BaseDjangoStorage):
+    user = UserSocialAuth
+    nonce = Nonce
+    association = Association

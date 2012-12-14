@@ -1,12 +1,12 @@
 from social.utils import import_module
-from social.backends import BaseAuthBackend
+from social.backends.base import BaseAuth
 
 
 # Cache for discovered backends.
 BACKENDSCACHE = {}
 
 
-def load_backends(strategy, force_load=False):
+def load_backends(backends, force_load=False):
     """
     Entry point to the BACKENDS cache. If BACKENDSCACHE hasn't been
     populated, each of the modules referenced in
@@ -26,20 +26,20 @@ def load_backends(strategy, force_load=False):
     below can retry a requested backend that may not yet be discovered.
     """
     if not BACKENDSCACHE or force_load:
-        for auth_backend in strategy.setting('AUTHENTICATION_BACKENDS', []):
+        for auth_backend in backends:
             mod, cls_name = auth_backend.rsplit('.', 1)
             module = import_module(mod)
             backend = getattr(module, cls_name)
 
-            if issubclass(backend, BaseAuthBackend):
+            if issubclass(backend, BaseAuth):
                 name = backend.name
                 backends = getattr(module, 'BACKENDS', {})
-                if name in backends and backends[name].enabled():
+                if name in backends:
                     BACKENDSCACHE[name] = backends[name]
     return BACKENDSCACHE
 
 
-def get_backend(strategy, name, *args, **kwargs):
+def get_backend(backends, name, *args, **kwargs):
     """Returns a backend by name. Backends are stored in the BACKENDSCACHE
     cache dict. If not found, each of the modules referenced in
     AUTHENTICATION_BACKENDS is imported and checked for a BACKENDS
@@ -51,7 +51,7 @@ def get_backend(strategy, name, *args, **kwargs):
         return BACKENDSCACHE[name]
     except KeyError:
         # Reload BACKENDS to ensure a missing backend hasn't been missed
-        load_backends(strategy, force_load=True)
+        load_backends(backends, force_load=True)
         try:
             return BACKENDSCACHE[name]
         except KeyError:

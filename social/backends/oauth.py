@@ -1,10 +1,14 @@
-from urllib2 import HTTPError
+import json
+from urllib2 import Request, HTTPError
+from urllib import urlencode
 
-from oauth2 import Token, Request as OAuthRequest, Consumer as OAuthConsumer
+from oauth2 import Token, SignatureMethod_HMAC_SHA1, HTTP_METHOD, \
+                   Request as OAuthRequest, Consumer as OAuthConsumer
 
-from social.utils import dsa_urlopen
-from social.exceptions import AuthCanceled, AuthTokenError
-from social.utils import build_consumer_oauth_request
+from social.utils import url_add_parameters
+from social.exceptions import AuthFailed, AuthCanceled, AuthUnknownError, \
+                              AuthMissingParameter, AuthStateMissing, \
+                              AuthStateForbidden, AuthTokenError
 from social.backends.base import BaseAuth
 
 
@@ -21,8 +25,6 @@ class OAuthAuth(BaseAuth):
 
     access_token is always stored.
     """
-    SETTINGS_KEY_NAME = ''
-    SETTINGS_SECRET_NAME = ''
     SCOPE_VAR_NAME = None
     SCOPE_PARAMETER_NAME = 'scope'
     DEFAULT_SCOPE = None
@@ -60,20 +62,13 @@ class OAuthAuth(BaseAuth):
         """Return tuple with Consumer Key and Consumer Secret for current
         service provider. Must return (key, secret), order *must* be respected.
         """
-        return self.strategy.setting(self.SETTINGS_KEY_NAME), \
-               self.strategy.setting(self.SETTINGS_SECRET_NAME)
-
-    def enabled(self):
-        """Return backend enabled status by checking basic settings"""
-        return self.strategy.setting(self.SETTINGS_KEY_NAME) and \
-               self.strategy.setting(self.SETTINGS_SECRET_NAME)
+        return self.strategy.setting(self.titled_name + '_KEY'), \
+               self.strategy.setting(self.titled_name + '_SECRET')
 
     def get_scope(self):
         """Return list with needed access scope"""
-        scope = self.DEFAULT_SCOPE or []
-        if self.SCOPE_VAR_NAME:
-            scope = scope + self.strategy.setting(self.SCOPE_VAR_NAME, [])
-        return scope
+        return (self.DEFAULT_SCOPE or []) + \
+               self.strategy.setting('EXTRA_SCOPE', [])
 
     def get_scope_argument(self):
         param = {}
@@ -157,7 +152,7 @@ class ConsumerBasedOAuth(OAuthAuth):
         params.update(self.get_scope_argument())
         return OAuthRequest.from_token_and_callback(
             token=token,
-            callback=self.redirect,
+            callback=self.redirect_uri,
             http_url=self.AUTHORIZATION_URL,
             parameters=params
         )
@@ -165,13 +160,13 @@ class ConsumerBasedOAuth(OAuthAuth):
     def oauth_request(self, token, url, extra_params=None):
         """Generate OAuth request, setups callback url"""
         return build_consumer_oauth_request(self, token, url,
-                                            self.redirect,
+                                            self.redirect_uri,
                                             self.data.get('oauth_verifier'),
                                             extra_params)
 
     def fetch_response(self, request):
         """Executes request and fetchs service response"""
-        response = dsa_urlopen(request.to_url())
+        response = self.urlopen(request.to_url())
         return '\n'.join(response.readlines())
 
     def access_token(self, token):
@@ -183,3 +178,175 @@ class ConsumerBasedOAuth(OAuthAuth):
     def consumer(self):
         """Setups consumer"""
         return OAuthConsumer(*self.get_key_and_secret())
+
+
+class BaseOAuth2(OAuthAuth):
+    """Base class for OAuth2 providers.
+
+    OAuth2 draft details at:
+        http://tools.ietf.org/html/draft-ietf-oauth-v2-10
+
+    Attributes:
+        AUTHORIZATION_URL       Authorization service url
+        ACCESS_TOKEN_URL        Token URL
+    """
+    AUTHORIZATION_URL = None
+    ACCESS_TOKEN_URL = None
+    REFRESH_TOKEN_URL = None
+    RESPONSE_TYPE = 'code'
+    REDIRECT_STATE = True
+    STATE_PARAMETER = True
+
+    def state_token(self):
+        """Generate csrf token to include as state parameter."""
+        return self.strategy.random_string(32)
+
+    def get_redirect_uri(self, state=None):
+        """Build redirect with redirect_state parameter."""
+        uri = self.redirect_uri
+        if self.REDIRECT_STATE and state:
+            uri = url_add_parameters(uri, {'redirect_state': state})
+        return uri
+
+    def auth_params(self, state=None):
+        client_id, client_secret = self.get_key_and_secret()
+        params = {
+            'client_id': client_id,
+            'redirect_uri': self.get_redirect_uri(state)
+        }
+        if self.STATE_PARAMETER and state:
+            params['state'] = state
+        if self.RESPONSE_TYPE:
+            params['response_type'] = self.RESPONSE_TYPE
+        return params
+
+    def auth_url(self):
+        """Return redirect url"""
+        if self.STATE_PARAMETER or self.REDIRECT_STATE:
+            # Store state in session for further request validation. The state
+            # value is passed as state parameter (as specified in OAuth2 spec),
+            # but also added to redirect, that way we can still verify the
+            # request if the provider doesn't implement the state parameter.
+            # Reuse token if any.
+            name = self.titled_name + '_state'
+            state = self.strategy.session_get(name)
+            if state is None:
+                state = self.state_token()
+                self.strategy.session_set(name, state)
+        else:
+            state = None
+
+        params = self.auth_params(state)
+        params.update(self.get_scope_argument())
+        params.update(self.auth_extra_arguments())
+        query_string = self.strategy.request_query_string()
+        if query_string:
+            query_string = '&' + query_string
+        return self.AUTHORIZATION_URL + '?' + urlencode(params) + query_string
+
+    def validate_state(self):
+        """Validate state value. Raises exception on error, returns state
+        value if valid."""
+        if not self.STATE_PARAMETER and not self.REDIRECT_STATE:
+            return None
+        state = self.strategy.session_get(self.titled_name + '_state')
+        if state:
+            request_state = self.data.get('state') or \
+                            self.data.get('redirect_state')
+            if not request_state:
+                raise AuthMissingParameter(self, 'state')
+            elif not state:
+                raise AuthStateMissing(self, 'state')
+            elif not request_state == state:
+                raise AuthStateForbidden(self)
+        return state
+
+    def process_error(self, data):
+        if data.get('error'):
+            raise AuthFailed(self, self.data.get('error_description') or
+                                   self.data['error'])
+
+    def auth_complete_params(self, state=None):
+        client_id, client_secret = self.get_key_and_secret()
+        return {
+            'grant_type': 'authorization_code',  # request auth code
+            'code': self.data.get('code', ''),  # server response code
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'redirect_uri': self.get_redirect_uri(state)
+        }
+
+    def auth_headers(self):
+        return {'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json'}
+
+    def auth_complete(self, *args, **kwargs):
+        """Completes loging process, must return user instance"""
+        self.process_error(self.data)
+        params = self.auth_complete_params(self.validate_state())
+        request = Request(self.ACCESS_TOKEN_URL, data=urlencode(params),
+                          headers=self.auth_headers())
+
+        try:
+            response = json.loads(self.urlopen(request).read())
+        except HTTPError, e:
+            if e.code == 400:
+                raise AuthCanceled(self)
+            else:
+                raise
+        except (ValueError, KeyError):
+            raise AuthUnknownError(self)
+        self.process_error(response)
+        return self.do_auth(response['access_token'], response=response,
+                            *args, **kwargs)
+
+    def do_auth(self, access_token, *args, **kwargs):
+        """Finish the auth process once the access_token was retrieved"""
+        data = self.user_data(access_token, *args, **kwargs)
+        response = kwargs.get('response') or {}
+        response.update(data or {})
+        kwargs.update({'response': response, self.name: True})
+        return self.strategy.authenticate(*args, **kwargs)
+
+    def refresh_token_params(self, token):
+        client_id, client_secret = self.get_key_and_secret()
+        return {
+            'refresh_token': token,
+            'grant_type': 'refresh_token',
+            'client_id': client_id,
+            'client_secret': client_secret
+        }
+
+    def process_refresh_token_response(self, response):
+        return json.loads(response)
+
+    def refresh_token(self, token):
+        request = Request(
+            self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL,
+            data=urlencode(self.refresh_token_params(token)),
+            headers=self.auth_headers()
+        )
+        return self.process_refresh_token_response(
+            self.urlopen(request).read()
+        )
+
+
+def build_consumer_oauth_request(backend, token, url, redirect_uri='/',
+                                 oauth_verifier=None, extra_params=None,
+                                 method=HTTP_METHOD):
+    """Builds a Consumer OAuth request."""
+    params = {'oauth_callback': redirect_uri}
+    if extra_params:
+        params.update(extra_params)
+
+    if oauth_verifier:
+        params['oauth_verifier'] = oauth_verifier
+
+    consumer = OAuthConsumer(*backend.get_key_and_secret())
+    request = OAuthRequest.from_consumer_and_token(consumer,
+                                                   token=token,
+                                                   http_method=method,
+                                                   http_url=url,
+                                                   parameters=params)
+    request.sign_request(SignatureMethod_HMAC_SHA1(), consumer, token)
+    return request
