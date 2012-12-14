@@ -11,8 +11,10 @@ from social.backends.utils import get_backend
 
 
 BACKENDS = settings.AUTHENTICATION_BACKENDS
-STRATEGY = getattr(settings, setting_name('STRATEGY'))
-STORAGE = getattr(settings, setting_name('STORAGE'))
+STRATEGY = getattr(settings, setting_name('STRATEGY'),
+                   'social.strategies.dj.DjangoStrategy')
+STORAGE = getattr(settings, setting_name('STORAGE'),
+                  'social.apps.dj.default.models.DjangoStorage')
 
 
 def get_strategy(request, backend, redirect_uri=None, *args, **kwargs):
