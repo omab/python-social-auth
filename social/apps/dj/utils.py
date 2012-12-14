@@ -50,7 +50,10 @@ def disconnect_view(func):
 
 
 def setting(name, default=None):
-    return getattr(settings, setting_name(name), default)
+    try:
+        return getattr(settings, setting_name(name))
+    except AttributeError:
+        return getattr(settings, name, default)
 
 
 def sanitize_redirect(host, redirect_to):

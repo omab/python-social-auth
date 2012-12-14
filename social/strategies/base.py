@@ -3,6 +3,7 @@ import random
 import hashlib
 
 from social.utils import setting_name
+from social.strategies.store import OpenIdStore
 
 
 class BaseStrategy(object):
@@ -88,6 +89,7 @@ class BaseStrategy(object):
 
     def session_setdefault(self, name, value):
         self.session_set(name, value)
+        return self.session_get(name)
 
     def to_session(self, next_idx, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
@@ -102,7 +104,7 @@ class BaseStrategy(object):
         raise NotImplementedError('Implement in subclass')
 
     def openid_store(self):
-        raise NotImplementedError('Implement in subclass')
+        return OpenIdStore(self)
 
     def get_pipeline(self):
         return self.setting('PIPELINE', (

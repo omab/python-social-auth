@@ -108,6 +108,7 @@ LOGGING = {
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
+    'social.backends.open_id.OpenIdAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 

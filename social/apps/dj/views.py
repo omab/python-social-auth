@@ -38,6 +38,7 @@ def complete(request, backend, *args, **kwargs):
                      request.REQUEST.get(REDIRECT_FIELD_NAME, '')
     is_authenticated = request.user.is_authenticated()
     user = request.user.is_authenticated() and request.user or None
+    url = DEFAULT_REDIRECT
 
     if request.session.get(PIPELINE_KEY):
         data = request.session.pop(PIPELINE_KEY)
@@ -60,7 +61,7 @@ def complete(request, backend, *args, **kwargs):
 
     if is_authenticated:
         if not user:
-            url = redirect_value
+            url = redirect_value or DEFAULT_REDIRECT
         else:
             url = redirect_value or \
                   strategy.setting('NEW_ASSOCIATION_REDIRECT_URL') or \
@@ -81,9 +82,6 @@ def complete(request, backend, *args, **kwargs):
             # user.social_user is the used UserSocialAuth instance defined
             # in authenticate process
             social_user = user.social_user
-            if redirect_value:
-                request.session[REDIRECT_FIELD_NAME] = redirect_value or \
-                                                       DEFAULT_REDIRECT
 
             if setting('SESSION_EXPIRATION', True):
                 # Set session expiration date if present and not disabled

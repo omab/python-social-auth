@@ -113,13 +113,13 @@ class OpenIdAuth(BaseAuth):
         """Return auth URL returned by service"""
         openid_request = self.setup_request(self.auth_extra_arguments())
         # Construct completion URL, including page we should redirect to
-        return_to = self.strategy.build_absolute_uri(self.redirect)
+        return_to = self.strategy.build_absolute_uri(self.redirect_uri)
         return openid_request.redirectURL(self.trust_root(), return_to)
 
     def auth_html(self):
         """Return auth HTML returned by service"""
         openid_request = self.setup_request(self.auth_extra_arguments())
-        return_to = self.strategy.build_absolute_uri(self.redirect)
+        return_to = self.strategy.build_absolute_uri(self.redirect_uri)
         form_tag = {'id': 'openid_message'}
         return openid_request.htmlMarkup(self.trust_root(), return_to,
                                          form_tag_attrs=form_tag)
@@ -133,7 +133,7 @@ class OpenIdAuth(BaseAuth):
         """Continue previous halted pipeline"""
         response = self.consumer().complete(dict(self.data.items()),
                                             self.strategy.build_absolute_uri())
-        kwargs.update({'response': response, self.name: True})
+        kwargs.update({'response': response, 'backend': self.name})
         return self.strategy.authenticate(*args, **kwargs)
 
     def auth_complete(self, *args, **kwargs):
@@ -143,7 +143,7 @@ class OpenIdAuth(BaseAuth):
         if not response:
             raise AuthException(self, 'OpenID relying party endpoint')
         elif response.status == SUCCESS:
-            kwargs.update({'response': response, self.name: True})
+            kwargs.update({'response': response, 'backend': self.name})
             return self.strategy.authenticate(*args, **kwargs)
         elif response.status == FAILURE:
             raise AuthFailed(self, response.message)
@@ -195,7 +195,6 @@ class OpenIdAuth(BaseAuth):
         return Consumer(self.strategy.session_setdefault(SESSION_NAME, {}),
                         self.strategy.openid_store())
 
-    @property
     def uses_redirect(self):
         """Return true if openid request will be handled with redirect or
         HTML content will be returned.

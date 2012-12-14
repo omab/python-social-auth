@@ -5,7 +5,6 @@ from django.db.utils import IntegrityError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
 
-from social.strategies.store import OpenIDStore
 from social.strategies.base import BaseStrategy
 
 
@@ -41,7 +40,7 @@ class DjangoStrategy(BaseStrategy):
         self.request.session.modified = True
 
     def session_setdefault(self, name, value):
-        self.request.session.setdefault(name, value)
+        return self.request.session.setdefault(name, value)
 
     def to_session(self, next, backend, *args, **kwargs):
         """Returns dict to store on session for partial pipeline."""
@@ -68,9 +67,6 @@ class DjangoStrategy(BaseStrategy):
     def clean_partial_pipeline(self):
         name = self.setting('PARTIAL_PIPELINE_KEY', 'partial_pipeline')
         self.request.session.pop(name, None)
-
-    def openid_store(self):
-        return OpenIDStore(self)
 
     def random_string(self, length=12, chars=BaseStrategy.ALLOWED_CHARS):
         try:

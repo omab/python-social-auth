@@ -1,17 +1,17 @@
 import time
 
-from openid.store.interface import OpenIDStore
+from openid.store.interface import OpenIDStore as BaseOpenIDStore
 from openid.store.nonce import SKEW
 
 
-class OpenIDStore(OpenIDStore):
+class OpenIdStore(BaseOpenIDStore):
     """Storage class"""
     def __init__(self, strategy):
         """Init method"""
-        super(OpenIDStore, self).__init__()
+        super(OpenIdStore, self).__init__()
         self.strategy = strategy
         self.storage = strategy.storage
-        self.assoc = self.storage.associations
+        self.assoc = self.storage.association
         self.nonce = self.storage.nonce
         self.max_nonce_age = 6 * 60 * 60  # Six hours
 

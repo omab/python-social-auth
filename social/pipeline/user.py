@@ -24,7 +24,6 @@ def get_username(strategy, details, user=None, *args, **kwargs):
 
 def create_user(strategy, details, response, uid, username, user=None, *args,
                 **kwargs):
-    """Create user. Depends on get_username pipeline."""
     if user or not username:
         return None
     return {
@@ -40,10 +39,8 @@ def user_details(strategy, details, response, user=None, *args, **kwargs):
         return
 
     changed = False  # flag to track changes
-    if kwargs.get('is_new'):
-        keep = ('username', 'id', 'pk')
-    else:
-        keep = strategy.setting('PROTECTED_USER_FIELDS', [])
+    keep = ('username', 'id', 'pk') + \
+           tuple(strategy.setting('PROTECTED_USER_FIELDS', []))
 
     for name, value in details.iteritems():
         # do not update username, it was already generated

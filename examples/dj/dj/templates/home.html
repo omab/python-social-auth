@@ -2,4 +2,12 @@
 
 {% block content %}
 <a href="{% url socialauth_begin "google-oauth2" %}">Google OAuth2</a>
+
+<form action="{% url socialauth_begin "openid" %}" method="post">{% csrf_token %}
+  <div>
+    <label for="openid_identifier">OpenId provider</label>
+    <input id="openid_identifier" type="text" value="" name="openid_identifier" />
+    <input type="submit" value="Login" />
+  </div>
+</form>
 {% endblock %}

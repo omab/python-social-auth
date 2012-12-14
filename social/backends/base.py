@@ -93,7 +93,8 @@ class BaseAuth(object):
                 return result
             out.update(result)
         user = out['user']
-        setattr(user, 'social_user', out['social_user'])
+        user.social_user = out['social_user']
+        user.is_new = out['is_new']
         return user
 
     def extra_data(self, user, uid, response, details):
@@ -137,7 +138,7 @@ class BaseAuth(object):
 
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""
-        kwargs.update({self.name: True})
+        kwargs.update({'backend': self.name})
         return self.strategy.authenticate(*args, **kwargs)
 
     def request_token_extra_arguments(self):

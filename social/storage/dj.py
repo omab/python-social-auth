@@ -104,8 +104,13 @@ class DjangoNonceMixin(NonceMixin):
 class DjangoAssociationMixin(AssociationMixin):
     @classmethod
     def store(cls, server_url, association):
-        assoc = cls.objects.get_or_create(server_url=server_url,
-                                          handle=association.handle)[1]
+        # Don't use get_or_create because issued cannot be null
+        try:
+            assoc = cls.objects.get(server_url=server_url,
+                                    handle=association.handle)
+        except cls.DoesNotExist:
+            assoc = cls(server_url=server_url,
+                        handle=association.handle)
         assoc.secret = base64.encodestring(association.secret)
         assoc.issued = association.issued
         assoc.lifetime = association.lifetime

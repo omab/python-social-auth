@@ -174,7 +174,7 @@ class AssociationMixin(object):
                                    assoc.issued,
                                    assoc.lifetime,
                                    assoc.assoc_type))
-                for assoc in cls.get_associations(**kwargs)
+                for assoc in cls.get(**kwargs)
         ], key=lambda x: x[1].issued, reverse=True)
 
 

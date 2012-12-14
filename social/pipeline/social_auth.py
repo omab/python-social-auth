@@ -14,11 +14,8 @@ def social_user(strategy, uid, user=None, *args, **kwargs):
 
 
 def associate_user(strategy, user, uid, social_user=None, *args, **kwargs):
-    if social_user:
+    if social_user or not user:
         return None
-
-    if not user:
-        return {}
 
     try:
         social = strategy.storage.user.create_social_auth(
