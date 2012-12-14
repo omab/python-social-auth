@@ -11,19 +11,16 @@ from social.backends.utils import get_backend
 
 
 BACKENDS = settings.AUTHENTICATION_BACKENDS
-STRATEGY = getattr(settings, setting_name('STRATEGY'),
-                   'social.strategies.dj.DjangoStrategy')
-STORAGE = getattr(settings, setting_name('STORAGE'),
-                  'social.apps.dj.default.models.DjangoStorage')
+Strategy = module_member(getattr(settings, setting_name('STRATEGY'),
+                                 'social.strategies.dj.DjangoStrategy'))
+Storage = module_member(getattr(settings, setting_name('STORAGE'),
+                                'social.apps.dj.default.models.DjangoStorage'))
 
 
 def get_strategy(request, backend, redirect_uri=None, *args, **kwargs):
     Backend = get_backend(BACKENDS, backend)
     if not Backend:
         raise ValueError('Missing backend entry')
-    Strategy = module_member(STRATEGY)
-    Storage = module_member(STORAGE)
-
     uri = redirect_uri
     if uri and not uri.startswith('/'):
         uri = reverse(uri, args=(backend,))
@@ -92,7 +89,4 @@ def sanitize_redirect(host, redirect_to):
 
 class BackendWrapper(object):
     def get_user(self, user_id):
-        Strategy = module_member(STRATEGY)
-        Storage = module_member(STORAGE)
-        strategy = Strategy(storage=Storage)
-        return strategy.get_user(user_id)
+        return Strategy(storage=Storage).get_user(user_id)
