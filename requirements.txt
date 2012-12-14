@@ -1,0 +1,2 @@
+oauth2>=1.5.167
+python_openid>=2.2
