@@ -56,10 +56,3 @@ def get_backend(backends, name, *args, **kwargs):
             return BACKENDSCACHE[name]
         except KeyError:
             return None
-
-
-def instance_backend(strategy, name, *args, **kwargs):
-    backend = get_backend(strategy, name)
-    if backend:
-        backend = backend(strategy=strategy, *args, **kwargs)
-    return backend
