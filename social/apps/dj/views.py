@@ -5,9 +5,8 @@ from django.contrib.auth import login, REDIRECT_FIELD_NAME, BACKEND_SESSION_KEY
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
-from social.apps.dj.default.utils import strategy, setting, \
-                                         sanitize_redirect, \
-                                         disconnect_view
+from social.apps.dj.utils import strategy, setting, sanitize_redirect, \
+                                 disconnect_view, BackendWrapper
 
 
 DEFAULT_REDIRECT = setting('LOGIN_REDIRECT_URL')
@@ -75,8 +74,10 @@ def complete(request, backend, *args, **kwargs):
             # that won't know about the strategy/storage layout being used
             request.session['original_' + BACKEND_SESSION_KEY] = \
                     request.session[BACKEND_SESSION_KEY]
-            request.session[BACKEND_SESSION_KEY] = \
-                    'social.apps.dj.default.utils.BackendWrapper'
+            request.session[BACKEND_SESSION_KEY] = '%s.%s' % (
+                BackendWrapper.__module__,
+                BackendWrapper.__name__
+            )
             # user.social_user is the used UserSocialAuth instance defined
             # in authenticate process
             social_user = user.social_user
@@ -107,9 +108,7 @@ def complete(request, backend, *args, **kwargs):
             if new_user_redirect and is_new:
                 url = new_user_redirect
             else:
-                url = redirect_value or \
-                      strategy.setting('LOGIN_REDIRECT_URL') or \
-                      DEFAULT_REDIRECT
+                url = redirect_value or strategy.setting('LOGIN_REDIRECT_URL')
         else:
             url = strategy.setting('INACTIVE_USER_URL', LOGIN_ERROR_URL)
     else:

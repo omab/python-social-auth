@@ -4,5 +4,5 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     url(r'^$', 'example.views.home'),
     url(r'^done/$', 'example.views.done'),
-    url('', include('social.apps.dj.default.urls'))
+    url('', include('social.apps.dj.urls'))
 )
