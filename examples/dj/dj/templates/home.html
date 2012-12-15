@@ -5,6 +5,7 @@
 <a href="{% url socialauth_begin "google-oauth" %}">Google OAuth</a> <br />
 <a href="{% url socialauth_begin "google" %}">Google OpenId</a> <br />
 <a href="{% url socialauth_begin "twitter" %}">Twitter</a> <br />
+<a href="{% url socialauth_begin "yahoo" %}">Yahoo</a> <br />
 
 <form action="{% url socialauth_begin "openid" %}" method="post">{% csrf_token %}
   <div>
