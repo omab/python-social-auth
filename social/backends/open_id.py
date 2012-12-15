@@ -133,7 +133,7 @@ class OpenIdAuth(BaseAuth):
         """Continue previous halted pipeline"""
         response = self.consumer().complete(dict(self.data.items()),
                                             self.strategy.build_absolute_uri())
-        kwargs.update({'response': response, 'backend': self.name})
+        kwargs.update({'response': response, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
 
     def auth_complete(self, *args, **kwargs):
@@ -143,7 +143,7 @@ class OpenIdAuth(BaseAuth):
         if not response:
             raise AuthException(self, 'OpenID relying party endpoint')
         elif response.status == SUCCESS:
-            kwargs.update({'response': response, 'backend': self.name})
+            kwargs.update({'response': response, 'backend': self})
             return self.strategy.authenticate(*args, **kwargs)
         elif response.status == FAILURE:
             raise AuthFailed(self, response.message)

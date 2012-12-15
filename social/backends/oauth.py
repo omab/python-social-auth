@@ -134,8 +134,8 @@ class ConsumerBasedOAuth(OAuthAuth):
         data = self.user_data(access_token)
         if data is not None:
             data['access_token'] = access_token.to_string()
-        kwargs.update({'response': data, 'backend': self.name})
-        return self.authenticate(*args, **kwargs)
+        kwargs.update({'response': data, 'backend': self})
+        return self.strategy.authenticate(*args, **kwargs)
 
     def unauthorized_token(self):
         """Return request for unauthorized token (first stage)"""
@@ -305,7 +305,7 @@ class BaseOAuth2(OAuthAuth):
         data = self.user_data(access_token, *args, **kwargs)
         response = kwargs.get('response') or {}
         response.update(data or {})
-        kwargs.update({'response': response, 'backend': self.name})
+        kwargs.update({'response': response, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
 
     def refresh_token_params(self, token):

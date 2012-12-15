@@ -138,7 +138,7 @@ class BaseAuth(object):
 
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""
-        kwargs.update({'backend': self.name})
+        kwargs.update({'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
 
     def request_token_extra_arguments(self):

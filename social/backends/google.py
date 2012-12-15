@@ -17,24 +17,13 @@ import json
 from urllib import urlencode
 from urllib2 import Request
 
+from oauth2 import Request as OAuthRequest
+
 from social.exceptions import AuthFailed
-from social.backends.oauth import BaseOAuth2
+from social.backends.oauth import BaseOAuth2, ConsumerBasedOAuth
 
 
-class GoogleOAuth2(BaseOAuth2):
-    """Google OAuth2 authentication backend"""
-    name = 'google-oauth2'
-    REDIRECT_STATE = False
-    AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/auth'
-    ACCESS_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
-    DEFAULT_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
-                     'https://www.googleapis.com/auth/userinfo.profile']
-    EXTRA_DATA = [
-        ('refresh_token', 'refresh_token', True),
-        ('expires_in', 'expires'),
-        ('token_type', 'token_type', True)
-    ]
-
+class BaseGoogleAuth(object):
     def get_user_id(self, details, response):
         """Use google email as unique id"""
         email = details['email']
@@ -59,6 +48,21 @@ class GoogleOAuth2(BaseOAuth2):
                 'first_name': response.get('given_name', ''),
                 'last_name': response.get('family_name', '')}
 
+
+class GoogleOAuth2(BaseGoogleAuth, BaseOAuth2):
+    """Google OAuth2 authentication backend"""
+    name = 'google-oauth2'
+    REDIRECT_STATE = False
+    AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/auth'
+    ACCESS_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
+    DEFAULT_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
+                     'https://www.googleapis.com/auth/userinfo.profile']
+    EXTRA_DATA = [
+        ('refresh_token', 'refresh_token', True),
+        ('expires_in', 'expires'),
+        ('token_type', 'token_type', True)
+    ]
+
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Google API"""
         url = 'https://www.googleapis.com/oauth2/v1/userinfo'
@@ -70,7 +74,56 @@ class GoogleOAuth2(BaseOAuth2):
             return None
 
 
-# Backend definition
+class GoogleOAuth(BaseGoogleAuth, ConsumerBasedOAuth):
+    """Google OAuth authorization mechanism"""
+    name = 'google-oauth'
+    AUTHORIZATION_URL = 'https://www.google.com/accounts/OAuthAuthorizeToken'
+    REQUEST_TOKEN_URL = 'https://www.google.com/accounts/OAuthGetRequestToken'
+    ACCESS_TOKEN_URL = 'https://www.google.com/accounts/OAuthGetAccessToken'
+    DEFAULT_SCOPE = ['https://www.googleapis.com/auth/userinfo#email']
+
+    def user_data(self, access_token, *args, **kwargs):
+        """Return user data from Google API"""
+        url = 'https://www.googleapis.com/userinfo/email'
+        request = self.oauth_request(access_token, url, {'alt': 'json'})
+        url, params = request.to_url().split('?', 1)
+        request = Request(request.to_url(), headers={'Authorization': params})
+        try:
+            return json.loads(self.urlopen(request).read())['data']
+        except (ValueError, KeyError, IOError):
+            return None
+
+    def oauth_authorization_request(self, token):
+        """Generate OAuth request to authorize token."""
+        return OAuthRequest.from_consumer_and_token(
+            self.consumer,
+            token=token,
+            http_url=self.AUTHORIZATION_URL
+        )
+
+    def oauth_request(self, token, url, extra_params=None):
+        extra_params = extra_params or {}
+        scope = self.DEFAULT_SCOPE + self.strategy.setting('EXTRA_SCOPE', [])
+        extra_params.update({'scope': ' '.join(scope)})
+        if self.get_key_and_secret() != ('anonymous', 'anonymous'):
+            xoauth_displayname = self.strategy.setting('DISPLAY_NAME',
+                                                       'Social Auth')
+            extra_params['xoauth_displayname'] = xoauth_displayname
+        return super(GoogleOAuth, self).oauth_request(token, url, extra_params)
+
+    def get_key_and_secret(self):
+        """Return Google OAuth Consumer Key and Consumer Secret pair, uses
+        anonymous by default, beware that this marks the application as not
+        registered and a security badge is displayed on authorization page.
+        http://code.google.com/apis/accounts/docs/OAuth_ref.html#SigningOAuth
+        """
+        key_secret = super(GoogleOAuth, self).get_key_and_secret()
+        if key_secret == (None, None):
+            key_secret = ('anonymous', 'anonymous')
+        return key_secret
+
+
 BACKENDS = {
+    'google-oauth': GoogleOAuth,
     'google-oauth2': GoogleOAuth2,
 }

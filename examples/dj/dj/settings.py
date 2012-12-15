@@ -107,13 +107,22 @@ LOGGING = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOAuth2',
     'social.backends.open_id.OpenIdAuth',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.google.GoogleOAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 
+LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/done/'
 SOCIAL_AUTH_STRATEGY = 'social.strategies.dj.DjangoStrategy'
 SOCIAL_AUTH_STORAGE = 'social.apps.dj.default.models.DjangoStorage'
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '475232891386-9tbuets6eejq7k4isl4ef2dihn9afch8.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'mjbJ-9ld2Xmuaaj31Tk6BcRJ'
+SOCIAL_AUTH_GOOGLE_OAUTH_EXTRA_SCOPE = [
+    'https://www.googleapis.com/auth/drive',
+    'https://www.googleapis.com/auth/userinfo.profile'
+]
+
+try:
+    from local_settings import *
+except ImportError:
+    pass

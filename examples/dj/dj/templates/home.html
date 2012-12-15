@@ -2,6 +2,7 @@
 
 {% block content %}
 <a href="{% url socialauth_begin "google-oauth2" %}">Google OAuth2</a>
+<a href="{% url socialauth_begin "google-oauth" %}">Google OAuth</a>
 
 <form action="{% url socialauth_begin "openid" %}" method="post">{% csrf_token %}
   <div>
