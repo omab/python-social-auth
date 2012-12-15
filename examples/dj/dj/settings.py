@@ -114,6 +114,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.twitter.TwitterOAuth',
     'social.backends.yahoo.YahooOpenId',
     'social.backends.stripe.StripeOAuth2',
+    'social.backends.persona.PersonaAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 

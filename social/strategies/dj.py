@@ -17,6 +17,12 @@ class DjangoStrategy(BaseStrategy):
         # GET parameters on it
         return self.request.REQUEST
 
+    def request_query_string(self):
+        return self.request.META.get('QUERY_STRING', '')
+
+    def request_host(self):
+        return self.request.get_host()
+
     def redirect(self, url):
         return HttpResponseRedirect(url)
 

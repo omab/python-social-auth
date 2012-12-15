@@ -35,14 +35,6 @@ class BaseStrategy(object):
     def get_setting(self, name):
         raise NotImplementedError('Implement in subclass')
 
-    def request_data(self):
-        if not hasattr(self, '_request'):
-            self._request = {}
-        return self._request
-
-    def request_query_string(self):
-        return self.request.META.get('QUERY_STRING', '')
-
     def start(self):
         # Clean any partial pipeline info before starting the process
         self.clean_partial_pipeline()
@@ -77,6 +69,15 @@ class BaseStrategy(object):
 
     def get_user(self, *args, **kwargs):
         return self.storage.user.get_user(*args, **kwargs)
+
+    def request_data(self):
+        raise NotImplementedError('Implement in subclass')
+
+    def request_query_string(self):
+        raise NotImplementedError('Implement in subclass')
+
+    def request_host(self):
+        raise NotImplementedError('Implement in subclass')
 
     def get_current_user(self, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
