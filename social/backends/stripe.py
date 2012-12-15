@@ -1,0 +1,73 @@
+"""
+Stripe OAuth2 support.
+
+This backend adds support for Stripe OAuth2 service. The settings
+STRIPE_APP_ID and STRIPE_API_SECRET must be defined with the values
+given by Stripe application registration process.
+"""
+from social.backends.oauth import BaseOAuth2
+from social.exceptions import AuthFailed, AuthCanceled
+
+
+class StripeOAuth2(BaseOAuth2):
+    """Stripe OAuth2 authentication backend"""
+    name = 'stripe'
+    ID_KEY = 'stripe_user_id'
+    AUTHORIZATION_URL = 'https://connect.stripe.com/oauth/authorize'
+    ACCESS_TOKEN_URL = 'https://connect.stripe.com/oauth/token'
+    SCOPE_VAR_NAME = 'STRIPE_SCOPE'
+    REDIRECT_STATE = False
+    EXTRA_DATA = [
+        ('stripe_publishable_key', 'stripe_publishable_key'),
+        ('access_token', 'access_token'),
+        ('livemode', 'livemode'),
+        ('token_type', 'token_type'),
+        ('refresh_token', 'refresh_token'),
+        ('stripe_user_id', 'stripe_user_id'),
+    ]
+
+    def get_user_details(self, response):
+        """Return user details from Stripe account"""
+        return {'username': response.get('stripe_user_id'),
+                'email': ''}
+
+    def process_error(self, data):
+        if self.data.get('error'):
+            error = self.data.get('error_description') or self.data['error']
+            if self.data['error'] == 'access_denied':
+                raise AuthCanceled(self, error)
+            else:
+                raise AuthFailed(self, error)
+
+    def auth_params(self, state=None):
+        client_id, client_secret = self.get_key_and_secret()
+        params = {'response_type': 'code',
+                  'client_id': client_id}
+        if state:
+            params['state'] = state
+        return params
+
+    def auth_complete_params(self, state=None):
+        client_id, client_secret = self.get_key_and_secret()
+        return {
+            'grant_type': 'authorization_code',
+            'client_id': client_id,
+            'scope': self.SCOPE_SEPARATOR.join(self.get_scope()),
+            'code': self.data['code']
+       }
+
+    def auth_headers(self):
+        client_id, client_secret = self.get_key_and_secret()
+        return {'Accept': 'application/json',
+                'Authorization': 'Bearer %s' % client_secret}
+
+    @classmethod
+    def refresh_token_params(cls, refresh_token):
+        return {'refresh_token': refresh_token,
+                'grant_type': 'refresh_token'}
+
+
+# Backend definition
+BACKENDS = {
+    'stripe': StripeOAuth2
+}
