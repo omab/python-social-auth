@@ -20,6 +20,7 @@ from urllib2 import Request
 from oauth2 import Request as OAuthRequest
 
 from social.exceptions import AuthFailed
+from social.backends.open_id import OpenIdAuth
 from social.backends.oauth import BaseOAuth2, ConsumerBasedOAuth
 
 
@@ -27,13 +28,7 @@ class BaseGoogleAuth(object):
     def get_user_id(self, details, response):
         """Use google email as unique id"""
         email = details['email']
-        emails = self.strategy.setting('GOOGLE_WHITE_LISTED_EMAILS', [])
-        domains = self.strategy.setting('GOOGLE_WHITE_LISTED_DOMAINS', [])
-        if emails and email in emails:
-            return  # you're good
-        if domains and email.split('@', 1)[1] not in domains:
-            raise AuthFailed(self, 'Domain not allowed')
-
+        validate_whitelists(self, email)
         if self.strategy.setting('USE_UNIQUE_USER_ID', False):
             return response['id']
         else:
@@ -123,7 +118,34 @@ class GoogleOAuth(BaseGoogleAuth, ConsumerBasedOAuth):
         return key_secret
 
 
+class GoogleOpenId(OpenIdAuth):
+    name = 'google'
+
+    def get_user_id(self, details, response):
+        """
+        Return user unique id provided by service. For google user email
+        is unique enought to flag a single user. Email comes from schema:
+        http://axschema.org/contact/email
+        """
+        email = details['email']
+        validate_whitelists(self, email)
+        return email
+
+    def openid_url(self):
+        """Return Google OpenID service url"""
+        return 'https://www.google.com/accounts/o8/id'
+
+
+def validate_whitelists(backend, email):
+    domain = email.split('@', 1)[1]
+    emails = backend.strategy.setting('GOOGLE_WHITE_LISTED_EMAILS', [])
+    domains = backend.strategy.setting('GOOGLE_WHITE_LISTED_DOMAINS', [])
+    if (emails and email not in emails) or (domains and domain not in domains):
+        raise AuthFailed(backend, 'Email or domain not allowed')
+
+
 BACKENDS = {
+    'google': GoogleOpenId,
     'google-oauth': GoogleOAuth,
     'google-oauth2': GoogleOAuth2,
 }
