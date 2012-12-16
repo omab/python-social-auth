@@ -68,7 +68,7 @@ class OAuthAuth(BaseAuth):
     def get_scope(self):
         """Return list with needed access scope"""
         return (self.DEFAULT_SCOPE or []) + \
-               self.strategy.setting('EXTRA_SCOPE', [])
+               self.strategy.setting('SCOPE', [])
 
     def get_scope_argument(self):
         param = {}

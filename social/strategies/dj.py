@@ -4,6 +4,7 @@ from django.db.models import Model
 from django.db.utils import IntegrityError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
+from django.template import TemplateDoesNotExist, RequestContext, loader
 
 from social.strategies.base import BaseStrategy
 
@@ -28,6 +29,16 @@ class DjangoStrategy(BaseStrategy):
 
     def html(self, content):
         return HttpResponse(content, content_type='text/html;charset=UTF-8')
+
+    def render_html(self, tpl=None, html=None, context=None):
+        if not tpl and not html:
+            raise ValueError('Missing template or html parameters')
+        context = context or {}
+        try:
+            template = loader.get_template(html)
+        except TemplateDoesNotExist:
+            template = loader.get_template_from_string(html)
+        return template.render(RequestContext(self.request, context))
 
     def get_current_user(self, *args, **kwargs):
         return self.request.user

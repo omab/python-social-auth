@@ -70,6 +70,9 @@ class BaseStrategy(object):
     def get_user(self, *args, **kwargs):
         return self.storage.user.get_user(*args, **kwargs)
 
+    def render_html(self, tpl=None, html=None, context=None):
+        raise NotImplementedError('Implement in subclass')
+
     def request_data(self):
         raise NotImplementedError('Implement in subclass')
 

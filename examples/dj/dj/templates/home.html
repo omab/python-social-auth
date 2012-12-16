@@ -7,6 +7,8 @@
 <a href="{% url socialauth_begin "twitter" %}">Twitter</a> <br />
 <a href="{% url socialauth_begin "yahoo" %}">Yahoo</a> <br />
 <a href="{% url socialauth_begin "stripe" %}">Stripe</a> <br />
+<a href="{% url socialauth_begin "facebook" %}">Facebook</a> <br />
+<a href="{% url socialauth_begin "facebook-app" %}">Facebook App</a> <br />
 
 <form action="{% url socialauth_begin "openid" %}" method="post">{% csrf_token %}
   <div>
