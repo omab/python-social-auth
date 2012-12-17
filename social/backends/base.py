@@ -20,6 +20,7 @@ class BaseAuth(object):
     a authentication provider response"""
     name = ''  # provider name, it's stored in database
     supports_inactive_user = False  # Django auth
+    ID_KEY = None
 
     def __init__(self, strategy=None, redirect_uri=None):
         self.titled_name = self.name.upper().replace('-', '_')
@@ -103,7 +104,7 @@ class BaseAuth(object):
 
     def get_user_id(self, details, response):
         """Must return a unique ID from values returned on details"""
-        raise NotImplementedError('Implement in subclass')
+        return response.get(self.ID_KEY)
 
     def get_user_details(self, response):
         """Must return user details in a know internal struct:

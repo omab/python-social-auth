@@ -32,10 +32,6 @@ class OAuthAuth(BaseAuth):
     EXTRA_DATA = None
     ID_KEY = 'id'
 
-    def get_user_id(self, details, response):
-        """OAuth providers return an unique user id in response"""
-        return response[self.ID_KEY]
-
     def extra_data(self, user, uid, response, details=None):
         """Return access_token and extra defined names to store in
         extra_data field"""
