@@ -30,6 +30,7 @@ class DjangoUserMixin(UserMixin):
             qs = cls.objects.exclude(id=association_id)
         else:
             qs = cls.objects.exclude(provider=backend_name)
+        qs = qs.filter(user=user)
 
         if hasattr(user, 'has_usable_password'):
             valid_password = user.has_usable_password()
