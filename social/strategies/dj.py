@@ -59,6 +59,12 @@ class DjangoStrategy(BaseStrategy):
     def session_setdefault(self, name, value):
         return self.request.session.setdefault(name, value)
 
+    def cookies_get(self, name, default=None):
+        return self.request.COOKIES.get(name, default)
+
+    def cookies_set(self, name, value):
+        self.request.COOKIES[name] = value
+
     def to_session(self, next, backend, *args, **kwargs):
         """Returns dict to store on session for partial pipeline."""
         return {

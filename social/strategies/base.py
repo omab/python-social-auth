@@ -95,6 +95,12 @@ class BaseStrategy(object):
         self.session_set(name, value)
         return self.session_get(name)
 
+    def cookies_get(self, name):
+        raise NotImplementedError('Implement in subclass')
+
+    def cookies_set(self, name, value):
+        raise NotImplementedError('Implement in subclass')
+
     def to_session(self, next_idx, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
 
