@@ -35,8 +35,8 @@ class OrkutOAuth(GoogleOAuth):
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from Orkut service"""
         fields = ','.join(set(['name', 'displayName', 'emails'] +
-                          self.strategy.setting('EXTRA_DATA', [])))
-        scope = self.DEFAULT_SCOPE + self.strategy.setting('EXTRA_SCOPE', [])
+                          self.setting('EXTRA_DATA', [])))
+        scope = self.DEFAULT_SCOPE + self.setting('EXTRA_SCOPE', [])
         params = {'method': 'people.get',
                   'id': 'myself',
                   'userId': '@me',
@@ -53,7 +53,7 @@ class OrkutOAuth(GoogleOAuth):
 
     def oauth_request(self, token, url, extra_params=None):
         extra_params = extra_params or {}
-        scope = self.DEFAULT_SCOPE + self.strategy.setting('EXTRA_SCOPE', [])
+        scope = self.DEFAULT_SCOPE + self.setting('EXTRA_SCOPE', [])
         extra_params['scope'] = self.SCOPE_SEPARATOR.join(scope)
         return super(OrkutOAuth, self).oauth_request(token, url, extra_params)
 

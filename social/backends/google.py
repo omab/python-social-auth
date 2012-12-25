@@ -29,7 +29,7 @@ class BaseGoogleAuth(object):
         """Use google email as unique id"""
         email = details['email']
         validate_whitelists(self, email)
-        if self.strategy.setting('USE_UNIQUE_USER_ID', False):
+        if self.setting('USE_UNIQUE_USER_ID', False):
             return response['id']
         else:
             return email
@@ -98,10 +98,10 @@ class GoogleOAuth(BaseGoogleAuth, ConsumerBasedOAuth):
 
     def oauth_request(self, token, url, extra_params=None):
         extra_params = extra_params or {}
-        scope = self.DEFAULT_SCOPE + self.strategy.setting('EXTRA_SCOPE', [])
+        scope = self.DEFAULT_SCOPE + self.setting('EXTRA_SCOPE', [])
         extra_params.update({'scope': ' '.join(scope)})
         if self.get_key_and_secret() != ('anonymous', 'anonymous'):
-            xoauth_displayname = self.strategy.setting('DISPLAY_NAME',
+            xoauth_displayname = self.setting('DISPLAY_NAME',
                                                        'Social Auth')
             extra_params['xoauth_displayname'] = xoauth_displayname
         return super(GoogleOAuth, self).oauth_request(token, url, extra_params)
@@ -138,8 +138,8 @@ class GoogleOpenId(OpenIdAuth):
 
 def validate_whitelists(backend, email):
     domain = email.split('@', 1)[1]
-    emails = backend.strategy.setting('GOOGLE_WHITE_LISTED_EMAILS', [])
-    domains = backend.strategy.setting('GOOGLE_WHITE_LISTED_DOMAINS', [])
+    emails = backend.setting('GOOGLE_WHITE_LISTED_EMAILS', [])
+    domains = backend.setting('GOOGLE_WHITE_LISTED_DOMAINS', [])
     if (emails and email not in emails) or (domains and domain not in domains):
         raise AuthFailed(backend, 'Email or domain not allowed')
 

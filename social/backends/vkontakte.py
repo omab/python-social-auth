@@ -41,15 +41,15 @@ class VKontakteOpenAPI(BaseAuth):
         """Returns local VK authentication page, not necessary for
         VK to authenticate.
         """
-        ctx = {'VK_APP_ID': self.strategy.setting('APP_ID'),
+        ctx = {'VK_APP_ID': self.setting('APP_ID'),
                'VK_COMPLETE_URL': self.redirect_uri}
-        local_html = self.strategy.setting('LOCAL_HTML', 'vkontakte.html')
+        local_html = self.setting('LOCAL_HTML', 'vkontakte.html')
         return self.strategy.render_html(tpl=local_html, context=ctx)
 
     def auth_complete(self, *args, **kwargs):
         """Performs check of authentication in VKontakte, returns User if
         succeeded"""
-        app_cookie = 'vk_app_' + self.strategy.setting('APP_ID')
+        app_cookie = 'vk_app_' + self.setting('APP_ID')
 
         if not 'id' in self.data or not self.strategy.cookie_get(app_cookie):
             raise ValueError('VKontakte authentication is not completed')
@@ -97,7 +97,7 @@ class VKontakteOAuth2(BaseOAuth2):
     def user_data(self, access_token, response, *args, **kwargs):
         """Loads user data from service"""
         request_data = ['first_name', 'last_name', 'screen_name', 'nickname',
-                        'photo'] + self.strategy.setting('EXTRA_DATA', [])
+                        'photo'] + self.setting('EXTRA_DATA', [])
 
         fields = ','.join(set(request_data))
         data = vkontakte_api(self, 'users.get', {
@@ -154,7 +154,7 @@ class VKontakteAppOAuth2(VKontakteOAuth2):
     """VKontakte Application Authentication support"""
 
     def app_auth(self):
-        return self.strategy.setting('APP_AUTH')
+        return self.setting('APP_AUTH')
 
     def auth_complete(self, *args, **kwargs):
         if self.app_auth():

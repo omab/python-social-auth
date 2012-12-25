@@ -34,6 +34,10 @@ class BaseAuth(object):
         else:
             self.data = {}
 
+    def setting(self, name, default=None):
+        """Return setting value from strategy"""
+        return self.setting(name, default)
+
     def auth_url(self):
         """Must return redirect URL to auth provider"""
         raise NotImplementedError('Implement in subclass')
@@ -144,12 +148,12 @@ class BaseAuth(object):
 
     def request_token_extra_arguments(self):
         """Return extra arguments needed on request-token process"""
-        return self.strategy.setting('REQUEST_TOKEN_EXTRA_ARGUMENTS', {})
+        return self.setting('REQUEST_TOKEN_EXTRA_ARGUMENTS', {})
 
     def auth_extra_arguments(self):
         """Return extra arguments needed on auth process. The defaults can be
         overriden by GET parameters."""
-        extra_arguments = self.strategy.setting('AUTH_EXTRA_ARGUMENTS', {})
+        extra_arguments = self.setting('AUTH_EXTRA_ARGUMENTS', {})
         extra_arguments.update((key, self.data[key]) for key in extra_arguments
                                     if key in self.data)
         return extra_arguments
@@ -166,7 +170,7 @@ class BaseAuth(object):
         self.strategy.disconnect(user, association_id)
 
     def urlopen(self, *args, **kwargs):
-        timeout = self.strategy.setting('URLOPEN_TIMEOUT')
+        timeout = self.setting('URLOPEN_TIMEOUT')
         if timeout and 'timeout' not in kwargs:
             kwargs['timeout'] = timeout
         return urlopen(*args, **kwargs)

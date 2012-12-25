@@ -50,7 +50,7 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
         """Return user data from Odnoklassniki REST API"""
         data = {'access_token': access_token, 'method': 'users.getCurrentUser'}
         key, secret = self.get_key_and_secret()
-        public_key = self.strategy.setting('PUBLIC_NAME')
+        public_key = self.setting('PUBLIC_NAME')
         url = 'http://api.odnoklassniki.ru/'
         return odnoklassniki_api(self, data, url, public_key, secret, 'oauth')
 
@@ -77,20 +77,20 @@ class OdnoklassnikiApp(BaseAuth):
         self.verify_auth_sig()
         response = self.get_response()
         fields = ('uid', 'first_name', 'last_name', 'name') + \
-                 self.strategy.setting('EXTRA_USER_DATA_LIST', ())
+                 self.setting('EXTRA_USER_DATA_LIST', ())
         data = {
             'method': 'users.getInfo',
             'uids': '{0}'.format(response['logged_user_id']),
             'fields': ','.join(fields),
         }
         client_key, client_secret = self.get_key_and_secret()
-        public_key = self.strategy.setting('PUBLIC_NAME')
+        public_key = self.setting('PUBLIC_NAME')
         details = odnoklassniki_api(self, data, response['api_server'],
                                     public_key, client_secret,
                                     'iframe_nosession')
         if len(details) == 1 and 'uid' in details[0]:
             details = details[0]
-            auth_data_fields = self.strategy.setting(
+            auth_data_fields = self.setting(
                 'EXTRA_AUTH_DATA_LIST',
                 ('api_server', 'apiconnection', 'session_key',
                  'session_secret_key', 'authorized')
@@ -105,7 +105,7 @@ class OdnoklassnikiApp(BaseAuth):
         return self.strategy.authenticate(*args, **kwargs)
 
     def get_auth_sig(self):
-        secret_key = self.strategy.setting('APP_SECRET')
+        secret_key = self.setting('APP_SECRET')
         hash_source = '{0:d}{1:s}{2:s}'.format(self.data['logged_user_id'],
                                                self.data['session_key'],
                                                secret_key)

@@ -60,7 +60,7 @@ class FacebookOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        params = self.strategy.setting('PROFILE_EXTRA_PARAMS', {})
+        params = self.setting('PROFILE_EXTRA_PARAMS', {})
         params['access_token'] = access_token
         url = 'https://graph.facebook.com/me?' + urlencode(params)
         try:
@@ -120,7 +120,7 @@ class FacebookOAuth2(BaseOAuth2):
             # data is needed (it contains the user ID used to identify the
             # account on further logins), this app cannot allow it to
             # continue with the auth process.
-            raise AuthUnknownError(self, 'An error ocurred while retrieving ' \
+            raise AuthUnknownError(self, 'An error ocurred while retrieving '
                                          'users Facebook data')
 
         data['access_token'] = access_token
@@ -185,8 +185,8 @@ class FacebookAppOAuth2(FacebookOAuth2):
 
     def auth_html(self):
         key, secret = self.get_key_and_secret()
-        namespace = self.strategy.setting('NAMESPACE', None)
-        scope = self.strategy.setting('SCOPE', '')
+        namespace = self.setting('NAMESPACE', None)
+        scope = self.setting('SCOPE', '')
         if scope:
             scope = self.SCOPE_SEPARATOR.join(scope)
         ctx = {
@@ -195,7 +195,7 @@ class FacebookAppOAuth2(FacebookOAuth2):
             'FACEBOOK_COMPLETE_URI': self.redirect_uri,
             'FACEBOOK_APP_NAMESPACE': namespace or key
         }
-        local_html = self.strategy.setting('LOCAL_HTML', 'facebook.html')
+        local_html = self.setting('LOCAL_HTML', 'facebook.html')
         return self.strategy.render_html(local_html, REDIRECT_HTML, ctx)
 
 

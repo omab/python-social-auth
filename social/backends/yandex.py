@@ -68,7 +68,7 @@ class YandexOAuth2(BaseOAuth2):
         return get_user_details(response)
 
     def user_data(self, access_token, response, *args, **kwargs):
-        url = self.strategy.setting('API_URL')
+        url = self.setting('API_URL')
         reply = user_data(self, url, access_token, response, *args, **kwargs)
         if reply:
             if isinstance(reply, list) and len(reply) >= 1:
@@ -105,7 +105,7 @@ def get_user_details(response):
 
     return {
         'username': username,
-        'email':  response.get('email', ''),
+        'email': response.get('email', ''),
         'first_name': first_name,
         'last_name': last_name,
     }

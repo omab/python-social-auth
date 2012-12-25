@@ -105,8 +105,8 @@ class OpenIdAuth(BaseAuth):
         Both list must be a value name and an alias mapping similar to
         SREG_ATTR, OLD_AX_ATTRS or AX_SCHEMA_ATTRS
         """
-        sreg_names = self.strategy.setting('SREG_EXTRA_DATA')
-        ax_names = self.strategy.setting('AX_EXTRA_DATA')
+        sreg_names = self.setting('SREG_EXTRA_DATA')
+        ax_names = self.setting('AX_EXTRA_DATA')
         return self.values_from_response(response, sreg_names, ax_names)
 
     def auth_url(self):
@@ -126,7 +126,7 @@ class OpenIdAuth(BaseAuth):
 
     def trust_root(self):
         """Return trust-root option"""
-        return self.strategy.setting('OPENID_TRUST_ROOT') or \
+        return self.setting('OPENID_TRUST_ROOT') or \
                self.strategy.build_absolute_uri('/')
 
     def continue_pipeline(self, *args, **kwargs):
@@ -168,13 +168,13 @@ class OpenIdAuth(BaseAuth):
         openid_request.addExtension(fetch_request)
 
         # Add PAPE Extension for if configured
-        preferred_policies = self.strategy.setting(
+        preferred_policies = self.setting(
             'OPENID_PAPE_PREFERRED_AUTH_POLICIES'
         )
-        preferred_level_types = self.strategy.setting(
+        preferred_level_types = self.setting(
             'OPENID_PAPE_PREFERRED_AUTH_LEVEL_TYPES'
         )
-        max_age = self.strategy.setting('OPENID_PAPE_MAX_AUTH_AGE')
+        max_age = self.setting('OPENID_PAPE_MAX_AUTH_AGE')
         if max_age is not None:
             try:
                 max_age = int(max_age)

@@ -37,7 +37,7 @@ class OAuthAuth(BaseAuth):
         extra_data field"""
         data = {'access_token': response.get('access_token', '')}
         names = (self.EXTRA_DATA or []) + \
-                self.strategy.setting('EXTRA_DATA', [])
+                self.setting('EXTRA_DATA', [])
         for entry in names:
             if len(entry) == 2:
                 (name, alias), discard = entry, False
@@ -58,13 +58,13 @@ class OAuthAuth(BaseAuth):
         """Return tuple with Consumer Key and Consumer Secret for current
         service provider. Must return (key, secret), order *must* be respected.
         """
-        return self.strategy.setting(self.titled_name + '_KEY'), \
-               self.strategy.setting(self.titled_name + '_SECRET')
+        return self.setting(self.titled_name + '_KEY'), \
+               self.setting(self.titled_name + '_SECRET')
 
     def get_scope(self):
         """Return list with needed access scope"""
         return (self.DEFAULT_SCOPE or []) + \
-               self.strategy.setting('SCOPE', [])
+               self.setting('SCOPE', [])
 
     def get_scope_argument(self):
         param = {}
@@ -110,7 +110,7 @@ class ConsumerBasedOAuth(OAuthAuth):
         for unauthed_token in unauthed_tokens:
             token = Token.from_string(unauthed_token)
             if token.key == self.data.get('oauth_token', 'no-token'):
-                self.strategy.session_set(name, list(set(unauthed_tokens) - \
+                self.strategy.session_set(name, list(set(unauthed_tokens) -
                                                      set([unauthed_token])))
                 break
         else:
