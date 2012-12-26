@@ -20,6 +20,7 @@ class BehanceOAuth2(BaseOAuth2):
     ACCESS_TOKEN_URL = 'https://www.behance.net/v2/oauth/token'
     SCOPE_SEPARATOR = '|'
     EXTRA_DATA = [('username', 'username')]
+    REDIRECT_STATE = False
 
     def get_user_id(self, details, response):
         return response['user']['id']

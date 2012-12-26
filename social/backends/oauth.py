@@ -54,13 +54,6 @@ class OAuthAuth(BaseAuth):
             data[alias] = value
         return data
 
-    def get_key_and_secret(self):
-        """Return tuple with Consumer Key and Consumer Secret for current
-        service provider. Must return (key, secret), order *must* be respected.
-        """
-        return self.setting(self.titled_name + '_KEY'), \
-               self.setting(self.titled_name + '_SECRET')
-
     def get_scope(self):
         """Return list with needed access scope"""
         return (self.DEFAULT_SCOPE or []) + \

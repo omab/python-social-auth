@@ -36,7 +36,7 @@ class BaseAuth(object):
 
     def setting(self, name, default=None):
         """Return setting value from strategy"""
-        return self.setting(name, default)
+        return self.strategy.setting(name, default)
 
     def auth_url(self):
         """Must return redirect URL to auth provider"""
@@ -174,6 +174,13 @@ class BaseAuth(object):
         if timeout and 'timeout' not in kwargs:
             kwargs['timeout'] = timeout
         return urlopen(*args, **kwargs)
+
+    def get_key_and_secret(self):
+        """Return tuple with Consumer Key and Consumer Secret for current
+        service provider. Must return (key, secret), order *must* be respected.
+        """
+        return self.setting(self.titled_name + '_KEY'), \
+               self.setting(self.titled_name + '_SECRET')
 
     @classmethod
     def tokens(cls, instance):

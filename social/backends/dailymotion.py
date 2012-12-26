@@ -28,7 +28,7 @@ class DailymotionOAuth2(BaseOAuth2):
     ACCESS_TOKEN_URL = 'https://api.dailymotion.com/oauth/token'
 
     def get_user_details(self, response):
-        return {'username': response['screenname']}
+        return {'username': response.get('screenname')}
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""

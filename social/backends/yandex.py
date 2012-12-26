@@ -63,6 +63,9 @@ class YandexOAuth(OAuthAuth):
 class YandexOAuth2(BaseOAuth2):
     """Legacy Yandex OAuth2 authentication backend"""
     name = 'yandex-oauth2'
+    AUTHORIZATION_URL = 'https://oauth.yandex.com/authorize'
+    ACCESS_TOKEN_URL = 'https://oauth.yandex.com/token'
+    REDIRECT_STATE = False
 
     def get_user_details(self, response):
         return get_user_details(response)
