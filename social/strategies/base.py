@@ -3,7 +3,7 @@ import random
 import hashlib
 
 from social.utils import setting_name
-from social.strategies.store import OpenIdStore
+from social.store import OpenIdStore
 
 
 class BaseStrategy(object):
