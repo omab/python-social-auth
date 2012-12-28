@@ -22,7 +22,7 @@ def associate_user(strategy, user, uid, social_user=None, *args, **kwargs):
             user, uid, strategy.backend.name
         )
     except Exception, e:
-        if strategy.is_integrity_error(e):
+        if not strategy.is_integrity_error(e):
             raise
         # Protect for possible race condition, those bastard with FTL
         # clicking capabilities, check issue #131:

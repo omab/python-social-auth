@@ -228,10 +228,7 @@ class BaseOAuth2(OAuthAuth):
         params = self.auth_params(state)
         params.update(self.get_scope_argument())
         params.update(self.auth_extra_arguments())
-        query_string = self.strategy.request_query_string()
-        if query_string:
-            query_string = '&' + query_string
-        return self.AUTHORIZATION_URL + '?' + urlencode(params) + query_string
+        return self.AUTHORIZATION_URL + '?' + urlencode(params)
 
     def validate_state(self):
         """Validate state value. Raises exception on error, returns state

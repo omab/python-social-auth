@@ -74,13 +74,7 @@ class SoundcloudOAuth2(BaseOAuth2):
         params = self.auth_params(state)
         params.update(self.get_scope_argument())
         params.update(self.auth_extra_arguments())
-
-        query_string = self.strategy.request_query_string()
-        if query_string:
-            query_string += '&' + query_string
-        else:
-            query_string = ''
-        return self.AUTHORIZATION_URL + '?' + urlencode(params) + query_string
+        return self.AUTHORIZATION_URL + '?' + urlencode(params)
 
 
 # Backend definition

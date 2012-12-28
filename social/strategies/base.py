@@ -76,13 +76,7 @@ class BaseStrategy(object):
     def request_data(self):
         raise NotImplementedError('Implement in subclass')
 
-    def request_query_string(self):
-        raise NotImplementedError('Implement in subclass')
-
     def request_host(self):
-        raise NotImplementedError('Implement in subclass')
-
-    def get_current_user(self, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
 
     def session_get(self, name):
@@ -94,12 +88,6 @@ class BaseStrategy(object):
     def session_setdefault(self, name, value):
         self.session_set(name, value)
         return self.session_get(name)
-
-    def cookies_get(self, name):
-        raise NotImplementedError('Implement in subclass')
-
-    def cookies_set(self, name, value):
-        raise NotImplementedError('Implement in subclass')
 
     def to_session(self, next_idx, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
@@ -138,4 +126,4 @@ class BaseStrategy(object):
         return ''.join([random.choice(chars) for i in range(length)])
 
     def is_integrity_error(self, exception):
-        raise NotImplementedError('Implement in subclass')
+        return self.storage.is_integrity_error(exception)

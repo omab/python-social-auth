@@ -1,13 +1,9 @@
 """Django ORM models for Social Auth"""
-import re
 import base64
 
 from social.exceptions import NotAllowedToDisconnect
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
                                 BaseStorage
-
-
-CLEAN_USERNAME_REGEX = re.compile(r'[^\w.@+-_]+', re.UNICODE)
 
 
 class DjangoUserMixin(UserMixin):
@@ -19,10 +15,6 @@ class DjangoUserMixin(UserMixin):
     def set_extra_data(self, extra_data=None):
         if super(DjangoUserMixin, self).set_extra_data(extra_data):
             self.save()
-
-    @classmethod
-    def clean_username(cls, value):
-        return CLEAN_USERNAME_REGEX.sub('', value)
 
     @classmethod
     def allowed_to_disconnect(cls, user, backend_name, association_id=None):
@@ -51,12 +43,12 @@ class DjangoUserMixin(UserMixin):
             raise NotAllowedToDisconnect()
 
     @classmethod
-    def simple_user_exists(cls, *args, **kwargs):
+    def simple_user_exists(cls, username):
         """
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.
         """
-        return cls.user_model().objects.filter(*args, **kwargs).count() > 0
+        return cls.user_model().objects.filter(username=username).count() > 0
 
     @classmethod
     def get_username(cls, user):

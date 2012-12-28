@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse
 from django.db.models import Model
-from django.db.utils import IntegrityError
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
 from django.template import TemplateDoesNotExist, RequestContext, loader
@@ -18,9 +17,6 @@ class DjangoStrategy(BaseStrategy):
         # GET parameters on it
         return self.request.REQUEST
 
-    def request_query_string(self):
-        return self.request.META.get('QUERY_STRING', '')
-
     def request_host(self):
         return self.request.get_host()
 
@@ -35,13 +31,10 @@ class DjangoStrategy(BaseStrategy):
             raise ValueError('Missing template or html parameters')
         context = context or {}
         try:
-            template = loader.get_template(html)
+            template = loader.get_template(tpl)
         except TemplateDoesNotExist:
             template = loader.get_template_from_string(html)
         return template.render(RequestContext(self.request, context))
-
-    def get_current_user(self, *args, **kwargs):
-        return self.request.user
 
     def authenticate(self, *args, **kwargs):
         kwargs['strategy'] = self
@@ -58,12 +51,6 @@ class DjangoStrategy(BaseStrategy):
 
     def session_setdefault(self, name, value):
         return self.request.session.setdefault(name, value)
-
-    def cookies_get(self, name, default=None):
-        return self.request.COOKIES.get(name, default)
-
-    def cookies_set(self, name, value):
-        self.request.COOKIES[name] = value
 
     def to_session(self, next, backend, *args, **kwargs):
         """Returns dict to store on session for partial pipeline."""
@@ -98,9 +85,6 @@ class DjangoStrategy(BaseStrategy):
             return super(DjangoStrategy, self).random_string(length, chars)
         else:
             return get_random_string(length, chars)
-
-    def is_integrity_error(exception):
-        return exception.__class__ is IntegrityError
 
     def _ctype(self, val):
         """Converts values that are instance of Model to a dictionary

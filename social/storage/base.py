@@ -1,11 +1,15 @@
 """Models mixins for Social Auth"""
-import base64
+import re
 import time
+import base64
 from datetime import datetime, timedelta
 
 from openid.association import Association as OpenIdAssociation
 
 from social.utils import utc
+
+
+CLEAN_USERNAME_REGEX = re.compile(r'[^\w.@+-_]+', re.UNICODE)
 
 
 class UserMixin(object):
@@ -91,7 +95,7 @@ class UserMixin(object):
 
     @classmethod
     def clean_username(cls, value):
-        raise NotImplementedError('Implement in subclass')
+        return CLEAN_USERNAME_REGEX.sub('', value)
 
     @classmethod
     def allowed_to_disconnect(cls, user, backend_name, association_id=None):
@@ -102,7 +106,7 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def simple_user_exists(cls, *args, **kwargs):
+    def simple_user_exists(cls, username):
         """
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.
@@ -182,3 +186,6 @@ class BaseStorage(object):
     user = UserMixin
     nonce = NonceMixin
     association = AssociationMixin
+
+    def is_integrity_error(self, exception):
+        raise NotImplementedError('Implement in subclass')

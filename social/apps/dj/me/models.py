@@ -6,6 +6,7 @@ Requires MongoEngine 0.6.10
 from mongoengine import DictField, Document, IntField, ReferenceField, \
                         StringField
 from mongoengine.django.auth import User
+from mongoengine.queryset import OperationError
 
 from social.storage.dj import DjangoUserMixin, \
                               DjangoAssociationMixin, \
@@ -86,3 +87,7 @@ class DjangoStorage(BaseDjangoStorage):
     user = UserSocialAuth
     nonce = Nonce
     association = Association
+
+    def is_integrity_error(self, exception):
+        return exception.__class__ is OperationError and \
+               'E11000' in exception.message

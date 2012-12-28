@@ -1,6 +1,7 @@
 """Django ORM models for Social Auth"""
 from django.db import models
 from django.conf import settings
+from django.db.utils import IntegrityError
 
 from social.utils import setting_name
 from social.storage.dj import DjangoUserMixin, \
@@ -73,3 +74,6 @@ class DjangoStorage(BaseDjangoStorage):
     user = UserSocialAuth
     nonce = Nonce
     association = Association
+
+    def is_integrity_error(self, exception):
+        return exception.__class__ is IntegrityError
