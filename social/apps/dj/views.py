@@ -5,13 +5,13 @@ from django.contrib.auth import login, REDIRECT_FIELD_NAME, BACKEND_SESSION_KEY
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
-from social.apps.dj.utils import strategy, setting, sanitize_redirect, \
-                                 disconnect_view, BackendWrapper
+from social.utils import sanitize_redirect
+from social.apps.dj.utils import strategy, setting, disconnect_view, \
+                                 BackendWrapper
 
 
 DEFAULT_REDIRECT = setting('LOGIN_REDIRECT_URL')
 LOGIN_ERROR_URL = setting('LOGIN_ERROR_URL', setting('LOGIN_URL'))
-PIPELINE_KEY = setting('PARTIAL_PIPELINE_KEY', 'partial_pipeline')
 
 
 @strategy('socialauth_complete')
@@ -37,13 +37,14 @@ def complete(request, backend, *args, **kwargs):
     redirect_value = request.session.get(REDIRECT_FIELD_NAME, '') or \
                      request.REQUEST.get(REDIRECT_FIELD_NAME, '')
     is_authenticated = request.user.is_authenticated()
-    user = request.user.is_authenticated() and request.user or None
+    user = is_authenticated and request.user or None
     url = DEFAULT_REDIRECT
 
-    if request.session.get(PIPELINE_KEY):
-        data = request.session.pop(PIPELINE_KEY)
-        idx, xargs, xkwargs = strategy.from_session(data, user=user,
-                                                    request=request,
+    if request.session.get('partial_pipeline'):
+        data = request.session.pop('partial_pipeline')
+        kwargs = kwargs.copy()
+        kwargs.setdefault('user', user)
+        idx, xargs, xkwargs = strategy.from_session(data, request=request,
                                                     *args, **kwargs)
         if xkwargs.get('backend', '') == backend:
             user = strategy.continue_pipeline(pipeline_index=idx,

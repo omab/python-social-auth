@@ -75,8 +75,7 @@ class DjangoStrategy(BaseStrategy):
         return self.request.build_absolute_uri(path)
 
     def clean_partial_pipeline(self):
-        name = self.setting('PARTIAL_PIPELINE_KEY', 'partial_pipeline')
-        self.request.session.pop(name, None)
+        self.request.session.pop('partial_pipeline', None)
 
     def random_string(self, length=12, chars=BaseStrategy.ALLOWED_CHARS):
         try:
