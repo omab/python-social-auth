@@ -67,6 +67,8 @@ class FlaskStrategy(BaseStrategy):
 
     def build_absolute_uri(self, path=None):
         path = path or ''
+        if path.startswith('http://') or path.startswith('https://'):
+            return path
         if request.host_url.endswith('/') and path.startswith('/'):
             path = path[1:]
         return request.host_url + (path or '')
