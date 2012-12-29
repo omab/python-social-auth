@@ -13,7 +13,7 @@ REDIRECT_FIELD_NAME = 'next'
 social_auth = Blueprint('social', __name__)
 
 
-@social_auth.route('/login/<string:backend>/')
+@social_auth.route('/login/<string:backend>/', methods=['GET', 'POST'])
 @strategy('social.complete')
 def auth(backend):
     # Save any defined next value into session
@@ -29,7 +29,7 @@ def auth(backend):
     return strategy.start()
 
 
-@social_auth.route('/complete/<string:backend>/')
+@social_auth.route('/complete/<string:backend>/', methods=['GET', 'POST'])
 @strategy('social.complete')
 def complete(backend, *args, **kwargs):
     """Authentication complete view, override this view if transaction
@@ -105,8 +105,9 @@ def complete(backend, *args, **kwargs):
     return redirect(url)
 
 
-@social_auth.route('/disconnect/<string:backend>/')
-@social_auth.route('/disconnect/<string:backend>/<int:association_id>/')
+@social_auth.route('/disconnect/<string:backend>/', methods=['GET', 'POST'])
+@social_auth.route('/disconnect/<string:backend>/<int:association_id>/',
+                   methods=['GET', 'POST'])
 @login_required
 @strategy()
 #@disconnect_view
