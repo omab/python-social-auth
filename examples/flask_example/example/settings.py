@@ -1,7 +1,7 @@
 from example import app
 
 
-app.debug = False
+app.debug = True
 
 SECRET_KEY = 'random-secret-key'
 SESSION_COOKIE_NAME = 'psa_session'
