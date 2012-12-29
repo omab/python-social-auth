@@ -107,7 +107,7 @@ class SQLAlchemyNonceMixin(SQLAlchemyMixin, NonceMixin):
         kwargs = {'server_url': server_url, 'timestamp': timestamp,
                   'salt': salt}
         try:
-            return cls.query.filter(**kwargs)[0]
+            return cls.query.filter_by(**kwargs)[0]
         except IndexError:
             return cls.new_instance(cls, **kwargs)
 
@@ -117,8 +117,8 @@ class SQLAlchemyAssociationMixin(SQLAlchemyMixin, AssociationMixin):
     def store(cls, server_url, association):
         # Don't use get_or_create because issued cannot be null
         try:
-            assoc = cls.query.filter(server_url=server_url,
-                                     handle=association.handle)[0]
+            assoc = cls.query.filter_by(server_url=server_url,
+                                        handle=association.handle)[0]
         except IndexError:
             assoc = cls(server_url=server_url,
                         handle=association.handle)
@@ -130,7 +130,7 @@ class SQLAlchemyAssociationMixin(SQLAlchemyMixin, AssociationMixin):
 
     @classmethod
     def get(cls, *args, **kwargs):
-        return cls.query.filter(*args, **kwargs)
+        return cls.query.filter_by(*args, **kwargs)
 
     @classmethod
     def remove(cls, ids_to_delete):
