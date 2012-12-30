@@ -98,8 +98,8 @@ def complete(request, backend, *args, **kwargs):
                         request.session.set_expiry(None)
 
             # store last login backend name in session
-            key = setting('LAST_LOGIN', 'social_auth_last_login_backend')
-            request.session[key] = social_user.provider
+            request.session['social_auth_last_login_backend'] = \
+                    social_user.provider
 
             # Remove possible redirect URL from session, if this is a new
             # account, send him to the new-users-page if defined.

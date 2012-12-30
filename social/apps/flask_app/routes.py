@@ -4,10 +4,7 @@ from flask import g, request, session, Response, redirect, Blueprint
 from flask.ext.login import login_required, login_user
 
 from social.utils import sanitize_redirect
-from social.apps.flask_app.utils import strategy, setting
-
-
-REDIRECT_FIELD_NAME = 'next'
+from social.apps.flask_app.utils import strategy
 
 
 social_auth = Blueprint('social', __name__)
@@ -19,13 +16,13 @@ def auth(backend):
     # Save any defined next value into session
     strategy = g.strategy
     data = request.form if request.method == 'POST' else request.args
-    if REDIRECT_FIELD_NAME in data:
+    if 'next' in data:
         # Check and sanitize a user-defined GET/POST next field value
-        redirect_uri = data[REDIRECT_FIELD_NAME]
-        if setting('SANITIZE_REDIRECTS', True):
+        redirect_uri = data['next']
+        if strategy.setting('SANITIZE_REDIRECTS', True):
             redirect_uri = sanitize_redirect(request.host, redirect_uri)
-        session[REDIRECT_FIELD_NAME] = redirect_uri or \
-                                       strategy.setting('LOGIN_REDIRECT_URL')
+        session['next'] = redirect_uri or \
+                          strategy.setting('LOGIN_REDIRECT_URL')
     return strategy.start()
 
 
@@ -36,9 +33,9 @@ def complete(backend, *args, **kwargs):
     management doesn't suit your needs."""
     strategy = g.strategy
     # pop redirect value before the session is trashed on login()
-    redirect_value = session.get(REDIRECT_FIELD_NAME, '') or \
-                     request.form.get(REDIRECT_FIELD_NAME, '') or \
-                     request.args.get(REDIRECT_FIELD_NAME, '')
+    redirect_value = session.get('next', '') or \
+                     request.form.get('next', '') or \
+                     request.args.get('next', '')
     is_authenticated = g.user.is_authenticated()
     user = is_authenticated and g.user or None
     url = strategy.setting('LOGIN_REDIRECT_URL')
@@ -80,8 +77,7 @@ def complete(backend, *args, **kwargs):
             # in authenticate process
             social_user = user.social_user
             # store last login backend name in session
-            key = setting('LAST_LOGIN', 'social_auth_last_login_backend')
-            session[key] = social_user.provider
+            session['social_auth_last_login_backend'] = social_user.provider
 
             # Remove possible redirect URL from session, if this is a new
             # account, send him to the new-users-page if defined.
@@ -101,7 +97,7 @@ def complete(backend, *args, **kwargs):
     if redirect_value and redirect_value != url:
         redirect_value = quote(redirect_value)
         url += ('?' in url and '&' or '?') + \
-               '%s=%s' % (REDIRECT_FIELD_NAME, redirect_value)
+               '%s=%s' % ('next', redirect_value)
     return redirect(url)
 
 
@@ -115,8 +111,8 @@ def disconnect(backend, association_id=None):
     """Disconnects given backend from current logged in user."""
     strategy = g.strategy
     strategy.disconnect(g.user, association_id)
-    url = request.form.get(REDIRECT_FIELD_NAME, '') or \
-          request.args.get(REDIRECT_FIELD_NAME, '') or \
+    url = request.form.get('next', '') or \
+          request.args.get('next', '') or \
           strategy.setting('DISCONNECT_REDIRECT_URL') or \
           strategy.setting('LOGIN_REDIRECT_URL')
     return redirect(url)

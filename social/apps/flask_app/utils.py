@@ -28,15 +28,7 @@ def strategy(redirect_uri=None):
     def decorator(func):
         @wraps(func)
         def wrapper(backend, *args, **kwargs):
-
             g.strategy = get_strategy(backend, redirect_uri, *args, **kwargs)
             return func(backend, *args, **kwargs)
         return wrapper
     return decorator
-
-
-def setting(name, default=None):
-    try:
-        return current_app.config[setting_name(name)]
-    except KeyError:
-        return current_app.config.get(name, default)

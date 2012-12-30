@@ -12,9 +12,8 @@ from social.apps.flask_app.fields import JSONType
 
 
 def init_social(app, db):
-    USER_MODEL = app.config[setting_name('USER_MODEL')]
     UID_LENGTH = app.config.get(setting_name('UID_LENGTH'), 255)
-    User = module_member(USER_MODEL)
+    User = module_member(app.config[setting_name('USER_MODEL')])
 
     class UserSocialAuth(db.Model, SQLAlchemyUserMixin):
         """Social Auth association model"""
