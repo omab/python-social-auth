@@ -13,9 +13,9 @@ def get_strategy(backend, redirect_uri=None, *args, **kwargs):
         raise ValueError('Missing backend entry')
 
     Strategy = module_member(current_app.config.get(setting_name('STRATEGY'),
-                                    'social.strategies.fl.FlaskStrategy'))
+                             'social.strategies.flask_strategy.FlaskStrategy'))
     Storage = module_member(current_app.config.get(setting_name('STORAGE'),
-                                    'social.apps.fl.models.FlaskStorage'))
+                             'social.apps.flask_app.models.FlaskStorage'))
 
     uri = redirect_uri
     if uri and not uri.startswith('/'):

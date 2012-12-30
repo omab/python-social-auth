@@ -9,8 +9,8 @@ from flask.ext import login
 
 sys.path.append('../..')
 
-from social.apps.fl.routes import social_auth
-from social.apps.fl.models import init_social
+from social.apps.flask_app.routes import social_auth
+from social.apps.flask_app.models import init_social
 
 # App
 app = Flask(__name__)

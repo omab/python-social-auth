@@ -1,2 +1,2 @@
 from example.models import user
-from social.apps.fl import models
+from social.apps.flask_app import models

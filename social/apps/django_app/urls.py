@@ -2,7 +2,7 @@
 from django.conf.urls.defaults import patterns, url
 
 
-urlpatterns = patterns('social.apps.dj.views',
+urlpatterns = patterns('social.apps.django_app.views',
     # authentication / association
     url(r'^login/(?P<backend>[^/]+)/$', 'auth',
         name='socialauth_begin'),

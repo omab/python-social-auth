@@ -4,11 +4,11 @@ from django.conf import settings
 from django.db.utils import IntegrityError
 
 from social.utils import setting_name
-from social.storage.dj import DjangoUserMixin, \
-                              DjangoAssociationMixin, \
-                              DjangoNonceMixin, \
-                              BaseDjangoStorage
-from social.apps.dj.default.fields import JSONField
+from social.storage.django_orm import DjangoUserMixin, \
+                                      DjangoAssociationMixin, \
+                                      DjangoNonceMixin, \
+                                      BaseDjangoStorage
+from social.apps.django_app.default.fields import JSONField
 
 
 USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \

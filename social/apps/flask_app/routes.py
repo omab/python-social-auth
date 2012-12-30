@@ -4,7 +4,7 @@ from flask import g, request, session, Response, redirect, Blueprint
 from flask.ext.login import login_required, login_user
 
 from social.utils import sanitize_redirect
-from social.apps.fl.utils import strategy, setting
+from social.apps.flask_app.utils import strategy, setting
 
 
 REDIRECT_FIELD_NAME = 'next'

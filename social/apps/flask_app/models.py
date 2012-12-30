@@ -4,11 +4,11 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.schema import UniqueConstraint
 
 from social.utils import setting_name, module_member
-from social.storage.sql_alchemy import SQLAlchemyUserMixin, \
-                                       SQLAlchemyAssociationMixin, \
-                                       SQLAlchemyNonceMixin, \
-                                       BaseSQLAlchemyStorage
-from social.apps.fl.fields import JSONType
+from social.storage.sqlalchemy_orm import SQLAlchemyUserMixin, \
+                                          SQLAlchemyAssociationMixin, \
+                                          SQLAlchemyNonceMixin, \
+                                          BaseSQLAlchemyStorage
+from social.apps.flask_app.fields import JSONType
 
 
 def init_social(app, db):

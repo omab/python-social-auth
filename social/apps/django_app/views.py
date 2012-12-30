@@ -6,8 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
 from social.utils import sanitize_redirect
-from social.apps.dj.utils import strategy, setting, disconnect_view, \
-                                 BackendWrapper
+from social.apps.django_app.utils import strategy, setting, disconnect_view, \
+                                         BackendWrapper
 
 
 DEFAULT_REDIRECT = setting('LOGIN_REDIRECT_URL')

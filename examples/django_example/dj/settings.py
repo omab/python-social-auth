@@ -78,7 +78,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social.apps.dj.default',
+    'social.apps.django_app.default',
     'example',
 )
 
@@ -145,8 +145,8 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/done/'
-SOCIAL_AUTH_STRATEGY = 'social.strategies.dj.DjangoStrategy'
-SOCIAL_AUTH_STORAGE = 'social.apps.dj.default.models.DjangoStorage'
+SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
+SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 SOCIAL_AUTH_GOOGLE_OAUTH_EXTRA_SCOPE = [
     'https://www.googleapis.com/auth/drive',
     'https://www.googleapis.com/auth/userinfo.profile'

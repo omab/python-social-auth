@@ -8,10 +8,10 @@ from mongoengine import DictField, Document, IntField, ReferenceField, \
 from mongoengine.django.auth import User
 from mongoengine.queryset import OperationError
 
-from social.storage.dj import DjangoUserMixin, \
-                              DjangoAssociationMixin, \
-                              DjangoNonceMixin, \
-                              BaseDjangoStorage
+from social.storage.django_orm import DjangoUserMixin, \
+                                      DjangoAssociationMixin, \
+                                      DjangoNonceMixin, \
+                                      BaseDjangoStorage
 
 
 UNUSABLE_PASSWORD = '!'  # Borrowed from django 1.4
