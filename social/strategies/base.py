@@ -89,11 +89,18 @@ class BaseStrategy(object):
         self.session_set(name, value)
         return self.session_get(name)
 
-    def to_session(self, next_idx, *args, **kwargs):
-        raise NotImplementedError('Implement in subclass')
+    def to_session(self, next, backend, *args, **kwargs):
+        return {
+            'next': next,
+            'backend': backend.name,
+            'args': args,
+            'kwargs': kwargs
+        }
 
-    def from_session(self, next_idx, *args, **kwargs):
-        raise NotImplementedError('Implement in subclass')
+    def from_session(self, session):
+        saved_args = session['args']
+        saved_kwargs = session['kwargs']
+        return session['next'], saved_args, saved_kwargs
 
     def build_absolute_uri(self, path=None):
         raise NotImplementedError('Implement in subclass')

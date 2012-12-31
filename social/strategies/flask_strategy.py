@@ -48,23 +48,6 @@ class FlaskStrategy(BaseStrategy):
     def session_setdefault(self, name, value):
         return session.setdefault(name, value)
 
-    def to_session(self, next, backend, *args, **kwargs):
-        """Returns dict to store on session for partial pipeline."""
-        return {
-            'next': next,
-            'backend': backend.name,
-            'args': args,
-            'kwargs': kwargs
-        }
-
-    def from_session(self, session):
-        """Takes session saved data to continue pipeline and merges with any
-        new extra argument needed. Returns tuple with next pipeline index
-        entry, arguments and keyword arguments to continue the process."""
-        saved_args = session['args']
-        saved_kwargs = session['kwargs']
-        return session['next'], saved_args, saved_kwargs
-
     def build_absolute_uri(self, path=None):
         path = path or ''
         if path.startswith('http://') or path.startswith('https://'):
