@@ -35,6 +35,14 @@ def init_social(app, db):
         def user_model(cls):
             return User
 
+        @classmethod
+        def _session(cls):
+            return cls.query.session
+
+        @classmethod
+        def _query(cls):
+            return cls.query
+
     class Nonce(db.Model, SQLAlchemyNonceMixin):
         """One use numbers"""
         __tablename__ = 'social_auth_nonce'
@@ -43,6 +51,14 @@ def init_social(app, db):
         server_url = Column(String(255))
         timestamp = Column(Integer)
         salt = Column(String(40))
+
+        @classmethod
+        def _session(cls):
+            return cls.query.session
+
+        @classmethod
+        def _query(cls):
+            return cls.query
 
     class Association(db.Model, SQLAlchemyAssociationMixin):
         """OpenId account association"""
@@ -55,6 +71,14 @@ def init_social(app, db):
         issued = Column(Integer)
         lifetime = Column(Integer)
         assoc_type = Column(String(64))
+
+        @classmethod
+        def _session(cls):
+            return cls.query.session
+
+        @classmethod
+        def _query(cls):
+            return cls.query
 
     class FlaskStorage(BaseSQLAlchemyStorage):
         user = UserSocialAuth

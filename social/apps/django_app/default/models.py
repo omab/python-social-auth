@@ -75,5 +75,6 @@ class DjangoStorage(BaseDjangoStorage):
     nonce = Nonce
     association = Association
 
-    def is_integrity_error(self, exception):
+    @classmethod
+    def is_integrity_error(cls, exception):
         return exception.__class__ is IntegrityError

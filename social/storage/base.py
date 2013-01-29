@@ -187,5 +187,6 @@ class BaseStorage(object):
     nonce = NonceMixin
     association = AssociationMixin
 
-    def is_integrity_error(self, exception):
+    @classmethod
+    def is_integrity_error(cls, exception):
         raise NotImplementedError('Implement in subclass')
