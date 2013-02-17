@@ -41,5 +41,5 @@ class GoogleAppEngineAuth(BaseAuth):
 
 
 BACKENDS = {
-    'gae': GoogleAppEngineAuth
+    'google-appengine': GoogleAppEngineAuth
 }
