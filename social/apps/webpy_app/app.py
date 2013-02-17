@@ -14,11 +14,6 @@ urls = (
 )
 
 
-class hello(object):
-    def GET(self):
-        return 'Hello'
-
-
 class BaseViewClass(object):
     def __init__(self, *args, **kwargs):
         self.session = web.web_session

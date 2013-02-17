@@ -27,7 +27,7 @@ class BaseStrategy(object):
                  name)
         for name in names:
             try:
-                setting = self.get_setting(name)
+                return self.get_setting(name)
             except (AttributeError, KeyError):
                 pass
         return setting

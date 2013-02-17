@@ -179,8 +179,7 @@ class BaseAuth(object):
         """Return tuple with Consumer Key and Consumer Secret for current
         service provider. Must return (key, secret), order *must* be respected.
         """
-        return self.setting(self.titled_name + '_KEY'), \
-               self.setting(self.titled_name + '_SECRET')
+        return self.setting('KEY'), self.setting('SECRET')
 
     @classmethod
     def tokens(cls, instance):
