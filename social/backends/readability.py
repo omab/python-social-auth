@@ -13,7 +13,6 @@ from social.exceptions import AuthCanceled
 
 
 READABILITY_API = 'https://www.readability.com/api/rest/v1/'
-READABILITY_USER_DATA_URL = '%s/users/_current' % READABILITY_API
 
 
 class ReadabilityOAuth(ConsumerBasedOAuth):
