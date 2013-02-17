@@ -168,21 +168,6 @@ class AssociationMixin(object):
     assoc_type = ''
 
     @classmethod
-    def store(cls, server_url, association):
-        """Create an Association instance"""
-        raise NotImplementedError('Implement in subclass')
-
-    @classmethod
-    def get(cls, *args, **kwargs):
-        """Get an Association instance"""
-        raise NotImplementedError('Implement in subclass')
-
-    @classmethod
-    def remove(cls, ids_to_delete):
-        """Remove an Association instance"""
-        raise NotImplementedError('Implement in subclass')
-
-    @classmethod
     def oids(cls, server_url, handle=None):
         kwargs = {'server_url': server_url}
         if handle is not None:
@@ -196,6 +181,21 @@ class AssociationMixin(object):
                                    assoc.assoc_type))
                 for assoc in cls.get(**kwargs)
         ], key=lambda x: x[1].issued, reverse=True)
+
+    @classmethod
+    def store(cls, server_url, association):
+        """Create an Association instance"""
+        raise NotImplementedError('Implement in subclass')
+
+    @classmethod
+    def get(cls, *args, **kwargs):
+        """Get an Association instance"""
+        raise NotImplementedError('Implement in subclass')
+
+    @classmethod
+    def remove(cls, ids_to_delete):
+        """Remove an Association instance"""
+        raise NotImplementedError('Implement in subclass')
 
 
 class BaseStorage(object):
