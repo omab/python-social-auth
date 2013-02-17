@@ -21,7 +21,9 @@ class OpenIdStore(BaseOpenIDStore):
 
     def removeAssociation(self, server_url, handle):
         """Remove association"""
-        return UserSocialAuth.remove_association(server_url, handle)
+        associations_ids = dict(self.assoc.oids(server_url, handle)).keys()
+        if associations_ids:
+            self.assoc.remove(associations_ids)
 
     def getAssociation(self, server_url, handle=None):
         """Return stored assocition"""
