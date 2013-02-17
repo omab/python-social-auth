@@ -14,12 +14,6 @@ from social.backends.open_id import OpenIdAuth
 from social.backends.oauth import BaseOAuth2, OAuthAuth
 
 
-# Yandex configuration
-YANDEX_AUTHORIZATION_URL = 'https://oauth.yandex.ru/authorize'
-YANDEX_ACCESS_TOKEN_URL = 'https://oauth.yandex.ru/token'
-YANDEX_SERVER = 'oauth.yandex.ru'
-
-
 class YandexOpenId(OpenIdAuth):
     """Yandex OpenID authentication backend"""
     name = 'yandex'
@@ -44,8 +38,8 @@ class YandexOpenId(OpenIdAuth):
 class YandexOAuth(OAuthAuth):
     """Yandex OAuth authentication backend"""
     name = 'yaru'
-    AUTHORIZATION_URL = YANDEX_AUTHORIZATION_URL
-    ACCESS_TOKEN_URL = YANDEX_ACCESS_TOKEN_URL
+    AUTHORIZATION_URL = 'https://oauth.yandex.ru/authorize'
+    ACCESS_TOKEN_URL = 'https://oauth.yandex.ru/token'
     REDIRECT_STATE = False
     EXTRA_DATA = [
         ('id', 'id'),

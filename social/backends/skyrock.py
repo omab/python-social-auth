@@ -18,9 +18,9 @@ class SkyrockOAuth(ConsumerBasedOAuth):
     """Skyrock OAuth authentication backend"""
     name = 'skyrock'
     ID_KEY = 'id_user'
-    AUTHORIZATION_URL = 'http://https://api.skyrock.com/v2/oauth/authenticate'
-    REQUEST_TOKEN_URL = 'https://https://api.skyrock.com/v2/oauth/initiate'
-    ACCESS_TOKEN_URL = 'https://https://api.skyrock.com/v2/oauth/token'
+    AUTHORIZATION_URL = 'https://api.skyrock.com/v2/oauth/authenticate'
+    REQUEST_TOKEN_URL = 'https://api.skyrock.com/v2/oauth/initiate'
+    ACCESS_TOKEN_URL = 'https://api.skyrock.com/v2/oauth/token'
     EXTRA_DATA = [('id', 'id')]
 
     def get_user_details(self, response):
