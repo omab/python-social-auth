@@ -49,6 +49,9 @@ class DjangoStrategy(BaseStrategy):
         self.request.session[name] = value
         self.request.session.modified = True
 
+    def session_pop(self, name):
+        self.request.session.pop(name, None)
+
     def session_setdefault(self, name, value):
         return self.request.session.setdefault(name, value)
 
@@ -73,9 +76,6 @@ class DjangoStrategy(BaseStrategy):
 
     def build_absolute_uri(self, path=None):
         return self.request.build_absolute_uri(path)
-
-    def clean_partial_pipeline(self):
-        self.request.session.pop('partial_pipeline', None)
 
     def random_string(self, length=12, chars=BaseStrategy.ALLOWED_CHARS):
         try:

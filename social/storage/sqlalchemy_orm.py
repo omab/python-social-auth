@@ -71,7 +71,7 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
         return cls._session().query(cls.user_model())
 
     @classmethod
-    def simple_user_exists(cls, username):
+    def user_exists(cls, username):
         """
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.

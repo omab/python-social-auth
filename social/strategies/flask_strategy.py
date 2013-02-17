@@ -45,6 +45,9 @@ class FlaskStrategy(BaseStrategy):
     def session_set(self, name, value):
         session[name] = value
 
+    def session_pop(self, name):
+        session.pop(name, None)
+
     def session_setdefault(self, name, value):
         return session.setdefault(name, value)
 
@@ -55,6 +58,3 @@ class FlaskStrategy(BaseStrategy):
         if request.host_url.endswith('/') and path.startswith('/'):
             path = path[1:]
         return request.host_url + (path or '')
-
-    def clean_partial_pipeline(self):
-        session.pop('partial_pipeline', None)

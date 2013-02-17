@@ -43,7 +43,7 @@ class DjangoUserMixin(UserMixin):
             raise NotAllowedToDisconnect()
 
     @classmethod
-    def simple_user_exists(cls, username):
+    def user_exists(cls, username):
         """
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.

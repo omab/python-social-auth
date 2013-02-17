@@ -32,9 +32,6 @@ class BaseStrategy(object):
                 pass
         return setting
 
-    def get_setting(self, name):
-        raise NotImplementedError('Implement in subclass')
-
     def start(self):
         # Clean any partial pipeline info before starting the process
         self.clean_partial_pipeline()
@@ -58,32 +55,11 @@ class BaseStrategy(object):
         kwargs['backend'] = self.backend
         return self.backend.authenticate(*args, **kwargs)
 
-    def redirect(self, url):
-        return url
-
-    def html(self, content):
-        return content
-
     def create_user(self, *args, **kwargs):
         return self.storage.user.create_user(*args, **kwargs)
 
     def get_user(self, *args, **kwargs):
         return self.storage.user.get_user(*args, **kwargs)
-
-    def render_html(self, tpl=None, html=None, context=None):
-        raise NotImplementedError('Implement in subclass')
-
-    def request_data(self):
-        raise NotImplementedError('Implement in subclass')
-
-    def request_host(self):
-        raise NotImplementedError('Implement in subclass')
-
-    def session_get(self, name):
-        raise NotImplementedError('Implement in subclass')
-
-    def session_set(self, name, value):
-        raise NotImplementedError('Implement in subclass')
 
     def session_setdefault(self, name, value):
         self.session_set(name, value)
@@ -102,11 +78,8 @@ class BaseStrategy(object):
         saved_kwargs = session['kwargs']
         return session['next'], saved_args, saved_kwargs
 
-    def build_absolute_uri(self, path=None):
-        raise NotImplementedError('Implement in subclass')
-
     def clean_partial_pipeline(self):
-        raise NotImplementedError('Implement in subclass')
+        self.session_pop('partial_pipeline')
 
     def openid_store(self):
         return OpenIdStore(self)
@@ -134,3 +107,45 @@ class BaseStrategy(object):
 
     def is_integrity_error(self, exception):
         return self.storage.is_integrity_error(exception)
+
+    # Implement the following methods on strategies sub-classes
+
+    def redirect(self, url):
+        """Return a response redirect to the given URL"""
+        raise NotImplementedError('Implement in subclass')
+
+    def get_setting(self, name):
+        """Return value for given setting name"""
+        raise NotImplementedError('Implement in subclass')
+
+    def html(self, content):
+        """Return HTTP response with given content"""
+        raise NotImplementedError('Implement in subclass')
+
+    def render_html(self, tpl=None, html=None, context=None):
+        """Render given template or raw html with given context"""
+        raise NotImplementedError('Implement in subclass')
+
+    def request_data(self):
+        """Return current request data (POST or GET)"""
+        raise NotImplementedError('Implement in subclass')
+
+    def request_host(self):
+        """Return current host value"""
+        raise NotImplementedError('Implement in subclass')
+
+    def session_get(self, name):
+        """Return session value for given key"""
+        raise NotImplementedError('Implement in subclass')
+
+    def session_set(self, name, value):
+        """Set session value for given key"""
+        raise NotImplementedError('Implement in subclass')
+
+    def session_pop(self, name):
+        """Pop session value for given key"""
+        raise NotImplementedError('Implement in subclass')
+
+    def build_absolute_uri(self, path=None):
+        """Build absolute URI with given (optional) path"""
+        raise NotImplementedError('Implement in subclass')
