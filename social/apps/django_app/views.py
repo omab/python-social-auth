@@ -5,7 +5,7 @@ from django.contrib.auth import login, REDIRECT_FIELD_NAME, BACKEND_SESSION_KEY
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
-from social.utils import sanitize_redirect
+from social.utils import sanitize_redirect, user_is_authenticated
 from social.apps.django_app.utils import strategy, setting, disconnect_view, \
                                          BackendWrapper
 
@@ -36,7 +36,8 @@ def complete(request, backend, *args, **kwargs):
     # pop redirect value before the session is trashed on login()
     redirect_value = request.session.get(REDIRECT_FIELD_NAME, '') or \
                      request.REQUEST.get(REDIRECT_FIELD_NAME, '')
-    is_authenticated = request.user.is_authenticated()
+
+    is_authenticated = user_is_authenticated(request.user)
     user = is_authenticated and request.user or None
     url = DEFAULT_REDIRECT
 

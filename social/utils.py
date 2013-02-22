@@ -82,3 +82,16 @@ def sanitize_redirect(host, redirect_to):
     if netloc and netloc != host:
         return None
     return redirect_to
+
+
+def user_is_authenticated(user):
+    if user and hasattr(user, 'is_authenticated'):
+        if callable(user.authenticated):
+            authenticated = user.is_authenticated()
+        else:
+            authenticated = user.is_authenticated
+    elif user:
+        authenticated = True
+    else:
+        authenticated = False
+    return authenticated

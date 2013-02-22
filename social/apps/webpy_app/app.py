@@ -2,7 +2,7 @@ from urllib2 import quote
 
 import web
 
-from social.utils import sanitize_redirect
+from social.utils import sanitize_redirect, user_is_authenticated
 from social.apps.webpy_app.utils import strategy
 
 
@@ -73,7 +73,7 @@ class complete(BaseViewClass):
         url = strategy.setting('LOGIN_REDIRECT_URL')
 
         user = self.get_current_user()
-        is_authenticated = user and user.is_authenticated()
+        is_authenticated = user_is_authenticated(user)
         if not is_authenticated:
             user = None
 

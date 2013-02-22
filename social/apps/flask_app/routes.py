@@ -3,7 +3,7 @@ from urllib2 import quote
 from flask import g, request, session, Response, redirect, Blueprint
 from flask.ext.login import login_required, login_user
 
-from social.utils import sanitize_redirect
+from social.utils import sanitize_redirect, user_is_authenticated
 from social.apps.flask_app.utils import strategy
 
 
@@ -36,7 +36,8 @@ def complete(backend, *args, **kwargs):
     redirect_value = session.get('next', '') or \
                      request.form.get('next', '') or \
                      request.args.get('next', '')
-    is_authenticated = g.user.is_authenticated()
+
+    is_authenticated = user_is_authenticated(g.user)
     user = is_authenticated and g.user or None
     url = strategy.setting('LOGIN_REDIRECT_URL')
 
