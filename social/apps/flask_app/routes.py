@@ -3,7 +3,8 @@ from urllib2 import quote
 from flask import g, request, session, Response, redirect, Blueprint
 from flask.ext.login import login_required, login_user
 
-from social.utils import sanitize_redirect, user_is_authenticated
+from social.utils import sanitize_redirect, user_is_authenticated, \
+                         user_is_active
 from social.apps.flask_app.utils import strategy
 
 
@@ -70,7 +71,7 @@ def complete(backend, *args, **kwargs):
                   strategy.setting('NEW_ASSOCIATION_REDIRECT_URL') or \
                   strategy.setting('LOGIN_REDIRECT_URL')
     elif user:
-        if getattr(user, 'is_active', True):
+        if user_is_active(user):
             # catch is_new flag before login() resets the instance
             is_new = getattr(user, 'is_new', False)
             login_user(user)

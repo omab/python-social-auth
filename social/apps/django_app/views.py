@@ -5,7 +5,8 @@ from django.contrib.auth import login, REDIRECT_FIELD_NAME, BACKEND_SESSION_KEY
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
-from social.utils import sanitize_redirect, user_is_authenticated
+from social.utils import sanitize_redirect, user_is_authenticated, \
+                         user_is_active
 from social.apps.django_app.utils import strategy, setting, disconnect_view, \
                                          BackendWrapper
 
@@ -69,7 +70,7 @@ def complete(request, backend, *args, **kwargs):
                   strategy.setting('NEW_ASSOCIATION_REDIRECT_URL') or \
                   DEFAULT_REDIRECT
     elif user:
-        if getattr(user, 'is_active', True):
+        if user_is_active(user):
             # catch is_new flag before login() resets the instance
             is_new = getattr(user, 'is_new', False)
             login(request, user)

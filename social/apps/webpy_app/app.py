@@ -2,7 +2,8 @@ from urllib2 import quote
 
 import web
 
-from social.utils import sanitize_redirect, user_is_authenticated
+from social.utils import sanitize_redirect, user_is_authenticated, \
+                         user_is_active
 from social.apps.webpy_app.utils import strategy
 
 
@@ -106,7 +107,7 @@ class complete(BaseViewClass):
                       strategy.setting('NEW_ASSOCIATION_REDIRECT_URL') or \
                       strategy.setting('LOGIN_REDIRECT_URL')
         elif user:
-            if getattr(user, 'is_active', True):
+            if user_is_active(user):
                 # catch is_new flag before login() resets the instance
                 is_new = getattr(user, 'is_new', False)
                 self.login_user(user)
