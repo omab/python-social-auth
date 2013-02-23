@@ -2,8 +2,6 @@ from functools import wraps
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.views.decorators.http import require_POST
-from django.views.decorators.csrf import csrf_protect
 
 from social.utils import setting_name, module_member
 from social.strategies.utils import get_strategy
@@ -31,16 +29,6 @@ def strategy(redirect_uri=None):
             return func(request, backend, *args, **kwargs)
         return wrapper
     return decorator
-
-
-def disconnect_view(func):
-    @wraps(func)
-    def wrapper(request, *args, **kwargs):
-        return func(request, *args, **kwargs)
-
-    if setting('FORCE_POST_DISCONNECT'):
-        wrapper = require_POST(csrf_protect(wrapper))
-    return wrapper
 
 
 def setting(name, default=None):

@@ -3,12 +3,12 @@ from urllib2 import quote
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import login, REDIRECT_FIELD_NAME, BACKEND_SESSION_KEY
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.http import require_POST
 
 from social.utils import sanitize_redirect, user_is_authenticated, \
                          user_is_active
-from social.apps.django_app.utils import strategy, setting, disconnect_view, \
-                                         BackendWrapper
+from social.apps.django_app.utils import strategy, setting, BackendWrapper
 
 
 DEFAULT_REDIRECT = setting('LOGIN_REDIRECT_URL')
@@ -124,7 +124,8 @@ def complete(request, backend, *args, **kwargs):
 
 @login_required
 @strategy()
-@disconnect_view
+@require_POST
+@csrf_protect
 def disconnect(request, backend, association_id=None):
     """Disconnects given backend from current logged in user."""
     strategy = request.strategy

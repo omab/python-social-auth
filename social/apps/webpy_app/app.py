@@ -142,14 +142,8 @@ class complete(BaseViewClass):
 
 
 class disconnect(BaseViewClass):
-    def GET(self, backend, association_id=None):
-        return self._disconnect(backend, association_id)
-
-    def POST(self, backend, association_id=None):
-        return self._disconnect(backend, association_id)
-
     @strategy()
-    def _disconnect(self, backend, association_id=None):
+    def POST(self, backend, association_id=None):
         strategy = self.strategy
         user = self.get_current_user()
         strategy.disconnect(user, association_id)

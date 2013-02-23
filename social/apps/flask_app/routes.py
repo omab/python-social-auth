@@ -103,12 +103,11 @@ def complete(backend, *args, **kwargs):
     return redirect(url)
 
 
-@social_auth.route('/disconnect/<string:backend>/', methods=['GET', 'POST'])
+@social_auth.route('/disconnect/<string:backend>/', methods=['POST'])
 @social_auth.route('/disconnect/<string:backend>/<int:association_id>/',
-                   methods=['GET', 'POST'])
+                   methods=['POST'])
 @login_required
 @strategy()
-#@disconnect_view
 def disconnect(backend, association_id=None):
     """Disconnects given backend from current logged in user."""
     strategy = g.strategy
