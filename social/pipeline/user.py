@@ -1,5 +1,7 @@
 from uuid import uuid4
 
+from social.utils import slugify
+
 
 def get_username(strategy, details, user=None, *args, **kwargs):
     storage = strategy.storage
@@ -8,6 +10,7 @@ def get_username(strategy, details, user=None, *args, **kwargs):
         email_as_username = strategy.setting('USERNAME_IS_FULL_EMAIL', False)
         uuid_length = strategy.setting('UUID_LENGTH', 16)
         max_length = storage.user.username_max_length()
+        do_slugify = strategy.setting('SLUGIFY_USERNAMES', False)
 
         if email_as_username and details.get('email'):
             username = details['email']
@@ -18,6 +21,8 @@ def get_username(strategy, details, user=None, *args, **kwargs):
 
         short_username = username[:max_length - uuid_length]
         final_username = storage.user.clean_username(username[:max_length])
+        if do_slugify:
+            final_username = slugify(final_username)
 
         # Generate a unique username for current user using username
         # as base but adding a unique hash at the end. Original
@@ -25,6 +30,8 @@ def get_username(strategy, details, user=None, *args, **kwargs):
         while storage.user.user_exists(final_username):
             username = short_username + uuid4().get_hex()[:uuid_length]
             final_username = storage.user.clean_username(username[:max_length])
+            if do_slugify:
+                final_username = slugify(final_username)
     else:
         final_username = storage.user.get_username(user)
     return {'username': final_username}

@@ -1,6 +1,8 @@
+import re
 import sys
 import urlparse
 import urllib
+import unicodedata
 from cgi import parse_qsl
 from datetime import timedelta, tzinfo
 
@@ -108,3 +110,15 @@ def user_is_active(user):
     else:
         is_active = False
     return is_active
+
+
+# This slugify version was borrowed from django revision a61dbd6
+def slugify(value):
+    """Converts to lowercase, removes non-word characters (alphanumerics
+    and underscores) and converts spaces to hyphens. Also strips leading
+    and trailing whitespace."""
+    value = unicodedata.normalize('NFKD', value) \
+                       .encode('ascii', 'ignore') \
+                       .decode('ascii')
+    value = re.sub('[^\w\s-]', '', value).strip().lower()
+    return re.sub('[-\s]+', '-', value)
