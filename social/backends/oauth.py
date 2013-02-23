@@ -146,12 +146,13 @@ class ConsumerBasedOAuth(OAuthAuth):
             parameters=params
         )
 
-    def oauth_request(self, token, url, extra_params=None):
+    def oauth_request(self, token, url, extra_params=None, method=HTTP_METHOD):
         """Generate OAuth request, setups callback url"""
         return build_consumer_oauth_request(self, token, url,
                                             self.redirect_uri,
                                             self.data.get('oauth_verifier'),
-                                            extra_params)
+                                            extra_params,
+                                            method=method)
 
     def fetch_response(self, request):
         """Executes request and fetchs service response"""
