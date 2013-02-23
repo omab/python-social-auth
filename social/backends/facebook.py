@@ -26,18 +26,6 @@ from social.exceptions import AuthException, AuthCanceled, AuthFailed, \
                               AuthTokenError, AuthUnknownError
 
 
-REDIRECT_HTML = """
-<script type="text/javascript">
-    var domain = 'https://apps.facebook.com/',
-        redirectURI = domain + "{{ FACEBOOK_APP_NAMESPACE }}" + '/';
-    window.top.location = 'https://www.facebook.com/dialog/oauth/' +
-                          '?client_id={{ FACEBOOK_KEY }}' +
-                          '&redirect_uri=' + encodeURIComponent(redirectURI) +
-                          '&scope={{ FACEBOOK_EXTENDED_PERMISSIONS }}';
-</script>
-"""
-
-
 class FacebookOAuth2(BaseOAuth2):
     """Facebook OAuth2 authentication backend"""
     name = 'facebook'
@@ -195,8 +183,8 @@ class FacebookAppOAuth2(FacebookOAuth2):
             'FACEBOOK_COMPLETE_URI': self.redirect_uri,
             'FACEBOOK_APP_NAMESPACE': namespace or key
         }
-        local_html = self.setting('LOCAL_HTML', 'facebook.html')
-        return self.strategy.render_html(local_html, REDIRECT_HTML, ctx)
+        html = self.setting('LOCAL_HTML', 'facebook.html')
+        return self.strategy.render_html(html, ctx)
 
 
 # Backend definition
