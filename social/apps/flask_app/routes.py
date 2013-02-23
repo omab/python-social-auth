@@ -17,6 +17,12 @@ def auth(backend):
     # Save any defined next value into session
     strategy = g.strategy
     data = request.form if request.method == 'POST' else request.args
+
+    # Save extra data into session.
+    for field_name in strategy.setting('FIELDS_STORED_IN_SESSION', []):
+        if field_name in data:
+            session[field_name] = data[field_name]
+
     if 'next' in data:
         # Check and sanitize a user-defined GET/POST next field value
         redirect_uri = data['next']

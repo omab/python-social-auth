@@ -48,6 +48,12 @@ class auth(BaseViewClass):
     def _auth(self, backend):
         # Save any defined next value into session
         strategy = self.strategy
+
+        # Save extra data into session.
+        for field_name in strategy.setting('FIELDS_STORED_IN_SESSION', []):
+            if field_name in self.data:
+                self.session[field_name] = self.data[field_name]
+
         if 'next' in self.data:
             # Check and sanitize a user-defined GET/POST next field value
             redirect_uri = self.data['next']

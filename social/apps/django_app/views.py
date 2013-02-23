@@ -19,6 +19,12 @@ LOGIN_ERROR_URL = setting('LOGIN_ERROR_URL', setting('LOGIN_URL'))
 def auth(request, backend):
     # Save any defined next value into session
     data = request.POST if request.method == 'POST' else request.GET
+
+    # Save extra data into session.
+    for field_name in request.strategy.setting('FIELDS_STORED_IN_SESSION', []):
+        if field_name in data:
+            request.session[field_name] = data[field_name]
+
     if REDIRECT_FIELD_NAME in data:
         # Check and sanitize a user-defined GET/POST next field value
         redirect = data[REDIRECT_FIELD_NAME]
