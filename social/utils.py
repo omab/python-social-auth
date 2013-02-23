@@ -122,3 +122,10 @@ def slugify(value):
                        .decode('ascii')
     value = re.sub('[^\w\s-]', '', value).strip().lower()
     return re.sub('[-\s]+', '-', value)
+
+
+def first(func, items):
+    """Return the first item in the list for what func returns True"""
+    for item in items:
+        if func(item):
+            return item
