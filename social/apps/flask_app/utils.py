@@ -8,6 +8,15 @@ from social.strategies.utils import get_strategy
 
 AUTHENTICATION_BACKENDS = setting_name('AUTHENTICATION_BACKENDS')
 
+DEFAULTS = {
+    'STORAGE': 'social.apps.flask_app.models.FlaskStorage',
+    'STRATEGY': 'social.strategies.flask_strategy.FlaskStrategy'
+}
+
+
+def get_helper(name):
+    return current_app.config.get(setting_name(name), DEFAULTS[name])
+
 
 def strategy(redirect_uri=None):
     def decorator(func):
@@ -17,14 +26,8 @@ def strategy(redirect_uri=None):
             if uri and not uri.startswith('/'):
                 uri = url_for(uri, backend=backend)
             backends = current_app.config[AUTHENTICATION_BACKENDS]
-            strategy = current_app.config.get(
-                setting_name('STRATEGY'),
-                'social.strategies.flask_strategy.FlaskStrategy'
-            )
-            storage = current_app.config.get(
-                setting_name('STORAGE'),
-                'social.apps.flask_app.models.FlaskStorage'
-            )
+            strategy = get_helper('STRATEGY')
+            storage = get_helper('STORAGE')
             g.strategy = get_strategy(backends, strategy, storage, request,
                                       backend, redirect_uri=uri, *args,
                                       **kwargs)

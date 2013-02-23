@@ -8,8 +8,7 @@ except ImportError:  # django < 1.4
     empty = object()
 
 
-from social.utils import user_is_authenticated
-from social.backends.utils import load_backends
+from social.utils import user_backends_data
 from social.apps.django_app.utils import Storage
 
 
@@ -28,29 +27,9 @@ class LazyDict(SimpleLazyObject):
 
 def backends(request):
     """Load Social Auth current user data to context under the key 'backends'.
-
-    Context entry will have the following keys:
-        associated: UserSocialAuth model instances for currently associated
-                    accounts
-        not_associated: Not associated (yet) backend names
-        backends: All backend names.
-
-    If user is not authenticated, then 'associated' list is empty, and there's
-    no difference between 'not_associated' and 'backends'.
-    """
-    def context_value():
-        available = load_backends().keys()
-        values = {'associated': [],
-                  'not_associated': available,
-                  'backends': available}
-        if user_is_authenticated(request.user):
-            associated = Storage.user.get_social_auth_for_user(request.user)
-            not_associated = list(set(available) -
-                                  set(assoc.provider for assoc in associated))
-            values['associated'] = associated
-            values['not_associated'] = not_associated
-        return values
-    return {'backends': LazyDict(context_value)}
+    Will return the output of social.utils.user_backends_data."""
+    return {'backends': LazyDict(lambda: user_backends_data(request.user,
+                                                            Storage))}
 
 
 def login_redirect(request):

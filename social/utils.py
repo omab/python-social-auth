@@ -6,6 +6,8 @@ import unicodedata
 from cgi import parse_qsl
 from datetime import timedelta, tzinfo
 
+from social.backends.utils import load_backends
+
 
 SETTING_PREFIX = 'SOCIAL_AUTH'
 
@@ -129,3 +131,28 @@ def first(func, items):
     for item in items:
         if func(item):
             return item
+
+
+def user_backends_data(user, storage):
+    """
+    Will return backends data for given user, the return value will have the
+    following keys:
+        associated: UserSocialAuth model instances for currently associated
+                    accounts
+        not_associated: Not associated (yet) backend names
+        backends: All backend names.
+
+    If user is not authenticated, then 'associated' list is empty, and there's
+    no difference between 'not_associated' and 'backends'.
+    """
+    available = load_backends().keys()
+    values = {'associated': [],
+              'not_associated': available,
+              'backends': available}
+    if user_is_authenticated(user):
+        associated = storage.user.get_social_auth_for_user(user)
+        not_associated = list(set(available) -
+                              set(assoc.provider for assoc in associated))
+        values['associated'] = associated
+        values['not_associated'] = not_associated
+    return values
