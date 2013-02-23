@@ -5,9 +5,17 @@ def get_username(strategy, details, user=None, *args, **kwargs):
     storage = strategy.storage
 
     if not user:
-        username = unicode(details.get('username') or uuid4().get_hex())
+        email_as_username = strategy.setting('USERNAME_IS_FULL_EMAIL', False)
         uuid_length = strategy.setting('UUID_LENGTH', 16)
         max_length = storage.user.username_max_length()
+
+        if email_as_username and details.get('email'):
+            username = details['email']
+        elif details.get('username'):
+            username = unicode(details['username'])
+        else:
+            username = uuid4().get_hex()
+
         short_username = username[:max_length - uuid_length]
         final_username = storage.user.clean_username(username[:max_length])
 
