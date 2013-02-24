@@ -25,7 +25,6 @@ class OAuthAuth(BaseAuth):
 
     access_token is always stored.
     """
-    SCOPE_VAR_NAME = None
     SCOPE_PARAMETER_NAME = 'scope'
     DEFAULT_SCOPE = None
     SCOPE_SEPARATOR = ' '

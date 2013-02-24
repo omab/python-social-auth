@@ -32,7 +32,6 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
     ID_KEY = 'uid'
     AUTHORIZATION_URL = 'http://www.odnoklassniki.ru/oauth/authorize'
     ACCESS_TOKEN_URL = 'http://api.odnoklassniki.ru/oauth/token.do'
-    SETTINGS_PUBLIC_NAME = 'ODNOKLASSNIKI_OAUTH2_APP_KEY'
     EXTRA_DATA = [('refresh_token', 'refresh_token'),
                   ('expires_in', 'expires')]
 
@@ -51,8 +50,8 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
         data = {'access_token': access_token, 'method': 'users.getCurrentUser'}
         key, secret = self.get_key_and_secret()
         public_key = self.setting('PUBLIC_NAME')
-        url = 'http://api.odnoklassniki.ru/'
-        return odnoklassniki_api(self, data, url, public_key, secret, 'oauth')
+        return odnoklassniki_api(self, data, 'http://api.odnoklassniki.ru/',
+                                 public_key, secret, 'oauth')
 
 
 class OdnoklassnikiApp(BaseAuth):
@@ -90,11 +89,10 @@ class OdnoklassnikiApp(BaseAuth):
                                     'iframe_nosession')
         if len(details) == 1 and 'uid' in details[0]:
             details = details[0]
-            auth_data_fields = self.setting(
-                'EXTRA_AUTH_DATA_LIST',
-                ('api_server', 'apiconnection', 'session_key',
-                 'session_secret_key', 'authorized')
-            )
+            auth_data_fields = self.setting('EXTRA_AUTH_DATA_LIST',
+                                            ('api_server', 'apiconnection',
+                                             'session_key', 'authorized',
+                                             'session_secret_key'))
 
             for field in auth_data_fields:
                 details[field] = response[field]

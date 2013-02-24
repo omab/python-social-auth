@@ -120,6 +120,57 @@ class VKontakteOAuth2(BaseOAuth2):
         return data
 
 
+class VKontakteAppOAuth2(VKontakteOAuth2):
+    """VKontakte Application Authentication support"""
+    name = 'vkontakte-app'
+
+    def user_profile(self, user_id, access_token=None):
+        data = {'uids': user_id, 'fields': 'photo'}
+        if access_token:
+            data['access_token'] = access_token
+        profiles = vkontakte_api(self, 'getProfiles', data).get('response')
+        if profiles:
+            return profiles[0]
+
+    def auth_complete(self, *args, **kwargs):
+        required_params = ('is_app_user', 'viewer_id', 'access_token',
+                           'api_id')
+        if not all(param in self.data for param in required_params):
+            return None
+
+        auth_key = self.data.get('auth_key')
+
+        # Verify signature, if present
+        key, secret = self.get_key_and_secret()
+        if auth_key:
+            check_key = md5('_'.join([self.data.get('api_id'),
+                                      self.data.get('viewer_id'),
+                                      key])).hexdigest()
+            if check_key != auth_key:
+                raise ValueError('VKontakte authentication failed: invalid '
+                                 'auth key')
+
+        user_check = self.setting('USERMODE')
+        user_id = self.data.get('viewer_id')
+        if user_check is not None:
+            user_check = int(user_check)
+            if user_check == 1:
+                is_user = self.data.get('is_app_user')
+            elif user_check == 2:
+                is_user = vkontakte_api(self, 'isAppUser',
+                                        {'uid': user_id}).get('response', 0)
+            if not int(is_user):
+                return None
+        return self.strategy.authenticate(*args, **{'auth': self,
+            'backend': self,
+            'request': self.request,
+            'response': {
+                'response': self.user_profile(user_id),
+                'user_id': user_id,
+            }
+        })
+
+
 def vkontakte_api(backend, method, data):
     """Calls VKontakte OpenAPI method
         http://vkontakte.ru/apiclub,
@@ -150,77 +201,6 @@ def vkontakte_api(backend, method, data):
         return None
 
 
-class VKontakteAppOAuth2(VKontakteOAuth2):
-    """VKontakte Application Authentication support"""
-
-    def app_auth(self):
-        return self.setting('APP_AUTH')
-
-    def auth_complete(self, *args, **kwargs):
-        if self.app_auth():
-            stop, app_auth = self.application_auth(*args, **kwargs)
-            if app_auth:
-                return app_auth
-            if stop:
-                return None
-        return super(VKontakteAppOAuth2, self).auth_complete(*args, **kwargs)
-
-    def user_profile(self, user_id, access_token=None):
-        data = {'uids': user_id, 'fields': 'photo'}
-        if access_token:
-            data['access_token'] = access_token
-        profiles = vkontakte_api(self, 'getProfiles', data).get('response')
-        if profiles:
-            return profiles[0]
-
-    def is_app_user(self, user_id, access_token=None):
-        """Returns app usage flag from VKontakte API"""
-        data = {'uid': user_id}
-        if access_token:
-            data['access_token'] = access_token
-        return vkontakte_api(self, 'isAppUser', data).get('response', 0)
-
-    def application_auth(self, *args, **kwargs):
-        required_params = ('is_app_user', 'viewer_id', 'access_token',
-                           'api_id')
-        if not all(param in self.data for param in required_params):
-            return (False, None)
-
-        auth_key = self.data.get('auth_key')
-
-        # Verify signature, if present
-        app_auth = self.app_auth()
-        if auth_key:
-            check_key = md5('_'.join([self.data.get('api_id'),
-                                      self.data.get('viewer_id'),
-                                      app_auth['key']])).hexdigest()
-            if check_key != auth_key:
-                raise ValueError('VKontakte authentication failed: invalid '
-                                 'auth key')
-
-        user_check = app_auth.get('user_mode', 0)
-        user_id = self.data.get('viewer_id')
-
-        if user_check:
-            if user_check == 1:
-                is_user = self.data.get('is_app_user')
-            else:
-                is_user = self.is_app_user(user_id)
-
-            if not int(is_user):
-                return (True, None)
-
-        return (True, self.strategy.authenticate(*args, **{'auth': self,
-            'backend': self,
-            'request': self.request,
-            'response': {
-                'response': self.user_profile(user_id),
-                'user_id': user_id,
-            }
-        }))
-
-
-# Backend definition
 BACKENDS = {
     'vkontakte': VKontakteOpenAPI,
     'vkontakte-oauth2': VKontakteOAuth2,

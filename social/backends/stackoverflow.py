@@ -2,13 +2,12 @@
 Stackoverflow OAuth support.
 
 This contribution adds support for Stackoverflow OAuth service. The settings
-SOCIAL_AUTH_STACKOVERFLOW_CLIENT_ID, STACKOVERFLOW_CLIENT_SECRET and
-STACKOVERFLOW_CLIENT_SECRET must be defined with the values given by
+SOCIAL_AUTH_STACKOVERFLOW_KEY, SOCIAL_AUTH_STACKOVERFLOW_SECRET and
+SOCIAL_AUTH_STACKOVERFLOW_API_KEY must be defined with the values given by
 Stackoverflow application registration process.
 
-Extended permissions are supported by defining
-STACKOVERFLOW_EXTENDED_PERMISSIONS setting, it must be a list of values
-to request.
+Extended permissions are supported by defining SOCIAL_AUTH_STACKOVERFLOW_SCOPE
+setting, it must be a list of values to request.
 
 By default account id and token expiration time are stored in extra_data
 field, check OAuthBackend class for details on how to extend it.
@@ -46,7 +45,7 @@ class StackoverflowOAuth2(BaseOAuth2):
         url = 'https://api.stackexchange.com/2.1/me?' + urlencode({
             'site': 'stackoverflow',
             'access_token': access_token,
-            'key': self.settings('KEY')
+            'key': self.settings('API_KEY')
         })
 
         opener = self.urlopen(url)

@@ -178,10 +178,10 @@ class FacebookAppOAuth2(FacebookOAuth2):
         if scope:
             scope = self.SCOPE_SEPARATOR.join(scope)
         ctx = {
+            'FACEBOOK_APP_NAMESPACE': namespace or key,
             'FACEBOOK_KEY': key,
             'FACEBOOK_EXTENDED_PERMISSIONS': scope,
             'FACEBOOK_COMPLETE_URI': self.redirect_uri,
-            'FACEBOOK_APP_NAMESPACE': namespace or key
         }
         html = self.setting('LOCAL_HTML', 'facebook.html')
         return self.strategy.render_html(html, ctx)

@@ -27,8 +27,7 @@ from social.backends.oauth import BaseOAuth2, ConsumerBasedOAuth
 class BaseGoogleAuth(object):
     def get_user_id(self, details, response):
         """Use google email as unique id"""
-        email = details['email']
-        validate_whitelists(self, email)
+        email = validate_whitelists(self, details['email'])
         if self.setting('USE_UNIQUE_USER_ID', False):
             return response['id']
         else:
@@ -101,8 +100,7 @@ class GoogleOAuth(BaseGoogleAuth, ConsumerBasedOAuth):
         scope = self.DEFAULT_SCOPE + self.setting('EXTRA_SCOPE', [])
         extra_params.update({'scope': ' '.join(scope)})
         if self.get_key_and_secret() != ('anonymous', 'anonymous'):
-            xoauth_displayname = self.setting('DISPLAY_NAME',
-                                                       'Social Auth')
+            xoauth_displayname = self.setting('DISPLAY_NAME', 'Social Auth')
             extra_params['xoauth_displayname'] = xoauth_displayname
         return super(GoogleOAuth, self).oauth_request(token, url, extra_params)
 
@@ -127,9 +125,7 @@ class GoogleOpenId(OpenIdAuth):
         is unique enought to flag a single user. Email comes from schema:
         http://axschema.org/contact/email
         """
-        email = details['email']
-        validate_whitelists(self, email)
-        return email
+        return validate_whitelists(self, details['email'])
 
     def openid_url(self):
         """Return Google OpenID service url"""
@@ -142,6 +138,7 @@ def validate_whitelists(backend, email):
     domains = backend.setting('GOOGLE_WHITE_LISTED_DOMAINS', [])
     if (emails and email not in emails) or (domains and domain not in domains):
         raise AuthFailed(backend, 'Email or domain not allowed')
+    return email
 
 
 BACKENDS = {
