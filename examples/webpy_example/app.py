@@ -28,9 +28,9 @@ from social.apps.webpy_app import app as social_app
 
 
 urls = (
-  '^/$', 'main',
-  '^/done/$', 'done',
-  '', social_app.app_social
+    '^/$', 'main',
+    '^/done/$', 'done',
+    '', social_app.app_social
 )
 
 
