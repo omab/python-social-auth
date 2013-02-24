@@ -40,7 +40,7 @@ Each pipeline function will receive the following parameters:
 
 Each pipeline entry can return a ``dict``, ``None``, any other type of return
 value is treated as a response instance and returned directly to the client,
-check `Partial Piepeline`_ for details.
+check Partial Piepeline below for details.
 
 If a ``dict`` is returned, any value in the set will be merged into the
 ``kwargs`` argument for the next pipeline entry, ``None`` is taken as if ``{}``
@@ -49,6 +49,7 @@ was returned.
 The workflow will be cut if the exception ``social.exceptions.StopPipeline``
 is raised at any point, but this should be done after a user and
 social user instance are created.
+
 
 Partial Pipeline
 ----------------

@@ -1,6 +1,9 @@
 Backends
 ========
 
+Here's a list and detailed instruction on how to setup the support for each
+backend.
+
 Contents:
 
 .. toctree::

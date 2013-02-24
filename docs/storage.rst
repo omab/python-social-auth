@@ -156,7 +156,7 @@ Sqlalchemy and Django mixins
 ----------------------------
 
 Currently there are partial implementations of mixins for `Sqlalchemy ORM`_ and
-`Django_ ORM`_ with common code used later on current implemented applications.
+`Django ORM`_ with common code used later on current implemented applications.
 
 
 Models Examples

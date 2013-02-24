@@ -28,7 +28,7 @@ Models Setup
 
 At the moment the models for python-social-auth_ are defined inside a function
 because they need the reference to the current db instance and the User model
-used on your project (check `User model reference` below). Once the Flask app
+used on your project (check *User model reference* below). Once the Flask app
 and the database are defined, call ``init_social`` to register the models::
 
     from social.apps.flask_app.models import init_social
@@ -40,15 +40,16 @@ rather than making it as a side-effect of calling this function since the
 database is not available and ``current_app`` cannot be used on init time, just
 run time.
 
-.. _User model reference:
-- User model reference
 
-  The application keeps a reference to the User model used by your project,
-  define it by using this setting::
+User model reference
+--------------------
+
+The application keeps a reference to the User model used by your project,
+define it by using this setting::
 
     SOCIAL_AUTH_USER_MODEL = 'foobar.models.User'
 
-  The value must be the import path to the User model.
+The value must be the import path to the User model.
 
 
 Global user
@@ -59,7 +60,7 @@ define a handler like this to ensure that::
 
     @app.before_request
     def global_user():
-        g.user = <get current logged in user>
+        g.user = get_current_logged_in_user
 
 
 Flask-Login
@@ -71,7 +72,7 @@ handlers to these::
     @login_manager.user_loader
     def load_user(userid):
         try:
-            return .User.query.get(int(userid))
+            return User.query.get(int(userid))
         except (TypeError, ValueError):
             pass
 

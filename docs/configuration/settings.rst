@@ -4,7 +4,7 @@ Configuration
 Application setup
 -----------------
 
-Once the application was installed (Installation_) define the following
+Once the application was installed (check Installation_) define the following
 settings to enable the application behavior. Also check the sections dedicated
 to each framework for detailed instructions.
 
@@ -64,29 +64,29 @@ URLs options
 These URLs are used on different steps of the auth process, some for successful
 results and others for error situations.
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in/'
+``SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in/'``
     Used to redirect the user once the auth process ended successfully. The
     value of ``?next=/foo`` is used if it was present
 
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'
+``SOCIAL_AUTH_LOGIN_ERROR_URL = '/login-error/'``
     URL where the user will be redirected in case of an error
 
-SOCIAL_AUTH_LOGIN_URL = '/login-url/'
+``SOCIAL_AUTH_LOGIN_URL = '/login-url/'``
     Is used as a fallback for ``LOGIN_ERROR_URL``
 
-SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/new-users-redirect-url/'
+``SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/new-users-redirect-url/'``
     Used to redirect new registered users, will be used in place of
     ``SOCIAL_AUTH_LOGIN_REDIRECT_URL`` if defined.
 
-SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/new-association-redirect-url/'
+``SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/new-association-redirect-url/'``
     Like ``SOCIAL_AUTH_NEW_USER_REDIRECT_URL`` but for new associated accounts
     (user is already logged in). Used in place of ``SOCIAL_AUTH_LOGIN_REDIRECT_URL``
 
-SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '/account-disconnected-redirect-url/'
+``SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '/account-disconnected-redirect-url/'``
     The user will be redirected to this URL when a social account is
     disconnected
 
-SOCIAL_AUTH_INACTIVE_USER_URL = '/inactive-user/'
+``SOCIAL_AUTH_INACTIVE_USER_URL = '/inactive-user/'``
     Inactive users can be redirected to this URL when trying to authenticate.
 
 Successful URLs will default to ``SOCIAL_AUTH_LOGIN_URL`` while error URLs will
@@ -117,20 +117,19 @@ Some databases impose limitations to indexes columns (like MySQL InnoDB), these
 limitations won't play nice on some ``UserSocialAuth`` fields. To avoid such
 error define some of the following settings.
 
-SOCIAL_AUTH_UID_LENGTH = <int>
-  Used to define the max length of the field `uid`. A value of 223 should work
-  when using MySQL InnoDB which impose a 767 bytes limit (assuming UTF-8
-  encoding).
+``SOCIAL_AUTH_UID_LENGTH = <int>``
+    Used to define the max length of the field `uid`. A value of 223 should work
+    when using MySQL InnoDB which impose a 767 bytes limit (assuming UTF-8
+    encoding).
 
-SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = <int>
-  ``Nonce`` model has a unique constraint over ``('server_url', 'timestamp',
-  'salt')``, salt has a max length of 40, so ``server_url`` length must be
-  tweaked using this setting.
+``SOCIAL_AUTH_NONCE_SERVER_URL_LENGTH = <int>``
+    ``Nonce`` model has a unique constraint over ``('server_url', 'timestamp',
+    'salt')``, salt has a max length of 40, so ``server_url`` length must be
+    tweaked using this setting.
 
-SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = <int>
-SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = <int>
-  ``Association`` model has a unique constraint over ``('server_url',
-  'handle')``, both fields lengths can be tweaked by these settings.
+``SOCIAL_AUTH_ASSOCIATION_SERVER_URL_LENGTH = <int>`` or ``SOCIAL_AUTH_ASSOCIATION_HANDLE_LENGTH = <int>``
+    ``Association`` model has a unique constraint over ``('server_url',
+    'handle')``, both fields lengths can be tweaked by these settings.
 
 
 Username generation
@@ -143,18 +142,18 @@ defaults to generating one if needed.
 An UUID is appended to usernames in case of collisions. Here are some settings
 to control usernames generation.
 
-SOCIAL_AUTH_DEFAULT_USERNAME = 'foobar'
+``SOCIAL_AUTH_DEFAULT_USERNAME = 'foobar'``
     Default value to use as username, can be a callable. An UUID will be
     appended in case of duplicate entries.
     
-SOCIAL_AUTH_UUID_LENGTH = 16
+``SOCIAL_AUTH_UUID_LENGTH = 16``
     This controls the length of the UUID appended to usernames.
 
-SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
+``SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True``
     If you want to use the full email address as the ``username``, define this
     setting.
 
-SOCIAL_AUTH_SLUGIFY_USERNAMES = False
+``SOCIAL_AUTH_SLUGIFY_USERNAMES = False``
     For those that prefer slugged usernames, the ``get_username`` pipeline can
     apply a slug transformation (code borrowed from Django project) by defining
     this setting to ``True``. The feature is disabled by default to to not
@@ -189,21 +188,20 @@ Processing redirects and urlopen
 The application issues several redirects and API calls, this following settings
 allow some tweaks to the behavior of these.
 
-SOCIAL_AUTH_SANITIZE_REDIRECTS = False
+``SOCIAL_AUTH_SANITIZE_REDIRECTS = False``
     The auth process finishes with a redirect, by default it's done to the
     value of ``SOCIAL_AUTH_LOGIN_REDIRECT_URL`` but can be overridden with
     ``next`` GET argument. If this settings is ``True``, this application will
     very the domain of the final URL and only redirect to it if it's on the
     same domain.
    
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+``SOCIAL_AUTH_REDIRECT_IS_HTTPS = False``
     On projects behind a reverse proxy that uses HTTPS, the redirect URIs
     can became with the wrong schema (``http://`` instead of ``https://``) when
     the request lacks some headers, and might cause errors with the auth
     process, to force HTTPS in the final URIs set this setting to ``True``
 
-
-SOCIAL_AUTH_URLOPEN_TIMEOUT = 30
+``SOCIAL_AUTH_URLOPEN_TIMEOUT = 30``
     Any ``urllib2.urlopen`` call will be performed with the default timeout
     value, to change it without affecting the global socket timeout define this
     setting (the value specifies timeout seconds).
@@ -220,21 +218,21 @@ SOCIAL_AUTH_URLOPEN_TIMEOUT = 30
 Miscellaneous settings
 ----------------------
 
-SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email',]
+``SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email',]``
     The `user_details` pipeline processor will set certain fields on user
     objects, such as ``email``. Set this to a list of fields you only want to
     set for newly created users and avoid updating on further logins.
 
-SOCIAL_AUTH_SESSION_EXPIRATION = True
+``SOCIAL_AUTH_SESSION_EXPIRATION = True``
     Some providers return the time that the access token will live, the value is
     stored in ``UserSocialAuth.extra_data`` under the key ``expires``. By default
     the current user session is set to expire if this value is present, this
     behavior can be disabled by setting.
 
-SOCIAL_AUTH_OPENID_PAPE_MAX_AUTH_AGE = <int value>
+``SOCIAL_AUTH_OPENID_PAPE_MAX_AUTH_AGE = <int value>``
     Enable `OpenID PAPE`_ extension support by defining this setting.
 
-SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['foo',]
+``SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['foo',]``
     If you want to store extra parameters from POST or GET in session, like it
     was made for ``next`` parameter, define this setting with the parameter
     names.
@@ -254,3 +252,6 @@ using POST.
 
 .. _urllib2 documentation: http://docs.python.org/library/urllib2.html#urllib2.urlopen
 .. _OpenID PAPE: http://openid.net/specs/openid-provider-authentication-policy-extension-1_0.html
+.. _Installation: ../installing.html
+.. _Backends: ../backends/index.html
+.. _OAuth: http://oauth.net/

@@ -118,7 +118,7 @@ suits your project. Check `Authentication Pipeline`_ section.
 .. _Google: http://google.com
 .. _Instagram: https://instagram.com
 .. _Linkedin: https://www.linkedin.com
-.. _Live: https://live.com
+.. _Live: https://www.live.com
 .. _Livejournal: http://livejournal.com
 .. _Mailru: https://mail.ru
 .. _Mixcloud: https://www.mixcloud.com
@@ -134,7 +134,7 @@ suits your project. Check `Authentication Pipeline`_ section.
 .. _Twilio: https://www.twilio.com
 .. _Twitter: http://twitter.com
 .. _Vkontakte: http://vk.com
-.. _Weibo: https://weibo.com
+.. _Weibo: http://weibo.com
 .. _Xing: https://www.xing.com
 .. _Yahoo: http://yahoo.com
 .. _Yammer: https://www.yammer.com
