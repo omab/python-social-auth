@@ -1,9 +1,14 @@
-Introduction
-============
+Python Social Auth
+==================
 
-Python Social Auth aims to be an easy to setup social authentication and
-authorization mechanism for Python projects supporting protocols like OAuth_ (1
-and 2), OpenId_ and others.
+Python Social Auth is an easy to setup social authentication/registration
+mechanism with support for several frameworks and auth providers.
+
+Crafted using base code from django-social-auth, implements a common interface
+to define new authentication providers from third parties. And to bring support
+for more frameworks and ORMs.
+
+.. contents:: Table of Contents
 
 
 Features
@@ -95,9 +100,61 @@ Authentication processing
 -------------------------
 
 Extensible pipeline to handle authentication/association mechanism in ways that
-suits your project. Check `Authentication Pipeline`_ section.
+suits your project.
 
 
+Dependencies
+============
+
+Dependencies that **must** be meet to use the application:
+
+- OpenId_ support depends on python-openid_
+
+- OAuth_ support depends on python-oauth2_ (despite the name, this is just for
+  OAuth1)
+
+- Several backends demands application registration on their corresponding
+  sites and other dependencies like sqlalchemy_ on Flask and Webpy.
+
+
+Installation
+============
+
+From pypi_::
+
+    $ pip install python-social-auth
+
+Or::
+
+    $ easy_install python-social-auth
+
+Or clone from github_::
+
+    $ git clone git://github.com/omab/python-social-auth.git
+
+And add social to ``PYTHONPATH``::
+
+    $ export PYTHONPATH=$PYTHONPATH:$(pwd)/python-social-auth/
+
+Or::
+
+    $ cd python-social-auth
+    $ sudo python setup.py install
+
+
+
+Copyrights and Licence
+======================
+
+``python-social-auth`` is protected by BSD licence. Check the LICENCE_ for
+details.
+
+The base work was derived from django-social-auth_ work and copyrighted too,
+check `django-social-auth LICENCE`_ for details:
+
+.. _LICENCE: https://github.com/omab/python-social-auth/blob/master/LICENSE
+.. _django-social-auth: https://github.com/omab/django-social-auth
+.. _django-social-auth LICENCE: https://github.com/omab/django-social-auth/blob/master/LICENSE
 .. _OpenId: http://openid.net/
 .. _OAuth: http://oauth.net/
 .. _myOpenID: https://www.myopenid.com/
@@ -147,4 +204,7 @@ suits your project. Check `Authentication Pipeline`_ section.
 .. _Django: https://github.com/omab/python-social-auth/tree/master/social/apps/django_app
 .. _Flask: https://github.com/omab/python-social-auth/tree/master/social/apps/flask_app
 .. _Webpy: https://github.com/omab/python-social-auth/tree/master/social/apps/webpy_app
-.. _Authentication Pipeline: pipeline.html
+.. _python-openid: http://pypi.python.org/pypi/python-openid/
+.. _python-oauth2: https://github.com/simplegeo/python-oauth2
+.. _sqlalchemy: http://www.sqlalchemy.org/
+.. _pypi: http://pypi.python.org/pypi/python-social-auth/
