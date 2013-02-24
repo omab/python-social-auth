@@ -37,3 +37,4 @@ nosetests.xml
 test.db
 local_settings.py
 sessions/
+_build/
