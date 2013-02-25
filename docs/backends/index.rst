@@ -4,7 +4,17 @@ Backends
 Here's a list and detailed instruction on how to setup the support for each
 backend.
 
-Contents:
+Adding new backend support
+--------------------------
+
+Add new backends is quite easy, usually adding just a ``class`` with a couple
+methods overrides to retrieve user data from services API. Follow the details
+on this document_ about it.
+
+Supported backends
+------------------
+
+Here's the list of currently supported backends.
 
 .. toctree::
    :maxdepth: 2
@@ -46,3 +56,5 @@ Contents:
    vkontakte
    weibo
    yahoo
+
+.. _document: implementation.html
