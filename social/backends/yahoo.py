@@ -33,10 +33,7 @@ from social.backends.oauth import ConsumerBasedOAuth
 class YahooOpenId(OpenIdAuth):
     """Yahoo OpenID authentication backend"""
     name = 'yahoo'
-
-    def openid_url(self):
-        """Return Yahoo OpenID service url"""
-        return 'http://me.yahoo.com'
+    URL = 'http://me.yahoo.com'
 
 
 class YahooOAuth(ConsumerBasedOAuth):

@@ -17,6 +17,7 @@ from social.backends.oauth import BaseOAuth2, OAuthAuth
 class YandexOpenId(OpenIdAuth):
     """Yandex OpenID authentication backend"""
     name = 'yandex'
+    URL = 'http://openid.yandex.ru'
 
     def get_user_id(self, details, response):
         return details['email'] or response.identity_url
@@ -29,10 +30,6 @@ class YandexOpenId(OpenIdAuth):
                                     .path.strip('/')
         values['email'] = values.get('email', '')
         return values
-
-    def openid_url(self):
-        """Returns Yandex authentication URL"""
-        return 'http://openid.yandex.ru'
 
 
 class YandexOAuth(OAuthAuth):

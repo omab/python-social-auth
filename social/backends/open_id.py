@@ -35,6 +35,7 @@ SESSION_NAME = 'openid'
 class OpenIdAuth(BaseAuth):
     """Generic OpenID authentication backend"""
     name = 'openid'
+    URL = None
 
     def get_user_id(self, details, response):
         """Return user unique id provided by service"""
@@ -220,9 +221,12 @@ class OpenIdAuth(BaseAuth):
         """Return service provider URL.
         This base class is generic accepting a POST parameter that specifies
         provider URL."""
-        if OPENID_ID_FIELD not in self.data:
+        if self.URL:
+            return self.URL
+        elif OPENID_ID_FIELD in self.data:
+            return self.data[OPENID_ID_FIELD]
+        else:
             raise AuthMissingParameter(self, OPENID_ID_FIELD)
-        return self.data[OPENID_ID_FIELD]
 
 
 BACKENDS = {

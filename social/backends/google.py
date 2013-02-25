@@ -118,6 +118,7 @@ class GoogleOAuth(BaseGoogleAuth, ConsumerBasedOAuth):
 
 class GoogleOpenId(OpenIdAuth):
     name = 'google'
+    URL = 'https://www.google.com/accounts/o8/id'
 
     def get_user_id(self, details, response):
         """
@@ -126,10 +127,6 @@ class GoogleOpenId(OpenIdAuth):
         http://axschema.org/contact/email
         """
         return validate_whitelists(self, details['email'])
-
-    def openid_url(self):
-        """Return Google OpenID service url"""
-        return 'https://www.google.com/accounts/o8/id'
 
 
 def validate_whitelists(backend, email):

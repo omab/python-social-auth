@@ -13,10 +13,7 @@ USER_INFO = 'http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?'
 
 class SteamOpenId(OpenIdAuth):
     name = 'steam'
-
-    def openid_url(self):
-        """Return Steam OpenID service url"""
-        return 'http://steamcommunity.com/openid'
+    URL = 'http://steamcommunity.com/openid'
 
     def get_user_id(self, details, response):
         """Return user unique id provided by service"""
