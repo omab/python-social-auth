@@ -8,7 +8,7 @@ except ImportError:  # django < 1.4
     empty = object()
 
 
-from social.utils import user_backends_data
+from social.backends.utils import user_backends_data
 from social.apps.django_app.utils import Storage
 
 

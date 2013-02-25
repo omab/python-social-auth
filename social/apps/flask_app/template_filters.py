@@ -1,6 +1,6 @@
 from flask import g, request
 
-from social.utils import user_backends_data
+from social.backends.utils import user_backends_data
 from social.apps.flask_app.utils import get_helper
 
 
