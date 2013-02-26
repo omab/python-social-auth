@@ -72,8 +72,3 @@ def mailru_api(backend, data):
         return json.loads(backend.urlopen(request).read())
     except (TypeError, KeyError, IOError, ValueError, IndexError):
         return None
-
-
-BACKENDS = {
-    'mailru-oauth2': MailruOAuth2
-}

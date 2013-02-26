@@ -199,10 +199,3 @@ def vkontakte_api(backend, method, data):
         return json.load(backend.urlopen(url + '?' + urlencode(data)))
     except (TypeError, KeyError, IOError, ValueError, IndexError):
         return None
-
-
-BACKENDS = {
-    'vkontakte': VKontakteOpenAPI,
-    'vkontakte-oauth2': VKontakteOAuth2,
-    'vkontakte-app': VKontakteAppOAuth2
-}

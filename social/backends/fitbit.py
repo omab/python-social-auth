@@ -57,8 +57,3 @@ class FitbitOAuth(ConsumerBasedOAuth):
             'username': access_token.username,
             'fullname': access_token.fullname,
         }
-
-
-BACKENDS = {
-    'fitbit': FitbitOAuth
-}

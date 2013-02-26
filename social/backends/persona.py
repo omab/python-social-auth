@@ -53,9 +53,3 @@ class PersonaAuth(BaseAuth):
                 raise AuthFailed(self)
             kwargs.update({'response': response, 'backend': self})
             return self.strategy.authenticate(*args, **kwargs)
-
-
-# Backend definition
-BACKENDS = {
-    'persona': PersonaAuth
-}

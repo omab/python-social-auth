@@ -84,9 +84,3 @@ class DoubanOAuth2(BaseOAuth2):
             raise AuthCanceled(self)
         else:
             return super(DoubanOAuth2, self).auth_complete(*args, **kwargs)
-
-
-BACKENDS = {
-    'douban': DoubanOAuth,
-    'douban2': DoubanOAuth2
-}

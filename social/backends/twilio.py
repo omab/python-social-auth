@@ -36,9 +36,3 @@ class TwilioAuth(BaseAuth):
             raise ValueError('No AccountSid returned')
         kwargs.update({'response': self.data, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
-
-
-# Backend definition
-BACKENDS = {
-    'twilio': TwilioAuth
-}

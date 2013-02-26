@@ -5,6 +5,7 @@ from social.backends.oauth import BaseOAuth2
 
 
 class StocktwitsOAuth2(BaseOAuth2):
+    """Stockwiths OAuth2 backend"""
     name = 'stocktwits'
     AUTHORIZATION_URL = 'https://api.stocktwits.com/api/2/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://api.stocktwits.com/api/2/oauth/token'
@@ -36,8 +37,3 @@ class StocktwitsOAuth2(BaseOAuth2):
             return json.load(self.urlopen(url))
         except ValueError:
             return None
-
-
-BACKENDS = {
-    'stocktwits': StocktwitsOAuth2
-}

@@ -91,10 +91,3 @@ class YahooOAuth(ConsumerBasedOAuth):
         except ValueError:
             raise AuthUnknownError('Error during user id retrieval, '
                                    'please, try again later')
-
-
-# Backend definition
-BACKENDS = {
-    'yahoo': YahooOpenId,
-    'yahoo-oauth': YahooOAuth
-}

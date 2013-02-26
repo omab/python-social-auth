@@ -66,8 +66,3 @@ class TwitterOAuth(ConsumerBasedOAuth):
             token = dict(tok.split('=')
                             for tok in token['access_token'].split('&'))
         return token
-
-
-BACKENDS = {
-    'twitter': TwitterOAuth
-}

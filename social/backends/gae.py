@@ -38,8 +38,3 @@ class GoogleAppEngineAuth(BaseAuth):
             raise AuthException('Authentication error')
         kwargs.update({'response': '', 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
-
-
-BACKENDS = {
-    'google-appengine': GoogleAppEngineAuth
-}

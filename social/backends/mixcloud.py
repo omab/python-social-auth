@@ -30,8 +30,3 @@ class MixcloudOAuth2(BaseOAuth2):
             return json.loads(self.urlopen(request).read())
         except (ValueError, KeyError, IOError):
             return None
-
-
-BACKENDS = {
-    'mixcloud': MixcloudOAuth2
-}

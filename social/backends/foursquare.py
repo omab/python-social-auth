@@ -31,8 +31,3 @@ class FoursquareOAuth2(BaseOAuth2):
             return json.load(self.urlopen(url))
         except ValueError:
             return None
-
-
-BACKENDS = {
-    'foursquare': FoursquareOAuth2
-}

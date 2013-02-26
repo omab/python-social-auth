@@ -43,8 +43,3 @@ class AngelOAuth2(BaseOAuth2):
             return json.load(self.urlopen(url))
         except ValueError:
             return None
-
-
-BACKENDS = {
-    'angel': AngelOAuth2
-}

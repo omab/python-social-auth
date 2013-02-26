@@ -77,8 +77,3 @@ class BitbucketOAuth(ConsumerBasedOAuth):
         except ValueError:
             return None
         return None
-
-
-BACKENDS = {
-    'bitbucket': BitbucketOAuth
-}

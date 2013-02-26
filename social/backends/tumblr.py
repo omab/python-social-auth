@@ -54,8 +54,3 @@ class TumblrOAuth(ConsumerBasedOAuth):
             token = dict(tok.split('=')
                             for tok in token['access_token'].split('&'))
         return token
-
-
-BACKENDS = {
-    'tumblr': TumblrOAuth
-}

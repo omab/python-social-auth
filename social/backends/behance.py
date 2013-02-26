@@ -41,8 +41,3 @@ class BehanceOAuth2(BaseOAuth2):
         data = response.copy()
         data.update(response['user'])
         return super(BehanceOAuth2, self).extra_data(user, uid, data, details)
-
-
-BACKENDS = {
-    'behance': BehanceOAuth2
-}

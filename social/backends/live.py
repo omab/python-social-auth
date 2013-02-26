@@ -59,8 +59,3 @@ class LiveOAuth2(BaseOAuth2):
         except (ValueError, IOError):
             raise AuthUnknownError('Error during profile retrieval, '
                                    'please, try again later')
-
-
-BACKENDS = {
-    'live': LiveOAuth2
-}

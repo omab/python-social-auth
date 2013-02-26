@@ -80,8 +80,3 @@ class StackoverflowOAuth2(BaseOAuth2):
         self.process_error(response)
         return self.do_auth(response['access_token'], response=response,
                             *args, **kwargs)
-
-
-BACKENDS = {
-    'stackoverflow': StackoverflowOAuth2
-}

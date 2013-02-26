@@ -1,4 +1,4 @@
-from social.utils import import_module, user_is_authenticated
+from social.utils import module_member, user_is_authenticated
 from social.backends.base import BaseAuth
 
 
@@ -8,34 +8,27 @@ BACKENDSCACHE = {}
 
 def load_backends(backends, force_load=False):
     """
-    Entry point to the BACKENDS cache. If BACKENDSCACHE hasn't been
-    populated, each of the modules referenced in
-    AUTHENTICATION_BACKENDS is imported and checked for a BACKENDS
-    definition and if enabled, added to the cache.
+    Load backends defined on SOCIAL_AUTH_AUTHENTICATION_BACKENDS, backends will
+    be imported and cached on BACKENDSCACHE. The key in that dict will be the
+    backend name, and the value is the backend class.
 
-    Previously all backends were attempted to be loaded at
-    import time of this module, which meant that backends that subclass
-    bases found in this module would not have the chance to be loaded
-    by the time they were added to this module's BACKENDS dict. See:
-    https://github.com/omab/django-social-auth/issues/204
+    Only subclasses of BaseAuth (and sub-classes) are considered backends.
 
-    This new approach ensures that backends are allowed to subclass from
-    bases in this module and still be picked up.
+    Previously there was a BACKENDS attribute expected on backends modules,
+    this is not needed anymore since it's enough with the
+    AUTHENTICATION_BACKENDS setting. BACKENDS was used because backends used to
+    be split on two classes the authentication backend and another class that
+    dealt with the auth mechanism with the provider, those classes are joined
+    now.
 
-    A force_load boolean arg is also provided so that get_backend
+    A force_load boolean argument is also provided so that get_backend
     below can retry a requested backend that may not yet be discovered.
     """
     if not BACKENDSCACHE or force_load:
         for auth_backend in backends:
-            mod, cls_name = auth_backend.rsplit('.', 1)
-            module = import_module(mod)
-            backend = getattr(module, cls_name)
-
+            backend = module_member(auth_backend)
             if issubclass(backend, BaseAuth):
-                name = backend.name
-                backends = getattr(module, 'BACKENDS', {})
-                if name in backends:
-                    BACKENDSCACHE[name] = backends[name]
+                BACKENDSCACHE[backend.name] = backend
     return BACKENDSCACHE
 
 

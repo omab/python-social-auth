@@ -185,10 +185,3 @@ class FacebookAppOAuth2(FacebookOAuth2):
         }
         html = self.setting('LOCAL_HTML', 'facebook.html')
         return self.strategy.render_html(html, ctx)
-
-
-# Backend definition
-BACKENDS = {
-    'facebook': FacebookOAuth2,
-    'facebook-app': FacebookAppOAuth2,
-}

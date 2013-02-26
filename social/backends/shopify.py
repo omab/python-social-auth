@@ -87,9 +87,3 @@ class ShopifyOAuth2(BaseOAuth2):
             }
         })
         return self.strategy.authenticate(*args, **kwargs)
-
-
-# Backend definition
-BACKENDS = {
-    'shopify': ShopifyOAuth2,
-}

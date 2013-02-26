@@ -46,8 +46,3 @@ class SkyrockOAuth(ConsumerBasedOAuth):
             raise ValueError('Authentication denied')
         else:
             return super(SkyrockOAuth, self).auth_complete(*args, **kwargs)
-
-
-BACKENDS = {
-    'skyrock': SkyrockOAuth
-}

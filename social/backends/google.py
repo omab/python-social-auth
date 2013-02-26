@@ -136,10 +136,3 @@ def validate_whitelists(backend, email):
     if (emails and email not in emails) or (domains and domain not in domains):
         raise AuthFailed(backend, 'Email or domain not allowed')
     return email
-
-
-BACKENDS = {
-    'google': GoogleOpenId,
-    'google-oauth': GoogleOAuth,
-    'google-oauth2': GoogleOAuth2,
-}

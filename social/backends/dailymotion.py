@@ -47,8 +47,3 @@ class DailymotionOAuth2(BaseOAuth2):
 
     def oauth_request(self, token, url, extra_params=None):
         return extra_params or {}
-
-
-BACKENDS = {
-    'dailymotion': DailymotionOAuth2
-}

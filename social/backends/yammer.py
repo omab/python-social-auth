@@ -77,9 +77,3 @@ class YammerStagingOAuth2(YammerOAuth2):
     AUTHORIZATION_URL = 'https://www.staging.yammer.com/dialog/oauth'
     ACCESS_TOKEN_URL = 'https://www.staging.yammer.com/oauth2/access_token'
     REQUEST_TOKEN_URL = 'https://www.staging.yammer.com/oauth2/request_token'
-
-
-BACKENDS = {
-    'yammer': YammerOAuth2,
-    'yammer-staging': YammerStagingOAuth2
-}

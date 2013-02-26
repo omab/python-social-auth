@@ -35,7 +35,7 @@ class LinkedinOAuth(ConsumerBasedOAuth):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        fields_selectors = ','.join(set(['id', 'first-name', 'last-name'] + \
+        fields_selectors = ','.join(set(['id', 'first-name', 'last-name'] +
                                         self.setting('FIELD_SELECTORS', [])))
         # use set() over fields_selectors since LinkedIn fails when values are
         # duplicated
@@ -90,8 +90,3 @@ def to_dict(xml):
             else:
                 out[node.tag] = to_dict(node)
         return out
-
-
-BACKENDS = {
-    'linkedin': LinkedinOAuth
-}

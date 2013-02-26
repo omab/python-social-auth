@@ -16,7 +16,7 @@ from social.backends.oauth import BaseOAuth2, OAuthAuth
 
 class YandexOpenId(OpenIdAuth):
     """Yandex OpenID authentication backend"""
-    name = 'yandex'
+    name = 'yandex-openid'
     URL = 'http://openid.yandex.ru'
 
     def get_user_id(self, details, response):
@@ -34,7 +34,7 @@ class YandexOpenId(OpenIdAuth):
 
 class YandexOAuth(OAuthAuth):
     """Yandex OAuth authentication backend"""
-    name = 'yaru'
+    name = 'yandex-oauth'
     AUTHORIZATION_URL = 'https://oauth.yandex.ru/authorize'
     ACCESS_TOKEN_URL = 'https://oauth.yandex.ru/token'
     REDIRECT_STATE = False
@@ -116,11 +116,3 @@ def user_data(backend, url, access_token, response, *args, **kwargs):
         return json.load(backend.urlopen(url))
     except (ValueError, IndexError):
         return None
-
-
-# Backend definition
-BACKENDS = {
-    'yandex-openid': YandexOpenId,
-    'yandex-oauth': YandexOAuth,
-    'yandex-oauth2': YandexOAuth2
-}

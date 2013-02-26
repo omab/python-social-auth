@@ -227,8 +227,3 @@ class OpenIdAuth(BaseAuth):
             return self.data[OPENID_ID_FIELD]
         else:
             raise AuthMissingParameter(self, OPENID_ID_FIELD)
-
-
-BACKENDS = {
-    'openid': OpenIdAuth
-}

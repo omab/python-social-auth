@@ -28,7 +28,7 @@ from social.exceptions import AuthFailed
 
 class OdnoklassnikiOAuth2(BaseOAuth2):
     """Odnoklassniki authentication backend"""
-    name = 'odnoklassniki'
+    name = 'odnoklassniki-oauth2'
     ID_KEY = 'uid'
     AUTHORIZATION_URL = 'http://www.odnoklassniki.ru/oauth/authorize'
     ACCESS_TOKEN_URL = 'http://api.odnoklassniki.ru/oauth/token.do'
@@ -56,7 +56,7 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
 
 class OdnoklassnikiApp(BaseAuth):
     """Odnoklassniki iframe app authentication backend"""
-    name = 'odnoklassnikiapp'
+    name = 'odnoklassniki-app'
     ID_KEY = 'uid'
 
     def extra_data(self, user, uid, response, details):
@@ -176,9 +176,3 @@ def odnoklassniki_api(backend, data, api_url, public_key, client_secret,
         return json.loads(backend.urlopen(request).read())
     except (TypeError, KeyError, IOError, ValueError, IndexError):
         return None
-
-
-BACKENDS = {
-    'odnoklassniki-oauth2': OdnoklassnikiOAuth2,
-    'odnoklassniki-app': OdnoklassnikiApp
-}

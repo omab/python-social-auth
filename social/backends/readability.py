@@ -66,8 +66,3 @@ class ReadabilityOAuth(ConsumerBasedOAuth):
                          map(lambda x: x.split('='),
                              token['access_token'].split('&'))))
         return token
-
-
-BACKENDS = {
-    'readability': ReadabilityOAuth
-}

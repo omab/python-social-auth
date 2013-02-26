@@ -40,8 +40,3 @@ class DropboxOAuth(ConsumerBasedOAuth):
             return simplejson.loads(response)
         except ValueError:
             return None
-
-
-BACKENDS = {
-    'dropbox': DropboxOAuth,
-}

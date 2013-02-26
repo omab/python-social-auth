@@ -49,8 +49,3 @@ class WeiboOAuth2(BaseOAuth2):
             return json.loads(self.urlopen(url).read())
         except (ValueError, KeyError, IOError):
             return None
-
-
-BACKENDS = {
-    'weibo': WeiboOAuth2
-}

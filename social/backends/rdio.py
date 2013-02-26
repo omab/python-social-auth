@@ -79,10 +79,3 @@ class RdioOAuth2(BaseRdio, BaseOAuth2):
             return json.load(response)['result']
         except ValueError:
             return None
-
-
-# Backend definition
-BACKENDS = {
-    'rdio-oauth1': RdioOAuth1,
-    'rdio-oauth2': RdioOAuth2
-}

@@ -64,9 +64,3 @@ class StripeOAuth2(BaseOAuth2):
     def refresh_token_params(cls, refresh_token):
         return {'refresh_token': refresh_token,
                 'grant_type': 'refresh_token'}
-
-
-# Backend definition
-BACKENDS = {
-    'stripe': StripeOAuth2
-}

@@ -68,8 +68,3 @@ class FlickrOAuth(ConsumerBasedOAuth):
         if not 'perms' in params:
             params['perms'] = 'read'
         return params
-
-
-BACKENDS = {
-    'flickr': FlickrOAuth
-}

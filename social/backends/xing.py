@@ -80,8 +80,3 @@ class XingOAuth(ConsumerBasedOAuth):
         )
         response = self.fetch_response(request)
         return Token.from_string(response)
-
-
-BACKENDS = {
-    'xing': XingOAuth
-}

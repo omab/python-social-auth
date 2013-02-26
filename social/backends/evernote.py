@@ -85,9 +85,3 @@ class EvernoteSandboxOAuth(EvernoteOAuth):
     AUTHORIZATION_URL = 'https://sandbox.evernote.com/OAuth.action'
     REQUEST_TOKEN_URL = 'https://sandbox.evernote.com/oauth'
     ACCESS_TOKEN_URL = 'https://sandbox.evernote.com/oauth'
-
-
-BACKENDS = {
-    'evernote': EvernoteOAuth,
-    'evernote-sandbox': EvernoteSandboxOAuth
-}

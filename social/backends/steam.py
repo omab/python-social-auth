@@ -46,8 +46,3 @@ class SteamOpenId(OpenIdAuth):
         if match is None:
             raise AuthFailed(self, 'Missing Steam Id')
         return match.group(1)
-
-
-BACKENDS = {
-    'steam': SteamOpenId
-}

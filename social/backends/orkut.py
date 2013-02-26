@@ -56,9 +56,3 @@ class OrkutOAuth(GoogleOAuth):
         scope = self.DEFAULT_SCOPE + self.setting('EXTRA_SCOPE', [])
         extra_params['scope'] = self.SCOPE_SEPARATOR.join(scope)
         return super(OrkutOAuth, self).oauth_request(token, url, extra_params)
-
-
-# Backend definition
-BACKENDS = {
-    'orkut': OrkutOAuth
-}

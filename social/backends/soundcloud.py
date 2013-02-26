@@ -75,9 +75,3 @@ class SoundcloudOAuth2(BaseOAuth2):
         params.update(self.get_scope_argument())
         params.update(self.auth_extra_arguments())
         return self.AUTHORIZATION_URL + '?' + urlencode(params)
-
-
-# Backend definition
-BACKENDS = {
-    'soundcloud': SoundcloudOAuth2
-}
