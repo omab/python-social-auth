@@ -103,7 +103,7 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
 
     @classmethod
     def get_social_auth_for_user(cls, user):
-        return user.social_auth._query().all()
+        return user.social_auth
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):

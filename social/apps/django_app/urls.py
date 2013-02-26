@@ -5,12 +5,12 @@ from django.conf.urls.defaults import patterns, url
 urlpatterns = patterns('social.apps.django_app.views',
     # authentication / association
     url(r'^login/(?P<backend>[^/]+)/$', 'auth',
-        name='socialauth_begin'),
+        name='begin'),
     url(r'^complete/(?P<backend>[^/]+)/$', 'complete',
-        name='socialauth_complete'),
+        name='complete'),
     # disconnection
     url(r'^disconnect/(?P<backend>[^/]+)/$', 'disconnect',
-        name='socialauth_disconnect'),
+        name='disconnect'),
     url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>\d+)/$',
-        'disconnect', name='socialauth_disconnect_individual'),
+        'disconnect', name='disconnect_individual'),
 )

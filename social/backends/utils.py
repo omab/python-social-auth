@@ -58,7 +58,7 @@ def get_backend(backends, name, *args, **kwargs):
             return None
 
 
-def user_backends_data(user, storage):
+def user_backends_data(user, backends, storage):
     """
     Will return backends data for given user, the return value will have the
     following keys:
@@ -70,7 +70,7 @@ def user_backends_data(user, storage):
     If user is not authenticated, then 'associated' list is empty, and there's
     no difference between 'not_associated' and 'backends'.
     """
-    available = load_backends().keys()
+    available = load_backends(backends).keys()
     values = {'associated': [],
               'not_associated': available,
               'backends': available}

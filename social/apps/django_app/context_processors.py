@@ -9,7 +9,7 @@ except ImportError:  # django < 1.4
 
 
 from social.backends.utils import user_backends_data
-from social.apps.django_app.utils import Storage
+from social.apps.django_app.utils import Storage, BACKENDS
 
 
 class LazyDict(SimpleLazyObject):
@@ -29,6 +29,7 @@ def backends(request):
     """Load Social Auth current user data to context under the key 'backends'.
     Will return the output of social.utils.user_backends_data."""
     return {'backends': LazyDict(lambda: user_backends_data(request.user,
+                                                            BACKENDS,
                                                             Storage))}
 
 

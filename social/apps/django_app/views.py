@@ -15,7 +15,7 @@ DEFAULT_REDIRECT = setting('LOGIN_REDIRECT_URL')
 LOGIN_ERROR_URL = setting('LOGIN_ERROR_URL', setting('LOGIN_URL'))
 
 
-@strategy('socialauth_complete')
+@strategy('social:complete')
 def auth(request, backend):
     # Save any defined next value into session
     data = request.POST if request.method == 'POST' else request.GET
@@ -35,7 +35,7 @@ def auth(request, backend):
 
 
 @csrf_exempt
-@strategy('socialauth_complete')
+@strategy('social:complete')
 def complete(request, backend, *args, **kwargs):
     """Authentication complete view, override this view if transaction
     management doesn't suit your needs."""

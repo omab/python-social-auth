@@ -1,38 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
-<a href="{% url socialauth_begin "google-oauth2" %}">Google OAuth2</a> <br />
-<a href="{% url socialauth_begin "google-oauth" %}">Google OAuth</a> <br />
-<a href="{% url socialauth_begin "google" %}">Google OpenId</a> <br />
-<a href="{% url socialauth_begin "twitter" %}">Twitter OAuth</a> <br />
-<a href="{% url socialauth_begin "yahoo" %}">Yahoo OpenId</a> <br />
-<a href="{% url socialauth_begin "yahoo-oauth" %}">Yahoo OAuth</a> <br />
-<a href="{% url socialauth_begin "stripe" %}">Stripe OAuth2</a> <br />
-<a href="{% url socialauth_begin "facebook" %}">Facebook OAuth2</a> <br />
-<a href="{% url socialauth_begin "facebook-app" %}">Facebook App</a> <br />
-<a href="{% url socialauth_begin "angel" %}">Angel OAuth2</a> <br />
-<a href="{% url socialauth_begin "behance" %}">Behance OAuth2</a> <br />
-<a href="{% url socialauth_begin "bitbucket" %}">Bitbucket OAuth</a> <br />
-<a href="{% url socialauth_begin "linkedin" %}">LinkedIn OAuth</a> <br />
-<a href="{% url socialauth_begin "github" %}">Github OAuth2</a> <br />
-<a href="{% url socialauth_begin "foursquare" %}">Foursquare OAuth2</a> <br />
-<a href="{% url socialauth_begin "instagram" %}">Instagram OAuth2</a> <br />
-<a href="{% url socialauth_begin "live" %}">Live OAuth2</a> <br />
-<a href="{% url socialauth_begin "vkontakte-oauth2" %}">Vkontakte OAuth2</a> <br />
-<a href="{% url socialauth_begin "dailymotion" %}">Dailymotion OAuth2</a> <br />
-<a href="{% url socialauth_begin "disqus" %}">Disqus OAuth2</a> <br />
-<a href="{% url socialauth_begin "dropbox" %}">Dropbox OAuth</a> <br />
-<a href="{% url socialauth_begin "evernote-sandbox" %}">Evernote OAuth (sandbox mode)</a> <br />
-<a href="{% url socialauth_begin "fitbit" %}">Fitbit OAuth</a> <br />
-<a href="{% url socialauth_begin "flickr" %}">Flickr OAuth</a> <br />
-<a href="{% url socialauth_begin "soundcloud" %}">Soundcloud OAuth2</a> <br />
-<a href="{% url socialauth_begin "stocktwits" %}">Stocktwits OAuth2</a> <br />
-<a href="{% url socialauth_begin "tripit" %}">Tripit OAuth</a> <br />
-<a href="{% url socialauth_begin "twilio" %}">Twilio</a> <br />
-<a href="{% url socialauth_begin "xing" %}">Xing OAuth</a> <br />
-<a href="{% url socialauth_begin "yandex-oauth2" %}">Yandex OAuth2</a> <br />
+<a href="{% url social:begin "google-oauth2" %}">Google OAuth2</a> <br />
+<a href="{% url social:begin "google-oauth" %}">Google OAuth</a> <br />
+<a href="{% url social:begin "google" %}">Google OpenId</a> <br />
+<a href="{% url social:begin "twitter" %}">Twitter OAuth</a> <br />
+<a href="{% url social:begin "yahoo" %}">Yahoo OpenId</a> <br />
+<a href="{% url social:begin "yahoo-oauth" %}">Yahoo OAuth</a> <br />
+<a href="{% url social:begin "stripe" %}">Stripe OAuth2</a> <br />
+<a href="{% url social:begin "facebook" %}">Facebook OAuth2</a> <br />
+<a href="{% url social:begin "facebook-app" %}">Facebook App</a> <br />
+<a href="{% url social:begin "angel" %}">Angel OAuth2</a> <br />
+<a href="{% url social:begin "behance" %}">Behance OAuth2</a> <br />
+<a href="{% url social:begin "bitbucket" %}">Bitbucket OAuth</a> <br />
+<a href="{% url social:begin "linkedin" %}">LinkedIn OAuth</a> <br />
+<a href="{% url social:begin "github" %}">Github OAuth2</a> <br />
+<a href="{% url social:begin "foursquare" %}">Foursquare OAuth2</a> <br />
+<a href="{% url social:begin "instagram" %}">Instagram OAuth2</a> <br />
+<a href="{% url social:begin "live" %}">Live OAuth2</a> <br />
+<a href="{% url social:begin "vkontakte-oauth2" %}">Vkontakte OAuth2</a> <br />
+<a href="{% url social:begin "dailymotion" %}">Dailymotion OAuth2</a> <br />
+<a href="{% url social:begin "disqus" %}">Disqus OAuth2</a> <br />
+<a href="{% url social:begin "dropbox" %}">Dropbox OAuth</a> <br />
+<a href="{% url social:begin "evernote-sandbox" %}">Evernote OAuth (sandbox mode)</a> <br />
+<a href="{% url social:begin "fitbit" %}">Fitbit OAuth</a> <br />
+<a href="{% url social:begin "flickr" %}">Flickr OAuth</a> <br />
+<a href="{% url social:begin "soundcloud" %}">Soundcloud OAuth2</a> <br />
+<a href="{% url social:begin "stocktwits" %}">Stocktwits OAuth2</a> <br />
+<a href="{% url social:begin "tripit" %}">Tripit OAuth</a> <br />
+<a href="{% url social:begin "twilio" %}">Twilio</a> <br />
+<a href="{% url social:begin "xing" %}">Xing OAuth</a> <br />
+<a href="{% url social:begin "yandex-oauth2" %}">Yandex OAuth2</a> <br />
 
-<form action="{% url socialauth_begin "openid" %}" method="post">{% csrf_token %}
+<form action="{% url social:begin "openid" %}" method="post">{% csrf_token %}
   <div>
     <label for="openid_identifier">OpenId provider</label>
     <input id="openid_identifier" type="text" value="" name="openid_identifier" />
@@ -40,7 +40,7 @@
   </div>
 </form>
 
-<form action="{% url socialauth_begin "livejournal" %}" method="post">{% csrf_token %}
+<form action="{% url social:begin "livejournal" %}" method="post">{% csrf_token %}
   <div>
     <label for="openid_lj_identifier">LiveJournal ID</label>
     <input id="openid_lj_identifier" type="text" value="" name="openid_lj_user" />
@@ -48,7 +48,7 @@
   </div>
 </form>
 
-<form method="post" action="{% url socialauth_complete "persona" %}">
+<form method="post" action="{% url social:complete "persona" %}">
   <input type="hidden" name="assertion" value="" />
   <a rel="nofollow" id="persona" href="#">Persona</a>
 </form>
