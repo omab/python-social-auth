@@ -1,5 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-Logged in as {{ user.username }}!
+<p>You are logged in as {{ user.username }}!</p>
+
+<p>Associated:</p>
+<ul>
+  {% for assoc in backends.associated %}
+    <li>
+      {{ assoc.provider }} (<form action="{{ url_for("social.disconnect", backend=assoc.provider, association_id=assoc.id) }}" method="post"><input type="submit" value="Disconnect" /></form>)
+    </li>
+  {% endfor %}
+</ul>
+
+<p>Associate:</p>
+<ul>
+  {% for name in backends.not_associated %}
+    <li>
+      <a href="{{ url_for("social.auth", backend=name) }}">{{ name }}</a>
+    </li>
+  {% endfor %}
+</ul>
 {% endblock %}

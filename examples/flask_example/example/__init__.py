@@ -11,6 +11,7 @@ sys.path.append('../..')
 
 from social.apps.flask_app.routes import social_auth
 from social.apps.flask_app.models import init_social
+from social.apps.flask_app.template_filters import backends
 
 # App
 app = Flask(__name__)
@@ -58,3 +59,6 @@ def inject_user():
         return {'user': g.user}
     except AttributeError:
         return {'user': None}
+
+
+app.context_processor(backends)
