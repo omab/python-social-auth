@@ -7,7 +7,7 @@
 <ul>
   {% for assoc in backends.associated %}
     <li>
-      {{ assoc.provider }} (<form action="{{ url_for("social.disconnect", backend=assoc.provider, association_id=assoc.id) }}" method="post"><input type="submit" value="Disconnect" /></form>)
+      {{ assoc.provider }} (<a href="{{ url_for("social.disconnect", backend=assoc.provider, association_id=assoc.id) }}" class="disconnect">Disconnect</a>)
     </li>
   {% endfor %}
 </ul>

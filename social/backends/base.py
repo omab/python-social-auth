@@ -22,7 +22,7 @@ class BaseAuth(object):
     supports_inactive_user = False  # Django auth
     ID_KEY = None
 
-    def __init__(self, strategy=None, redirect_uri=None):
+    def __init__(self, strategy=None, redirect_uri=None, *args, **kwargs):
         self.titled_name = self.name.upper().replace('-', '_')
         self.strategy = strategy
         self.redirect_uri = redirect_uri
@@ -167,7 +167,7 @@ class BaseAuth(object):
         """Deletes current backend from user if associated.
         Override if extra operations are needed.
         """
-        self.strategy.disconnect(user, association_id)
+        self.strategy.disconnect(user=user, association_id=association_id)
 
     def urlopen(self, *args, **kwargs):
         timeout = self.setting('URLOPEN_TIMEOUT')

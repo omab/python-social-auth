@@ -135,7 +135,7 @@ def complete(request, backend, *args, **kwargs):
 def disconnect(request, backend, association_id=None):
     """Disconnects given backend from current logged in user."""
     strategy = request.strategy
-    strategy.disconnect(request.user, association_id)
+    strategy.disconnect(user=request.user, association_id=association_id)
     url = request.REQUEST.get(REDIRECT_FIELD_NAME, '') or \
           strategy.setting('DISCONNECT_REDIRECT_URL') or \
           DEFAULT_REDIRECT

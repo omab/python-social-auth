@@ -152,7 +152,7 @@ class disconnect(BaseViewClass):
     def POST(self, backend, association_id=None):
         strategy = self.strategy
         user = self.get_current_user()
-        strategy.disconnect(user, association_id)
+        strategy.disconnect(user=user, association_id=association_id)
         url = self.data.get('next') or \
               strategy.setting('DISCONNECT_REDIRECT_URL') or \
               strategy.setting('LOGIN_REDIRECT_URL')

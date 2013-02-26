@@ -46,8 +46,9 @@ class BaseStrategy(object):
     def continue_pipeline(self, *args, **kwargs):
         return self.backend.continue_pipeline(*args, **kwargs)
 
-    def disconnect(self, *args, **kwargs):
-        self.storage.user.disconnect(name=self.backend.name, *args, **kwargs)
+    def disconnect(self, user, association_id=None):
+        self.storage.user.disconnect(name=self.backend.name, user=user,
+                                     association_id=association_id)
 
     def authenticate(self, *args, **kwargs):
         kwargs['strategy'] = self
