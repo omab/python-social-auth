@@ -2,8 +2,21 @@ import web
 
 from functools import wraps
 
-from social.utils import setting_name
+from social.utils import setting_name, module_member
+from social.backends.utils import user_backends_data
 from social.strategies.utils import get_strategy
+
+
+DEFAULTS = {
+    'STRATEGY': 'social.strategies.webpy_strategy.WebpyStrategy',
+    'STORAGE': 'social.apps.webpy_app.models.WebpyStorage'
+}
+
+
+def get_helper(name, do_import=False):
+    config = web.config.get(setting_name(name),
+                            DEFAULTS.get(name, None))
+    return do_import and module_member(config) or config
 
 
 def strategy(redirect_uri=None):
@@ -15,15 +28,9 @@ def strategy(redirect_uri=None):
             if uri and backend and '%(backend)s' in uri:
                 uri = uri % {'backend': backend}
 
-            backends = web.config[setting_name('AUTHENTICATION_BACKENDS')]
-            strategy = web.config.get(
-                setting_name('STRATEGY'),
-                'social.strategies.webpy_strategy.WebpyStrategy'
-            )
-            storage = web.config.get(
-                setting_name('STORAGE'),
-                'social.apps.webpy_app.models.WebpyStorage'
-            )
+            backends = get_helper('AUTHENTICATION_BACKENDS')
+            strategy = get_helper('STRATEGY')
+            storage = get_helper('STORAGE')
             self.strategy = get_strategy(backends, strategy, storage, web.ctx,
                                          backend, redirect_uri=uri, *args,
                                          **kwargs)
@@ -33,3 +40,22 @@ def strategy(redirect_uri=None):
                 return func(self, *args, **kwargs)
         return wrapper
     return decorator
+
+
+def backends(user):
+    """Load Social Auth current user data to context under the key 'backends'.
+    Will return the output of social.backends.utils.user_backends_data."""
+    return user_backends_data(user, get_helper('AUTHENTICATION_BACKENDS'),
+                              get_helper('STORAGE', do_import=True))
+
+
+def login_redirect():
+    """Load current redirect to context."""
+    method = web.ctx.method == 'POST' and 'post' or 'get'
+    data = web.input(_method=method)
+    value = data.get('next')
+    return {
+        'REDIRECT_FIELD_NAME': 'next',
+        'REDIRECT_FIELD_VALUE': value,
+        'REDIRECT_QUERYSTRING': value and ('next=' + value) or ''
+    }

@@ -27,7 +27,7 @@ class LazyDict(SimpleLazyObject):
 
 def backends(request):
     """Load Social Auth current user data to context under the key 'backends'.
-    Will return the output of social.utils.user_backends_data."""
+    Will return the output of social.backends.utils.user_backends_data."""
     return {'backends': LazyDict(lambda: user_backends_data(request.user,
                                                             BACKENDS,
                                                             Storage))}

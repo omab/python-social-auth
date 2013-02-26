@@ -6,7 +6,7 @@ from social.apps.flask_app.utils import get_helper
 
 def backends():
     """Load Social Auth current user data to context under the key 'backends'.
-    Will return the output of social.utils.user_backends_data."""
+    Will return the output of social.backends.utils.user_backends_data."""
     return {
         'backends': user_backends_data(g.user,
                                        get_helper('AUTHENTICATION_BACKENDS'),

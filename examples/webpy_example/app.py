@@ -9,22 +9,49 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from social.utils import setting_name
-from social.apps.webpy_app.utils import strategy
+from social.apps.webpy_app.utils import strategy, backends
+from social.apps.webpy_app import app as social_app
 
+import local_settings
 
 web.config.debug = False
 web.config[setting_name('USER_MODEL')] = 'models.User'
 web.config[setting_name('AUTHENTICATION_BACKENDS')] = (
+    'social.backends.open_id.OpenIdAuth',
+    'social.backends.google.GoogleOpenId',
     'social.backends.google.GoogleOAuth2',
+    'social.backends.google.GoogleOAuth',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.yahoo.YahooOpenId',
+    'social.backends.stripe.StripeOAuth2',
+    'social.backends.persona.PersonaAuth',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.facebook.FacebookAppOAuth2',
+    'social.backends.yahoo.YahooOAuth',
+    'social.backends.angel.AngelOAuth2',
+    'social.backends.behance.BehanceOAuth2',
+    'social.backends.bitbucket.BitbucketOAuth',
+    'social.backends.linkedin.LinkedinOAuth',
+    'social.backends.github.GithubOAuth2',
+    'social.backends.foursquare.FoursquareOAuth2',
+    'social.backends.instagram.InstagramOAuth2',
+    'social.backends.live.LiveOAuth2',
+    'social.backends.vkontakte.VKontakteOAuth2',
+    'social.backends.dailymotion.DailymotionOAuth2',
+    'social.backends.disqus.DisqusOAuth2',
+    'social.backends.dropbox.DropboxOAuth',
+    'social.backends.evernote.EvernoteSandboxOAuth',
+    'social.backends.fitbit.FitbitOAuth',
+    'social.backends.flickr.FlickrOAuth',
+    'social.backends.livejournal.LiveJournalOpenId',
+    'social.backends.soundcloud.SoundcloudOAuth2',
+    'social.backends.stocktwits.StocktwitsOAuth2',
+    'social.backends.tripit.TripItOAuth',
+    'social.backends.twilio.TwilioAuth',
+    'social.backends.xing.XingOAuth',
+    'social.backends.yandex.YandexOAuth2',
 )
 web.config[setting_name('LOGIN_REDIRECT_URL')] = '/done/'
-web.config[setting_name('GOOGLE_OAUTH2_KEY')] = '475232891386-9tbuets6eejq7k' \
-                                                '4isl4ef2dihn9afch8.apps.goo' \
-                                                'gleusercontent.com'
-web.config[setting_name('GOOGLE_OAUTH2_SECRET')] = 'mjbJ-9ld2Xmuaaj31Tk6BcRJ'
-
-
-from social.apps.webpy_app import app as social_app
 
 
 urls = (
@@ -45,7 +72,8 @@ class main(object):
 class done(social_app.BaseViewClass):
     @strategy()
     def GET(self):
-        return render.done(user=self.get_current_user())
+        user = self.get_current_user()
+        return render.done(user=user, backends=backends(user))
 
 
 engine = create_engine('sqlite:///test.db', echo=True)
