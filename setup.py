@@ -5,7 +5,25 @@ from setuptools import setup
 
 
 version = __import__('social').__version__
-long_description = open(join(dirname(__file__), 'README.rst')).read()
+
+LONG_DESCRIPTION = """
+Python Social Auth is an easy to setup social authentication/registration
+mechanism with support for several frameworks and auth providers.
+
+Crafted using base code from django-social-auth, implements a common interface
+to define new authentication providers from third parties. And to bring support
+for more frameworks and ORMs.
+"""
+
+
+def long_description():
+    """Return long description from README.rst if it's present
+    because it doesn't get installed."""
+    try:
+        return open(join(dirname(__file__), 'README.rst')).read()
+    except IOError:
+        return LONG_DESCRIPTION
+
 
 setup(name='python-social-auth',
       version=version,
@@ -27,7 +45,7 @@ setup(name='python-social-auth',
                 'social.pipeline',
                 'social.strategies'],
       #package_data={'social': ['locale/*/LC_MESSAGES/*']},
-      long_description=long_description,
+      long_description=long_description(),
       install_requires=['oauth2>=1.5.167',
                         'python_openid>=2.2'],
       classifiers=['Development Status :: 4 - Beta',
