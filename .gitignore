@@ -38,3 +38,4 @@ test.db
 local_settings.py
 sessions/
 _build/
+fabfile.py
