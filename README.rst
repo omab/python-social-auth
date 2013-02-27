@@ -117,6 +117,13 @@ Dependencies that **must** be meet to use the application:
   sites and other dependencies like sqlalchemy_ on Flask and Webpy.
 
 
+Documents
+=========
+
+Project homepage is available at http://psa.matiasaguirre.net/ and documents at
+http://psa.matiasaguirre.net/docs/.
+
+
 Installation
 ============
 
@@ -140,7 +147,6 @@ Or::
 
     $ cd python-social-auth
     $ sudo python setup.py install
-
 
 
 Copyrights and Licence
