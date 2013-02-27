@@ -154,6 +154,7 @@ AUTHENTICATION_BACKENDS = (
 
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/done/'
+URL_PATH = ''
 SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
 SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 SOCIAL_AUTH_GOOGLE_OAUTH_EXTRA_SCOPE = [
