@@ -73,6 +73,15 @@ class EvernoteOAuth(ConsumerBasedOAuth):
         token.user_info = params
         return token
 
+    def extra_data(self, user, uid, response, details=None):
+        data = super(EvernoteOAuth, self).extra_data(user, uid, response,
+                                                     details)
+        # Evernote returns expiration timestamp in miliseconds, so it needs to
+        # be normalized.
+        if 'expires' in data:
+            data['expires'] = unicode(int(data['expires']) / 1000)
+        return data
+
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
         # drop lists
