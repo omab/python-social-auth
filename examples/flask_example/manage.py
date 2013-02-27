@@ -18,6 +18,7 @@ manager.add_command('shell', Shell(make_context=lambda: {
 
 @manager.command
 def migrate(action):
+    # ./manage.py migrate run
     with app.app_context():
         evolution.manager(action)
 
