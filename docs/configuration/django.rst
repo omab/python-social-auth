@@ -28,6 +28,10 @@ And for MongoEngine_ ORM::
         ...
     )
 
+Also ensure to define the MongoEngine_ storage setting::
+
+    SOCIAL_AUTH_STORAGE = 'social.apps.django_app.me.models.DjangoStorage'
+
 
 Database
 --------
