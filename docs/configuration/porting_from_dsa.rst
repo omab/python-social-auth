@@ -77,6 +77,13 @@ example::
     SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '...'
     SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '...'
 
+Remember that the name of the backend is needed in the settings, and names
+differ a little from backend to backend, like `Facebook OAuth2 backend`_ name
+is ``facebook``. So the settings should be::
+
+    SOCIAL_AUTH_FACEBOOK_KEY = '...'
+    SOCIAL_AUTH_FACEBOOK_SECRET = '...'
+
 
 Authentication backends
 -----------------------
@@ -99,3 +106,4 @@ changes. Examples of the new import paths::
 .. _django-social-auth: https://github.com/omab/django-social-auth
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _example app: https://github.com/omab/python-social-auth/blob/master/examples/django_example/dj/urls.py#L7
+.. _Facebook OAuth2 backend: https://github.com/omab/python-social-auth/blob/master/social/backends/facebook.py#L29
