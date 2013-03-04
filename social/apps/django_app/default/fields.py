@@ -53,6 +53,6 @@ class JSONField(models.TextField):
 
 try:
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^social_auth\.fields\.JSONField"])
+    add_introspection_rules([], ["^social\.apps\.django_app\.default\.fields\.JSONField"])
 except:
     pass
