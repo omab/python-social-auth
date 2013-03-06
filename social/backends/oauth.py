@@ -1,7 +1,7 @@
 import json
-from urllib2 import Request, HTTPError
 from urllib import urlencode
 
+from requests import HTTPError
 from oauth2 import Token, SignatureMethod_HMAC_SHA1, HTTP_METHOD, \
                    Request as OAuthRequest, Consumer as OAuthConsumer
 
@@ -111,7 +111,7 @@ class ConsumerBasedOAuth(OAuthAuth):
         try:
             access_token = self.access_token(token)
         except HTTPError, e:
-            if e.code == 400:
+            if e.response.status_code == 400:
                 raise AuthCanceled(self)
             else:
                 raise
@@ -155,8 +155,7 @@ class ConsumerBasedOAuth(OAuthAuth):
 
     def fetch_response(self, request):
         """Executes request and fetchs service response"""
-        response = self.urlopen(request.to_url())
-        return '\n'.join(response.readlines())
+        return self.request(request.to_url()).content
 
     def access_token(self, token):
         """Return request for access token value"""
@@ -269,14 +268,14 @@ class BaseOAuth2(OAuthAuth):
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         self.process_error(self.data)
-        params = self.auth_complete_params(self.validate_state())
-        request = Request(self.ACCESS_TOKEN_URL, data=urlencode(params),
-                          headers=self.auth_headers())
-
         try:
-            response = json.loads(self.urlopen(request).read())
+            response = self.get_json(
+                self.ACCESS_TOKEN_URL,
+                data=self.auth_complete_params(self.validate_state()),
+                headers=self.auth_headers()
+            )
         except HTTPError, e:
-            if e.code == 400:
+            if e.response.status_code == 400:
                 raise AuthCanceled(self)
             else:
                 raise
@@ -307,13 +306,12 @@ class BaseOAuth2(OAuthAuth):
         return json.loads(response)
 
     def refresh_token(self, token):
-        request = Request(
-            self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL,
-            data=urlencode(self.refresh_token_params(token)),
-            headers=self.auth_headers()
-        )
         return self.process_refresh_token_response(
-            self.urlopen(request).read()
+            self.request(
+                self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL,
+                params=self.refresh_token_params(token),
+                headers=self.auth_headers()
+            ).content
         )
 
 

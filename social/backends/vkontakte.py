@@ -6,10 +6,8 @@ This contribution adds support for VKontakte OpenAPI and OAuth 2.0 service in
 the form www.vkontakte.ru. Username is retrieved from the identity returned by
 server.
 """
-import json
 from time import time
 from hashlib import md5
-from urllib import urlencode
 
 from social.backends.base import BaseAuth
 from social.backends.oauth import BaseOAuth2
@@ -196,6 +194,6 @@ def vkontakte_api(backend, method, data):
         url = 'https://api.vkontakte.ru/method/' + method
 
     try:
-        return json.load(backend.urlopen(url + '?' + urlencode(data)))
+        return backend.get_json(url, params=data)
     except (TypeError, KeyError, IOError, ValueError, IndexError):
         return None

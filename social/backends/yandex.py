@@ -6,8 +6,6 @@ openid.yandex.ru/user. Username is retrieved from the identity url.
 
 If username is not specified, OpenID 2.0 url used for authentication.
 """
-import json
-from urllib import urlencode
 from urlparse import urlparse, urlsplit
 
 from social.backends.open_id import OpenIdAuth
@@ -107,12 +105,11 @@ def get_user_details(response):
 
 def user_data(backend, url, access_token, response, *args, **kwargs):
     """Loads user data from service"""
-    url = url + '?' + urlencode({
-        'oauth_token': access_token,
-        'format': 'json',
-        'text': 1
-    })
     try:
-        return json.load(backend.urlopen(url))
+        return backend.get_json(url, params={
+            'oauth_token': access_token,
+            'format': 'json',
+            'text': 1
+        })
     except (ValueError, IndexError):
         return None

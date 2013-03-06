@@ -13,10 +13,6 @@ APIs console https://code.google.com/apis/console/ Identity option.
 
 OpenID also works straightforward, it doesn't need further configurations.
 """
-import json
-from urllib import urlencode
-from urllib2 import Request
-
 from oauth2 import Request as OAuthRequest
 
 from social.exceptions import AuthFailed
@@ -59,11 +55,11 @@ class GoogleOAuth2(BaseGoogleAuth, BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Google API"""
-        url = 'https://www.googleapis.com/oauth2/v1/userinfo'
-        data = {'access_token': access_token, 'alt': 'json'}
-        request = Request(url + '?' + urlencode(data))
         try:
-            return json.loads(self.urlopen(request).read())
+            return self.get_json(
+                'https://www.googleapis.com/oauth2/v1/userinfo',
+                params={'access_token': access_token, 'alt': 'json'}
+            )
         except (ValueError, KeyError, IOError):
             return None
 
@@ -81,9 +77,9 @@ class GoogleOAuth(BaseGoogleAuth, ConsumerBasedOAuth):
         url = 'https://www.googleapis.com/userinfo/email'
         request = self.oauth_request(access_token, url, {'alt': 'json'})
         url, params = request.to_url().split('?', 1)
-        request = Request(request.to_url(), headers={'Authorization': params})
         try:
-            return json.loads(self.urlopen(request).read())['data']
+            return self.get_json(request.to_url(),
+                                 headers={'Authorization': params})['data']
         except (ValueError, KeyError, IOError):
             return None
 

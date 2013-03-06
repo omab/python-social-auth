@@ -1,7 +1,5 @@
 """Steam OpenId support"""
 import re
-import json
-import urllib
 
 from social.backends.open_id import OpenIdAuth
 from social_auth.exceptions import AuthFailed
@@ -21,13 +19,12 @@ class SteamOpenId(OpenIdAuth):
 
     def get_user_details(self, response):
         user_id = self._user_id(response)
-        url = USER_INFO + urllib.urlencode({
-            'key': self.setting('API_KEY'),
-            'steamids': user_id
-        })
         details = {}
         try:
-            player = json.load(self.urlopen(url))
+            player = self.get_json(USER_INFO, params={
+                'key': self.setting('API_KEY'),
+                'steamids': user_id
+            })
         except (ValueError, IOError):
             pass
         else:

@@ -9,12 +9,10 @@ http://api.mail.ru/sites/my/add
 Then update your settings values using registration information
 
 """
-
-import json
-
-from urllib import urlencode, unquote
-from urllib2 import Request, HTTPError
+from urllib import unquote
 from hashlib import md5
+
+from requests import HTTPError
 
 from social.exceptions import AuthCanceled
 from social.backends.oauth import BaseOAuth2
@@ -46,8 +44,11 @@ class MailruOAuth2(BaseOAuth2):
     def auth_complete(self, *args, **kwargs):
         try:
             return super(MailruOAuth2, self).auth_complete(*args, **kwargs)
-        except HTTPError:  # Mail.ru returns HTTPError 400 if cancelled
-            raise AuthCanceled(self)
+        except HTTPError, e:  # Mail.ru returns HTTPError 400 if cancelled
+            if e.response.status_code == 400:
+                raise AuthCanceled(self)
+            else:
+                raise
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Mail.ru REST API"""
@@ -66,9 +67,8 @@ def mailru_api(backend, data):
     key, secret = backend.get_key_and_secret()
     data.update({'app_id': key, 'secure': '1'})
     data['sig'] = mailru_sig(secret, data)
-    params = urlencode(data)
-    request = Request('http://www.appsmail.ru/platform/api', params)
     try:
-        return json.loads(backend.urlopen(request).read())
+        return backend.get_json('http://www.appsmail.ru/platform/api',
+                                params=data)
     except (TypeError, KeyError, IOError, ValueError, IndexError):
         return None

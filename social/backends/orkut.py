@@ -45,9 +45,8 @@ class OrkutOAuth(GoogleOAuth):
                   'scope': self.SCOPE_SEPARATOR.join(scope)}
         url = 'http://www.orkut.com/social/rpc'
         request = self.oauth_request(access_token, url, params)
-        response = self.urlopen(request.to_url()).read()
         try:
-            return json.loads(response)['data']
+            return self.get_json(request.to_url())['data']
         except (ValueError, KeyError):
             return None
 

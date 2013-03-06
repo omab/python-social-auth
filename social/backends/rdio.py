@@ -1,6 +1,3 @@
-import json
-import urllib
-
 from social.backends import ConsumerBasedOAuth, BaseOAuth2, OAuthAuth
 
 
@@ -47,9 +44,10 @@ class RdioOAuth1(BaseRdio, ConsumerBasedOAuth):
                   'extras': 'username,displayName,streamRegion'}
         request = self.oauth_request(access_token, RDIO_API,
                                      params, method='POST')
-        response = self.urlopen(request.url, request.to_postdata())
         try:
-            return json.loads('\n'.join(response.readlines()))['result']
+            return self.get_json(request.url,
+                                 method='POST',
+                                 data=request.to_postdata())['result']
         except ValueError:
             return None
 
@@ -69,13 +67,11 @@ class RdioOAuth2(BaseRdio, BaseOAuth2):
     ]
 
     def user_data(self, access_token, *args, **kwargs):
-        params = {
-            'method': 'currentUser',
-            'extras': 'username,displayName,streamRegion',
-            'access_token': access_token,
-        }
-        response = self.urlopen(RDIO_API, urllib.urlencode(params))
         try:
-            return json.load(response)['result']
+            return self.get_json(RDIO_API, method='POST', data={
+                'method': 'currentUser',
+                'extras': 'username,displayName,streamRegion',
+                'access_token': access_token,
+            })['result']
         except ValueError:
             return None

@@ -10,9 +10,6 @@ Optional scope to include 'email' and/or 'messages' separated by space:
 
 More information on scope can be found at https://angel.co/api/oauth/faq
 """
-import json
-from urllib import urlencode
-
 from social.backends.oauth import BaseOAuth2
 
 
@@ -36,10 +33,9 @@ class AngelOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        url = 'https://api.angel.co/1/me/?' + urlencode({
-            'access_token': access_token
-        })
         try:
-            return json.load(self.urlopen(url))
+            return self.get_json('https://api.angel.co/1/me/', params={
+                'access_token': access_token
+            })
         except ValueError:
             return None

@@ -10,7 +10,8 @@ You must:
 
 """
 import imp
-from urllib2 import HTTPError
+
+from requests import HTTPError
 
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthFailed, AuthCanceled
@@ -67,7 +68,7 @@ class ShopifyOAuth2(BaseOAuth2):
         except self.shopifyAPI.ValidationException, e:
             raise AuthCanceled(self)
         except HTTPError, e:
-            if e.code == 400:
+            if e.response.status_code == 400:
                 raise AuthCanceled(self)
             else:
                 raise

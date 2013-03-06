@@ -18,8 +18,8 @@ import time
 import json
 import base64
 import hashlib
-from urllib import urlencode
-from urllib2 import HTTPError
+
+from requests import HTTPError
 
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthException, AuthCanceled, AuthFailed, \
@@ -50,9 +50,9 @@ class FacebookOAuth2(BaseOAuth2):
         """Loads user data from service"""
         params = self.setting('PROFILE_EXTRA_PARAMS', {})
         params['access_token'] = access_token
-        url = 'https://graph.facebook.com/me?' + urlencode(params)
         try:
-            return json.load(self.urlopen(url))
+            return self.get_json('https://graph.facebook.com/me',
+                                 params=params)
         except ValueError:
             return None
         except HTTPError:
@@ -63,14 +63,15 @@ class FacebookOAuth2(BaseOAuth2):
         if 'code' in self.data:
             state = self.validate_state()
             key, secret = self.get_key_and_secret()
-            url = self.ACCESS_TOKEN_URL + '?' + urlencode({
+            url = self.ACCESS_TOKEN_URL
+            params = {
                 'client_id': key,
                 'redirect_uri': self.get_redirect_uri(state),
                 'client_secret': secret,
                 'code': self.data['code']
-            })
+            }
             try:
-                response = cgi.parse_qs(self.urlopen(url).read())
+                response = self.get_querystring(url, params=params)
             except HTTPError:
                 raise AuthFailed(self, 'There was an error authenticating the'
                                        'the app')

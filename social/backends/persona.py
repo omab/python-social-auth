@@ -1,9 +1,6 @@
 """
 BrowserID support
 """
-import json
-from urllib import urlencode
-
 from social.backends.base import BaseAuth
 from social.exceptions import AuthFailed, AuthMissingParameter
 
@@ -40,12 +37,11 @@ class PersonaAuth(BaseAuth):
         if not 'assertion' in self.data:
             raise AuthMissingParameter(self, 'assertion')
 
-        data = urlencode({'assertion': self.data['assertion'],
-                          'audience': self.strategy.request_host()})
-
         try:
-            response = json.load(self.urlopen('https://browserid.org/verify',
-                                              data=data))
+            response = self.get_json('https://browserid.org/verify', params={
+                'assertion': self.data['assertion'],
+                'audience': self.strategy.request_host()
+            })
         except ValueError:
             pass
         else:

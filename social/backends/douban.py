@@ -10,7 +10,6 @@ By default account id is stored in extra_data field, check OAuthBackend
 class for details on how to extend it.
 """
 import json
-from urllib2 import Request
 
 from social.backends.oauth import BaseOAuth2, ConsumerBasedOAuth
 from social.exceptions import AuthCanceled
@@ -70,11 +69,11 @@ class DoubanOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        url = 'https://api.douban.com/v2/user/~me'
-        headers = {'Authorization': 'Bearer %s' % access_token}
-        request = Request(url, headers=headers)
         try:
-            return json.loads(self.urlopen(request).read())
+            return self.get_json(
+                'https://api.douban.com/v2/user/~me',
+                headers={'Authorization': 'Bearer %s' % access_token}
+            )
         except (ValueError, KeyError, IOError):
             return None
 

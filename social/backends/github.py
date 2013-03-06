@@ -11,9 +11,6 @@ setting, it must be a list of values to request.
 By default account id and token expiration time are stored in extra_data
 field, check OAuthBackend class for details on how to extend it.
 """
-import json
-from urllib import urlencode
-
 from social.backends.oauth import BaseOAuth2
 
 
@@ -36,10 +33,9 @@ class GithubOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        url = 'https://api.github.com/user?' + urlencode({
-            'access_token': access_token
-        })
         try:
-            return json.load(self.urlopen(url))
+            return self.get_json('https://api.github.com/user', params={
+                'access_token': access_token
+            })
         except ValueError:
             return None

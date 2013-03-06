@@ -1,6 +1,3 @@
-import json
-from urllib import urlencode
-
 from social.backends.oauth import BaseOAuth2
 
 
@@ -42,10 +39,10 @@ class DisqusOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         key, secret = self.get_key_and_secret()
-        url = 'https://disqus.com/api/3.0/users/details.json?' + \
-                    urlencode({'access_token': access_token,
-                               'api_secret': secret})
         try:
-            return json.load(self.urlopen(url))
+            return self.get_json(
+                'https://disqus.com/api/3.0/users/details.json',
+                params={'access_token': access_token, 'api_secret': secret}
+            )
         except ValueError:
             return None

@@ -70,10 +70,7 @@ class BitbucketOAuth(ConsumerBasedOAuth):
                     if email_address['primary']:
                         break
             url = 'https://bitbucket.org/api/1.0/users/'
-            response = self.urlopen(url + email)
-            user_details = json.load(response)['user']
-            user_details['email'] = email
-            return user_details
+            return dict(self.get_json(url + email)['user'], email=email)
         except ValueError:
             return None
         return None

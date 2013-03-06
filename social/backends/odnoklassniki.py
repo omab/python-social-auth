@@ -16,9 +16,7 @@ elif you're building iframe application,
 Then setup your application according manual and use information from
 registration mail to set settings values.
 """
-import json
-from urllib import urlencode, unquote
-from urllib2 import Request
+from urllib import unquote
 from hashlib import md5
 
 from social.backends.base import BaseAuth
@@ -170,9 +168,7 @@ def odnoklassniki_api(backend, data, api_url, public_key, client_secret,
     else:
         msg = 'Unknown request type {0}. How should it be signed?'
         raise AuthFailed(backend, msg.format(request_type))
-    params = urlencode(data)
-    request = Request('{0}fb.do?{1}'.format(api_url, params))
     try:
-        return json.loads(backend.urlopen(request).read())
+        return backend.get_json(api_url + 'fb.do', params=data)
     except (TypeError, KeyError, IOError, ValueError, IndexError):
         return None

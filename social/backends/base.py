@@ -9,7 +9,9 @@ Also the modules *must* define a BACKENDS dictionary with the backend name
 (which is used for URLs matching) and Auth class, otherwise it won't be
 enabled.
 """
-from urllib2 import urlopen
+from cgi import parse_qs
+
+from requests import request
 
 from social.utils import module_member
 from social.exceptions import StopPipeline
@@ -169,11 +171,18 @@ class BaseAuth(object):
         """
         self.strategy.disconnect(user=user, association_id=association_id)
 
-    def urlopen(self, *args, **kwargs):
-        timeout = self.setting('URLOPEN_TIMEOUT')
-        if timeout and 'timeout' not in kwargs:
-            kwargs['timeout'] = timeout
-        return urlopen(*args, **kwargs)
+    def request(self, url, method='GET', *args, **kwargs):
+        kwargs.setdefault('timeout', self.setting('REQUESTS_TIMEOUT') or
+                                     self.setting('URLOPEN_TIMEOUT'))
+        response = request(method, url, *args, **kwargs)
+        response.raise_for_status()
+        return response
+
+    def get_json(self, url, *args, **kwargs):
+        return self.request(url, *args, **kwargs).json()
+
+    def get_querystring(self, url, *args, **kwargs):
+        return parse_qs(self.request(url, *args, **kwargs).text)
 
     def get_key_and_secret(self):
         """Return tuple with Consumer Key and Consumer Secret for current

@@ -1,8 +1,6 @@
 """
 Yammer OAuth2 support
 """
-import json
-from urllib import urlencode
 from urlparse import parse_qs
 
 from social.backends.oauth import BaseOAuth2
@@ -42,14 +40,12 @@ class YammerOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         """Load user data from yammer"""
         key, secret = self.get_key_and_secret()
-        params = {'client_id': key,
-                  'client_secret': secret,
-                  'code': access_token}
-
-        url = '%s?%s' % (self.ACCESS_TOKEN_URL, urlencode(params))
-
         try:
-            return json.load(self.urlopen(url))
+            return self.get_json(self.ACCESS_TOKEN_URL, params={
+                'client_id': key,
+                'client_secret': secret,
+                'code': access_token
+            })
         except Exception:
             pass
         return None

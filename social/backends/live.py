@@ -14,9 +14,6 @@ References:
 Throws:
 AuthUnknownError - if user data retrieval fails
 """
-import json
-from urllib import urlencode
-
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthUnknownError
 
@@ -51,11 +48,10 @@ class LiveOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        url = 'https://apis.live.net/v5.0/me?' + urlencode({
-            'access_token': access_token
-        })
         try:
-            return json.load(self.urlopen(url))
+            return self.get_json('https://apis.live.net/v5.0/me', params={
+                'access_token': access_token
+            })
         except (ValueError, IOError):
             raise AuthUnknownError('Error during profile retrieval, '
                                    'please, try again later')

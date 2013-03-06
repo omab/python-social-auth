@@ -12,7 +12,6 @@ http://developers.soundcloud.com/docs
 By default account id and token expiration time are stored in extra_data
 field, check OAuthBackend class for details on how to extend it.
 """
-import json
 from urllib import urlencode
 
 from social.backends.oauth import BaseOAuth2
@@ -48,12 +47,9 @@ class SoundcloudOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        url = 'https://api.soundcloud.com/me.json?' + urlencode({
-            'oauth_token': access_token
-        })
         try:
-            value = json.load(self.urlopen(url))
-            return value
+            return self.get_json('https://api.soundcloud.com/me.json',
+                                 params={'oauth_token': access_token})
         except ValueError:
             return None
 

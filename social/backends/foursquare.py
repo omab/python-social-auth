@@ -1,6 +1,3 @@
-import json
-from urllib import urlencode
-
 from social.backends.oauth import BaseOAuth2
 
 
@@ -24,10 +21,8 @@ class FoursquareOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        url = 'https://api.foursquare.com/v2/users/self?' + urlencode({
-            'oauth_token': access_token
-        })
         try:
-            return json.load(self.urlopen(url))
+            return self.get_json('https://api.foursquare.com/v2/users/self',
+                                 params={'oauth_token': access_token})
         except ValueError:
             return None

@@ -3,7 +3,7 @@ EverNote OAuth support
 
 No extra configurations are needed to make this work.
 """
-from urllib2 import HTTPError
+from requests import HTTPError
 try:
     from urlparse import parse_qs
     parse_qs  # placate pyflakes
@@ -59,7 +59,7 @@ class EvernoteOAuth(ConsumerBasedOAuth):
             response = self.fetch_response(request)
         except HTTPError, e:
             # Evernote returns a 401 error when AuthCanceled
-            if e.code == 401:
+            if e.response.status_code == 401:
                 raise AuthCanceled(self)
             else:
                 raise
