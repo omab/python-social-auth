@@ -9,12 +9,10 @@ values.
 By default account id is stored in extra_data field, check OAuthBackend
 class for details on how to extend it.
 """
-import json
-
-from social.backends import ConsumerBasedOAuth
+from social.backends import BaseOAuth1
 
 
-class SkyrockOAuth(ConsumerBasedOAuth):
+class SkyrockOAuth(BaseOAuth1):
     """Skyrock OAuth authentication backend"""
     name = 'skyrock'
     ID_KEY = 'id_user'
@@ -33,10 +31,11 @@ class SkyrockOAuth(ConsumerBasedOAuth):
 
     def user_data(self, access_token):
         """Return user data provided"""
-        url = 'https://https://api.skyrock.com/v2/user/get.json'
-        request = self.oauth_request(access_token, url)
         try:
-            return json.loads(self.fetch_response(request))
+            return self.get_json(
+                'https://https://api.skyrock.com/v2/user/get.json',
+                auth=self.oauth_auth(access_token)
+            )
         except ValueError:
             return None
 

@@ -6,13 +6,11 @@ No extra configurations are needed to make this work.
 from xml.etree import ElementTree
 from xml.parsers.expat import ExpatError
 
-from oauth2 import Token
-
-from social.backends.oauth import ConsumerBasedOAuth
+from social.backends.oauth import BaseOAuth1
 from social.exceptions import AuthCanceled, AuthUnknownError
 
 
-class LinkedinOAuth(ConsumerBasedOAuth):
+class LinkedinOAuth(BaseOAuth1):
     """Linkedin OAuth authentication backend"""
     name = 'linkedin'
     AUTHORIZATION_URL = 'https://www.linkedin.com/uas/oauth/authenticate'
@@ -40,8 +38,7 @@ class LinkedinOAuth(ConsumerBasedOAuth):
         # use set() over fields_selectors since LinkedIn fails when values are
         # duplicated
         url = 'https://api.linkedin.com/v1/people/~:(%s)' % fields_selectors
-        request = self.oauth_request(access_token, url)
-        raw_xml = self.fetch_response(request)
+        raw_xml = self.oauth_request(access_token, url).content
         try:
             return to_dict(ElementTree.fromstring(raw_xml))
         except (ExpatError, KeyError, IndexError):
@@ -60,18 +57,12 @@ class LinkedinOAuth(ConsumerBasedOAuth):
 
     def unauthorized_token(self):
         """Makes first request to oauth. Returns an unauthorized Token."""
-        request_token_url = self.REQUEST_TOKEN_URL
-        scope = self.get_scope()
+        scope = self.get_scope() or ''
         if scope:
-            qs = 'scope=' + self.SCOPE_SEPARATOR.join(scope)
-            request_token_url = request_token_url + '?' + qs
-        request = self.oauth_request(
-            token=None,
-            url=request_token_url,
-            extra_params=self.request_token_extra_arguments()
-        )
-        response = self.fetch_response(request)
-        return Token.from_string(response)
+            scope = '?scope=' + self.SCOPE_SEPARATOR.join(scope)
+        return self.request(self.REQUEST_TOKEN_URL + scope,
+                            params=self.request_token_extra_arguments(),
+                            auth=self.oauth_auth()).content
 
 
 def to_dict(xml):

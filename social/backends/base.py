@@ -9,11 +9,9 @@ Also the modules *must* define a BACKENDS dictionary with the backend name
 (which is used for URLs matching) and Auth class, otherwise it won't be
 enabled.
 """
-from cgi import parse_qs
-
 from requests import request
 
-from social.utils import module_member
+from social.utils import module_member, parse_qs
 from social.exceptions import StopPipeline
 
 

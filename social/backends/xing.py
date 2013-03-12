@@ -3,17 +3,12 @@ XING OAuth support
 
 No extra configurations are needed to make this work.
 """
-import json
-from urllib import urlencode
-
-import oauth2 as oauth
-from oauth2 import Token
-
-from social.backends.oauth import ConsumerBasedOAuth
+from social.utils import parse_qs
+from social.backends.oauth import BaseOAuth1
 from social.exceptions import AuthCanceled, AuthUnknownError
 
 
-class XingOAuth(ConsumerBasedOAuth):
+class XingOAuth(BaseOAuth1):
     """Xing OAuth authentication backend"""
     name = 'xing'
     AUTHORIZATION_URL = 'https://www.xing.com/v1/authorize'
@@ -37,14 +32,13 @@ class XingOAuth(ConsumerBasedOAuth):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        key, secret = self.get_key_and_secret()
-        consumer = oauth.Consumer(key=key, secret=secret)
-        client = oauth.Client(consumer, access_token)
-        url = 'https://api.xing.com/v1/users/me.json'
-        resp, content = client.request(url, 'GET')
-
         try:
-            profile = json.loads(content)['users'][0]
+            profile = self.get_json('https://api.xing.com/v1/users/me.json',
+                                    auth=self.oauth_auth(access_token))
+            profile = profile['users'][0]
+        except (ValueError, KeyError, IndexError):
+            pass
+        else:
             return {
                 'user_id': profile['id'],
                 'id': profile['id'],
@@ -52,8 +46,6 @@ class XingOAuth(ConsumerBasedOAuth):
                 'last_name': profile['last_name'],
                 'email': profile['active_email']
             }
-        except (ValueError, KeyError, IndexError):
-            pass
 
     def auth_complete(self, *args, **kwargs):
         """Complete auth process. Check Xing error response."""
@@ -68,15 +60,4 @@ class XingOAuth(ConsumerBasedOAuth):
 
     def unauthorized_token(self):
         """Makes first request to oauth. Returns an unauthorized Token."""
-        request_token_url = self.REQUEST_TOKEN_URL
-        scope = self.get_scope_argument()
-        if scope:
-            request_token_url = request_token_url + '?' + urlencode(scope)
-
-        request = self.oauth_request(
-            token=None,
-            url=request_token_url,
-            extra_params=self.request_token_extra_arguments()
-        )
-        response = self.fetch_response(request)
-        return Token.from_string(response)
+        return parse_qs(super(XingOAuth, self).unauthorized_token())

@@ -5,6 +5,12 @@ import urllib
 import unicodedata
 from cgi import parse_qsl
 from datetime import timedelta, tzinfo
+try:
+    from urlparse import parse_qs as battery_parse_qs
+    battery_parse_qs  # placate pyflakes
+except ImportError:
+    # fall back for Python 2.5
+    from cgi import parse_qs as battery_parse_qs
 
 
 SETTING_PREFIX = 'SOCIAL_AUTH'
@@ -129,3 +135,12 @@ def first(func, items):
     for item in items:
         if func(item):
             return item
+
+
+def parse_qs(value):
+    """Like urlparse.parse_qs but transform list values to single items"""
+    return drop_lists(battery_parse_qs(value))
+
+
+def drop_lists(value):
+    return dict((key, val[0]) for key, val in value.iteritems())

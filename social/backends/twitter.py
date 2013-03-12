@@ -11,13 +11,11 @@ User screen name is used to generate username.
 By default account id is stored in extra_data field, check OAuthBackend
 class for details on how to extend it.
 """
-import json
-
 from social.exceptions import AuthCanceled
-from social.backends.oauth import ConsumerBasedOAuth
+from social.backends.oauth import BaseOAuth1
 
 
-class TwitterOAuth(ConsumerBasedOAuth):
+class TwitterOAuth(BaseOAuth1):
     """Twitter OAuth authentication backend"""
     name = 'twitter'
     EXTRA_DATA = [('id', 'id')]
@@ -41,9 +39,8 @@ class TwitterOAuth(ConsumerBasedOAuth):
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
         url = 'https://api.twitter.com/1.1/account/verify_credentials.json'
-        response = self.fetch_response(self.oauth_request(access_token, url))
         try:
-            return json.loads(response)
+            return self.get_json(url, auth=self.oauth_auth(access_token))
         except ValueError:
             return None
 

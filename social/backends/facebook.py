@@ -12,7 +12,6 @@ to request.
 By default account id and token expiration time are stored in extra_data
 field, check OAuthBackend class for details on how to extend it.
 """
-import cgi
 import hmac
 import time
 import json
@@ -21,6 +20,7 @@ import hashlib
 
 from requests import HTTPError
 
+from social.utils import parse_qs
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthException, AuthCanceled, AuthFailed, \
                               AuthTokenError, AuthUnknownError
@@ -76,8 +76,8 @@ class FacebookOAuth2(BaseOAuth2):
                 raise AuthFailed(self, 'There was an error authenticating the'
                                        'the app')
 
-            access_token = response['access_token'][0]
-            expires = 'expires' in response and response['expires'][0] or None
+            access_token = response['access_token']
+            expires = 'expires' in response and response['expires'] or None
             return self.do_auth(access_token, expires=expires, *args, **kwargs)
         else:
             if self.data.get('error') == 'access_denied':
@@ -87,8 +87,7 @@ class FacebookOAuth2(BaseOAuth2):
 
     @classmethod
     def process_refresh_token_response(cls, response):
-        return dict((key, val[0])
-                        for key, val in cgi.parse_qs(response).iteritems())
+        return parse_qs(response)
 
     @classmethod
     def refresh_token_params(cls, token):

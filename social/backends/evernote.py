@@ -4,20 +4,12 @@ EverNote OAuth support
 No extra configurations are needed to make this work.
 """
 from requests import HTTPError
-try:
-    from urlparse import parse_qs
-    parse_qs  # placate pyflakes
-except ImportError:
-    # fall back for Python 2.5
-    from cgi import parse_qs
 
-from oauth2 import Token
-
-from social.backends.oauth import ConsumerBasedOAuth
 from social.exceptions import AuthCanceled
+from social.backends.oauth import BaseOAuth1
 
 
-class EvernoteOAuth(ConsumerBasedOAuth):
+class EvernoteOAuth(BaseOAuth1):
     """
     Evernote OAuth authentication backend.
 
@@ -53,25 +45,15 @@ class EvernoteOAuth(ConsumerBasedOAuth):
 
     def access_token(self, token):
         """Return request for access token value"""
-        request = self.oauth_request(token, self.ACCESS_TOKEN_URL)
-
         try:
-            response = self.fetch_response(request)
+            return self.get_querystring(self.ACCESS_TOKEN_URL,
+                                        auth=self.oauth_auth(token))
         except HTTPError, e:
             # Evernote returns a 401 error when AuthCanceled
             if e.response.status_code == 401:
                 raise AuthCanceled(self)
             else:
                 raise
-
-        params = parse_qs(response)
-        # evernote sents a empty secret token, this way it doesn't fires up the
-        # exception
-        response = response.replace('oauth_token_secret=',
-                                    'oauth_token_secret=None')
-        token = Token.from_string(response)
-        token.user_info = params
-        return token
 
     def extra_data(self, user, uid, response, details=None):
         data = super(EvernoteOAuth, self).extra_data(user, uid, response,
@@ -84,9 +66,7 @@ class EvernoteOAuth(ConsumerBasedOAuth):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        # drop lists
-        return dict([(key, val[0]) for key, val in
-                            access_token.user_info.items()])
+        return access_token
 
 
 class EvernoteSandboxOAuth(EvernoteOAuth):

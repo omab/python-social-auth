@@ -10,13 +10,11 @@ Then update your settings values using registration information
 ref:
     https://github.com/gkmngrgn/django-tumblr-auth
 """
-import json
-
 from social.utils import first
-from social.backends.oauth import ConsumerBasedOAuth
+from social.backends.oauth import BaseOAuth1
 
 
-class TumblrOAuth(ConsumerBasedOAuth):
+class TumblrOAuth(BaseOAuth1):
     name = 'tumblr'
     ID_KEY = 'username'
     AUTHORIZATION_URL = 'http://www.tumblr.com/oauth/authorize'
@@ -33,10 +31,9 @@ class TumblrOAuth(ConsumerBasedOAuth):
         return data
 
     def user_data(self, access_token):
-        request = self.oauth_request(access_token,
-                                     'http://api.tumblr.com/v2/user/info')
         try:
-            return json.loads(self.fetch_response(request))
+            return self.get_json('http://api.tumblr.com/v2/user/info',
+                                 auth=self.oauth_auth(access_token))
         except ValueError:
             return None
 

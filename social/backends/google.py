@@ -13,11 +13,11 @@ APIs console https://code.google.com/apis/console/ Identity option.
 
 OpenID also works straightforward, it doesn't need further configurations.
 """
-from oauth2 import Request as OAuthRequest
+# from oauth2 import Request as OAuthRequest
 
 from social.exceptions import AuthFailed
 from social.backends.open_id import OpenIdAuth
-from social.backends.oauth import BaseOAuth2, ConsumerBasedOAuth
+from social.backends.oauth import BaseOAuth2, BaseOAuth1
 
 
 class BaseGoogleAuth(object):
@@ -64,7 +64,7 @@ class GoogleOAuth2(BaseGoogleAuth, BaseOAuth2):
             return None
 
 
-class GoogleOAuth(BaseGoogleAuth, ConsumerBasedOAuth):
+class GoogleOAuth(BaseGoogleAuth, BaseOAuth1):
     """Google OAuth authorization mechanism"""
     name = 'google-oauth'
     AUTHORIZATION_URL = 'https://www.google.com/accounts/OAuthAuthorizeToken'
@@ -82,14 +82,6 @@ class GoogleOAuth(BaseGoogleAuth, ConsumerBasedOAuth):
                                  headers={'Authorization': params})['data']
         except (ValueError, KeyError, IOError):
             return None
-
-    def oauth_authorization_request(self, token):
-        """Generate OAuth request to authorize token."""
-        return OAuthRequest.from_consumer_and_token(
-            self.consumer,
-            token=token,
-            http_url=self.AUTHORIZATION_URL
-        )
 
     def oauth_request(self, token, url, extra_params=None):
         extra_params = extra_params or {}

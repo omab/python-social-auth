@@ -23,11 +23,9 @@ OAuth 1.0 Yahoo backend
     Throws:
         AuthUnknownError - if user data retrieval fails (guid or profile)
 """
-import json
-
 from social.exceptions import AuthUnknownError
 from social.backends.open_id import OpenIdAuth
-from social.backends.oauth import ConsumerBasedOAuth
+from social.backends.oauth import BaseOAuth1
 
 
 class YahooOpenId(OpenIdAuth):
@@ -36,7 +34,7 @@ class YahooOpenId(OpenIdAuth):
     URL = 'http://me.yahoo.com'
 
 
-class YahooOAuth(ConsumerBasedOAuth):
+class YahooOAuth(BaseOAuth1):
     """Yahoo OAuth authentication backend"""
     name = 'yahoo-oauth'
     ID_KEY = 'guid'
@@ -69,10 +67,9 @@ class YahooOAuth(ConsumerBasedOAuth):
         guid = self._get_guid(access_token)
         url = 'http://social.yahooapis.com/v1/user/%s/profile?format=json' \
                     % guid
-        request = self.oauth_request(access_token, url)
-        response = self.fetch_response(request)
         try:
-            return json.loads(response)['profile']
+            profile = self.get_json(url, auth=self.oauth_auth(access_token))
+            return profile['profile']
         except ValueError:
             raise AuthUnknownError('Error during profile retrieval, '
                                    'please, try again later')
@@ -83,10 +80,8 @@ class YahooOAuth(ConsumerBasedOAuth):
             it's also returned during one of OAuth calls
         """
         url = 'http://social.yahooapis.com/v1/me/guid?format=json'
-        request = self.oauth_request(access_token, url)
-        response = self.fetch_response(request)
         try:
-            data = json.loads(response)
+            data = self.get_json(url, auth=self.oauth_auth(access_token))
             return data['guid']['value']
         except ValueError:
             raise AuthUnknownError('Error during user id retrieval, '

@@ -2,10 +2,9 @@ import json
 from urllib import urlencode
 
 from requests import HTTPError
-from oauth2 import Token, SignatureMethod_HMAC_SHA1, HTTP_METHOD, \
-                   Request as OAuthRequest, Consumer as OAuthConsumer
+from requests_oauthlib import OAuth1
 
-from social.utils import url_add_parameters
+from social.utils import url_add_parameters, parse_qs
 from social.exceptions import AuthFailed, AuthCanceled, AuthUnknownError, \
                               AuthMissingParameter, AuthStateMissing, \
                               AuthStateForbidden, AuthTokenError
@@ -70,7 +69,7 @@ class OAuthAuth(BaseAuth):
         return {}
 
 
-class ConsumerBasedOAuth(OAuthAuth):
+class BaseOAuth1(OAuthAuth):
     """Consumer based mechanism OAuth authentication, fill the needed
     parameters to communicate properly with authentication service.
 
@@ -86,10 +85,9 @@ class ConsumerBasedOAuth(OAuthAuth):
         """Return redirect url"""
         token = self.unauthorized_token()
         name = self.name + 'unauthorized_token_name'
-        tokens = self.strategy.session_get(name, [])
-        tokens.append(token.to_string())
+        tokens = self.strategy.session_get(name, []) + [token]
         self.strategy.session_set(name, tokens)
-        return self.oauth_authorization_request(token).to_url()
+        return self.oauth_authorization_request(token)
 
     def auth_complete(self, *args, **kwargs):
         """Return user, might be logged in"""
@@ -100,8 +98,10 @@ class ConsumerBasedOAuth(OAuthAuth):
         if not unauthed_tokens:
             raise AuthTokenError(self, 'Missing unauthorized token')
         for unauthed_token in unauthed_tokens:
-            token = Token.from_string(unauthed_token)
-            if token.key == self.data.get('oauth_token', 'no-token'):
+            token = unauthed_token
+            if not isinstance(unauthed_token, dict):
+                token = parse_qs(unauthed_token)
+            if token.get('oauth_token') == self.data.get('oauth_token'):
                 self.strategy.session_set(name, list(set(unauthed_tokens) -
                                                      set([unauthed_token])))
                 break
@@ -121,51 +121,54 @@ class ConsumerBasedOAuth(OAuthAuth):
         """Finish the auth process once the access_token was retrieved"""
         data = self.user_data(access_token)
         if data is not None:
-            data['access_token'] = access_token.to_string()
+            data['access_token'] = access_token
         kwargs.update({'response': data, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
 
     def unauthorized_token(self):
         """Return request for unauthorized token (first stage)"""
-        request = self.oauth_request(
-            token=None,
-            url=self.REQUEST_TOKEN_URL,
-            extra_params=self.request_token_extra_arguments()
-        )
-        return Token.from_string(self.fetch_response(request))
+        params = self.request_token_extra_arguments()
+        params.update(self.get_scope_argument())
+        key, secret = self.get_key_and_secret()
+        response = self.request(self.REQUEST_TOKEN_URL,
+                                params=params,
+                                auth=OAuth1(key, secret,
+                                            callback_uri=self.redirect_uri))
+        return response.content
 
     def oauth_authorization_request(self, token):
         """Generate OAuth request to authorize token."""
+        if not isinstance(token, dict):
+            token = parse_qs(token)
         params = self.auth_extra_arguments() or {}
         params.update(self.get_scope_argument())
-        return OAuthRequest.from_token_and_callback(
-            token=token,
-            callback=self.redirect_uri,
-            http_url=self.AUTHORIZATION_URL,
-            parameters=params
-        )
+        params['oauth_token'] = token.get('oauth_token')
+        params['redirect_uri'] = self.redirect_uri
+        return self.AUTHORIZATION_URL + '?' + urlencode(params)
 
-    def oauth_request(self, token, url, extra_params=None, method=HTTP_METHOD):
+    def oauth_auth(self, token=None, oauth_verifier=None):
+        key, secret = self.get_key_and_secret()
+        oauth_verifier = oauth_verifier or self.data.get('oauth_verifier')
+        token = token or {}
+        return OAuth1(key, secret,
+                      resource_owner_key=token.get('oauth_token'),
+                      resource_owner_secret=token.get('oauth_token_secret'),
+                      callback_uri=self.redirect_uri,
+                      verifier=oauth_verifier)
+
+    def oauth_request(self, token, url, extra_params=None, method='GET'):
         """Generate OAuth request, setups callback url"""
-        return build_consumer_oauth_request(self, token, url,
-                                            self.redirect_uri,
-                                            self.data.get('oauth_verifier'),
-                                            extra_params,
-                                            method=method)
-
-    def fetch_response(self, request):
-        """Executes request and fetchs service response"""
-        return self.request(request.to_url()).content
+        # params = {'oauth_callback': self.redirect_uri}
+        # params.update(extra_params or {})
+        # oauth_verifier = self.data.get('oauth_verifier')
+        # if oauth_verifier:
+        #     params['oauth_verifier'] = oauth_verifier
+        return self.request(url, auth=self.oauth_auth(token))
 
     def access_token(self, token):
         """Return request for access token value"""
-        request = self.oauth_request(token, self.ACCESS_TOKEN_URL)
-        return Token.from_string(self.fetch_response(request))
-
-    @property
-    def consumer(self):
-        """Setups consumer"""
-        return OAuthConsumer(*self.get_key_and_secret())
+        return self.get_querystring(self.ACCESS_TOKEN_URL,
+                                    auth=self.oauth_auth(token))
 
 
 class BaseOAuth2(OAuthAuth):
@@ -313,24 +316,3 @@ class BaseOAuth2(OAuthAuth):
                 headers=self.auth_headers()
             ).content
         )
-
-
-def build_consumer_oauth_request(backend, token, url, redirect_uri='/',
-                                 oauth_verifier=None, extra_params=None,
-                                 method=HTTP_METHOD):
-    """Builds a Consumer OAuth request."""
-    params = {'oauth_callback': redirect_uri}
-    if extra_params:
-        params.update(extra_params)
-
-    if oauth_verifier:
-        params['oauth_verifier'] = oauth_verifier
-
-    consumer = OAuthConsumer(*backend.get_key_and_secret())
-    request = OAuthRequest.from_consumer_and_token(consumer,
-                                                   token=token,
-                                                   http_method=method,
-                                                   http_url=url,
-                                                   parameters=params)
-    request.sign_request(SignatureMethod_HMAC_SHA1(), consumer, token)
-    return request

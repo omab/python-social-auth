@@ -1,4 +1,4 @@
-from social.backends import ConsumerBasedOAuth, BaseOAuth2, OAuthAuth
+from social.backends import BaseOAuth1, BaseOAuth2, OAuthAuth
 
 
 RDIO_API = 'https://www.rdio.com/api/1/'
@@ -16,7 +16,7 @@ class BaseRdio(OAuthAuth):
         }
 
 
-class RdioOAuth1(BaseRdio, ConsumerBasedOAuth):
+class RdioOAuth1(BaseRdio, BaseOAuth1):
     """Rdio OAuth authentication backend"""
     name = 'rdio-oauth1'
     REQUEST_TOKEN_URL = 'http://api.rdio.com/oauth/request_token'

@@ -10,10 +10,10 @@ User screen name is used to generate username.
 """
 from xml.dom import minidom
 
-from social.backends.oauth import ConsumerBasedOAuth
+from social.backends.oauth import BaseOAuth1
 
 
-class TripItOAuth(ConsumerBasedOAuth):
+class TripItOAuth(BaseOAuth1):
     """TripIt OAuth authentication backend"""
     name = 'tripit'
     AUTHORIZATION_URL = 'https://www.tripit.com/oauth/authorize'
@@ -37,8 +37,7 @@ class TripItOAuth(ConsumerBasedOAuth):
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
         url = 'https://api.tripit.com/v1/get/profile'
-        request = self.oauth_request(access_token, url)
-        content = self.fetch_response(request)
+        content = self.oauth_request(access_token, url).content
         try:
             dom = minidom.parseString(content)
         except ValueError:

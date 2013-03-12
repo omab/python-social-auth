@@ -1,10 +1,9 @@
 """
 Yammer OAuth2 support
 """
-from urlparse import parse_qs
-
-from social.backends.oauth import BaseOAuth2
+from social.utils import parse_qs
 from social.exceptions import AuthCanceled
+from social.backends.oauth import BaseOAuth2
 
 
 class YammerOAuth2(BaseOAuth2):
@@ -63,7 +62,7 @@ class YammerOAuth2(BaseOAuth2):
             extra = parse_qs(extra)
             data['redirect_state'] = redirect_state
             if 'code' in extra:
-                data['code'] = extra['code'][0]
+                data['code'] = extra['code']
         self.data = data
         return super(YammerOAuth2, self).auth_complete(*args, **kwargs)
 

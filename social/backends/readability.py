@@ -4,18 +4,16 @@ Readability OAuth support.
 This contribution adds support for Readability OAuth service. The settings
 SOCIAL_AUTH_READABILITY_CONSUMER_KEY and
 SOCIAL_AUTH_READABILITY_CONSUMER_SECRET must be defined with the values given
-by Readability in the Connections page of your account settings."""
-
-import json
-
-from social.backends import ConsumerBasedOAuth
+by Readability in the Connections page of your account settings.
+"""
+from social.backends import BaseOAuth1
 from social.exceptions import AuthCanceled
 
 
 READABILITY_API = 'https://www.readability.com/api/rest/v1/'
 
 
-class ReadabilityOAuth(ConsumerBasedOAuth):
+class ReadabilityOAuth(BaseOAuth1):
     """Readability OAuth authentication backend"""
     name = 'readability'
     ID_KEY = 'username'
@@ -28,18 +26,14 @@ class ReadabilityOAuth(ConsumerBasedOAuth):
                   ('email_into_address', 'email_into_address')]
 
     def get_user_details(self, response):
-        username = response['username']
-        first_name, last_name = response['first_name'], response['last_name']
-        return {'username': username,
-                'first_name': first_name,
-                'last_name': last_name}
+        return {'username': response['username'],
+                'first_name': response['first_name'],
+                'last_name': response['last_name']}
 
     def user_data(self, access_token):
-        request = self.oauth_request(
-            access_token, '%s/users/_current' % READABILITY_API
-        )
         try:
-            return json.loads(self.fetch_response(request))
+            return self.get_json(READABILITY_API + '/users/_current',
+                                 auth=self.oauth_auth(access_token))
         except ValueError:
             return None
 
