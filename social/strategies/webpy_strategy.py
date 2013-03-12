@@ -11,10 +11,14 @@ class WebpyStrategy(BaseStrategy):
     def get_setting(self, name):
         return getattr(web.config, name)
 
-    def request_data(self):
-        # Use request because some auth providers use POST urls with needed
-        # GET parameters on it
-        return web.input()
+    def request_data(self, merge=True):
+        if merge:
+            data = web.input(_method='both')
+        elif web.ctx.method == 'POST':
+            data = web.input(_method='post')
+        else:
+            data = web.input(_method='get')
+        return data
 
     def request_host(self):
         return self.request.host
@@ -59,3 +63,6 @@ class WebpyStrategy(BaseStrategy):
         if path.startswith('http://') or path.startswith('https://'):
             return path
         return web.ctx.protocol + '://' + web.ctx.host + path
+
+    def is_response(self, value):
+        return isinstance(value, web.Storage)

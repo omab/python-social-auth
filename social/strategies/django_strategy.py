@@ -12,10 +12,14 @@ class DjangoStrategy(BaseStrategy):
     def get_setting(self, name):
         return getattr(settings, name)
 
-    def request_data(self):
-        # Use request because some auth providers use POST urls with needed
-        # GET parameters on it
-        return self.request.REQUEST
+    def request_data(self, merge=True):
+        if merge:
+            data = self.request.REQUEST
+        elif self.request.method == 'POST':
+            data = self.request.POST
+        else:
+            data = self.request.GET
+        return data
 
     def request_host(self):
         return self.request.get_host()
@@ -102,3 +106,6 @@ class DjangoStrategy(BaseStrategy):
             ModelClass = ctype.model_class()
             val = ModelClass.objects.get(pk=val['pk'])
         return val
+
+    def is_response(self, value):
+        return isinstance(value, HttpResponse)

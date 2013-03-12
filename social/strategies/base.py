@@ -16,8 +16,10 @@ class BaseStrategy(object):
         self.request = request
         self.storage = storage
         if backend:
+            self.backend_name = backend.name
             self.backend = backend(strategy=self, *args, **kwargs)
         else:
+            self.backend_name = None
             self.backend = backend
 
     def setting(self, name, default=None):
@@ -127,7 +129,7 @@ class BaseStrategy(object):
         """Render given template or raw html with given context"""
         raise NotImplementedError('Implement in subclass')
 
-    def request_data(self):
+    def request_data(self, merge=True):
         """Return current request data (POST or GET)"""
         raise NotImplementedError('Implement in subclass')
 
@@ -150,3 +152,6 @@ class BaseStrategy(object):
     def build_absolute_uri(self, path=None):
         """Build absolute URI with given (optional) path"""
         raise NotImplementedError('Implement in subclass')
+
+    def is_response(self, value):
+        raise NotImplemented('Implement in subclass')

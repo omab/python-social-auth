@@ -1,5 +1,5 @@
 from flask import current_app, request, redirect, make_response, session, \
-                  render_template, render_template_string
+                  render_template, render_template_string, Response
 
 from social.strategies.base import BaseStrategy
 
@@ -8,9 +8,14 @@ class FlaskStrategy(BaseStrategy):
     def get_setting(self, name):
         return current_app.config[name]
 
-    def request_data(self):
-        data = request.form.copy()
-        data.update(request.args)
+    def request_data(self, merge=True):
+        if merge:
+            data = request.form.copy()
+            data.update(request.args)
+        elif request.method == 'POST':
+            data = request.form
+        else:
+            data = request.args
         return data
 
     def request_host(self):
@@ -58,3 +63,6 @@ class FlaskStrategy(BaseStrategy):
         if request.host_url.endswith('/') and path.startswith('/'):
             path = path[1:]
         return request.host_url + (path or '')
+
+    def is_response(self, value):
+        return isinstance(value, Response)
