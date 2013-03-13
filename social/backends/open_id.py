@@ -169,7 +169,9 @@ class OpenIdAuth(BaseAuth):
                 fetch_request.add(ax.AttrInfo(attr, alias=alias,
                                               required=True))
         else:
-            fetch_request = sreg.SRegRequest(optional=dict(SREG_ATTR).keys())
+            fetch_request = sreg.SRegRequest(
+                optional=list(dict(SREG_ATTR).keys())
+            )
         openid_request.addExtension(fetch_request)
 
         # Add PAPE Extension for if configured

@@ -15,10 +15,10 @@ field, check OAuthBackend class for details on how to extend it.
 import json
 
 from gzip import GzipFile
-from StringIO import StringIO
 
 from requests import HTTPError
 
+from social.p3 import StringIO
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthUnknownError, AuthCanceled
 

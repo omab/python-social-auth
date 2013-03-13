@@ -63,7 +63,7 @@ def user_backends_data(user, backends, storage):
     If user is not authenticated, then 'associated' list is empty, and there's
     no difference between 'not_associated' and 'backends'.
     """
-    available = load_backends(backends).keys()
+    available = list(load_backends(backends).keys())
     values = {'associated': [],
               'not_associated': available,
               'backends': available}

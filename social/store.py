@@ -21,7 +21,8 @@ class OpenIdStore(BaseOpenIDStore):
 
     def removeAssociation(self, server_url, handle):
         """Remove association"""
-        associations_ids = dict(self.assoc.oids(server_url, handle)).keys()
+        associations_ids = list(dict(self.assoc.oids(server_url,
+                                                     handle)).keys())
         if associations_ids:
             self.assoc.remove(associations_ids)
 

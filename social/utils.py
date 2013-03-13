@@ -2,6 +2,7 @@ import re
 import sys
 import unicodedata
 import six
+import collections
 
 from cgi import parse_qsl
 from datetime import timedelta, tzinfo
@@ -28,7 +29,8 @@ def url_add_parameters(url, params):
     """Adds parameters to URL, parameter will be repeated if already present"""
     if params:
         fragments = list(urlparse(url))
-        fragments[4] = urlencode(parse_qsl(fragments[4]) + params.items())
+        fragments[4] = urlencode(parse_qsl(fragments[4]) +
+                                 list(params.items()))
         url = urlunparse(fragments)
     return url
 
@@ -90,7 +92,7 @@ def sanitize_redirect(host, redirect_to):
 
 def user_is_authenticated(user):
     if user and hasattr(user, 'is_authenticated'):
-        if callable(user.is_authenticated):
+        if isinstance(user.is_authenticated, collections.Callable):
             authenticated = user.is_authenticated()
         else:
             authenticated = user.is_authenticated
@@ -103,7 +105,7 @@ def user_is_authenticated(user):
 
 def user_is_active(user):
     if user and hasattr(user, 'is_active'):
-        if callable(user.is_active):
+        if isinstance(user.is_active, collections.Callable):
             is_active = user.is_active()
         else:
             is_active = user.is_active

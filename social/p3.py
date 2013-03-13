@@ -4,6 +4,7 @@ import six
 if six.PY3:
     from urllib.parse import parse_qs, urlparse, urlunparse, quote, \
                              urlsplit, urlencode, unquote
+    from io import StringIO
 else:
     try:
         from urlparse import parse_qs
@@ -11,3 +12,4 @@ else:
         from cgi import parse_qs
     from urlparse import urlparse, urlunparse, quote, urlsplit
     from urllib import urlencode, unquote
+    from StringIO import StringIO

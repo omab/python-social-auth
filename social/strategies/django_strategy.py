@@ -73,7 +73,7 @@ class DjangoStrategy(BaseStrategy):
         """Takes session saved data to continue pipeline and merges with any
         new extra argument needed. Returns tuple with next pipeline index
         entry, arguments and keyword arguments to continue the process."""
-        saved_args = map(self._model, session['args'])
+        saved_args = list(map(self._model, session['args']))
         saved_kwargs = dict((key, self._model(val))
                             for key, val in session['kwargs'].items())
         return session['next'], saved_args, saved_kwargs
