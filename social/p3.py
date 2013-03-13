@@ -10,6 +10,6 @@ else:
         from urlparse import parse_qs
     except ImportError:  # fall back for Python 2.5
         from cgi import parse_qs
-    from urlparse import urlparse, urlunparse, quote, urlsplit
-    from urllib import urlencode, unquote
+    from urlparse import urlparse, urlunparse, urlsplit
+    from urllib import urlencode, unquote, quote
     from StringIO import StringIO

@@ -64,12 +64,7 @@ class BaseJSONField(models.TextField):
         return self.get_prep_value(self._get_val_from_obj(obj))
 
 
-if six.PY3:
-    class JSONField(BaseJSONField, metaclass=models.SubfieldBase):
-        pass
-else:
-    class JSONField(BaseJSONField):
-        __metaclass__ = models.SubfieldBase
+JSONField = models.SubfieldBase('JSONField', (BaseJSONField,), {})
 
 
 try:
