@@ -10,6 +10,7 @@ You must:
 
 """
 import imp
+import six
 
 from requests import HTTPError
 
@@ -30,8 +31,8 @@ class ShopifyOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Use the shopify store name as the username"""
         return {
-            'username': unicode(response.get('shop', '')
-                                        .replace('.myshopify.com', ''))
+            'username': six.text_type(response.get('shop', ''), 'utf-8')
+                                .replace('.myshopify.com', '')
         }
 
     def __init__(self, request, redirect):
@@ -65,10 +66,10 @@ class ShopifyOAuth2(BaseOAuth2):
             self.shopifyAPI.Session.setup(api_key=key, secret=secret)
             shopify_session = self.shopifyAPI.Session(shop_url, self.data)
             access_token = shopify_session.token
-        except self.shopifyAPI.ValidationException, e:
+        except self.shopifyAPI.ValidationException:
             raise AuthCanceled(self)
-        except HTTPError, e:
-            if e.response.status_code == 400:
+        except HTTPError as err:
+            if err.response.status_code == 400:
                 raise AuthCanceled(self)
             else:
                 raise

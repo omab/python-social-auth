@@ -19,7 +19,7 @@ def auth(backend):
 def complete(backend, *args, **kwargs):
     """Authentication complete view, override this view if transaction
     management doesn't suit your needs."""
-    return do_complete(g.strategy, login=lambda req, user: login_user(user),
+    return do_complete(g.strategy, login=lambda strat, user: login_user(user),
                        user=g.user, *args, **kwargs)
 
 

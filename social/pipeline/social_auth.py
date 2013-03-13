@@ -23,8 +23,8 @@ def associate_user(strategy, user, uid, social_user=None, *args, **kwargs):
         social = strategy.storage.user.create_social_auth(
             user, uid, strategy.backend.name
         )
-    except Exception, e:
-        if not strategy.is_integrity_error(e):
+    except Exception as err:
+        if not strategy.is_integrity_error(err):
             raise
         # Protect for possible race condition, those bastard with FTL
         # clicking capabilities, check issue #131:

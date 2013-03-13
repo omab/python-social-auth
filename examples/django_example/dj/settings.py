@@ -163,6 +163,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH_EXTRA_SCOPE = [
 ]
 
 try:
-    from local_settings import *
+    from dj.local_settings import *
 except ImportError:
     pass

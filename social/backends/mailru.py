@@ -9,11 +9,11 @@ http://api.mail.ru/sites/my/add
 Then update your settings values using registration information
 
 """
-from urllib import unquote
 from hashlib import md5
 
 from requests import HTTPError
 
+from social.p3 import unquote
 from social.exceptions import AuthCanceled
 from social.backends.oauth import BaseOAuth2
 
@@ -44,8 +44,8 @@ class MailruOAuth2(BaseOAuth2):
     def auth_complete(self, *args, **kwargs):
         try:
             return super(MailruOAuth2, self).auth_complete(*args, **kwargs)
-        except HTTPError, e:  # Mail.ru returns HTTPError 400 if cancelled
-            if e.response.status_code == 400:
+        except HTTPError as err:  # Mail.ru returns HTTPError 400 if cancelled
+            if err.response.status_code == 400:
                 raise AuthCanceled(self)
             else:
                 raise

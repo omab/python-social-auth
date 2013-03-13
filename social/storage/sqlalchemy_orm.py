@@ -1,5 +1,6 @@
 """SQLAlchemy models for Social Auth"""
 import base64
+import six
 
 # from sqlalchemy.orm import Query
 from sqlalchemy.exc import IntegrityError
@@ -93,7 +94,7 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
 
     @classmethod
     def get_social_auth(cls, provider, uid):
-        if not isinstance(uid, basestring):
+        if not isinstance(uid, six.string_types):
             uid = str(uid)
         try:
             return cls._query().filter_by(provider=provider,
@@ -107,7 +108,7 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):
-        if not isinstance(uid, basestring):
+        if not isinstance(uid, six.string_types):
             uid = str(uid)
         return cls._new_instance(cls, user=user, uid=uid, provider=provider)
 

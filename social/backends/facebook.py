@@ -120,13 +120,13 @@ class FacebookOAuth2(BaseOAuth2):
 
     def load_signed_request(self, signed_request):
         def base64_url_decode(data):
-            data = data.encode(u'ascii')
+            data = data.encode('ascii')
             data += '=' * (4 - (len(data) % 4))
             return base64.urlsafe_b64decode(data)
 
         key, secret = self.get_key_and_secret()
         try:
-            sig, payload = signed_request.split(u'.', 1)
+            sig, payload = signed_request.split('.', 1)
         except ValueError:
             pass  # ignore if can't split on dot
         else:

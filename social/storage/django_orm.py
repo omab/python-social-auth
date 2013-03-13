@@ -1,5 +1,6 @@
 """Django ORM models for Social Auth"""
 import base64
+import six
 
 from social.exceptions import NotAllowedToDisconnect
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
@@ -68,7 +69,7 @@ class DjangoUserMixin(UserMixin):
 
     @classmethod
     def get_social_auth(cls, provider, uid):
-        if not isinstance(uid, basestring):
+        if not isinstance(uid, six.string_types):
             uid = str(uid)
         try:
             return cls.objects.get(provider=provider, uid=uid)
@@ -81,7 +82,7 @@ class DjangoUserMixin(UserMixin):
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):
-        if not isinstance(uid, basestring):
+        if not isinstance(uid, six.string_types):
             uid = str(uid)
         return cls.objects.create(user=user, uid=uid, provider=provider)
 

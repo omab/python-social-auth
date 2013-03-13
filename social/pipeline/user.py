@@ -15,9 +15,9 @@ def get_username(strategy, details, user=None, *args, **kwargs):
         if email_as_username and details.get('email'):
             username = details['email']
         elif details.get('username'):
-            username = unicode(details['username'])
+            username = details['username']
         else:
-            username = uuid4().get_hex()
+            username = uuid4().hex
 
         short_username = username[:max_length - uuid_length]
         final_username = storage.user.clean_username(username[:max_length])
@@ -28,7 +28,7 @@ def get_username(strategy, details, user=None, *args, **kwargs):
         # as base but adding a unique hash at the end. Original
         # username is cut to avoid any field max_length.
         while storage.user.user_exists(final_username):
-            username = short_username + uuid4().get_hex()[:uuid_length]
+            username = short_username + uuid4().hex[:uuid_length]
             final_username = storage.user.clean_username(username[:max_length])
             if do_slugify:
                 final_username = slugify(final_username)
@@ -57,7 +57,7 @@ def user_details(strategy, details, response, user=None, *args, **kwargs):
     keep = ('username', 'id', 'pk') + \
            tuple(strategy.setting('PROTECTED_USER_FIELDS', []))
 
-    for name, value in details.iteritems():
+    for name, value in details.items():
         # do not update username, it was already generated
         # do not update configured fields if user already existed
         if name not in keep:

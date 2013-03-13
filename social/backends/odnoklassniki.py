@@ -16,9 +16,9 @@ elif you're building iframe application,
 Then setup your application according manual and use information from
 registration mail to set settings values.
 """
-from urllib import unquote
 from hashlib import md5
 
+from social.p3 import unquote
 from social.backends.base import BaseAuth
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthFailed

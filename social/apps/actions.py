@@ -1,5 +1,4 @@
-from urllib2 import quote
-
+from social.p3 import quote
 from social.utils import sanitize_redirect, user_is_authenticated, \
                          user_is_active
 
@@ -71,7 +70,7 @@ def do_complete(strategy, login, user=None, redirect_name='next',
         if user_is_active(user):
             # catch is_new flag before login() resets the instance
             is_new = getattr(user, 'is_new', False)
-            login(strategy.request, user)
+            login(strategy, user)
 
             # user.social_user is the used UserSocialAuth instance defined
             # in authenticate process

@@ -66,7 +66,7 @@ class DjangoStrategy(BaseStrategy):
             'backend': backend.name,
             'args': tuple(map(self._ctype, args)),
             'kwargs': dict((key, self._ctype(val))
-                                for key, val in kwargs.iteritems())
+                                for key, val in kwargs.items())
         }
 
     def from_session(self, session):
@@ -75,7 +75,7 @@ class DjangoStrategy(BaseStrategy):
         entry, arguments and keyword arguments to continue the process."""
         saved_args = map(self._model, session['args'])
         saved_kwargs = dict((key, self._model(val))
-                            for key, val in session['kwargs'].iteritems())
+                            for key, val in session['kwargs'].items())
         return session['next'], saved_args, saved_kwargs
 
     def build_absolute_uri(self, path=None):

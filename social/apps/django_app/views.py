@@ -36,7 +36,7 @@ def disconnect(request, backend, association_id=None):
 
 
 def _do_login(strategy, user):
-    login(user)
+    login(strategy.request, user)
     strategy.session_set('original_' + BACKEND_SESSION_KEY,
                          strategy.session_get(BACKEND_SESSION_KEY))
     strategy.session_set(BACKEND_SESSION_KEY, '%s.%s' % (

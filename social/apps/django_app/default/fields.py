@@ -1,14 +1,24 @@
+import json
+import six
+
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import simplejson
-from django.utils.encoding import smart_unicode
+
+try:
+    from django.utils.encoding import smart_unicode as smart_text
+    smart_text  # placate pyflakes
+except ImportError:
+    from django.utils.encoding import smart_text
 
 
-class JSONField(models.TextField):
+class BaseJSONField(models.TextField):
     """Simple JSON field that stores python structures as JSON strings
     on database.
     """
-    __metaclass__ = models.SubfieldBase
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('default', '{}')
+        super(BaseJSONField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
         """
@@ -16,43 +26,57 @@ class JSONField(models.TextField):
         django.core.exceptions.ValidationError if the data can't be converted.
         """
         if self.blank and not value:
-            return None
-        if isinstance(value, basestring):
+            return {}
+        value = value or '{}'
+        if isinstance(value, six.binary_type):
+            value = six.text_type(value, 'utf-8')
+        if isinstance(value, six.string_types):
             try:
-                return simplejson.loads(value)
-            except Exception, e:
-                raise ValidationError(str(e))
+                return json.loads(value)
+            except Exception as err:
+                raise ValidationError(str(err))
         else:
             return value
 
     def validate(self, value, model_instance):
         """Check value is a valid JSON string, raise ValidationError on
         error."""
-        if isinstance(value, basestring):
+        if isinstance(value, six.string_types):
             super(JSONField, self).validate(value, model_instance)
             try:
-                simplejson.loads(value)
-            except Exception, e:
-                raise ValidationError(str(e))
+                json.loads(value)
+            except Exception as err:
+                raise ValidationError(str(err))
 
     def get_prep_value(self, value):
         """Convert value to JSON string before save"""
         try:
-            return simplejson.dumps(value)
-        except Exception, e:
-            raise ValidationError(str(e))
+            return json.dumps(value)
+        except Exception as err:
+            raise ValidationError(str(err))
 
     def value_to_string(self, obj):
         """Return value from object converted to string properly"""
-        return smart_unicode(self.get_prep_value(self._get_val_from_obj(obj)))
+        return smart_text(self.get_prep_value(self._get_val_from_obj(obj)))
 
     def value_from_object(self, obj):
         """Return value dumped to string."""
         return self.get_prep_value(self._get_val_from_obj(obj))
 
 
+if six.PY3:
+    class JSONField(BaseJSONField, metaclass=models.SubfieldBase):
+        pass
+else:
+    class JSONField(BaseJSONField):
+        __metaclass__ = models.SubfieldBase
+
+
 try:
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^social\.apps\.django_app\.default\.fields\.JSONField"])
+    add_introspection_rules(
+        [],
+        ["^social\.apps\.django_app\.default\.fields\.JSONField"]
+    )
 except:
     pass

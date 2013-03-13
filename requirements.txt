@@ -2,3 +2,4 @@ python_openid>=2.2
 requests>=1.1.0
 oauthlib>=0.3.8
 requests-oauthlib>=0.3.0
+six>=1.2.0

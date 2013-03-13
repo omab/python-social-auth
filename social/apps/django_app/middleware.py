@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import six
+
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -31,7 +33,7 @@ class SocialAuthExceptionMiddleware(object):
                 # Ensure that messages are added to authenticated users only,
                 # otherwise this fails
                 messages.error(request, message,
-                               extra_tags=u'social-auth ' + backend_name)
+                               extra_tags='social-auth ' + backend_name)
             else:
                 url += ('?' in url and '&' or '?') + \
                        'message=%s&backend=%s' % (message, backend_name)
@@ -41,7 +43,7 @@ class SocialAuthExceptionMiddleware(object):
         return self.strategy.setting('RAISE_EXCEPTIONS') or settings.DEBUG
 
     def get_message(self, request, exception):
-        return unicode(exception)
+        return six.text_type(exception)
 
     def get_redirect_uri(self, request, exception):
         return self.strategy.setting('LOGIN_ERROR_URL')

@@ -12,8 +12,7 @@ http://developers.soundcloud.com/docs
 By default account id and token expiration time are stored in extra_data
 field, check OAuthBackend class for details on how to extend it.
 """
-from urllib import urlencode
-
+from social.p3 import urlencode
 from social.backends.oauth import BaseOAuth2
 
 

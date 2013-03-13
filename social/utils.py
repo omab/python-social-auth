@@ -1,16 +1,13 @@
 import re
 import sys
-import urlparse
-import urllib
 import unicodedata
+import six
+
 from cgi import parse_qsl
 from datetime import timedelta, tzinfo
-try:
-    from urlparse import parse_qs as battery_parse_qs
-    battery_parse_qs  # placate pyflakes
-except ImportError:
-    # fall back for Python 2.5
-    from cgi import parse_qs as battery_parse_qs
+
+from social.p3 import urlparse, urlunparse, urlencode, \
+                      parse_qs as battery_parse_qs
 
 
 SETTING_PREFIX = 'SOCIAL_AUTH'
@@ -30,10 +27,9 @@ def module_member(name):
 def url_add_parameters(url, params):
     """Adds parameters to URL, parameter will be repeated if already present"""
     if params:
-        fragments = list(urlparse.urlparse(url))
-        fragments[4] = urllib.urlencode(parse_qsl(fragments[4]) +
-                                        params.items())
-        url = urlparse.urlunparse(fragments)
+        fragments = list(urlparse(url))
+        fragments[4] = urlencode(parse_qsl(fragments[4]) + params.items())
+        url = urlunparse(fragments)
     return url
 
 
@@ -143,4 +139,12 @@ def parse_qs(value):
 
 
 def drop_lists(value):
-    return dict((key, val[0]) for key, val in value.iteritems())
+    out = {}
+    for key, val in value.items():
+        val = val[0]
+        if isinstance(key, six.binary_type):
+            key = six.text_type(key, 'utf-8')
+        if isinstance(val, six.binary_type):
+            val = six.text_type(val, 'utf-8')
+        out[key] = val
+    return out

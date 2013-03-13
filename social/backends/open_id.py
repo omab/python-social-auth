@@ -213,7 +213,7 @@ class OpenIdAuth(BaseAuth):
                 self._openid_request = self.consumer().begin(
                     url_add_parameters(self.openid_url(), extra_params)
                 )
-            except DiscoveryFailure, err:
+            except DiscoveryFailure as err:
                 raise AuthException(self, 'OpenID discovery error: %s' % err)
         return self._openid_request
 

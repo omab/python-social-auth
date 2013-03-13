@@ -6,8 +6,7 @@ openid.yandex.ru/user. Username is retrieved from the identity url.
 
 If username is not specified, OpenID 2.0 url used for authentication.
 """
-from urlparse import urlparse, urlsplit
-
+from social.p3 import urlparse, urlsplit
 from social.backends.open_id import OpenIdAuth
 from social.backends.oauth import BaseOAuth2, OAuthAuth
 

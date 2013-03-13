@@ -69,8 +69,8 @@ class StackoverflowOAuth2(BaseOAuth2):
                     headers=self.auth_headers()
                 )
             )
-        except HTTPError, e:
-            if e.response.status_code == 400:
+        except HTTPError as err:
+            if err.response.status_code == 400:
                 raise AuthCanceled(self)
             else:
                 raise

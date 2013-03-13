@@ -1,9 +1,9 @@
 import json
-from urllib import urlencode
 
 from requests import HTTPError
 from requests_oauthlib import OAuth1
 
+from social.p3 import urlencode
 from social.utils import url_add_parameters, parse_qs
 from social.exceptions import AuthFailed, AuthCanceled, AuthUnknownError, \
                               AuthMissingParameter, AuthStateMissing, \
@@ -110,8 +110,8 @@ class BaseOAuth1(OAuthAuth):
 
         try:
             access_token = self.access_token(token)
-        except HTTPError, e:
-            if e.response.status_code == 400:
+        except HTTPError as err:
+            if err.response.status_code == 400:
                 raise AuthCanceled(self)
             else:
                 raise
@@ -277,8 +277,8 @@ class BaseOAuth2(OAuthAuth):
                 data=self.auth_complete_params(self.validate_state()),
                 headers=self.auth_headers()
             )
-        except HTTPError, e:
-            if e.response.status_code == 400:
+        except HTTPError as err:
+            if err.response.status_code == 400:
                 raise AuthCanceled(self)
             else:
                 raise

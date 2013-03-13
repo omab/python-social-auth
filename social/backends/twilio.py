@@ -2,8 +2,8 @@
 Twilio support
 """
 from re import sub
-from urllib import urlencode
 
+from social.p3 import urlencode
 from social.backends.base import BaseAuth
 
 

@@ -3,6 +3,8 @@ EverNote OAuth support
 
 No extra configurations are needed to make this work.
 """
+import six
+
 from requests import HTTPError
 
 from social.exceptions import AuthCanceled
@@ -48,9 +50,9 @@ class EvernoteOAuth(BaseOAuth1):
         try:
             return self.get_querystring(self.ACCESS_TOKEN_URL,
                                         auth=self.oauth_auth(token))
-        except HTTPError, e:
+        except HTTPError as err:
             # Evernote returns a 401 error when AuthCanceled
-            if e.response.status_code == 401:
+            if err.response.status_code == 401:
                 raise AuthCanceled(self)
             else:
                 raise
@@ -61,7 +63,7 @@ class EvernoteOAuth(BaseOAuth1):
         # Evernote returns expiration timestamp in miliseconds, so it needs to
         # be normalized.
         if 'expires' in data:
-            data['expires'] = unicode(int(data['expires']) / 1000)
+            data['expires'] = int(data['expires']) / 1000
         return data
 
     def user_data(self, access_token, *args, **kwargs):

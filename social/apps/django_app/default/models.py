@@ -22,7 +22,7 @@ class UserSocialAuth(models.Model, DjangoUserMixin):
     user = models.ForeignKey(USER_MODEL, related_name='social_auth')
     provider = models.CharField(max_length=32)
     uid = models.CharField(max_length=UID_LENGTH)
-    extra_data = JSONField(default='{}')
+    extra_data = JSONField()
 
     class Meta:
         """Meta data"""

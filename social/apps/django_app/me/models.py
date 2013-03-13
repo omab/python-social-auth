@@ -3,6 +3,8 @@ MongoEngine models for Social Auth
 
 Requires MongoEngine 0.6.10
 """
+import six
+
 from mongoengine import DictField, Document, IntField, ReferenceField, \
                         StringField
 from mongoengine.django.auth import User
@@ -30,7 +32,7 @@ class UserSocialAuth(Document, DjangoUserMixin):
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):
-        if not isinstance(type(uid), basestring):
+        if not isinstance(type(uid), six.string_types):
             uid = str(uid)
         return cls.objects.create(user=user, uid=uid, provider=provider)
 
