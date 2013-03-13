@@ -13,8 +13,6 @@ APIs console https://code.google.com/apis/console/ Identity option.
 
 OpenID also works straightforward, it doesn't need further configurations.
 """
-# from oauth2 import Request as OAuthRequest
-
 from social.exceptions import AuthFailed
 from social.backends.open_id import OpenIdAuth
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
@@ -74,14 +72,10 @@ class GoogleOAuth(BaseGoogleAuth, BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Google API"""
-        url = 'https://www.googleapis.com/userinfo/email'
-        request = self.oauth_request(access_token, url, {'alt': 'json'})
-        url, params = request.to_url().split('?', 1)
-        try:
-            return self.get_json(request.to_url(),
-                                 headers={'Authorization': params})['data']
-        except (ValueError, KeyError, IOError):
-            return None
+        return self.get_querystring(
+            'https://www.googleapis.com/userinfo/email',
+            auth=self.oauth_auth(access_token)
+        )
 
     def oauth_request(self, token, url, extra_params=None):
         extra_params = extra_params or {}

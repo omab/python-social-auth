@@ -2,6 +2,7 @@ import json
 
 from requests import HTTPError
 from requests_oauthlib import OAuth1
+from oauthlib.oauth1 import SIGNATURE_TYPE_AUTH_HEADER
 
 from social.p3 import urlencode
 from social.utils import url_add_parameters, parse_qs
@@ -146,7 +147,8 @@ class BaseOAuth1(OAuthAuth):
         params['redirect_uri'] = self.redirect_uri
         return self.AUTHORIZATION_URL + '?' + urlencode(params)
 
-    def oauth_auth(self, token=None, oauth_verifier=None):
+    def oauth_auth(self, token=None, oauth_verifier=None,
+                   signature_type=SIGNATURE_TYPE_AUTH_HEADER):
         key, secret = self.get_key_and_secret()
         oauth_verifier = oauth_verifier or self.data.get('oauth_verifier')
         token = token or {}
@@ -154,7 +156,8 @@ class BaseOAuth1(OAuthAuth):
                       resource_owner_key=token.get('oauth_token'),
                       resource_owner_secret=token.get('oauth_token_secret'),
                       callback_uri=self.redirect_uri,
-                      verifier=oauth_verifier)
+                      verifier=oauth_verifier,
+                      signature_type=signature_type)
 
     def oauth_request(self, token, url, extra_params=None, method='GET'):
         """Generate OAuth request, setups callback url"""
@@ -163,7 +166,8 @@ class BaseOAuth1(OAuthAuth):
         # oauth_verifier = self.data.get('oauth_verifier')
         # if oauth_verifier:
         #     params['oauth_verifier'] = oauth_verifier
-        return self.request(url, auth=self.oauth_auth(token))
+        return self.request(url, method=method, params=extra_params,
+                            auth=self.oauth_auth(token))
 
     def access_token(self, token):
         """Return request for access token value"""
