@@ -1,5 +1,3 @@
-import json
-
 from requests import HTTPError
 from requests_oauthlib import OAuth1
 from oauthlib.oauth1 import SIGNATURE_TYPE_AUTH_HEADER
@@ -310,13 +308,11 @@ class BaseOAuth2(OAuthAuth):
         }
 
     def process_refresh_token_response(self, response):
-        return json.loads(response)
+        return response.json()
 
     def refresh_token(self, token):
         return self.process_refresh_token_response(
-            self.request(
-                self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL,
-                params=self.refresh_token_params(token),
-                headers=self.auth_headers()
-            ).content
+            self.request(self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL,
+                         params=self.refresh_token_params(token),
+                         headers=self.auth_headers())
         )

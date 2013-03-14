@@ -87,7 +87,7 @@ class FacebookOAuth2(BaseOAuth2):
 
     @classmethod
     def process_refresh_token_response(cls, response):
-        return parse_qs(response)
+        return parse_qs(response.content)
 
     @classmethod
     def refresh_token_params(cls, token):
