@@ -100,7 +100,8 @@ class BaseOAuth1(OAuthAuth):
             token = unauthed_token
             if not isinstance(unauthed_token, dict):
                 token = parse_qs(unauthed_token)
-            if token.get('oauth_token') == self.data.get('oauth_token'):
+            saved_token = self.data.get('oauth_token', 'no-token')
+            if token.get('oauth_token') == saved_token:
                 self.strategy.session_set(name, list(set(unauthed_tokens) -
                                                      set([unauthed_token])))
                 break
