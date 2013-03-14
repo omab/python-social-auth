@@ -49,10 +49,10 @@ class StackoverflowOAuth2(BaseOAuth2):
         })
         if opener.headers.get('content-encoding') == 'gzip':
             # Stackoverflow doesn't respect no gzip header
-            gzip = GzipFile(fileobj=StringIO(opener.read()), mode='r')
+            gzip = GzipFile(fileobj=StringIO(opener.content), mode='r')
             response = gzip.read()
         else:
-            response = opener.read()
+            response = opener.content
         try:
             return json.loads(response)['items'][0]
         except (ValueError, TypeError):
