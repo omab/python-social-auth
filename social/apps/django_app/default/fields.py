@@ -15,7 +15,6 @@ class BaseJSONField(models.TextField):
     """Simple JSON field that stores python structures as JSON strings
     on database.
     """
-
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('default', '{}')
         super(BaseJSONField, self).__init__(*args, **kwargs)
