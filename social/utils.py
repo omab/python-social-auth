@@ -4,7 +4,6 @@ import unicodedata
 import six
 import collections
 
-from cgi import parse_qsl
 from datetime import timedelta, tzinfo
 
 from social.p3 import urlparse, urlunparse, urlencode, \
@@ -29,8 +28,9 @@ def url_add_parameters(url, params):
     """Adds parameters to URL, parameter will be repeated if already present"""
     if params:
         fragments = list(urlparse(url))
-        fragments[4] = urlencode(parse_qsl(fragments[4]) +
-                                 list(params.items()))
+        value = parse_qs(fragments[4])
+        value.update(params)
+        fragments[4] = urlencode(value)
         url = urlunparse(fragments)
     return url
 
