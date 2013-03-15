@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 """Setup file for easy installation"""
+import sys
 from os.path import join, dirname
 from setuptools import setup
 
+
+PY3 = sys.version_info[0] == 3
 
 version = __import__('social').__version__
 
@@ -46,7 +49,8 @@ setup(name='python-social-auth',
                 'social.strategies'],
       #package_data={'social': ['locale/*/LC_MESSAGES/*']},
       long_description=long_description(),
-      install_requires=['python_openid>=2.2',
+      install_requires=[PY3 and 'python3-openid>=3.0.1' or
+                                'python-openid>=2.2',
                         'requests>=1.1.0',
                         'oauthlib>=0.3.8',
                         'requests-oauthlib>=0.3.0',

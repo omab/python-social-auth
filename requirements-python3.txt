@@ -1,4 +1,4 @@
-python-openid>=2.2
+python3-openid>=3.0.1
 requests>=1.1.0
 oauthlib>=0.3.8
 requests-oauthlib>=0.3.0
