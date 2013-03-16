@@ -285,7 +285,7 @@ class BaseOAuth2(OAuthAuth):
                 raise AuthCanceled(self)
             else:
                 raise
-        except (ValueError, KeyError):
+        except KeyError:
             raise AuthUnknownError(self)
         self.process_error(response)
         return self.do_auth(response['access_token'], response=response,
