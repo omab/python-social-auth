@@ -23,7 +23,6 @@ class BaseStrategy(object):
             self.backend = backend
 
     def setting(self, name, default=None):
-        setting = default
         names = (setting_name(self.backend.titled_name, name),
                  setting_name(name),
                  name)
@@ -32,7 +31,7 @@ class BaseStrategy(object):
                 return self.get_setting(name)
             except (AttributeError, KeyError):
                 pass
-        return setting
+        return default
 
     def start(self):
         # Clean any partial pipeline info before starting the process
