@@ -6,6 +6,9 @@ from flask import Flask, g
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext import login
 
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
 
 sys.path.append('../..')
 
@@ -22,8 +25,16 @@ app.config.from_object('example.local_settings')
 db = SQLAlchemy(app)
 db.metadata.bind = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'],
+                       convert_unicode=True)
+db_session = scoped_session(sessionmaker(autocommit=False,
+                                         autoflush=False,
+                                         bind=engine))
+Base = declarative_base()
+Base.query = db_session.query_property()
+
 app.register_blueprint(social_auth)
-social_storage = init_social(app, db)
+social_storage = init_social(app, Base)
 
 login_manager = login.LoginManager()
 login_manager.login_view = 'main'
@@ -50,7 +61,12 @@ def global_user():
 @app.teardown_appcontext
 def commit_on_success(error=None):
     if error is None:
-        db.session.commit()
+        db_session.commit()
+
+
+@app.teardown_request
+def shutdown_session(exception=None):
+    db_session.remove()
 
 
 @app.context_processor

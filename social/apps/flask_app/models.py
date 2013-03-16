@@ -11,11 +11,17 @@ from social.storage.sqlalchemy_orm import SQLAlchemyUserMixin, \
 from social.apps.flask_app.fields import JSONType
 
 
-def init_social(app, db):
+class FlaskStorage(BaseSQLAlchemyStorage):
+    user = None
+    nonce = None
+    association = None
+
+
+def init_social(app, Base):
     UID_LENGTH = app.config.get(setting_name('UID_LENGTH'), 255)
     User = module_member(app.config[setting_name('USER_MODEL')])
 
-    class UserSocialAuth(db.Model, SQLAlchemyUserMixin):
+    class UserSocialAuth(Base, SQLAlchemyUserMixin):
         """Social Auth association model"""
         __tablename__ = 'social_auth_usersocialauth'
         __table_args__ = (UniqueConstraint('provider', 'uid'),)
@@ -43,7 +49,7 @@ def init_social(app, db):
         def _query(cls):
             return cls.query
 
-    class Nonce(db.Model, SQLAlchemyNonceMixin):
+    class Nonce(Base, SQLAlchemyNonceMixin):
         """One use numbers"""
         __tablename__ = 'social_auth_nonce'
         __table_args__ = (UniqueConstraint('server_url', 'timestamp', 'salt'),)
@@ -60,7 +66,7 @@ def init_social(app, db):
         def _query(cls):
             return cls.query
 
-    class Association(db.Model, SQLAlchemyAssociationMixin):
+    class Association(Base, SQLAlchemyAssociationMixin):
         """OpenId account association"""
         __tablename__ = 'social_auth_association'
         __table_args__ = (UniqueConstraint('server_url', 'handle'),)
@@ -80,15 +86,7 @@ def init_social(app, db):
         def _query(cls):
             return cls.query
 
-    class FlaskStorage(BaseSQLAlchemyStorage):
-        user = UserSocialAuth
-        nonce = Nonce
-        association = Association
-
-    globals().update({
-        'FlaskStorage': FlaskStorage,
-        'UserSocialAuth': UserSocialAuth,
-        'Nonce': Nonce,
-        'Association': Association
-    })
-    return FlaskStorage
+    # Set the references in the storage class
+    FlaskStorage.user = UserSocialAuth
+    FlaskStorage.nonce = Nonce
+    FlaskStorage.association = Association

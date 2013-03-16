@@ -2,10 +2,10 @@ from sqlalchemy import Column, Integer, String, Boolean
 
 from flask.ext.login import UserMixin
 
-from example import db
+from example import Base
 
 
-class User(db.Model, UserMixin):
+class User(Base, UserMixin):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     username = Column(String(200))

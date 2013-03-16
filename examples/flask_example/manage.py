@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 from flask.ext.script import Server, Manager, Shell
-from flask.ext.evolution import Evolution
 
-from example import app, db, models
+from example import app, db, models, Base, engine
 
-
-evolution = Evolution(app)
 
 manager = Manager(app)
 manager.add_command('runserver', Server())
@@ -17,11 +14,10 @@ manager.add_command('shell', Shell(make_context=lambda: {
 
 
 @manager.command
-def migrate(action):
-    # ./manage.py migrate run
-    with app.app_context():
-        evolution.manager(action)
-
+def syncdb():
+    from example.models import user
+    from social.apps.flask_app import models
+    Base.metadata.create_all(bind=engine)
 
 if __name__ == '__main__':
     manager.run()
