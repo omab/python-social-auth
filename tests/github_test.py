@@ -1,6 +1,5 @@
 import sys
 import json
-import unittest
 
 sys.path.insert(0, '..')
 
@@ -59,7 +58,3 @@ class GithubTest(OAuth2Test):
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
-
-
-if __name__ == '__main__':
-    unittest.main()
