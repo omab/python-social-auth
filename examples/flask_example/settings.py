@@ -1,4 +1,4 @@
-from example import app
+from flask_example import app
 
 
 app.debug = True

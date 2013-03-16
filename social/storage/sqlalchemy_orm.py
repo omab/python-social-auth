@@ -60,9 +60,9 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
         if cls.allowed_to_disconnect(user, name, association_id):
             qs = cls.get_social_auth_for_user(user)
             if association_id:
-                qs = qs.filter(cls.id == association_id)
+                qs = qs.filter_by(id=association_id)
             else:
-                qs = qs.filter(cls.provider == name)
+                qs = qs.filter_by(provider=name)
             qs.delete()
         else:
             raise NotAllowedToDisconnect()
@@ -104,7 +104,7 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
 
     @classmethod
     def get_social_auth_for_user(cls, user):
-        return user.social_auth
+        return cls._query().filter_by(user_id=user.id)
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):

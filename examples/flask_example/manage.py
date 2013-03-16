@@ -1,7 +1,11 @@
 #!/usr/bin/env python
+import sys
+
 from flask.ext.script import Server, Manager, Shell
 
-from example import app, db, models, Base, engine
+sys.path.append('..')
+
+from flask_example import app, db, models, Base, engine
 
 
 manager = Manager(app)
@@ -15,7 +19,7 @@ manager.add_command('shell', Shell(make_context=lambda: {
 
 @manager.command
 def syncdb():
-    from example.models import user
+    from flask_example.models import user
     from social.apps.flask_app import models
     Base.metadata.create_all(bind=engine)
 

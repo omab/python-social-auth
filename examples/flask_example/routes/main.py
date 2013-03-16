@@ -1,7 +1,7 @@
 from flask import render_template
 from flask.ext.login import login_required
 
-from example import app
+from flask_example import app
 
 
 @app.route('/')

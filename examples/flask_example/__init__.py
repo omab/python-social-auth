@@ -18,8 +18,8 @@ from social.apps.flask_app.template_filters import backends
 
 # App
 app = Flask(__name__)
-app.config.from_object('example.settings')
-app.config.from_object('example.local_settings')
+app.config.from_object('flask_example.settings')
+app.config.from_object('flask_example.local_settings')
 
 # DB
 db = SQLAlchemy(app)
@@ -27,9 +27,7 @@ db.metadata.bind = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'],
                        convert_unicode=True)
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=engine))
+db_session = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base()
 Base.query = db_session.query_property()
 
@@ -41,8 +39,8 @@ login_manager.login_view = 'main'
 login_manager.login_message = ''
 login_manager.setup_app(app)
 
-from example import models
-from example import routes
+from flask_example import models
+from flask_example import routes
 
 
 @login_manager.user_loader
