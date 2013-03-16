@@ -44,13 +44,15 @@ class OAuth2Test(unittest.TestCase):
         self.strategy.set_settings(self.settings or {})
         start_url = self.strategy.start().url
         target_url = self.strategy.build_absolute_uri(self.complete_url)
-        query = parse_qs(urlparse.urlparse(start_url).query)
+        start_query = parse_qs(urlparse.urlparse(start_url).query)
 
         location_url = target_url + ('?' in target_url and '&' or '?') + \
-                       'state=' + query['state']
+                       'state=' + start_query['state']
+        location_query = parse_qs(urlparse.urlparse(location_url).query)
+
         HTTPretty.register_uri(HTTPretty.GET, start_url, status=301,
                                location=location_url)
-        HTTPretty.register_uri(HTTPretty.GET, target_url, status=200,
+        HTTPretty.register_uri(HTTPretty.GET, location_url, status=200,
                                body='foobar')
 
         response = requests.get(start_url)
@@ -64,7 +66,7 @@ class OAuth2Test(unittest.TestCase):
                                body=self.user_data_body or '',
                                content_type='text/json')
 
-        self.strategy.set_request_data(query)
+        self.strategy.set_request_data(location_query)
         user = self.strategy.complete()
         expect(user.username).to.equal(self.expected_username)
         HTTPretty.disable()
@@ -91,6 +93,7 @@ class OAuth2Test(unittest.TestCase):
 
         location_url = target_url + ('?' in target_url and '&' or '?') + \
                        'state=' + query['state']
+        location_query = parse_qs(urlparse.urlparse(location_url).query)
 
         HTTPretty.register_uri(HTTPretty.GET, start_url, status=301,
                                location=location_url)
@@ -110,7 +113,7 @@ class OAuth2Test(unittest.TestCase):
                                content_type='text/json')
 
         url = self.strategy.build_absolute_uri('/password')
-        self.strategy.set_request_data(query)
+        self.strategy.set_request_data(location_query)
         redirect = self.strategy.complete()
         expect(redirect.url).to.equal(url)
 
