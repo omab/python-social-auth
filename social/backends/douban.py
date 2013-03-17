@@ -49,7 +49,7 @@ class DoubanOAuth(BaseOAuth1):
 
 class DoubanOAuth2(BaseOAuth2):
     """Douban OAuth authentication backend"""
-    name = 'douban2'
+    name = 'douban-oauth2'
     AUTHORIZATION_URL = 'https://www.douban.com/service/auth2/auth'
     ACCESS_TOKEN_URL = 'https://www.douban.com/service/auth2/token'
     REDIRECT_STATE = False

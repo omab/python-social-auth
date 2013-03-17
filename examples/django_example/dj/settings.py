@@ -149,6 +149,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.twilio.TwilioAuth',
     'social.backends.xing.XingOAuth',
     'social.backends.yandex.YandexOAuth2',
+    'social.backends.douban.DoubanOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
