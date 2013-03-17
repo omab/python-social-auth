@@ -18,6 +18,7 @@ class BehanceOAuth2(BaseOAuth2):
     name = 'behance'
     AUTHORIZATION_URL = 'https://www.behance.net/v2/oauth/authenticate'
     ACCESS_TOKEN_URL = 'https://www.behance.net/v2/oauth/token'
+    ACCESS_TOKEN_METHOD = 'POST'
     SCOPE_SEPARATOR = '|'
     EXTRA_DATA = [('username', 'username')]
     REDIRECT_STATE = False
