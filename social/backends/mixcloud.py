@@ -9,6 +9,7 @@ class MixcloudOAuth2(BaseOAuth2):
     ID_KEY = 'username'
     AUTHORIZATION_URL = 'https://www.mixcloud.com/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://www.mixcloud.com/oauth/access_token'
+    ACCESS_TOKEN_METHOD = 'POST'
 
     def get_user_details(self, response):
         return {'username': response['username'],
