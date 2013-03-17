@@ -5,6 +5,7 @@ class DisqusOAuth2(BaseOAuth2):
     name = 'disqus'
     AUTHORIZATION_URL = 'https://disqus.com/api/oauth/2.0/authorize/'
     ACCESS_TOKEN_URL = 'https://disqus.com/api/oauth/2.0/access_token/'
+    ACCESS_TOKEN_METHOD = 'POST'
     EXTRA_DATA = [
         ('avatar', 'avatar'),
         ('connections', 'connections'),
