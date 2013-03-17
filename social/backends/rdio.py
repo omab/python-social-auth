@@ -1,4 +1,5 @@
-from social.backends import BaseOAuth1, BaseOAuth2, OAuthAuth
+from social.utils import parse_qs
+from social.backends.oauth import BaseOAuth1, BaseOAuth2, OAuthAuth
 
 
 RDIO_API = 'https://www.rdio.com/api/1/'
@@ -34,8 +35,7 @@ class RdioOAuth1(BaseRdio, BaseOAuth1):
     def tokens(cls, instance):
         token = super(RdioOAuth1, cls).tokens(instance)
         if token and 'access_token' in token:
-            token = dict(tok.split('=')
-                            for tok in token['access_token'].split('&'))
+            token = parse_qs(token['access_token'])
         return token
 
     def user_data(self, access_token, *args, **kwargs):
@@ -56,6 +56,7 @@ class RdioOAuth2(BaseRdio, BaseOAuth2):
     name = 'rdio-oauth2'
     AUTHORIZATION_URL = 'https://www.rdio.com/oauth2/authorize'
     ACCESS_TOKEN_URL = 'https://www.rdio.com/oauth2/token'
+    ACCESS_TOKEN_METHOD = 'POST'
     EXTRA_DATA = [
         ('key', 'rdio_id'),
         ('icon', 'rdio_icon_url'),
@@ -68,10 +69,10 @@ class RdioOAuth2(BaseRdio, BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         try:
-            return self.get_json(RDIO_API, method='POST', data={
+            return self.get_json(RDIO_API, data={
                 'method': 'currentUser',
                 'extras': 'username,displayName,streamRegion',
-                'access_token': access_token,
+                'access_token': access_token
             })['result']
         except ValueError:
             return None
