@@ -272,11 +272,14 @@ class BaseOAuth2(OAuthAuth):
         return {'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json'}
 
+    def request_access_token(self, *args, **kwargs):
+        return self.get_json(*args, **kwargs)
+
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         self.process_error(self.data)
         try:
-            response = self.get_json(
+            response = self.request_access_token(
                 self.ACCESS_TOKEN_URL,
                 data=self.auth_complete_params(self.validate_state()),
                 headers=self.auth_headers(),
