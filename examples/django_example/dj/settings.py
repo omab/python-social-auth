@@ -153,6 +153,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.mixcloud.MixcloudOAuth2',
     'social.backends.rdio.RdioOAuth1',
     'social.backends.rdio.RdioOAuth2',
+    'social.backends.yammer.YammerOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
