@@ -24,6 +24,7 @@ class MailruOAuth2(BaseOAuth2):
     ID_KEY = 'uid'
     AUTHORIZATION_URL = 'https://connect.mail.ru/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://connect.mail.ru/oauth/token'
+    ACCESS_TOKEN_METHOD = 'POST'
     EXTRA_DATA = [('refresh_token', 'refresh_token'),
                   ('expires_in', 'expires')]
 
@@ -52,23 +53,19 @@ class MailruOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Mail.ru REST API"""
-        data = {'method': 'users.getInfo', 'session_key': access_token}
-        return mailru_api(self, data)[0]
-
-
-def mailru_sig(data, secret):
-    """ Calculates signature of request data """
-    param_list = sorted(list(item + '=' + data[item] for item in data))
-    return md5(''.join(param_list) + secret).hexdigest()
-
-
-def mailru_api(backend, data):
-    """Calls Mail.ru REST API http://api.mail.ru/docs/guides/restapi/"""
-    key, secret = backend.get_key_and_secret()
-    data.update({'app_id': key, 'secure': '1'})
-    data['sig'] = mailru_sig(secret, data)
-    try:
-        return backend.get_json('http://www.appsmail.ru/platform/api',
-                                params=data)
-    except (TypeError, KeyError, IOError, ValueError, IndexError):
-        return None
+        key, secret = self.get_key_and_secret()
+        data = {
+            'method': 'users.getInfo',
+            'session_key': access_token,
+            'app_id': key,
+            'secure': '1'
+        }
+        param_list = sorted(list(item + '=' + data[item] for item in data))
+        data['sig'] = md5(''.join(param_list) + secret).hexdigest()
+        try:
+            out = self.get_json('http://www.appsmail.ru/platform/api',
+                                 params=data)
+            print "OUT:", out
+            return out
+        except (TypeError, KeyError, IOError, ValueError, IndexError):
+            return None
