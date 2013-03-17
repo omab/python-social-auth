@@ -1,14 +1,10 @@
-import sys
 import json
 
-sys.path.insert(0, '..')
-
-from social.backends.yammer import YammerOAuth2
-from tests.oauth2_tests import OAuth2Test
+from tests.oauth2 import OAuth2Test
 
 
 class YammerTest(OAuth2Test):
-    backend = YammerOAuth2
+    backend_path = 'social.backends.yammer.YammerOAuth2'
     expected_username = 'foobar'
     access_token_body = json.dumps({
         'access_token': {

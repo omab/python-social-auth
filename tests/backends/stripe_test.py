@@ -1,14 +1,10 @@
-import sys
 import json
 
-sys.path.insert(0, '..')
-
-from social.backends.stripe import StripeOAuth2
-from tests.oauth2_tests import OAuth2Test
+from tests.oauth2 import OAuth2Test
 
 
 class StripeTest(OAuth2Test):
-    backend = StripeOAuth2
+    backend_path = 'social.backends.stripe.StripeOAuth2'
     access_token_body = json.dumps({
         'stripe_publishable_key': 'pk_test_foobar',
         'access_token': 'foobar',

@@ -1,14 +1,10 @@
-import sys
 import json
 
-sys.path.insert(0, '..')
-
-from social.backends.disqus import DisqusOAuth2
-from tests.oauth2_tests import OAuth2Test
+from tests.oauth2 import OAuth2Test
 
 
 class DisqusTest(OAuth2Test):
-    backend = DisqusOAuth2
+    backend_path = 'social.backends.disqus.DisqusOAuth2'
     user_data_url = 'https://disqus.com/api/3.0/users/details.json'
     expected_username = 'foobar'
     access_token_body = json.dumps({

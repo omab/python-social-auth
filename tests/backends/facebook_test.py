@@ -1,15 +1,11 @@
-import sys
 import json
 
-sys.path.insert(0, '..')
-
-from social.backends.facebook import FacebookOAuth2
 from social.p3 import urlencode
-from tests.oauth2_tests import OAuth2Test
+from tests.oauth2 import OAuth2Test
 
 
 class FacebookTest(OAuth2Test):
-    backend = FacebookOAuth2
+    backend_path = 'social.backends.facebook.FacebookOAuth2'
     user_data_url = 'https://graph.facebook.com/me'
     expected_username = 'foobar'
     access_token_body = urlencode({

@@ -1,14 +1,10 @@
-import sys
 import json
 
-sys.path.insert(0, '..')
-
-from social.backends.live import LiveOAuth2
-from tests.oauth2_tests import OAuth2Test
+from tests.oauth2 import OAuth2Test
 
 
 class LiveTest(OAuth2Test):
-    backend = LiveOAuth2
+    backend_path = 'social.backends.live.LiveOAuth2'
     user_data_url = 'https://apis.live.net/v5.0/me'
     expected_username = 'FooBar'
     access_token_body = json.dumps({

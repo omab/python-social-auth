@@ -7,7 +7,7 @@ from httpretty import HTTPretty
 
 sys.path.insert(0, '..')
 
-from social.utils import parse_qs
+from social.utils import parse_qs, module_member
 from social.p3 import urlparse
 
 from tests.models import TestStorage, User, TestUserSocialAuth, TestNonce, \
@@ -16,6 +16,7 @@ from tests.strategy import TestStrategy
 
 
 class OAuth2Test(unittest.TestCase):
+    backend_path = None
     backend = None
     access_token_body = None
     user_data_body = None
@@ -25,6 +26,7 @@ class OAuth2Test(unittest.TestCase):
     partial_login_settings = None
 
     def __init__(self, *args, **kwargs):
+        self.backend = module_member(self.backend_path)
         self.complete_url = '/complete/{0}/?code=foobar'.format(
             self.backend.name
         )

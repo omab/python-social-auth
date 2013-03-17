@@ -1,15 +1,11 @@
-import sys
 import json
 
-sys.path.insert(0, '..')
-
-from social.backends.stackoverflow import StackoverflowOAuth2
 from social.p3 import urlencode
-from tests.oauth2_tests import OAuth2Test
+from tests.oauth2 import OAuth2Test
 
 
 class StackoverflowTest(OAuth2Test):
-    backend = StackoverflowOAuth2
+    backend_path = 'social.backends.stackoverflow.StackoverflowOAuth2'
     user_data_url = 'https://api.stackexchange.com/2.1/me'
     expected_username = 'foobar'
     access_token_body = urlencode({
