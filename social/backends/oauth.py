@@ -186,6 +186,7 @@ class BaseOAuth2(OAuthAuth):
     """
     AUTHORIZATION_URL = None
     ACCESS_TOKEN_URL = None
+    ACCESS_TOKEN_METHOD = 'GET'
     REFRESH_TOKEN_URL = None
     RESPONSE_TYPE = 'code'
     REDIRECT_STATE = True
@@ -278,7 +279,8 @@ class BaseOAuth2(OAuthAuth):
             response = self.get_json(
                 self.ACCESS_TOKEN_URL,
                 data=self.auth_complete_params(self.validate_state()),
-                headers=self.auth_headers()
+                headers=self.auth_headers(),
+                method=self.ACCESS_TOKEN_METHOD
             )
         except HTTPError as err:
             if err.response.status_code == 400:
