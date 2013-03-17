@@ -15,6 +15,7 @@ class StripeOAuth2(BaseOAuth2):
     ID_KEY = 'stripe_user_id'
     AUTHORIZATION_URL = 'https://connect.stripe.com/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://connect.stripe.com/oauth/token'
+    ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
     EXTRA_DATA = [
         ('stripe_publishable_key', 'stripe_publishable_key'),
