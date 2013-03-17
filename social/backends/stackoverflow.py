@@ -12,10 +12,7 @@ setting, it must be a list of values to request.
 By default account id and token expiration time are stored in extra_data
 field, check OAuthBackend class for details on how to extend it.
 """
-from requests import HTTPError
-
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthUnknownError, AuthCanceled
 
 
 class StackoverflowOAuth2(BaseOAuth2):
