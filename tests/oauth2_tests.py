@@ -82,9 +82,10 @@ class OAuth2Test(unittest.TestCase):
                                body=self.access_token_body or '',
                                content_type='text/json')
 
-        HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
-                               body=self.user_data_body or '',
-                               content_type='text/json')
+        if self.user_data_url:
+            HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
+                                   body=self.user_data_body or '',
+                                   content_type='text/json')
 
         self.strategy.set_request_data(location_query)
         user = self.strategy.complete()
@@ -140,9 +141,10 @@ class OAuth2Test(unittest.TestCase):
                                body=self.access_token_body or '',
                                content_type='text/json')
 
-        HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
-                               body=self.user_data_body or '',
-                               content_type='text/json')
+        if self.user_data_url:
+            HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
+                                   body=self.user_data_body or '',
+                                   content_type='text/json')
 
         url = self.strategy.build_absolute_uri('/password')
         self.strategy.set_request_data(location_query)
