@@ -1,10 +1,10 @@
 import sys
 import json
-from urllib import urlencode
 
 sys.path.insert(0, '..')
 
 from social.backends.facebook import FacebookOAuth2
+from social.p3 import urlencode
 from tests.oauth2_tests import OAuth2Test
 
 

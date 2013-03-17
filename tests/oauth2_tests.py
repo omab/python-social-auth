@@ -1,6 +1,5 @@
 import sys
 import requests
-import urlparse
 import unittest
 
 from sure import expect
@@ -9,6 +8,7 @@ from httpretty import HTTPretty
 sys.path.insert(0, '..')
 
 from social.utils import parse_qs
+from social.p3 import urlparse
 
 from tests.models import TestStorage, User, TestUserSocialAuth, TestNonce, \
                          TestAssociation
@@ -53,7 +53,7 @@ class OAuth2Test(unittest.TestCase):
         })
         start_url = self.strategy.start().url
         target_url = self.strategy.build_absolute_uri(self.complete_url)
-        start_query = parse_qs(urlparse.urlparse(start_url).query)
+        start_query = parse_qs(urlparse(start_url).query)
 
         if self.backend.STATE_PARAMETER:
             location_url = target_url + ('?' in target_url and '&' or '?') + \
@@ -63,7 +63,7 @@ class OAuth2Test(unittest.TestCase):
                            'redirect_state=' + start_query['redirect_state']
         else:
             location_url = target_url
-        location_query = parse_qs(urlparse.urlparse(location_url).query)
+        location_query = parse_qs(urlparse(location_url).query)
 
         HTTPretty.register_uri(HTTPretty.GET, start_url, status=301,
                                location=location_url)
@@ -112,7 +112,7 @@ class OAuth2Test(unittest.TestCase):
         })
         start_url = self.strategy.start().url
         target_url = self.strategy.build_absolute_uri(self.complete_url)
-        start_query = parse_qs(urlparse.urlparse(start_url).query)
+        start_query = parse_qs(urlparse(start_url).query)
 
         if self.backend.STATE_PARAMETER:
             location_url = target_url + ('?' in target_url and '&' or '?') + \
@@ -122,7 +122,7 @@ class OAuth2Test(unittest.TestCase):
                            'redirect_state=' + start_query['redirect_state']
         else:
             location_url = target_url
-        location_query = parse_qs(urlparse.urlparse(location_url).query)
+        location_query = parse_qs(urlparse(location_url).query)
 
         HTTPretty.register_uri(HTTPretty.GET, start_url, status=301,
                                location=location_url)
