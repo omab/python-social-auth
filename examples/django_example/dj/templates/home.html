@@ -33,6 +33,7 @@
 <a href="{% url 'social:begin' "xing" %}">Xing OAuth</a> <br />
 <a href="{% url 'social:begin' "yandex-oauth2" %}">Yandex OAuth2</a> <br />
 <a href="{% url 'social:begin' "douban-oauth2" %}">Douban OAuth2</a> <br />
+<a href="{% url 'social:begin' "mixcloud" %}">Mixcloud OAuth2</a> <br />
 
 <form action="{% url 'social:begin' "openid" %}" method="post">{% csrf_token %}
   <div>
