@@ -43,6 +43,7 @@ class GoogleOAuth2(BaseGoogleAuth, BaseOAuth2):
     REDIRECT_STATE = False
     AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/auth'
     ACCESS_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
+    ACCESS_TOKEN_METHOD = 'POST'
     DEFAULT_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
                      'https://www.googleapis.com/auth/userinfo.profile']
     EXTRA_DATA = [
