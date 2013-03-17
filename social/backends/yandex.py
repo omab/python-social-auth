@@ -6,9 +6,9 @@ openid.yandex.ru/user. Username is retrieved from the identity url.
 
 If username is not specified, OpenID 2.0 url used for authentication.
 """
-from social.p3 import urlparse, urlsplit
+from social.p3 import urlsplit
 from social.backends.open_id import OpenIdAuth
-from social.backends.oauth import BaseOAuth2, OAuthAuth
+from social.backends.oauth import BaseOAuth2
 
 
 class YandexOpenId(OpenIdAuth):
@@ -29,86 +29,34 @@ class YandexOpenId(OpenIdAuth):
         return values
 
 
-class YandexOAuth(OAuthAuth):
-    """Yandex OAuth authentication backend"""
-    name = 'yandex-oauth'
-    AUTHORIZATION_URL = 'https://oauth.yandex.ru/authorize'
-    ACCESS_TOKEN_URL = 'https://oauth.yandex.ru/token'
-    REDIRECT_STATE = False
-    EXTRA_DATA = [
-        ('id', 'id'),
-        ('expires', 'expires')
-    ]
-
-    def get_user_details(self, response):
-        return get_user_details(response)
-
-    def user_data(self, access_token, response, *args, **kwargs):
-        url = 'https://api-yaru.yandex.ru/me/'
-        return user_data(self, url, access_token, response, *args, **kwargs)
-
-
 class YandexOAuth2(BaseOAuth2):
     """Legacy Yandex OAuth2 authentication backend"""
     name = 'yandex-oauth2'
     AUTHORIZATION_URL = 'https://oauth.yandex.com/authorize'
     ACCESS_TOKEN_URL = 'https://oauth.yandex.com/token'
+    ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
 
     def get_user_details(self, response):
-        return get_user_details(response)
+        first_name, last_name = '', ''
+        real_name = response.get('real_name')
+        if real_name:
+            if ' ' in real_name:
+                first_name, last_name = real_name.split(' ', 1)
+            else:
+                first_name = real_name
+        else:
+            first_name = response.get('display_name')
+        return {'username': response.get('display_name'),
+                'email': response.get('default_email') or
+                         response.get('emails', [''])[0],
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token, response, *args, **kwargs):
-        url = self.setting('API_URL')
-        reply = user_data(self, url, access_token, response, *args, **kwargs)
-        if reply:
-            if isinstance(reply, list) and len(reply) >= 1:
-                reply = reply[0]
-            if 'links' in reply:
-                userpic = reply['links'].get('avatar')
-            elif 'avatar' in reply:
-                userpic = reply['avatar'].get('Portrait')
-            else:
-                userpic = ''
-            reply.update({'id': reply['id'].split("/")[-1],
-                          'access_token': access_token,
-                          'userpic': userpic})
-        return reply
-
-
-def get_user_details(response):
-    """Return user details from Yandex account"""
-    name = response['name']
-    last_name = ''
-
-    if ' ' in name:
-        names = name.split(' ')
-        last_name = names[0]
-        first_name = names[1]
-    else:
-        first_name = name
-
-    try:
-        host = urlparse(response.get('links').get('www')).hostname
-        username = host.split('.')[0]
-    except (IndexError, AttributeError):
-        username = name.replace(' ', '')
-
-    return {
-        'username': username,
-        'email': response.get('email', ''),
-        'first_name': first_name,
-        'last_name': last_name,
-    }
-
-
-def user_data(backend, url, access_token, response, *args, **kwargs):
-    """Loads user data from service"""
-    try:
-        return backend.get_json(url, params={
-            'oauth_token': access_token,
-            'format': 'json',
-            'text': 1
-        })
-    except (ValueError, IndexError):
-        return None
+        try:
+            return self.get_json('https://login.yandex.ru/info',
+                                 params={'oauth_token': access_token,
+                                         'format': 'json'})
+        except (ValueError, IndexError):
+            return None
