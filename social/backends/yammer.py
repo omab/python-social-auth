@@ -2,7 +2,6 @@
 Yammer OAuth2 support
 """
 from social.utils import parse_qs
-from social.exceptions import AuthCanceled
 from social.backends.oauth import BaseOAuth2
 
 
@@ -10,7 +9,6 @@ class YammerOAuth2(BaseOAuth2):
     name = 'yammer'
     AUTHORIZATION_URL = 'https://www.yammer.com/dialog/oauth'
     ACCESS_TOKEN_URL = 'https://www.yammer.com/oauth2/access_token'
-    REQUEST_TOKEN_URL = 'https://www.yammer.com/oauth2/request_token'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires'),
@@ -36,24 +34,9 @@ class YammerOAuth2(BaseOAuth2):
             'picture_url': mugshot_url
         }
 
-    def user_data(self, access_token, *args, **kwargs):
-        """Load user data from yammer"""
-        key, secret = self.get_key_and_secret()
-        try:
-            return self.get_json(self.ACCESS_TOKEN_URL, params={
-                'client_id': key,
-                'client_secret': secret,
-                'code': access_token
-            })
-        except Exception:
-            pass
-        return None
-
     def auth_complete(self, *args, **kwargs):
         """Yammer API is a little strange"""
-        if 'error' in self.data:
-            raise AuthCanceled(self)
-
+        self.process_error(self.data)
         # now we need to clean up the data params
         data = self.data.copy()
         redirect_state = data.get('redirect_state')
