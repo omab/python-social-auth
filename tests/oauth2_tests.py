@@ -17,13 +17,18 @@ from tests.strategy import TestStrategy
 
 class OAuth2Test(unittest.TestCase):
     backend = None
-    complete_url = ''
     access_token_body = None
     user_data_body = None
     user_data_url = ''
     expected_username = ''
     settings = None
     partial_login_settings = None
+
+    def __init__(self, *args, **kwargs):
+        self.complete_url = '/complete/{0}/?code=foobar'.format(
+            self.backend.name
+        )
+        super(OAuth2Test, self).__init__(*args, **kwargs)
 
     def setUp(self):
         self.strategy = TestStrategy(self.backend, TestStorage)
@@ -41,13 +46,23 @@ class OAuth2Test(unittest.TestCase):
 
     def do_login(self):
         HTTPretty.enable()
-        self.strategy.set_settings(self.settings or {})
+        name = self.backend.name.upper().replace('-', '_')
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_' + name + '_KEY': 'a-key',
+            'SOCIAL_AUTH_' + name + '_SECRET': 'a-secret-key',
+        })
         start_url = self.strategy.start().url
         target_url = self.strategy.build_absolute_uri(self.complete_url)
         start_query = parse_qs(urlparse.urlparse(start_url).query)
 
-        location_url = target_url + ('?' in target_url and '&' or '?') + \
-                       'state=' + start_query['state']
+        if self.backend.STATE_PARAMETER:
+            location_url = target_url + ('?' in target_url and '&' or '?') + \
+                           'state=' + start_query['state']
+        elif self.backend.REDIRECT_STATE:
+            location_url = target_url + ('?' in target_url and '&' or '?') + \
+                           'redirect_state=' + start_query['redirect_state']
+        else:
+            location_url = target_url
         location_query = parse_qs(urlparse.urlparse(location_url).query)
 
         HTTPretty.register_uri(HTTPretty.GET, start_url, status=301,
@@ -59,9 +74,14 @@ class OAuth2Test(unittest.TestCase):
         expect(response.url).to.equal(location_url)
         expect(response.text).to.equal('foobar')
 
-        HTTPretty.register_uri(HTTPretty.GET, self.backend.ACCESS_TOKEN_URL,
-                               status=200, body=self.access_token_body or '',
+        method = self.backend.ACCESS_TOKEN_METHOD == 'GET' and HTTPretty.GET \
+                                                            or HTTPretty.POST
+        HTTPretty.register_uri(method,
+                               uri=self.backend.ACCESS_TOKEN_URL,
+                               status=200,
+                               body=self.access_token_body or '',
                                content_type='text/json')
+
         HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
                                body=self.user_data_body or '',
                                content_type='text/json')
@@ -73,8 +93,10 @@ class OAuth2Test(unittest.TestCase):
 
     def do_partial_pipeline(self):
         HTTPretty.enable()
-        self.strategy.set_settings(self.settings or {})
+        name = self.backend.name.upper().replace('-', '_')
         self.strategy.set_settings({
+            'SOCIAL_AUTH_' + name + '_KEY': 'a-key',
+            'SOCIAL_AUTH_' + name + '_SECRET': 'a-secret-key',
             'SOCIAL_AUTH_PIPELINE': (
                 'social.pipeline.partial.save_status_to_session',
                 'tests.pipeline.ask_for_password',
@@ -89,10 +111,16 @@ class OAuth2Test(unittest.TestCase):
         })
         start_url = self.strategy.start().url
         target_url = self.strategy.build_absolute_uri(self.complete_url)
-        query = parse_qs(urlparse.urlparse(start_url).query)
+        start_query = parse_qs(urlparse.urlparse(start_url).query)
 
-        location_url = target_url + ('?' in target_url and '&' or '?') + \
-                       'state=' + query['state']
+        if self.backend.STATE_PARAMETER:
+            location_url = target_url + ('?' in target_url and '&' or '?') + \
+                           'state=' + start_query['state']
+        elif self.backend.REDIRECT_STATE:
+            location_url = target_url + ('?' in target_url and '&' or '?') + \
+                           'redirect_state=' + start_query['redirect_state']
+        else:
+            location_url = target_url
         location_query = parse_qs(urlparse.urlparse(location_url).query)
 
         HTTPretty.register_uri(HTTPretty.GET, start_url, status=301,
@@ -104,8 +132,12 @@ class OAuth2Test(unittest.TestCase):
         expect(response.url).to.equal(location_url)
         expect(response.text).to.equal('foobar')
 
-        HTTPretty.register_uri(HTTPretty.GET, self.backend.ACCESS_TOKEN_URL,
-                               status=200, body=self.access_token_body or '',
+        method = self.backend.ACCESS_TOKEN_METHOD == 'GET' and HTTPretty.GET \
+                                                            or HTTPretty.POST
+        HTTPretty.register_uri(method,
+                               uri=self.backend.ACCESS_TOKEN_URL,
+                               status=200,
+                               body=self.access_token_body or '',
                                content_type='text/json')
 
         HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,

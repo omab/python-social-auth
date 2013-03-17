@@ -10,8 +10,8 @@ from tests.oauth2_tests import OAuth2Test
 
 class FacebookTest(OAuth2Test):
     backend = FacebookOAuth2
-    complete_url = '/complete/facebook/?code=foobar'
     user_data_url = 'https://graph.facebook.com/me'
+    expected_username = 'foobar'
     access_token_body = urlencode({
         'access_token': 'foobar',
         'token_type': 'bearer'
@@ -27,11 +27,6 @@ class FacebookTest(OAuth2Test):
         'link': 'http://www.facebook.com/foobar',
         'id': '110011001100010'
     })
-    settings = {
-        'SOCIAL_AUTH_FACEBOOK_KEY': 'a-key',
-        'SOCIAL_AUTH_FACEBOOK_SECRET': 'a-secret-key'
-    }
-    expected_username = 'foobar'
 
     def test_login(self):
         self.do_login()

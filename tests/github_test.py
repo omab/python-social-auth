@@ -9,8 +9,8 @@ from tests.oauth2_tests import OAuth2Test
 
 class GithubTest(OAuth2Test):
     backend = GithubOAuth2
-    complete_url = '/complete/github/?code=foobar'
     user_data_url = 'https://api.github.com/user'
+    expected_username = 'octocat'
     access_token_body = json.dumps({
         'access_token': 'foobar',
         'token_type': 'bearer'
@@ -47,11 +47,6 @@ class GithubTest(OAuth2Test):
             'private_repos': 20
         }
     })
-    settings = {
-        'SOCIAL_AUTH_GITHUB_KEY': 'a-key',
-        'SOCIAL_AUTH_GITHUB_SECRET': 'a-secret-key'
-    }
-    expected_username = 'octocat'
 
     def test_login(self):
         self.do_login()
