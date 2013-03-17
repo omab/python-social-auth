@@ -151,6 +151,8 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.yandex.YandexOAuth2',
     'social.backends.douban.DoubanOAuth2',
     'social.backends.mixcloud.MixcloudOAuth2',
+    'social.backends.rdio.RdioOAuth1',
+    'social.backends.rdio.RdioOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
