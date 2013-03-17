@@ -21,6 +21,7 @@ class SoundcloudOAuth2(BaseOAuth2):
     name = 'soundcloud'
     AUTHORIZATION_URL = 'https://soundcloud.com/connect'
     ACCESS_TOKEN_URL = 'https://api.soundcloud.com/oauth2/token'
+    ACCESS_TOKEN_METHOD = 'POST'
     SCOPE_SEPARATOR = ','
     REDIRECT_STATE = False
     EXTRA_DATA = [
