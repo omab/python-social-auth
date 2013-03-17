@@ -22,9 +22,9 @@ class LiveOAuth2(BaseOAuth2):
     name = 'live'
     AUTHORIZATION_URL = 'https://login.live.com/oauth20_authorize.srf'
     ACCESS_TOKEN_URL = 'https://login.live.com/oauth20_token.srf'
+    ACCESS_TOKEN_METHOD = 'POST'
     SCOPE_SEPARATOR = ','
     DEFAULT_SCOPE = ['wl.basic', 'wl.emails']
-
     EXTRA_DATA = [
         ('id', 'id'),
         ('access_token', 'access_token'),
