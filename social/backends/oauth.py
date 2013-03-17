@@ -255,8 +255,8 @@ class BaseOAuth2(OAuthAuth):
 
     def process_error(self, data):
         if data.get('error'):
-            raise AuthFailed(self, self.data.get('error_description') or
-                                   self.data['error'])
+            raise AuthFailed(self, data.get('error_description') or
+                                   data['error'])
 
     def auth_complete_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
