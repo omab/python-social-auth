@@ -55,11 +55,8 @@ class ShopifyOAuth2(BaseOAuth2):
 
     def auth_complete(self, *args, **kwargs):
         """Completes login process, must return user instance"""
+        self.process_error(self.data)
         access_token = None
-        if self.data.get('error'):
-            error = self.data.get('error_description') or self.data['error']
-            raise AuthFailed(self, error)
-
         key, secret = self.get_key_and_secret()
         try:
             shop_url = self.data.get('shop')
