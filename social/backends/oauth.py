@@ -80,6 +80,8 @@ class BaseOAuth1(OAuthAuth):
     AUTHORIZATION_URL = ''
     REQUEST_TOKEN_URL = ''
     REQUEST_TOKEN_METHOD = 'GET'
+    OAUTH_TOKEN_PARAMETER_NAME = 'oauth_token'
+    REDIRECT_URI_PARAMETER_NAME = 'redirect_uri'
     ACCESS_TOKEN_URL = ''
 
     def auth_url(self):
@@ -98,12 +100,13 @@ class BaseOAuth1(OAuthAuth):
         unauthed_tokens = self.strategy.session_get(name, [])
         if not unauthed_tokens:
             raise AuthTokenError(self, 'Missing unauthorized token')
-        data_token = self.data.get('oauth_token', 'no-token')
+        token_param_name = self.OAUTH_TOKEN_PARAMETER_NAME
+        data_token = self.data.get(token_param_name, 'no-token')
         for unauthed_token in unauthed_tokens:
             orig_unauthed_token = unauthed_token
             if not isinstance(unauthed_token, dict):
                 unauthed_token = parse_qs(unauthed_token)
-            if unauthed_token.get('oauth_token') == data_token:
+            if unauthed_token.get(token_param_name) == data_token:
                 self.strategy.session_set(name, list(
                     set(unauthed_tokens) -
                     set([orig_unauthed_token]))
@@ -148,8 +151,10 @@ class BaseOAuth1(OAuthAuth):
             token = parse_qs(token)
         params = self.auth_extra_arguments() or {}
         params.update(self.get_scope_argument())
-        params['oauth_token'] = token.get('oauth_token')
-        params['redirect_uri'] = self.redirect_uri
+        params[self.OAUTH_TOKEN_PARAMETER_NAME] = token.get(
+            self.OAUTH_TOKEN_PARAMETER_NAME
+        )
+        params[self.REDIRECT_URI_PARAMETER_NAME] = self.redirect_uri
         return self.AUTHORIZATION_URL + '?' + urlencode(params)
 
     def oauth_auth(self, token=None, oauth_verifier=None,

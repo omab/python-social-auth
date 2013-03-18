@@ -17,7 +17,10 @@ class DropboxOAuth(BaseOAuth1):
     ID_KEY = 'uid'
     AUTHORIZATION_URL = 'https://www.dropbox.com/1/oauth/authorize'
     REQUEST_TOKEN_URL = 'https://api.dropbox.com/1/oauth/request_token'
+    REQUEST_TOKEN_METHOD = 'POST'
     ACCESS_TOKEN_URL = 'https://api.dropbox.com/1/oauth/access_token'
+    ACCESS_TOKEN_METHOD = 'POST'
+    REDIRECT_URI_PARAMETER_NAME = 'oauth_callback'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires')
