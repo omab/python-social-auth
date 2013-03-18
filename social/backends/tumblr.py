@@ -19,6 +19,7 @@ class TumblrOAuth(BaseOAuth1):
     ID_KEY = 'username'
     AUTHORIZATION_URL = 'http://www.tumblr.com/oauth/authorize'
     REQUEST_TOKEN_URL = 'http://www.tumblr.com/oauth/request_token'
+    REQUEST_TOKEN_METHOD = 'POST'
     ACCESS_TOKEN_URL = 'http://www.tumblr.com/oauth/access_token'
 
     def get_user_details(self, response):

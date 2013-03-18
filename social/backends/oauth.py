@@ -79,6 +79,7 @@ class BaseOAuth1(OAuthAuth):
     """
     AUTHORIZATION_URL = ''
     REQUEST_TOKEN_URL = ''
+    REQUEST_TOKEN_METHOD = 'GET'
     ACCESS_TOKEN_URL = ''
 
     def auth_url(self):
@@ -137,7 +138,8 @@ class BaseOAuth1(OAuthAuth):
         response = self.request(self.REQUEST_TOKEN_URL,
                                 params=params,
                                 auth=OAuth1(key, secret,
-                                            callback_uri=self.redirect_uri))
+                                            callback_uri=self.redirect_uri),
+                                method=self.REQUEST_TOKEN_METHOD)
         return response.content
 
     def oauth_authorization_request(self, token):
