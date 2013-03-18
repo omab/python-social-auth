@@ -3,8 +3,6 @@ EverNote OAuth support
 
 No extra configurations are needed to make this work.
 """
-import six
-
 from requests import HTTPError
 
 from social.exceptions import AuthCanceled
@@ -68,7 +66,7 @@ class EvernoteOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        return access_token
+        return {'edam_userId': access_token['edam_userId']}
 
 
 class EvernoteSandboxOAuth(EvernoteOAuth):
