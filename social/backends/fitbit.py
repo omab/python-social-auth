@@ -17,20 +17,20 @@ class FitbitOAuth(BaseOAuth1):
     AUTHORIZATION_URL = 'https://api.fitbit.com/oauth/authorize'
     REQUEST_TOKEN_URL = 'https://api.fitbit.com/oauth/request_token'
     ACCESS_TOKEN_URL = 'https://api.fitbit.com/oauth/access_token'
-    EXTRA_DATA = [('id', 'id'),
-                  ('username', 'username'),
-                  ('expires', 'expires')]
+    EXTRA_DATA = [('encodedId', 'id'),
+                  ('displayName', 'username')]
 
     def get_user_details(self, response):
         """Return user details from Fitbit account"""
-        return {'username': response.get('id'),
-                'email': '',
-                'first_name': response.get('fullname')}
+        return {'username': response.get('displayName'),
+                'email': ''}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        return {
-            'id': access_token['encoded_user_id'],
-            'username': access_token['username'],
-            'fullname': access_token['fullname'],
-        }
+        try:
+            return self.get_json(
+                'https://api.fitbit.com/1/user/-/profile.json',
+                auth=self.oauth_auth(access_token)
+            )['user']
+        except ValueError:
+            return None
