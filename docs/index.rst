@@ -26,6 +26,7 @@ Contents:
    storage
    exceptions
    backends/index
+   tests
    copyright
 
 
