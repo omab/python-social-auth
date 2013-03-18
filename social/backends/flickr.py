@@ -25,17 +25,9 @@ class FlickrOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Flickr account"""
-        return {'username': response.get('id'),
+        return {'username': response.get('username') or response.get('id'),
                 'email': '',
                 'first_name': response.get('fullname')}
-
-    def access_token(self, token):
-        """Return request for access token value"""
-        # Flickr is a bit different - it passes user information along with
-        # the access token, so temporarily store it to view the user_data
-        # method easy access later in the flow!
-        return self.get_querystring(self.ACCESS_TOKEN_URL,
-                                    auth=self.oauth_auth(token))
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
