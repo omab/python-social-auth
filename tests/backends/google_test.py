@@ -1,9 +1,11 @@
 import json
 
+from social.p3 import urlencode
+from tests.oauth1 import OAuth1Test
 from tests.oauth2 import OAuth2Test
 
 
-class GoogleTest(OAuth2Test):
+class GoogleOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.google.GoogleOAuth2'
     user_data_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
     expected_username = 'foo'
@@ -24,6 +26,31 @@ class GoogleTest(OAuth2Test):
         'given_name': 'Foo',
         'id': '101010101010101010101',
         'verified_email': True
+    })
+
+    def test_login(self):
+        self.do_login()
+
+    def test_partial_pipeline(self):
+        self.do_partial_pipeline()
+
+
+class GoogleOAuth1Test(OAuth1Test):
+    backend_path = 'social.backends.google.GoogleOAuth'
+    user_data_url = 'https://www.googleapis.com/userinfo/email'
+    expected_username = 'foobar'
+    access_token_body = json.dumps({
+        'access_token': 'foobar',
+        'token_type': 'bearer'
+    })
+    request_token_body = urlencode({
+        'oauth_token_secret': 'foobar-secret',
+        'oauth_token': 'foobar',
+        'oauth_callback_confirmed': 'true'
+    })
+    user_data_body = urlencode({
+        'email': 'foobar@gmail.com',
+        'isVerified': 'true'
     })
 
     def test_login(self):
