@@ -40,6 +40,7 @@
 <a href="{% url 'social:begin' "stackoverflow" %}">Stackoverflow OAuth2</a> <br />
 <a href="{% url 'social:begin' "readability" %}">Readability OAuth1</a> <br />
 <a href="{% url 'social:begin' "skyrock" %}">Skyrock OAuth1</a> <br />
+<a href="{% url 'social:begin' "tumblr" %}">Tumblr OAuth1</a> <br />
 
 <form action="{% url 'social:begin' "openid" %}" method="post">{% csrf_token %}
   <div>
