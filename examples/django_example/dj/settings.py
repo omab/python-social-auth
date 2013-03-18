@@ -155,6 +155,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.rdio.RdioOAuth2',
     'social.backends.yammer.YammerOAuth2',
     'social.backends.stackoverflow.StackoverflowOAuth2',
+    'social.backends.readability.ReadabilityOAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 

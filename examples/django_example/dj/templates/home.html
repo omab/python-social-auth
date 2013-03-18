@@ -38,6 +38,7 @@
 <a href="{% url 'social:begin' "rdio-oauth1" %}">Rdio OAuth1</a> <br />
 <a href="{% url 'social:begin' "yammer" %}">Yammer OAuth2</a> <br />
 <a href="{% url 'social:begin' "stackoverflow" %}">Stackoverflow OAuth2</a> <br />
+<a href="{% url 'social:begin' "readability" %}">Readability OAuth1</a> <br />
 
 <form action="{% url 'social:begin' "openid" %}" method="post">{% csrf_token %}
   <div>
