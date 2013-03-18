@@ -21,6 +21,7 @@ class OAuth1Test(unittest.TestCase):
     access_token_body = None
     user_data_body = None
     user_data_url = ''
+    user_data_content_type = 'text/json'
     expected_username = ''
     settings = None
     partial_login_settings = None
@@ -84,7 +85,7 @@ class OAuth1Test(unittest.TestCase):
         if self.user_data_url:
             HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
                                    body=self.user_data_body or '',
-                                   content_type='text/json')
+                                   content_type=self.user_data_content_type)
         self.strategy.set_request_data(target_query)
 
     def do_login(self):
