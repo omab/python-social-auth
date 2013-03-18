@@ -5,7 +5,7 @@ from social.p3 import urlencode
 from tests.oauth1 import OAuth1Test
 
 
-class BitbucketTest(OAuth1Test):
+class BitbucketOAuth1Test(OAuth1Test):
     backend_path = 'social.backends.bitbucket.BitbucketOAuth'
     user_data_url = 'https://bitbucket.org/api/1.0/users/foo@bar.com'
     expected_username = 'foobar'

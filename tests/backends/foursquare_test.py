@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class FoursquareTest(OAuth2Test):
+class FoursquareOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.foursquare.FoursquareOAuth2'
     user_data_url = 'https://api.foursquare.com/v2/users/self'
     expected_username = 'FooBar'

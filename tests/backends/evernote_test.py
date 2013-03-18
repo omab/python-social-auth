@@ -2,7 +2,7 @@ from social.p3 import urlencode
 from tests.oauth1 import OAuth1Test
 
 
-class EvernoteTest(OAuth1Test):
+class EvernoteOAuth1Test(OAuth1Test):
     backend_path = 'social.backends.evernote.EvernoteOAuth'
     expected_username = '101010'
     access_token_body = urlencode({

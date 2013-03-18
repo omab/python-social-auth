@@ -4,7 +4,7 @@ from social.p3 import urlencode
 from tests.oauth1 import OAuth1Test
 
 
-class FitbitTest(OAuth1Test):
+class FitbitOAuth1Test(OAuth1Test):
     backend_path = 'social.backends.fitbit.FitbitOAuth'
     expected_username = 'foobar'
     access_token_body = urlencode({

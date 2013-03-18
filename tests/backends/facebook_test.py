@@ -4,7 +4,7 @@ from social.p3 import urlencode
 from tests.oauth2 import OAuth2Test
 
 
-class FacebookTest(OAuth2Test):
+class FacebookOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.facebook.FacebookOAuth2'
     user_data_url = 'https://graph.facebook.com/me'
     expected_username = 'foobar'

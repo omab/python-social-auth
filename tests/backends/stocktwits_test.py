@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class StocktwitsTest(OAuth2Test):
+class StocktwitsOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.stocktwits.StocktwitsOAuth2'
     user_data_url = 'https://api.stocktwits.com/api/2/account/verify.json'
     expected_username = 'foobar'

@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class YandexTest(OAuth2Test):
+class YandexOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.yandex.YandexOAuth2'
     user_data_url = 'https://login.yandex.ru/info'
     expected_username = 'foobar'

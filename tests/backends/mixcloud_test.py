@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class MixcloudTest(OAuth2Test):
+class MixcloudOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.mixcloud.MixcloudOAuth2'
     user_data_url = 'https://api.mixcloud.com/me/'
     expected_username = 'foobar'

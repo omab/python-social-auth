@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class AngelTest(OAuth2Test):
+class AngelOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.angel.AngelOAuth2'
     user_data_url = 'https://api.angel.co/1/me/'
     access_token_body = json.dumps({

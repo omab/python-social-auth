@@ -5,7 +5,7 @@ from social.p3 import urlencode
 from tests.oauth1 import OAuth1Test
 
 
-class YahooTest(OAuth1Test):
+class YahooOAuth1Test(OAuth1Test):
     backend_path = 'social.backends.yahoo.YahooOAuth'
     user_data_url = 'http://social.yahooapis.com/v1/user/a-guid/profile?' \
                     'format=json'

@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class GithubTest(OAuth2Test):
+class GithubOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.github.GithubOAuth2'
     user_data_url = 'https://api.github.com/user'
     expected_username = 'octocat'

@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class SoundcloudTest(OAuth2Test):
+class SoundcloudOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.soundcloud.SoundcloudOAuth2'
     user_data_url = 'https://api.soundcloud.com/me.json'
     expected_username = 'foobar'

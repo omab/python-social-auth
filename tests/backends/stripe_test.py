@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class StripeTest(OAuth2Test):
+class StripeOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.stripe.StripeOAuth2'
     access_token_body = json.dumps({
         'stripe_publishable_key': 'pk_test_foobar',

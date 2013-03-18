@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class LiveTest(OAuth2Test):
+class LiveOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.live.LiveOAuth2'
     user_data_url = 'https://apis.live.net/v5.0/me'
     expected_username = 'FooBar'

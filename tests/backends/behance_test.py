@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class BehanceTest(OAuth2Test):
+class BehanceOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.behance.BehanceOAuth2'
     access_token_body = json.dumps({
         'access_token': 'foobar',

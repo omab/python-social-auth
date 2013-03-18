@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class InstagramTest(OAuth2Test):
+class InstagramOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.instagram.InstagramOAuth2'
     user_data_url = 'https://api.instagram.com/v1/users/self'
     expected_username = 'foobar'

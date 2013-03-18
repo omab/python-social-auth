@@ -2,7 +2,7 @@ from social.p3 import urlencode
 from tests.oauth1 import OAuth1Test
 
 
-class FlickrTest(OAuth1Test):
+class FlickrOAuth1Test(OAuth1Test):
     backend_path = 'social.backends.flickr.FlickrOAuth'
     expected_username = 'foobar'
     access_token_body = urlencode({

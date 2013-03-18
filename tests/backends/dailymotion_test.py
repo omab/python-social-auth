@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class DailymotionTest(OAuth2Test):
+class DailymotionOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.dailymotion.DailymotionOAuth2'
     user_data_url = 'https://api.dailymotion.com/me/'
     expected_username = 'foobar'

@@ -3,7 +3,7 @@ import json
 from tests.oauth2 import OAuth2Test
 
 
-class DisqusTest(OAuth2Test):
+class DisqusOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.disqus.DisqusOAuth2'
     user_data_url = 'https://disqus.com/api/3.0/users/details.json'
     expected_username = 'foobar'

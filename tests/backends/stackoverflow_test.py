@@ -4,7 +4,7 @@ from social.p3 import urlencode
 from tests.oauth2 import OAuth2Test
 
 
-class StackoverflowTest(OAuth2Test):
+class StackoverflowOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.stackoverflow.StackoverflowOAuth2'
     user_data_url = 'https://api.stackexchange.com/2.1/me'
     expected_username = 'foobar'
