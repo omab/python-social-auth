@@ -58,7 +58,10 @@ class OAuth1Test(unittest.TestCase):
             'SOCIAL_AUTH_' + name + '_KEY': 'a-key',
             'SOCIAL_AUTH_' + name + '_SECRET': 'a-secret-key',
         })
-        HTTPretty.register_uri(HTTPretty.GET, self.backend.REQUEST_TOKEN_URL,
+
+        method = self.backend.REQUEST_TOKEN_METHOD == 'GET' and HTTPretty.GET \
+                                                            or HTTPretty.POST
+        HTTPretty.register_uri(method, self.backend.REQUEST_TOKEN_URL,
                                status=200, body=self.request_token_body)
 
         start_url = self.strategy.start().url
