@@ -9,7 +9,6 @@ class BitbucketTest(OAuth1Test):
     backend_path = 'social.backends.bitbucket.BitbucketOAuth'
     user_data_url = 'https://bitbucket.org/api/1.0/users/foo@bar.com'
     expected_username = 'foobar'
-
     access_token_body = json.dumps({
         'access_token': 'foobar',
         'token_type': 'bearer'
