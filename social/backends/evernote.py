@@ -66,7 +66,7 @@ class EvernoteOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        return {'edam_userId': access_token['edam_userId']}
+        return access_token.copy()
 
 
 class EvernoteSandboxOAuth(EvernoteOAuth):
