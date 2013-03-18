@@ -67,8 +67,9 @@ class BitbucketOAuth(BaseOAuth1):
                     email = email_address['email']
                     if email_address['primary']:
                         break
-            url = 'https://bitbucket.org/api/1.0/users/'
-            return dict(self.get_json(url + email)['user'], email=email)
+            return dict(self.get_json('https://bitbucket.org/api/1.0/users/' +
+                                      email)['user'],
+                        email=email)
         except ValueError:
             return None
         return None

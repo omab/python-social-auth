@@ -28,6 +28,7 @@ class OAuthAuth(BaseAuth):
     SCOPE_SEPARATOR = ' '
     EXTRA_DATA = None
     ID_KEY = 'id'
+    ACCESS_TOKEN_METHOD = 'GET'
 
     def extra_data(self, user, uid, response, details=None):
         """Return access_token and extra defined names to store in
@@ -96,14 +97,17 @@ class BaseOAuth1(OAuthAuth):
         unauthed_tokens = self.strategy.session_get(name, [])
         if not unauthed_tokens:
             raise AuthTokenError(self, 'Missing unauthorized token')
+        data_token = self.data.get('oauth_token', 'no-token')
         for unauthed_token in unauthed_tokens:
-            token = unauthed_token
+            orig_unauthed_token = unauthed_token
             if not isinstance(unauthed_token, dict):
-                token = parse_qs(unauthed_token)
-            saved_token = self.data.get('oauth_token', 'no-token')
-            if token.get('oauth_token') == saved_token:
-                self.strategy.session_set(name, list(set(unauthed_tokens) -
-                                                     set([unauthed_token])))
+                unauthed_token = parse_qs(unauthed_token)
+            if unauthed_token.get('oauth_token') == data_token:
+                self.strategy.session_set(name, list(
+                    set(unauthed_tokens) -
+                    set([orig_unauthed_token]))
+                )
+                token = unauthed_token
                 break
         else:
             raise AuthTokenError(self, 'Incorrect tokens')
@@ -171,7 +175,8 @@ class BaseOAuth1(OAuthAuth):
     def access_token(self, token):
         """Return request for access token value"""
         return self.get_querystring(self.ACCESS_TOKEN_URL,
-                                    auth=self.oauth_auth(token))
+                                    auth=self.oauth_auth(token),
+                                    method=self.ACCESS_TOKEN_METHOD)
 
 
 class BaseOAuth2(OAuthAuth):
@@ -186,7 +191,6 @@ class BaseOAuth2(OAuthAuth):
     """
     AUTHORIZATION_URL = None
     ACCESS_TOKEN_URL = None
-    ACCESS_TOKEN_METHOD = 'GET'
     REFRESH_TOKEN_URL = None
     RESPONSE_TYPE = 'code'
     REDIRECT_STATE = True

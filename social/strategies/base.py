@@ -136,7 +136,7 @@ class BaseStrategy(object):
         """Return current host value"""
         raise NotImplementedError('Implement in subclass')
 
-    def session_get(self, name):
+    def session_get(self, name, default=None):
         """Return session value for given key"""
         raise NotImplementedError('Implement in subclass')
 

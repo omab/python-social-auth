@@ -41,9 +41,9 @@ class TestStrategy(BaseStrategy):
         """Return current host value"""
         return TEST_HOST
 
-    def session_get(self, name):
+    def session_get(self, name, default=None):
         """Return session value for given key"""
-        return self._session.get(name)
+        return self._session.get(name, default)
 
     def session_set(self, name, value):
         """Set session value for given key"""

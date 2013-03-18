@@ -64,12 +64,12 @@ class YahooOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        guid = self._get_guid(access_token)
-        url = 'http://social.yahooapis.com/v1/user/%s/profile?format=json' \
-                    % guid
         try:
-            profile = self.get_json(url, auth=self.oauth_auth(access_token))
-            return profile['profile']
+            return self.get_json(
+                'http://social.yahooapis.com/v1/user/%s/profile?format=json' %
+                    self._get_guid(access_token),
+                auth=self.oauth_auth(access_token)
+            )['profile']
         except ValueError:
             raise AuthUnknownError('Error during profile retrieval, '
                                    'please, try again later')
@@ -79,10 +79,11 @@ class YahooOAuth(BaseOAuth1):
             Beause you have to provide GUID for every API request
             it's also returned during one of OAuth calls
         """
-        url = 'http://social.yahooapis.com/v1/me/guid?format=json'
         try:
-            data = self.get_json(url, auth=self.oauth_auth(access_token))
-            return data['guid']['value']
+            return self.get_json(
+                'http://social.yahooapis.com/v1/me/guid?format=json',
+                auth=self.oauth_auth(access_token)
+            )['guid']['value']
         except ValueError:
             raise AuthUnknownError('Error during user id retrieval, '
                                    'please, try again later')
