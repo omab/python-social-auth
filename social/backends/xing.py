@@ -3,7 +3,6 @@ XING OAuth support
 
 No extra configurations are needed to make this work.
 """
-from social.utils import parse_qs
 from social.backends.oauth import BaseOAuth1
 from social.exceptions import AuthCanceled, AuthUnknownError
 
@@ -57,7 +56,3 @@ class XingOAuth(BaseOAuth1):
                 raise AuthUnknownError(self, 'Xing error was %s' %
                                                     oauth_problem)
         return super(XingOAuth, self).auth_complete(*args, **kwargs)
-
-    def unauthorized_token(self):
-        """Makes first request to oauth. Returns an unauthorized Token."""
-        return parse_qs(super(XingOAuth, self).unauthorized_token())
