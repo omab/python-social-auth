@@ -6,11 +6,11 @@ SOCIAL_AUTH_READABILITY_CONSUMER_KEY and
 SOCIAL_AUTH_READABILITY_CONSUMER_SECRET must be defined with the values given
 by Readability in the Connections page of your account settings.
 """
-from social.backends import BaseOAuth1
 from social.exceptions import AuthCanceled
+from social.backends.oauth import BaseOAuth1
 
 
-READABILITY_API = 'https://www.readability.com/api/rest/v1/'
+READABILITY_API = 'https://www.readability.com/api/rest/v1'
 
 
 class ReadabilityOAuth(BaseOAuth1):
