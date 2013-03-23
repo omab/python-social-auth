@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
 
-from social.apps.actions import do_auth, do_complete, do_disconnect
+from social.actions import do_auth, do_complete, do_disconnect
 from social.apps.django_app.utils import strategy, setting, BackendWrapper
 
 

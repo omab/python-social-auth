@@ -1,6 +1,6 @@
 import web
 
-from social.apps.actions import do_auth, do_complete, do_disconnect
+from social.actions import do_auth, do_complete, do_disconnect
 from social.apps.webpy_app.utils import strategy
 
 
