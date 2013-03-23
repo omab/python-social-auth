@@ -14,8 +14,8 @@ class WebpyTemplateStrategy(BaseTemplateStrategy):
 class WebpyStrategy(BaseStrategy):
     def __init__(self, *args, **kwargs):
         self.session = web.web_session
-        super(WebpyStrategy, self).__init__(tpl=WebpyTemplateStrategy,
-                                            *args, **kwargs)
+        kwargs.setdefault('tpl', WebpyTemplateStrategy)
+        super(WebpyStrategy, self).__init__(*args, **kwargs)
 
     def get_setting(self, name):
         return getattr(web.config, name)

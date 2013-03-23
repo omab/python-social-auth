@@ -20,8 +20,8 @@ class DjangoTemplateStrategy(BaseTemplateStrategy):
 
 class DjangoStrategy(BaseStrategy):
     def __init__(self, *args, **kwargs):
-        return super(DjangoStrategy, self).__init__(tpl=DjangoTemplateStrategy,
-                                                    *args, **kwargs)
+        kwargs.setdefault('tpl', DjangoTemplateStrategy)
+        return super(DjangoStrategy, self).__init__(*args, **kwargs)
 
     def get_setting(self, name):
         return getattr(settings, name)

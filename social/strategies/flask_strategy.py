@@ -14,8 +14,8 @@ class FlaskTemplateStrategy(BaseTemplateStrategy):
 
 class FlaskStrategy(BaseStrategy):
     def __init__(self, *args, **kwargs):
-        super(FlaskStrategy, self).__init__(tpl=FlaskTemplateStrategy,
-                                            *args, **kwargs)
+        kwargs.setdefault('tpl', FlaskTemplateStrategy)
+        super(FlaskStrategy, self).__init__(*args, **kwargs)
 
     def get_setting(self, name):
         return current_app.config[name]
