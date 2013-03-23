@@ -73,6 +73,6 @@ class TestStrategy(BaseStrategy):
 
     def authenticate(self, *args, **kwargs):
         user = super(TestStrategy, self).authenticate(*args, **kwargs)
-        self.session_set('user', user.id)
-        self.session_set('username', user.username)
+        if isinstance(user, self.storage.user.user_model()):
+            self.session_set('username', user.username)
         return user
