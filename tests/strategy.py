@@ -70,3 +70,9 @@ class TestStrategy(BaseStrategy):
 
     def set_request_data(self, values):
         self._request_data.update(values)
+
+    def authenticate(self, *args, **kwargs):
+        user = super(TestStrategy, self).authenticate(*args, **kwargs)
+        self.session_set('user', user.id)
+        self.session_set('username', user.username)
+        return user
