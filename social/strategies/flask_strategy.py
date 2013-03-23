@@ -41,12 +41,6 @@ class FlaskStrategy(BaseStrategy):
         response.headers['Content-Type'] = 'text/html;charset=UTF-8'
         return response
 
-    def authenticate(self, *args, **kwargs):
-        kwargs['strategy'] = self
-        kwargs['storage'] = self.storage
-        kwargs['backend'] = self.backend
-        return self.backend.authenticate(*args, **kwargs)
-
     def session_get(self, name, default=None):
         return session.get(name, default)
 
