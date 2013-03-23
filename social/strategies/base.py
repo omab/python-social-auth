@@ -6,13 +6,34 @@ from social.utils import setting_name
 from social.store import OpenIdStore
 
 
+class BaseTemplateStrategy(object):
+    def __init__(self, strategy):
+        self.strategy = strategy
+
+    def render(self, tpl=None, html=None, context=None):
+        if not tpl and not html:
+            raise ValueError('Missing template or html parameters')
+        context = context or {}
+        if tpl:
+            return self.render_template(tpl, **context)
+        else:
+            return self.render_string(html, **context)
+
+    def render_template(self, tpl, context):
+        raise NotImplemented('Implement in subclass')
+
+    def render_string(self, html, context):
+        raise NotImplemented('Implement in subclass')
+
+
 class BaseStrategy(object):
     ALLOWED_CHARS = 'abcdefghijklmnopqrstuvwxyz' \
                     'ABCDEFGHIJKLMNOPQRSTUVWXYZ' \
                     '0123456789'
 
-    def __init__(self, backend=None, storage=None, request=None,
+    def __init__(self, backend=None, storage=None, request=None, tpl=None,
                  *args, **kwargs):
+        self.tpl = tpl(self)
         self.request = request
         self.storage = storage
         if backend:
@@ -126,7 +147,7 @@ class BaseStrategy(object):
 
     def render_html(self, tpl=None, html=None, context=None):
         """Render given template or raw html with given context"""
-        raise NotImplementedError('Implement in subclass')
+        return self.tpl.render(tpl, html, context)
 
     def request_data(self, merge=True):
         """Return current request data (POST or GET)"""

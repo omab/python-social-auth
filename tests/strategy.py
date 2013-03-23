@@ -1,4 +1,4 @@
-from social.strategies.base import BaseStrategy
+from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 
 
 TEST_URI = 'http://myapp.com'
@@ -10,13 +10,21 @@ class Redirect(object):
         self.url = url
 
 
-class TestStrategy(BaseStrategy):
+class TestTemplateStrategy(BaseTemplateStrategy):
+    def render_template(self, tpl, context):
+        return tpl
 
+    def render_string(self, html, context):
+        return html
+
+
+class TestStrategy(BaseStrategy):
     def __init__(self, *args, **kwargs):
         self._request_data = {}
         self._settings = {}
         self._session = {}
-        super(TestStrategy, self).__init__(*args, **kwargs)
+        super(TestStrategy, self).__init__(tpl=TestTemplateStrategy,
+                                           *args, **kwargs)
 
     def redirect(self, url):
         return Redirect(url)

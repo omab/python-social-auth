@@ -5,10 +5,24 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
 from django.template import TemplateDoesNotExist, RequestContext, loader
 
-from social.strategies.base import BaseStrategy
+from social.strategies.base import BaseStrategy, BaseTemplateStrategy
+
+
+class DjangoTemplateStrategy(BaseTemplateStrategy):
+    def render_template(self, tpl, context):
+        template = loader.get_template(tpl)
+        return template.render(RequestContext(self.strategy.request, context))
+
+    def render_string(self, html, context):
+        template = loader.get_template_from_string(html)
+        return template.render(RequestContext(self.strategy.request, context))
 
 
 class DjangoStrategy(BaseStrategy):
+    def __init__(self, *args, **kwargs):
+        return super(DjangoStrategy, self).__init__(tpl=DjangoTemplateStrategy,
+                                                    *args, **kwargs)
+
     def get_setting(self, name):
         return getattr(settings, name)
 

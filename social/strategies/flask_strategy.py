@@ -1,10 +1,22 @@
 from flask import current_app, request, redirect, make_response, session, \
                   render_template, render_template_string, Response
 
-from social.strategies.base import BaseStrategy
+from social.strategies.base import BaseStrategy, BaseTemplateStrategy
+
+
+class FlaskTemplateStrategy(BaseTemplateStrategy):
+    def render_template(self, tpl, context):
+        return render_template(tpl, **context)
+
+    def render_string(self, html, context):
+        return render_template_string(html, **context)
 
 
 class FlaskStrategy(BaseStrategy):
+    def __init__(self, *args, **kwargs):
+        super(FlaskStrategy, self).__init__(tpl=FlaskTemplateStrategy,
+                                            *args, **kwargs)
+
     def get_setting(self, name):
         return current_app.config[name]
 
@@ -28,15 +40,6 @@ class FlaskStrategy(BaseStrategy):
         response = make_response(content)
         response.headers['Content-Type'] = 'text/html;charset=UTF-8'
         return response
-
-    def render_html(self, tpl=None, html=None, context=None):
-        if not tpl and not html:
-            raise ValueError('Missing template or html parameters')
-        context = context or {}
-        if tpl:
-            return render_template(tpl, **context)
-        else:
-            return render_template_string(html, **context)
 
     def authenticate(self, *args, **kwargs):
         kwargs['strategy'] = self

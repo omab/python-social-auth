@@ -1,12 +1,21 @@
 import web
 
-from social.strategies.base import BaseStrategy
+from social.strategies.base import BaseStrategy, BaseTemplateStrategy
+
+
+class WebpyTemplateStrategy(BaseTemplateStrategy):
+    def render_template(self, tpl, context):
+        return web.template.render(tpl)(**context)
+
+    def render_string(self, html, context):
+        return web.template.Template(html)(**context)
 
 
 class WebpyStrategy(BaseStrategy):
     def __init__(self, *args, **kwargs):
         self.session = web.web_session
-        super(WebpyStrategy, self).__init__(*args, **kwargs)
+        super(WebpyStrategy, self).__init__(tpl=WebpyTemplateStrategy,
+                                            *args, **kwargs)
 
     def get_setting(self, name):
         return getattr(web.config, name)
