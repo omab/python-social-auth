@@ -10,6 +10,11 @@ class Redirect(object):
         self.url = url
 
 
+class Response(object):
+    def __init__(self, value):
+        self.value = value
+
+
 class TestTemplateStrategy(BaseTemplateStrategy):
     def render_template(self, tpl, context):
         return tpl
@@ -35,7 +40,7 @@ class TestStrategy(BaseStrategy):
 
     def html(self, content):
         """Return HTTP response with given content"""
-        return content
+        return Response(content)
 
     def render_html(self, tpl=None, html=None, context=None):
         """Render given template or raw html with given context"""
@@ -76,3 +81,6 @@ class TestStrategy(BaseStrategy):
         if isinstance(user, self.storage.user.user_model()):
             self.session_set('username', user.username)
         return user
+
+    def is_response(self, value):
+        return isinstance(value, (Redirect, Response))
