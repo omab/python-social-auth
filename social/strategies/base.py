@@ -33,7 +33,9 @@ class BaseStrategy(object):
 
     def __init__(self, backend=None, storage=None, request=None, tpl=None,
                  *args, **kwargs):
-        self.tpl = tpl(self)
+        if not isinstance(tpl, BaseTemplateStrategy):
+            tpl = tpl(self)
+        self.tpl = tpl
         self.request = request
         self.storage = storage
         if backend:
