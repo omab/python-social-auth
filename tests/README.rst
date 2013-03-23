@@ -34,10 +34,7 @@ a lot to work on, like:
     * Failure cases (like authentication canceled, etc)
     * Extra data saving
     * Application actions
-        - Login
-        - Associate
         - Partial pipeline
-        - Disconnect
 
 .. _HTTPretty: https://github.com/gabrielfalcao/HTTPretty
 .. _tests: https://github.com/omab/python-social-auth/tree/master/tests
