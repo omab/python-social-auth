@@ -33,8 +33,11 @@ class LinkedinOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        fields_selectors = ','.join(set(['id', 'first-name', 'last-name'] +
-                                        self.setting('FIELD_SELECTORS', [])))
+        fields_selectors = list(set(['first-name', 'id', 'last-name'] +
+                                self.setting('FIELD_SELECTORS', [])))
+        # this is ensure tests, otherwise HTTPretty fails randomly
+        fields_selectors.sort()
+        fields_selectors = ','.join(fields_selectors)
         # use set() over fields_selectors since LinkedIn fails when values are
         # duplicated
         url = 'https://api.linkedin.com/v1/people/~:(%s)' % fields_selectors

@@ -1,4 +1,3 @@
-import sys
 import base64
 
 from social.exceptions import NotAllowedToDisconnect
@@ -64,7 +63,7 @@ class TestUserSocialAuth(UserMixin, BaseModel):
 
     @classmethod
     def username_max_length(cls):
-        return sys.maxint
+        return 1024
 
     @classmethod
     def allowed_to_disconnect(cls, user, backend_name, association_id=None):
