@@ -23,8 +23,8 @@ class TestStrategy(BaseStrategy):
         self._request_data = {}
         self._settings = {}
         self._session = {}
-        super(TestStrategy, self).__init__(tpl=TestTemplateStrategy,
-                                           *args, **kwargs)
+        kwargs.setdefault('tpl', TestTemplateStrategy)
+        super(TestStrategy, self).__init__(*args, **kwargs)
 
     def redirect(self, url):
         return Redirect(url)
