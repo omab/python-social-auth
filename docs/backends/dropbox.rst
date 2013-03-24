@@ -7,7 +7,7 @@ Dropbox uses OAuth v1.0 for authentication.
 
 - fill ``App Key`` and ``App Secret`` values in the settings::
 
-      DOUBAN_DROPBOX_KEY = ''
-      DOUBAN_DROPBOX_SECRET = ''
+      SOCIAL_AUTH_DOUBAN_DROPBOX_KEY = ''
+      SOCIAL_AUTH_DOUBAN_DROPBOX_SECRET = ''
 
 .. _Dropbox Developers: https://www.dropbox.com/developers/apps

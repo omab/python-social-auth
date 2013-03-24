@@ -19,7 +19,7 @@ If you use OAuth2 workflow, you need to:
     SOCIAL_AUTH_ODNOKLASSNIKI_PUBLIC_NAME = ''
 
 - add ``'social.backends.odnoklassniki.OdnoklassnikiOAuth2'`` into your
-  ``AUTHENTICATION_BACKENDS``.
+  ``SOCIAL_AUTH_AUTHENTICATION_BACKENDS``.
 
 
 IFrame applications
@@ -40,7 +40,7 @@ If you want to authenticate users in your IFrame application,
     SOCIAL_AUTH_ODNOKLASSNIKIAPP_PUBLIC_NAME = ''
 
 - add ``'social.backends.odnoklassniki.OdnoklassnikiApp'`` into your
-  ``AUTHENTICATION_BACKENDS``
+  ``SOCIAL_AUTH_AUTHENTICATION_BACKENDS``
 
 - sign a public offer and do some bureaucracy
 

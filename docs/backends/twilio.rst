@@ -9,7 +9,7 @@ Twilio
     SOCIAL_AUTH_TWILIO_KEY = ''
     SOCIAL_AUTH_TWILIO_SECRET = ''
 
-- Add desired authentication backends to Django's ``AUTHENTICATION_BACKENDS``
+- Add desired authentication backends to Django's ``SOCIAL_AUTH_AUTHENTICATION_BACKENDS``
   setting::
 
     'social.backends.twilio.TwilioAuth',

@@ -7,7 +7,7 @@ The `Mixcloud API`_ offers support for authorization. To this backend support:
 
 - Add Mixcloud backend to ``AUTHENTICATION_BACKENDS`` in settings::
 
-    AUTHENTICATION_BACKENDS = (
+    SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
         ...
         'social.backends.mixcloud.MixcloudOAuth2',
     )
