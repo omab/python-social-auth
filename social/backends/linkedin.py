@@ -36,6 +36,13 @@ class BaseLinkedinAuth(object):
         fields_selectors = ','.join(fields_selectors)
         return self.USER_DETAILS % fields_selectors
 
+    def user_data(self, access_token, *args, **kwargs):
+        try:
+            raw_xml = self.profile_data(access_token, *args, **kwargs)
+            return self.to_dict(ElementTree.fromstring(raw_xml))
+        except (ValueError, KeyError, IOError):
+            return None
+
     def to_dict(self, xml):
         """Convert XML structure to dict recursively, repeated keys entries
         are returned as in list containers."""
@@ -61,13 +68,10 @@ class LinkedinOAuth(BaseLinkedinAuth, BaseOAuth1):
     REQUEST_TOKEN_URL = 'https://api.linkedin.com/uas/oauth/requestToken'
     ACCESS_TOKEN_URL = 'https://api.linkedin.com/uas/oauth/accessToken'
 
-    def user_data(self, access_token, *args, **kwargs):
+    def profile_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        raw_xml = self.oauth_request(access_token, self.user_details_url())
-        try:
-            return self.to_dict(ElementTree.fromstring(raw_xml.content))
-        except (ExpatError, KeyError, IndexError):
-            return None
+        return self.oauth_request(access_token,
+                                  self.user_details_url()).content
 
     def auth_complete(self, *args, **kwargs):
         """Complete auth process. Check LinkedIn error response."""
@@ -96,11 +100,7 @@ class LinkedinOAuth2(BaseLinkedinAuth, BaseOAuth2):
     ACCESS_TOKEN_URL = 'https://www.linkedin.com/uas/oauth2/accessToken'
     ACCESS_TOKEN_METHOD = 'POST'
 
-    def user_data(self, access_token, *args, **kwargs):
-        try:
-            raw_xml = self.request(self.user_details_url(), params={
-                'oauth2_access_token': access_token
-            }).content
-            return self.to_dict(ElementTree.fromstring(raw_xml))
-        except (ValueError, KeyError, IOError):
-            return None
+    def profile_data(self, access_token, *args, **kwargs):
+        return self.request(self.user_details_url(), params={
+            'oauth2_access_token': access_token
+        }).content
