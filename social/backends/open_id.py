@@ -159,10 +159,10 @@ class OpenIdAuth(BaseAuth):
 
     def setup_request(self, extra_params=None):
         """Setup request"""
-        openid_request = self.openid_request(extra_params)
+        request = self.openid_request(extra_params)
         # Request some user details. Use attribute exchange if provider
         # advertises support.
-        if openid_request.endpoint.supportsType(ax.AXMessage.ns_uri):
+        if request.endpoint.supportsType(ax.AXMessage.ns_uri):
             fetch_request = ax.FetchRequest()
             # Mark all attributes as required, Google ignores optional ones
             for attr, alias in (AX_SCHEMA_ATTRS + OLD_AX_ATTRS):
@@ -172,7 +172,7 @@ class OpenIdAuth(BaseAuth):
             fetch_request = sreg.SRegRequest(
                 optional=list(dict(SREG_ATTR).keys())
             )
-        openid_request.addExtension(fetch_request)
+        request.addExtension(fetch_request)
 
         # Add PAPE Extension for if configured
         preferred_policies = self.setting(
@@ -194,13 +194,17 @@ class OpenIdAuth(BaseAuth):
                 preferred_auth_policies=preferred_policies,
                 preferred_auth_level_types=preferred_level_types
             )
-            openid_request.addExtension(pape_request)
-        return openid_request
+            request.addExtension(pape_request)
+        return request
 
     def consumer(self):
         """Create an OpenID Consumer object for the given Django request."""
-        return Consumer(self.strategy.session_setdefault(SESSION_NAME, {}),
-                        self.strategy.openid_store())
+        if not hasattr(self, '_consumer'):
+            self._consumer = Consumer(
+                self.strategy.session_setdefault(SESSION_NAME, {}),
+                self.strategy.openid_store()
+            )
+        return self._consumer
 
     def uses_redirect(self):
         """Return true if openid request will be handled with redirect or
@@ -210,14 +214,11 @@ class OpenIdAuth(BaseAuth):
 
     def openid_request(self, extra_params=None):
         """Return openid request"""
-        if not hasattr(self, '_openid_request'):
-            try:
-                self._openid_request = self.consumer().begin(
-                    url_add_parameters(self.openid_url(), extra_params)
-                )
-            except DiscoveryFailure as err:
-                raise AuthException(self, 'OpenID discovery error: %s' % err)
-        return self._openid_request
+        try:
+            return self.consumer().begin(url_add_parameters(self.openid_url(),
+                                         extra_params))
+        except DiscoveryFailure as err:
+            raise AuthException(self, 'OpenID discovery error: %s' % err)
 
     def openid_url(self):
         """Return service provider URL.
