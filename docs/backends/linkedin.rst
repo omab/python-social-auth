@@ -1,10 +1,16 @@
 LinkedIn
 ========
 
-LinkedIn setup is similar to any other OAuth service. The auth flow is
-explained on `LinkedIn Developers`_ docs. To setup the backend follow:
+LinkedIn supports OAuth1 and OAuth2. Migration between each type is fair simple
+since the same Key / Secret pair is used for both authentication types.
 
-- Register an app on `LinkedIn Developer Network`_
+LinkedIn OAuth setup is similar to any other OAuth service. The auth flow is
+explained on `LinkedIn Developers`_ docs. First you will need to register an
+app att `LinkedIn Developer Network`_.
+
+
+OAuth1
+------
 
 - Fill the application key and secret in your settings::
 
@@ -44,6 +50,13 @@ would add these settings::
                                        ('email-address', 'email_address'),
                                        ('headline', 'headline'),
                                        ('industry', 'industry')]
+
+OAuth2
+------
+
+OAuth2 works exacly the same than OAuth1, but the settings must be named as::
+
+    SOCIAL_AUTH_LINKEDIN_OAUTH2_*
 
 .. _LinkedIn fields selectors: http://developer.linkedin.com/docs/DOC-1014
 .. _LinkedIn Scopes: https://developer.linkedin.com/documents/authentication#granting
