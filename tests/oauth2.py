@@ -19,6 +19,7 @@ class OAuth2Test(unittest.TestCase):
     backend_path = None
     backend = None
     access_token_body = None
+    user_data_content_type = 'text/json'
     user_data_body = None
     user_data_url = ''
     expected_username = ''
@@ -78,12 +79,12 @@ class OAuth2Test(unittest.TestCase):
                                uri=self.backend.ACCESS_TOKEN_URL,
                                status=200,
                                body=self.access_token_body or '',
-                               content_type='text/json')
+                               content_type=self.user_data_content_type)
 
         if self.user_data_url:
             HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
                                    body=self.user_data_body or '',
-                                   content_type='text/json')
+                                   content_type=self.user_data_content_type)
         self.strategy.set_request_data(location_query)
 
     def do_login(self):

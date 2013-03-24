@@ -131,6 +131,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.behance.BehanceOAuth2',
     'social.backends.bitbucket.BitbucketOAuth',
     'social.backends.linkedin.LinkedinOAuth',
+    'social.backends.linkedin.LinkedinOAuth2',
     'social.backends.github.GithubOAuth2',
     'social.backends.foursquare.FoursquareOAuth2',
     'social.backends.instagram.InstagramOAuth2',

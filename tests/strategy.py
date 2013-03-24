@@ -1,3 +1,5 @@
+import six
+
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 
 
@@ -8,11 +10,6 @@ TEST_HOST = 'myapp.com'
 class Redirect(object):
     def __init__(self, url):
         self.url = url
-
-
-class Response(object):
-    def __init__(self, value):
-        self.value = value
 
 
 class TestTemplateStrategy(BaseTemplateStrategy):
@@ -40,7 +37,7 @@ class TestStrategy(BaseStrategy):
 
     def html(self, content):
         """Return HTTP response with given content"""
-        return Response(content)
+        return content
 
     def render_html(self, tpl=None, html=None, context=None):
         """Render given template or raw html with given context"""
@@ -83,4 +80,4 @@ class TestStrategy(BaseStrategy):
         return user
 
     def is_response(self, value):
-        return isinstance(value, (Redirect, Response))
+        return isinstance(value, (Redirect, six.string_types))
