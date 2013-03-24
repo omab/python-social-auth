@@ -24,10 +24,10 @@ explained on `LinkedIn Developers`_ docs. To setup the backend follow:
 
     SOCIAL_AUTH_LINKEDIN_FIELD_SELECTORS = [...]
 
-  with the needed fields selectors, also define LINKEDIN_EXTRA_DATA properly as
-  described in `OAuth <oauth.html>`_, that way the values will be stored in
-  ``UserSocialAuth.extra_data`` field. By default ``id``, ``first-name`` and
-  ``last-name`` are requested and stored.
+  with the needed fields selectors, also define ``SOCIAL_AUTH_LINKEDIN_EXTRA_DATA``
+  properly as described in `OAuth <oauth.html>`_, that way the values will be
+  stored in ``UserSocialAuth.extra_data`` field. By default ``id``,
+  ``first-name`` and ``last-name`` are requested and stored.
 
 For example, to request a user's email, headline, and industry from the
 Linkedin API and store the information in ``UserSocialAuth.extra_data``, you
@@ -36,7 +36,7 @@ would add these settings::
     # Add email to requested authorizations.
     SOCIAL_AUTH_LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', ...]
     # Add the fields so they will be requested from linkedin.
-    SOCIAL_AUTH_LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
+    SOCIAL_AUTH_LINKEDIN_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
     # Arrange to add the fields to UserSocialAuth.extra_data
     SOCIAL_AUTH_LINKEDIN_EXTRA_DATA = [('id', 'id'),
                                        ('first-name', 'first_name'),
