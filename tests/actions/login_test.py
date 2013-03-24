@@ -6,3 +6,6 @@ class LoginActionTest(BaseActionTest):
 
     def test_login(self):
         self.do_login()
+
+    def test_login_with_partial_pipeline(self):
+        self.do_login_with_partial_pipeline()

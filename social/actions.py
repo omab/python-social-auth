@@ -40,13 +40,13 @@ def do_complete(strategy, login, user=None, redirect_name='next',
                       strategy.setting('LOGIN_URL')
 
     if strategy.session_get('partial_pipeline'):
-        idx, xargs, xkwargs = strategy.from_session(
+        idx, backend, xargs, xkwargs = strategy.from_session(
             strategy.session_pop('partial_pipeline')
         )
         kwargs = kwargs.copy()
         kwargs.setdefault('user', user)
         kwargs.update(xkwargs)
-        if xkwargs.get('backend') == strategy.backend_name:
+        if backend == strategy.backend_name:
             user = strategy.continue_pipeline(pipeline_index=idx,
                                               *xargs, **xkwargs)
         else:

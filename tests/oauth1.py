@@ -128,7 +128,8 @@ class OAuth1Test(unittest.TestCase):
         self.strategy.session_set('password', data['password'])
 
         data = self.strategy.session_pop('partial_pipeline')
-        idx, xargs, xkwargs = self.strategy.from_session(data)
+        idx, backend, xargs, xkwargs = self.strategy.from_session(data)
+        expect(backend).to.equal(self.backend.name)
         user = self.strategy.continue_pipeline(pipeline_index=idx,
                                                *xargs, **xkwargs)
 

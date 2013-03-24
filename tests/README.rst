@@ -33,8 +33,6 @@ a lot to work on, like:
     * Frameworks support
     * Failure cases (like authentication canceled, etc)
     * Extra data saving
-    * Application actions
-        - Partial pipeline
 
 .. _HTTPretty: https://github.com/gabrielfalcao/HTTPretty
 .. _tests: https://github.com/omab/python-social-auth/tree/master/tests

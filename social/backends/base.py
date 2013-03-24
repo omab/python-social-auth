@@ -127,20 +127,6 @@ class BaseAuth(object):
         """
         return self.strategy.get_user(user_id)
 
-    def to_session_dict(self, next_idx, *args, **kwargs):
-        """Returns dict to store on session for partial pipeline."""
-        return self.strategy.to_session_dict(next=next_idx, backend=self,
-                                             *args, **kwargs)
-
-    def from_session_dict(self, session, *args, **kwargs):
-        """Takes session saved data to continue pipeline and merges with any
-        new extra argument needed. Returns tuple with next pipeline index
-        entry, arguments and keyword arguments to continue the process."""
-        next, saved_args, saved_kwargs = self.strategy.from_session(session)
-        saved_args = args[:] + tuple(saved_args)
-        saved_kwargs.update(kwargs)
-        return (next, saved_args, saved_kwargs)
-
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""
         kwargs.update({'backend': self})

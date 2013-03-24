@@ -99,9 +99,8 @@ class BaseStrategy(object):
         }
 
     def from_session(self, session):
-        saved_args = session['args']
-        saved_kwargs = session['kwargs']
-        return session['next'], saved_args, saved_kwargs
+        return session['next'], session['backend'], \
+               session['args'], session['kwargs']
 
     def clean_partial_pipeline(self):
         self.session_pop('partial_pipeline')

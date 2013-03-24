@@ -114,7 +114,7 @@ class BaseActionTest(unittest.TestCase):
                                    body=self.user_data_body or '',
                                    content_type='text/json')
         self.strategy.set_request_data(location_query)
-        out_url = do_complete(
+        redirect = do_complete(
             self.strategy,
             user=self.user,
             login=lambda strategy, user: strategy.session_set('username',
@@ -123,4 +123,78 @@ class BaseActionTest(unittest.TestCase):
         expect(self.strategy.session_get('username')).to.equal(
             self.expected_username
         )
-        expect(out_url.url).to.equal(self.login_redirect_url)
+        expect(redirect.url).to.equal(self.login_redirect_url)
+
+    def do_login_with_partial_pipeline(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GITHUB_KEY': 'a-key',
+            'SOCIAL_AUTH_GITHUB_SECRET': 'a-secret-key',
+            'SOCIAL_AUTH_LOGIN_REDIRECT_URL': self.login_redirect_url,
+            'SOCIAL_AUTH_AUTHENTICATION_BACKENDS': (
+                'social.backends.github.GithubOAuth2',
+            ),
+            'SOCIAL_AUTH_PIPELINE': (
+                'social.pipeline.partial.save_status_to_session',
+                'tests.pipeline.ask_for_password',
+                'social.pipeline.social_auth.social_user',
+                'social.pipeline.user.get_username',
+                'social.pipeline.user.create_user',
+                'social.pipeline.social_auth.associate_user',
+                'social.pipeline.social_auth.load_extra_data',
+                'tests.pipeline.set_password',
+                'social.pipeline.user.user_details'
+            )
+        })
+        start_url = do_auth(self.strategy).url
+        target_url = self.strategy.build_absolute_uri(
+            '/complete/github/?code=foobar'
+        )
+
+        start_query = parse_qs(urlparse(start_url).query)
+        location_url = target_url + ('?' in target_url and '&' or '?') + \
+                       'state=' + start_query['state']
+        location_query = parse_qs(urlparse(location_url).query)
+
+        HTTPretty.register_uri(HTTPretty.GET, start_url, status=301,
+                               location=location_url)
+        HTTPretty.register_uri(HTTPretty.GET, location_url, status=200,
+                               body='foobar')
+
+        response = requests.get(start_url)
+        expect(response.url).to.equal(location_url)
+        expect(response.text).to.equal('foobar')
+
+        HTTPretty.register_uri(HTTPretty.GET,
+                               uri=self.backend.ACCESS_TOKEN_URL,
+                               status=200,
+                               body=self.access_token_body or '',
+                               content_type='text/json')
+
+        if self.user_data_url:
+            HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
+                                   body=self.user_data_body or '',
+                                   content_type='text/json')
+        self.strategy.set_request_data(location_query)
+
+        def _login(strategy, user):
+            strategy.session_set('username', user.username)
+
+        redirect = do_complete(self.strategy, user=self.user, login=_login)
+        url = self.strategy.build_absolute_uri('/password')
+        expect(redirect.url).to.equal(url)
+        HTTPretty.register_uri(HTTPretty.GET, redirect.url, status=200,
+                               body='foobar')
+        HTTPretty.register_uri(HTTPretty.POST, redirect.url, status=200)
+
+        password = 'foobar'
+        requests.get(url)
+        requests.post(url, data={'password': password})
+        data = parse_qs(HTTPretty.last_request.body)
+        expect(data['password']).to.equal(password)
+        self.strategy.session_set('password', data['password'])
+
+        redirect = do_complete(self.strategy, user=self.user, login=_login)
+        expect(self.strategy.session_get('username')).to.equal(
+            self.expected_username
+        )
+        expect(redirect.url).to.equal(self.login_redirect_url)
