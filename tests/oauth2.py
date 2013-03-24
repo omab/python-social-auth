@@ -25,15 +25,12 @@ class OAuth2Test(unittest.TestCase):
     settings = None
     partial_login_settings = None
 
-    def __init__(self, *args, **kwargs):
+    def setUp(self):
+        HTTPretty.enable()
         self.backend = module_member(self.backend_path)
         self.complete_url = '/complete/{0}/?code=foobar'.format(
             self.backend.name
         )
-        super(OAuth2Test, self).__init__(*args, **kwargs)
-
-    def setUp(self):
-        HTTPretty.enable()
         self.strategy = TestStrategy(self.backend, TestStorage)
         User.reset_cache()
         TestUserSocialAuth.reset_cache()
@@ -42,6 +39,8 @@ class OAuth2Test(unittest.TestCase):
 
     def tearDown(self):
         self.strategy = None
+        self.complete_url = None
+        self.backend = None
         User.reset_cache()
         TestUserSocialAuth.reset_cache()
         TestNonce.reset_cache()

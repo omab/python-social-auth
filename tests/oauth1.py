@@ -27,17 +27,14 @@ class OAuth1Test(unittest.TestCase):
     partial_login_settings = None
     request_token_body = None
 
-    def __init__(self, *args, **kwargs):
+    def setUp(self):
+        HTTPretty.enable()
         self.backend = module_member(self.backend_path)
         self.complete_url = '/complete/{0}/?{1}&{2}'.format(
             self.backend.name,
             'oauth_verifier=bazqux',
             'oauth_token=foobar'
         )
-        super(OAuth1Test, self).__init__(*args, **kwargs)
-
-    def setUp(self):
-        HTTPretty.enable()
         self.strategy = TestStrategy(self.backend, TestStorage)
         User.reset_cache()
         TestUserSocialAuth.reset_cache()
@@ -46,6 +43,8 @@ class OAuth1Test(unittest.TestCase):
 
     def tearDown(self):
         self.strategy = None
+        self.complete_url = None
+        self.backend = None
         User.reset_cache()
         TestUserSocialAuth.reset_cache()
         TestNonce.reset_cache()
