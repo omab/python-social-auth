@@ -144,9 +144,15 @@ class TestAssociation(AssociationMixin, BaseModel):
         assoc.save()
 
     @classmethod
-    def get(cls, *args, **kwargs):
-        return [TestAssociation.cache.get((kwargs.get('server_url'),
-                                  kwargs.get('handle')))]
+    def get(cls, server_url=None, handle=None):
+        result = []
+        for assoc in TestAssociation.cache.values():
+            if server_url and assoc.server_url != server_url:
+                continue
+            if handle and assoc.handle != handle:
+                continue
+            result.append(assoc)
+        return result
 
     @classmethod
     def remove(cls, ids_to_delete):
