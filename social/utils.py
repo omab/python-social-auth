@@ -63,17 +63,17 @@ def sanitize_redirect(host, redirect_to):
     and returns it, else returns None, similar as how's it done
     on django.contrib.auth.views.
 
-    >>> print sanitize_redirect('myapp.com', None)
+    >>> print(sanitize_redirect('myapp.com', None))
     None
-    >>> print sanitize_redirect('myapp.com', '')
+    >>> print(sanitize_redirect('myapp.com', ''))
     None
-    >>> print sanitize_redirect('myapp.com', {})
+    >>> print(sanitize_redirect('myapp.com', {}))
     None
-    >>> print sanitize_redirect('myapp.com', 'http://notmyapp.com/path/')
+    >>> print(sanitize_redirect('myapp.com', 'http://notmyapp.com/path/'))
     None
-    >>> print sanitize_redirect('myapp.com', 'http://myapp.com/path/')
+    >>> print(sanitize_redirect('myapp.com', 'http://myapp.com/path/'))
     http://myapp.com/path/
-    >>> print sanitize_redirect('myapp.com', '/path/')
+    >>> print(sanitize_redirect('myapp.com', '/path/'))
     /path/
     """
     # Quick sanity check.

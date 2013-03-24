@@ -63,9 +63,7 @@ class MailruOAuth2(BaseOAuth2):
         param_list = sorted(list(item + '=' + data[item] for item in data))
         data['sig'] = md5(''.join(param_list) + secret).hexdigest()
         try:
-            out = self.get_json('http://www.appsmail.ru/platform/api',
+            return self.get_json('http://www.appsmail.ru/platform/api',
                                  params=data)
-            print "OUT:", out
-            return out
         except (TypeError, KeyError, IOError, ValueError, IndexError):
             return None
