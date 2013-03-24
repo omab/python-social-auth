@@ -36,10 +36,6 @@ class OAuth1Test(unittest.TestCase):
             'oauth_token=foobar'
         )
         self.strategy = TestStrategy(self.backend, TestStorage)
-        User.reset_cache()
-        TestUserSocialAuth.reset_cache()
-        TestNonce.reset_cache()
-        TestAssociation.reset_cache()
 
     def tearDown(self):
         self.strategy = None

@@ -32,10 +32,6 @@ class OAuth2Test(unittest.TestCase):
             self.backend.name
         )
         self.strategy = TestStrategy(self.backend, TestStorage)
-        User.reset_cache()
-        TestUserSocialAuth.reset_cache()
-        TestNonce.reset_cache()
-        TestAssociation.reset_cache()
 
     def tearDown(self):
         self.strategy = None
