@@ -34,16 +34,16 @@ Linkedin API and store the information in ``UserSocialAuth.extra_data``, you
 would add these settings::
 
     # Add email to requested authorizations.
-    LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', ...]
+    SOCIAL_AUTH_LINKEDIN_SCOPE = ['r_basicprofile', 'r_emailaddress', ...]
     # Add the fields so they will be requested from linkedin.
-    LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
+    SOCIAL_AUTH_LINKEDIN_EXTRA_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
     # Arrange to add the fields to UserSocialAuth.extra_data
-    LINKEDIN_EXTRA_DATA = [('id', 'id'),
-                           ('first-name', 'first_name'),
-                           ('last-name', 'last_name'),
-                           ('email-address', 'email_address'),
-                           ('headline', 'headline'),
-                           ('industry', 'industry')]
+    SOCIAL_AUTH_LINKEDIN_EXTRA_DATA = [('id', 'id'),
+                                       ('first-name', 'first_name'),
+                                       ('last-name', 'last_name'),
+                                       ('email-address', 'email_address'),
+                                       ('headline', 'headline'),
+                                       ('industry', 'industry')]
 
 .. _LinkedIn fields selectors: http://developer.linkedin.com/docs/DOC-1014
 .. _LinkedIn Scopes: https://developer.linkedin.com/documents/authentication#granting
