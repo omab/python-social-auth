@@ -11,7 +11,6 @@ from social.exceptions import AuthCanceled, AuthUnknownError
 
 
 class BaseLinkedinAuth(object):
-    SCOPE_SEPARATOR = '+'
     EXTRA_DATA = [('id', 'id'),
                   ('first-name', 'first_name'),
                   ('last-name', 'last_name')]
@@ -40,7 +39,7 @@ class BaseLinkedinAuth(object):
         try:
             raw_xml = self.profile_data(access_token, *args, **kwargs)
             return self.to_dict(ElementTree.fromstring(raw_xml))
-        except (ValueError, KeyError, IOError):
+        except (ValueError, KeyError, IOError, ExpatError):
             return None
 
     def to_dict(self, xml):
@@ -64,6 +63,7 @@ class BaseLinkedinAuth(object):
 class LinkedinOAuth(BaseLinkedinAuth, BaseOAuth1):
     """Linkedin OAuth authentication backend"""
     name = 'linkedin'
+    SCOPE_SEPARATOR = '+'
     AUTHORIZATION_URL = 'https://www.linkedin.com/uas/oauth/authenticate'
     REQUEST_TOKEN_URL = 'https://api.linkedin.com/uas/oauth/requestToken'
     ACCESS_TOKEN_URL = 'https://api.linkedin.com/uas/oauth/accessToken'
@@ -96,6 +96,7 @@ class LinkedinOAuth(BaseLinkedinAuth, BaseOAuth1):
 
 class LinkedinOAuth2(BaseLinkedinAuth, BaseOAuth2):
     name = 'linkedin-oauth2'
+    SCOPE_SEPARATOR = ' '
     AUTHORIZATION_URL = 'https://www.linkedin.com/uas/oauth2/authorization'
     ACCESS_TOKEN_URL = 'https://www.linkedin.com/uas/oauth2/accessToken'
     ACCESS_TOKEN_METHOD = 'POST'
