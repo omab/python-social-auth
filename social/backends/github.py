@@ -11,6 +11,8 @@ setting, it must be a list of values to request.
 By default account id and token expiration time are stored in extra_data
 field, check OAuthBackend class for details on how to extend it.
 """
+from requests import HTTPError
+
 from social.backends.oauth import BaseOAuth2
 
 
@@ -39,3 +41,34 @@ class GithubOAuth2(BaseOAuth2):
             })
         except ValueError:
             return None
+
+
+class GithubOrganizationOAuth2(GithubOAuth2):
+    """Github OAuth2 authentication backend for organizations"""
+    name = 'github-org'
+
+    def get_user_details(self, response):
+        """Return user details from Github account"""
+        return {'username': response.get('login'),
+                'email': response.get('email') or '',
+                'first_name': response.get('name')}
+
+    def user_data(self, access_token, *args, **kwargs):
+        """Loads user data from service"""
+        user_data = super(GithubOrganizationOAuth2, self).user_data(
+            access_token, *args, **kwargs
+        )
+        if user_data:
+            org = self.setting('NAME')
+            url = 'https://api.github.com/orgs/{org}/members/{username}'\
+                        .format(org=org, username=user_data.get('login'))
+            try:
+                self.request(url, params={'access_token': access_token})
+            except HTTPError as err:
+                user_data = None
+            else:
+                # if the user is a member of the organization, response code
+                # will be 204, see http://bit.ly/ZS6vFl
+                if err.response.status_code != 204:
+                    user_data = None
+        return user_data

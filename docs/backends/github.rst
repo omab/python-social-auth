@@ -15,9 +15,21 @@ Github works similar to Facebook (OAuth).
 
       SOCIAL_AUTH_GITHUB_EXTENDED_PERMISSIONS = [...]
 
-- Optional ``GitHub Organization``, which if set will allow you to constrain
-  authentication to a given GitHub organization::
 
-      SOCIAL_AUTH_GITHUB_ORGANIZATION = ''
+Github for Organizations
+------------------------
+
+When defining authentication for organizations, use the
+``GithubOrganizationOAuth2`` backend instead. The settings are the same than
+the non-organization backend, but the names must be::
+
+    SOCIAL_AUTH_GITHUB_ORG_*
+
+Be sure to define the organization name using the setting::
+
+      SOCIAL_AUTH_GITHUB_ORG_NAME = ''
+
+This name will be used to check that the user really belongs to the given
+organization and discard it in case he's not part of it.
 
 .. _GitHub Developers: https://github.com/settings/applications/new
