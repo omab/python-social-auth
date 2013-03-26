@@ -159,6 +159,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.readability.ReadabilityOAuth',
     'social.backends.skyrock.SkyrockOAuth',
     'social.backends.tumblr.TumblrOAuth',
+    'social.backends.reddit.RedditOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
