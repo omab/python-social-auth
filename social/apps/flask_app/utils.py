@@ -18,6 +18,13 @@ def get_helper(name, do_import=False):
     return do_import and module_member(config) or config
 
 
+def load_strategy(*args, **kwargs):
+    backends = get_helper('AUTHENTICATION_BACKENDS')
+    strategy = get_helper('STRATEGY')
+    storage = get_helper('STORAGE')
+    return get_strategy(backends, strategy, storage, *args, **kwargs)
+
+
 def strategy(redirect_uri=None):
     def decorator(func):
         @wraps(func)
@@ -25,12 +32,8 @@ def strategy(redirect_uri=None):
             uri = redirect_uri
             if uri and not uri.startswith('/'):
                 uri = url_for(uri, backend=backend)
-            backends = get_helper('AUTHENTICATION_BACKENDS')
-            strategy = get_helper('STRATEGY')
-            storage = get_helper('STORAGE')
-            g.strategy = get_strategy(backends, strategy, storage, request,
-                                      backend, redirect_uri=uri, *args,
-                                      **kwargs)
+            g.strategy = load_strategy(request=request, backend=backend,
+                                       redirect_uri=uri, *args, **kwargs)
             return func(backend, *args, **kwargs)
         return wrapper
     return decorator

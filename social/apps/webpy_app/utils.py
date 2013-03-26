@@ -19,21 +19,22 @@ def get_helper(name, do_import=False):
     return do_import and module_member(config) or config
 
 
+def load_strategy(*args, **kwargs):
+    backends = get_helper('AUTHENTICATION_BACKENDS')
+    strategy = get_helper('STRATEGY')
+    storage = get_helper('STORAGE')
+    return get_strategy(backends, strategy, storage, *args, **kwargs)
+
+
 def strategy(redirect_uri=None):
     def decorator(func):
         @wraps(func)
         def wrapper(self, backend=None, *args, **kwargs):
             uri = redirect_uri
-
             if uri and backend and '%(backend)s' in uri:
                 uri = uri % {'backend': backend}
-
-            backends = get_helper('AUTHENTICATION_BACKENDS')
-            strategy = get_helper('STRATEGY')
-            storage = get_helper('STORAGE')
-            self.strategy = get_strategy(backends, strategy, storage, web.ctx,
-                                         backend, redirect_uri=uri, *args,
-                                         **kwargs)
+            self.strategy = load_strategy(request=web.ctx, backend=backend,
+                                          redirect_uri=uri, *args, **kwargs)
             if backend:
                 return func(self, backend=backend, *args, **kwargs)
             else:

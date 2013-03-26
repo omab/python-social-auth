@@ -16,6 +16,10 @@ Strategy = module_member(STRATEGY)
 Storage = module_member(STORAGE)
 
 
+def load_strategy(*args, **kwargs):
+    return get_strategy(BACKENDS, STRATEGY, STORAGE, *args, **kwargs)
+
+
 def strategy(redirect_uri=None):
     def decorator(func):
         @wraps(func)
@@ -23,9 +27,8 @@ def strategy(redirect_uri=None):
             uri = redirect_uri
             if uri and not uri.startswith('/'):
                 uri = reverse(redirect_uri, args=(backend,))
-            request.strategy = get_strategy(BACKENDS, STRATEGY, STORAGE,
-                                            request, backend, redirect_uri=uri,
-                                            *args, **kwargs)
+            request.strategy = load_strategy(request=request, backend=backend,
+                                             redirect_uri=uri, *args, **kwargs)
             return func(request, backend, *args, **kwargs)
         return wrapper
     return decorator
