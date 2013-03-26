@@ -86,11 +86,11 @@ class FacebookOAuth2(BaseOAuth2):
                 raise AuthException(self)
 
     @classmethod
-    def process_refresh_token_response(cls, response):
+    def process_refresh_token_response(cls, response, *args, **kwargs):
         return parse_qs(response.content)
 
     @classmethod
-    def refresh_token_params(cls, token):
+    def refresh_token_params(cls, token, *args, **kwargs):
         client_id, client_secret = cls.get_key_and_secret()
         return {
             'fb_exchange_token': token,

@@ -32,12 +32,13 @@ class BaseStrategy(object):
                     '0123456789'
 
     def __init__(self, backend=None, storage=None, request=None, tpl=None,
-                 *args, **kwargs):
+                 backends=None, *args, **kwargs):
         if not isinstance(tpl, BaseTemplateStrategy):
             tpl = tpl(self)
         self.tpl = tpl
         self.request = request
         self.storage = storage
+        self.backends = backends
         if backend:
             self.backend_name = backend.name
             self.backend = backend(strategy=self, *args, **kwargs)

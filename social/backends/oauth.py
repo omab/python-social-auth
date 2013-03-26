@@ -199,6 +199,7 @@ class BaseOAuth2(OAuthAuth):
     AUTHORIZATION_URL = None
     ACCESS_TOKEN_URL = None
     REFRESH_TOKEN_URL = None
+    REFRESH_TOKEN_METHOD = 'POST'
     RESPONSE_TYPE = 'code'
     REDIRECT_STATE = True
     STATE_PARAMETER = True
@@ -315,7 +316,7 @@ class BaseOAuth2(OAuthAuth):
         kwargs.update({'response': response, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
 
-    def refresh_token_params(self, token):
+    def refresh_token_params(self, token, *args, **kwargs):
         client_id, client_secret = self.get_key_and_secret()
         return {
             'refresh_token': token,
@@ -324,12 +325,12 @@ class BaseOAuth2(OAuthAuth):
             'client_secret': client_secret
         }
 
-    def process_refresh_token_response(self, response):
+    def process_refresh_token_response(self, response, *args, **kwargs):
         return response.json()
 
-    def refresh_token(self, token):
-        return self.process_refresh_token_response(
-            self.request(self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL,
-                         params=self.refresh_token_params(token),
-                         headers=self.auth_headers())
-        )
+    def refresh_token(self, token, *args, **kwargs):
+        params = self.refresh_token_params(token, *args, **kwargs)
+        request = self.request(self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL,
+                               params=params, headers=self.auth_headers(),
+                               method=self.REFRESH_TOKEN_METHOD)
+        return self.process_refresh_token_response(request, *args, **kwargs)

@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from openid.association import Association as OpenIdAssociation
 
 from social.utils import utc
+from social.backends.utils import get_backend
 
 
 CLEAN_USERNAME_REGEX = re.compile(r'[^\w.@+-_]+', re.UNICODE)
@@ -18,31 +19,29 @@ class UserMixin(object):
     uid = None
     extra_data = None
 
-    def get_backend(self):
-        # Make import here to avoid recursive imports :-/
-        from social_auth.backends import get_backends
-        return get_backends().get(self.provider)
+    def get_backend(self, strategy):
+        return get_backend(strategy.backends, self.provider)
 
     @property
-    def tokens(self):
+    def tokens(self, strategy):
         """Return access_token stored in extra_data or None"""
-        backend = self.get_backend()
+        backend = self.get_backend(strategy)
         if backend:
             return backend.tokens(self)
         else:
             return {}
 
-    def refresh_token(self):
-        data = self.extra_data
-        if 'refresh_token' in data or 'access_token' in data:
-            backend = self.get_backend()
-            if hasattr(backend, 'refresh_token'):
-                token = data.get('refresh_token') or data.get('access_token')
-                response = backend.refresh_token(token)
-                self.extra_data.update(
-                    backend.extra_data(self.user, self.uid, response)
-                )
-                self.save()
+    def refresh_token(self, strategy, *args, **kwargs):
+        token = self.extra_data.get('refresh_token') or \
+               self.extra_data.get('access_token')
+        backend = self.get_backend(strategy)
+        if token and backend and hasattr(backend, 'refresh_token'):
+            backend = backend(strategy=strategy)
+            response = backend.refresh_token(token, *args, **kwargs)
+            self.extra_data.update(
+                backend.extra_data(self.user, self.uid, response)
+            )
+            self.save()
 
     def expiration_datetime(self):
         """Return provider session live seconds. Returns a timedelta ready to
