@@ -42,6 +42,7 @@ Here's the list of currently supported backends.
    persona
    rdio
    readability
+   reddit
    shopify
    skyrock
    soundcloud
