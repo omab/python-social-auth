@@ -27,6 +27,8 @@ class DjangoStrategy(BaseStrategy):
         return getattr(settings, name)
 
     def request_data(self, merge=True):
+        if not self.request:
+            return {}
         if merge:
             data = self.request.REQUEST
         elif self.request.method == 'POST':
@@ -36,7 +38,8 @@ class DjangoStrategy(BaseStrategy):
         return data
 
     def request_host(self):
-        return self.request.get_host()
+        if self.request:
+            return self.request.get_host()
 
     def redirect(self, url):
         return HttpResponseRedirect(url)
@@ -61,17 +64,21 @@ class DjangoStrategy(BaseStrategy):
         return authenticate(*args, **kwargs)
 
     def session_get(self, name, default=None):
-        return self.request.session.get(name, default)
+        if self.request:
+            return self.request.session.get(name, default)
 
     def session_set(self, name, value):
-        self.request.session[name] = value
-        self.request.session.modified = True
+        if self.request:
+            self.request.session[name] = value
+            self.request.session.modified = True
 
     def session_pop(self, name):
-        self.request.session.pop(name, None)
+        if self.request:
+            self.request.session.pop(name, None)
 
     def session_setdefault(self, name, value):
-        return self.request.session.setdefault(name, value)
+        if self.request:
+            return self.request.session.setdefault(name, value)
 
     def to_session(self, next, backend, *args, **kwargs):
         """Returns dict to store on session for partial pipeline."""
@@ -94,7 +101,10 @@ class DjangoStrategy(BaseStrategy):
                dict((key, self._model(val)) for key, val in kwargs.items())
 
     def build_absolute_uri(self, path=None):
-        return self.request.build_absolute_uri(path)
+        if self.request:
+            return self.request.build_absolute_uri(path)
+        else:
+            return path
 
     def random_string(self, length=12, chars=BaseStrategy.ALLOWED_CHARS):
         try:
