@@ -9,6 +9,7 @@ values.
 By default account id is stored in extra_data field, check OAuthBackend
 class for details on how to extend it.
 """
+from social.exceptions import AuthCanceled
 from social.backends.oauth import BaseOAuth1
 
 
@@ -42,6 +43,6 @@ class SkyrockOAuth(BaseOAuth1):
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         if 'denied' in self.data:
-            raise ValueError('Authentication denied')
+            raise AuthCanceled('Authentication denied')
         else:
             return super(SkyrockOAuth, self).auth_complete(*args, **kwargs)
