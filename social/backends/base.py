@@ -25,13 +25,12 @@ class BaseAuth(object):
         self.titled_name = self.name.upper().replace('-', '_')
         self.strategy = strategy
         self.redirect_uri = redirect_uri
+        self.data = {}
         if strategy:
             self.data = self.strategy.request_data()
             self.redirect_uri = self.strategy.build_absolute_uri(
                 self.redirect_uri
             )
-        else:
-            self.data = {}
 
     def setting(self, name, default=None):
         """Return setting value from strategy"""
