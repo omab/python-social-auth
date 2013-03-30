@@ -1,4 +1,5 @@
 httpretty>=0.5.11
+coverage>=3.6
 nose>=1.2.1
 requests>=1.1.0
 sure>=1.2.0
