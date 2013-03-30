@@ -66,13 +66,11 @@ class FacebookOAuth2(BaseOAuth2):
         return self.do_auth(access_token, response=response,
                             *args, **kwargs)
 
-    @classmethod
-    def process_refresh_token_response(cls, response, *args, **kwargs):
+    def process_refresh_token_response(self, response, *args, **kwargs):
         return parse_qs(response.content)
 
-    @classmethod
-    def refresh_token_params(cls, token, *args, **kwargs):
-        client_id, client_secret = cls.get_key_and_secret()
+    def refresh_token_params(self, token, *args, **kwargs):
+        client_id, client_secret = self.get_key_and_secret()
         return {
             'fb_exchange_token': token,
             'grant_type': 'fb_exchange_token',
@@ -97,27 +95,6 @@ class FacebookOAuth2(BaseOAuth2):
             data['expires'] = response['expires']
         kwargs.update({'backend': self, 'response': data})
         return self.strategy.authenticate(*args, **kwargs)
-
-    def load_signed_request(self, signed_request):
-        def base64_url_decode(data):
-            data = data.encode('ascii')
-            data += '=' * (4 - (len(data) % 4))
-            return base64.urlsafe_b64decode(data)
-
-        key, secret = self.get_key_and_secret()
-        try:
-            sig, payload = signed_request.split('.', 1)
-        except ValueError:
-            pass  # ignore if can't split on dot
-        else:
-            sig = base64_url_decode(sig)
-            data = json.loads(base64_url_decode(payload))
-            expected_sig = hmac.new(secret, msg=payload,
-                                    digestmod=hashlib.sha256).digest()
-            # allow the signed_request to function for upto 1 day
-            if sig == expected_sig and \
-               data['issued_at'] > (time.time() - 86400):
-                return data
 
 
 class FacebookAppOAuth2(FacebookOAuth2):
@@ -165,3 +142,24 @@ class FacebookAppOAuth2(FacebookOAuth2):
         }
         html = self.setting('LOCAL_HTML', 'facebook.html')
         return self.strategy.render_html(html, ctx)
+
+    def load_signed_request(self, signed_request):
+        def base64_url_decode(data):
+            data = data.encode('ascii')
+            data += '=' * (4 - (len(data) % 4))
+            return base64.urlsafe_b64decode(data)
+
+        key, secret = self.get_key_and_secret()
+        try:
+            sig, payload = signed_request.split('.', 1)
+        except ValueError:
+            pass  # ignore if can't split on dot
+        else:
+            sig = base64_url_decode(sig)
+            data = json.loads(base64_url_decode(payload))
+            expected_sig = hmac.new(secret, msg=payload,
+                                    digestmod=hashlib.sha256).digest()
+            # allow the signed_request to function for upto 1 day
+            if sig == expected_sig and \
+               data['issued_at'] > (time.time() - 86400):
+                return data

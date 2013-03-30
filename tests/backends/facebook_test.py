@@ -1,6 +1,8 @@
 import json
 
 from social.p3 import urlencode
+from social.exceptions import AuthUnknownError
+
 from tests.oauth import OAuth2Test
 
 
@@ -29,3 +31,15 @@ class FacebookOAuth2Test(OAuth2Test):
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
+
+
+class FacebookOAuth2WrongUserDataTest(FacebookOAuth2Test):
+    user_data_body = 'null'
+
+    def test_login(self):
+        self.do_login.when.called_with().should.throw(AuthUnknownError)
+
+    def test_partial_pipeline(self):
+        self.do_partial_pipeline.when.called_with().should.throw(
+            AuthUnknownError
+        )
