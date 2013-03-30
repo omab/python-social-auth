@@ -38,9 +38,6 @@ class WeiboOAuth2(BaseOAuth2):
                 'first_name': response.get('screen_name', '')}
 
     def user_data(self, access_token, *args, **kwargs):
-        try:
-            return self.get_json('https://api.weibo.com/2/users/show.json',
-                                 params={'access_token': access_token,
-                                         'uid': args[0]['uid']})
-        except (ValueError, KeyError, IOError):
-            return None
+        return self.get_json('https://api.weibo.com/2/users/show.json',
+                             params={'access_token': access_token,
+                                     'uid': args[0]['uid']})

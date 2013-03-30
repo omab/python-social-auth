@@ -6,7 +6,6 @@ SOCIAL_AUTH_READABILITY_CONSUMER_KEY and
 SOCIAL_AUTH_READABILITY_CONSUMER_SECRET must be defined with the values given
 by Readability in the Connections page of your account settings.
 """
-from social.exceptions import AuthCanceled
 from social.backends.oauth import BaseOAuth1
 
 
@@ -33,10 +32,3 @@ class ReadabilityOAuth(BaseOAuth1):
     def user_data(self, access_token):
         return self.get_json(READABILITY_API + '/users/_current',
                              auth=self.oauth_auth(access_token))
-
-    def auth_complete(self, *args, **kwargs):
-        """Completes login process, must return user instance"""
-        if 'error' in self.data:
-            raise AuthCanceled(self)
-        else:
-            return super(ReadabilityOAuth, self).auth_complete(*args, **kwargs)

@@ -12,7 +12,6 @@ By default account id is stored in extra_data field, check OAuthBackend
 class for details on how to extend it.
 """
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthCanceled
 
 
 class DailymotionOAuth2(BaseOAuth2):
@@ -32,12 +31,6 @@ class DailymotionOAuth2(BaseOAuth2):
         """Return user data provided"""
         return self.get_json('https://api.dailymotion.com/me/',
                              params={'access_token': access_token})
-
-    def auth_complete(self, *args, **kwargs):
-        """Completes login process, must return user instance"""
-        if 'denied' in self.data:
-            raise AuthCanceled(self)
-        return super(DailymotionOAuth2, self).auth_complete(*args, **kwargs)
 
     def oauth_request(self, token, url, extra_params=None):
         return extra_params or {}

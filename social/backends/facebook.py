@@ -18,12 +18,9 @@ import json
 import base64
 import hashlib
 
-from requests import HTTPError
-
 from social.utils import parse_qs
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthException, AuthCanceled, AuthFailed, \
-                              AuthTokenError, AuthUnknownError
+from social.exceptions import AuthException, AuthCanceled, AuthUnknownError
 
 
 class FacebookOAuth2(BaseOAuth2):
@@ -50,40 +47,24 @@ class FacebookOAuth2(BaseOAuth2):
         """Loads user data from service"""
         params = self.setting('PROFILE_EXTRA_PARAMS', {})
         params['access_token'] = access_token
-        try:
-            return self.get_json('https://graph.facebook.com/me',
-                                 params=params)
-        except ValueError:
-            return None
-        except HTTPError:
-            raise AuthTokenError(self)
+        return self.get_json('https://graph.facebook.com/me',
+                             params=params)
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
-        if 'code' in self.data:
-            state = self.validate_state()
-            key, secret = self.get_key_and_secret()
-            url = self.ACCESS_TOKEN_URL
-            params = {
-                'client_id': key,
-                'redirect_uri': self.get_redirect_uri(state),
-                'client_secret': secret,
-                'code': self.data['code']
-            }
-            try:
-                response = self.get_querystring(url, params=params)
-            except HTTPError:
-                raise AuthFailed(self, 'There was an error authenticating the'
-                                       'the app')
-
-            access_token = response['access_token']
-            expires = 'expires' in response and response['expires'] or None
-            return self.do_auth(access_token, expires=expires, *args, **kwargs)
-        else:
-            if self.data.get('error') == 'access_denied':
-                raise AuthCanceled(self)
-            else:
-                raise AuthException(self)
+        self.process_error(self.data)
+        state = self.validate_state()
+        key, secret = self.get_key_and_secret()
+        url = self.ACCESS_TOKEN_URL
+        response = self.get_querystring(url, params={
+            'client_id': key,
+            'redirect_uri': self.get_redirect_uri(state),
+            'client_secret': secret,
+            'code': self.data['code']
+        })
+        access_token = response['access_token']
+        return self.do_auth(access_token, response=response,
+                            *args, **kwargs)
 
     @classmethod
     def process_refresh_token_response(cls, response, *args, **kwargs):
@@ -99,7 +80,7 @@ class FacebookOAuth2(BaseOAuth2):
             'client_secret': client_secret
         }
 
-    def do_auth(self, access_token, expires=None, *args, **kwargs):
+    def do_auth(self, access_token, response, *args, **kwargs):
         data = self.user_data(access_token)
 
         if not isinstance(data, dict):
@@ -112,9 +93,8 @@ class FacebookOAuth2(BaseOAuth2):
                                          'users Facebook data')
 
         data['access_token'] = access_token
-        if expires:  # expires is None on offline access
-            data['expires'] = expires
-
+        if 'expires' in response:
+            data['expires'] = response['expires']
         kwargs.update({'backend': self, 'response': data})
         return self.strategy.authenticate(*args, **kwargs)
 

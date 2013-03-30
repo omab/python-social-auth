@@ -6,7 +6,6 @@ STRIPE_APP_ID and STRIPE_API_SECRET must be defined with the values
 given by Stripe application registration process.
 """
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthFailed, AuthCanceled
 
 
 class StripeOAuth2(BaseOAuth2):
@@ -30,14 +29,6 @@ class StripeOAuth2(BaseOAuth2):
         """Return user details from Stripe account"""
         return {'username': response.get('stripe_user_id'),
                 'email': ''}
-
-    def process_error(self, data):
-        if self.data.get('error'):
-            error = self.data.get('error_description') or self.data['error']
-            if self.data['error'] == 'access_denied':
-                raise AuthCanceled(self, error)
-            else:
-                raise AuthFailed(self, error)
 
     def auth_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()

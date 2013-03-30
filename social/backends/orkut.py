@@ -10,8 +10,6 @@ can be specified by defining ORKUT_EXTRA_DATA setting.
 OAuth settings ORKUT_CONSUMER_KEY and ORKUT_CONSUMER_SECRET are needed
 to enable this service support.
 """
-import json
-
 from social.backends.google import GoogleOAuth
 
 
@@ -45,10 +43,7 @@ class OrkutOAuth(GoogleOAuth):
                   'scope': self.SCOPE_SEPARATOR.join(scope)}
         url = 'http://www.orkut.com/social/rpc'
         request = self.oauth_request(access_token, url, params)
-        try:
-            return self.get_json(request.to_url())['data']
-        except (ValueError, KeyError):
-            return None
+        return self.get_json(request.to_url())['data']
 
     def oauth_request(self, token, url, extra_params=None):
         extra_params = extra_params or {}

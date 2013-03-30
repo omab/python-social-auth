@@ -4,10 +4,8 @@ Linkedin OAuth support
 No extra configurations are needed to make this work.
 """
 from xml.etree import ElementTree
-from xml.parsers.expat import ExpatError
 
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
-from social.exceptions import AuthCanceled, AuthUnknownError
 
 
 class BaseLinkedinAuth(object):
@@ -36,11 +34,8 @@ class BaseLinkedinAuth(object):
         return self.USER_DETAILS % fields_selectors
 
     def user_data(self, access_token, *args, **kwargs):
-        try:
-            raw_xml = self.profile_data(access_token, *args, **kwargs)
-            return self.to_dict(ElementTree.fromstring(raw_xml))
-        except (ValueError, KeyError, IOError, ExpatError):
-            return None
+        raw_xml = self.profile_data(access_token, *args, **kwargs)
+        return self.to_dict(ElementTree.fromstring(raw_xml))
 
     def to_dict(self, xml):
         """Convert XML structure to dict recursively, repeated keys entries
@@ -72,17 +67,6 @@ class LinkedinOAuth(BaseLinkedinAuth, BaseOAuth1):
         """Return user data provided"""
         return self.oauth_request(access_token,
                                   self.user_details_url()).content
-
-    def auth_complete(self, *args, **kwargs):
-        """Complete auth process. Check LinkedIn error response."""
-        oauth_problem = self.data.get('oauth_problem')
-        if oauth_problem:
-            if oauth_problem == 'user_refused':
-                raise AuthCanceled(self, '')
-            else:
-                raise AuthUnknownError(self, 'LinkedIn error was %s' %
-                                                    oauth_problem)
-        return super(LinkedinOAuth, self).auth_complete(*args, **kwargs)
 
     def unauthorized_token(self):
         """Makes first request to oauth. Returns an unauthorized Token."""

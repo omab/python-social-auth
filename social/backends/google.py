@@ -54,13 +54,10 @@ class GoogleOAuth2(BaseGoogleAuth, BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Google API"""
-        try:
-            return self.get_json(
-                'https://www.googleapis.com/oauth2/v1/userinfo',
-                params={'access_token': access_token, 'alt': 'json'}
-            )
-        except (ValueError, KeyError, IOError):
-            return None
+        return self.get_json(
+            'https://www.googleapis.com/oauth2/v1/userinfo',
+            params={'access_token': access_token, 'alt': 'json'}
+        )
 
 
 class GoogleOAuth(BaseGoogleAuth, BaseOAuth1):

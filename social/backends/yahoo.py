@@ -23,7 +23,6 @@ OAuth 1.0 Yahoo backend
     Throws:
         AuthUnknownError - if user data retrieval fails (guid or profile)
 """
-from social.exceptions import AuthUnknownError
 from social.backends.open_id import OpenIdAuth
 from social.backends.oauth import BaseOAuth1
 
@@ -64,26 +63,18 @@ class YahooOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json(
-                'http://social.yahooapis.com/v1/user/%s/profile?format=json' %
-                    self._get_guid(access_token),
-                auth=self.oauth_auth(access_token)
-            )['profile']
-        except ValueError:
-            raise AuthUnknownError('Error during profile retrieval, '
-                                   'please, try again later')
+        return self.get_json(
+            'http://social.yahooapis.com/v1/user/%s/profile?format=json' %
+                self._get_guid(access_token),
+            auth=self.oauth_auth(access_token)
+        )['profile']
 
     def _get_guid(self, access_token):
         """
             Beause you have to provide GUID for every API request
             it's also returned during one of OAuth calls
         """
-        try:
-            return self.get_json(
-                'http://social.yahooapis.com/v1/me/guid?format=json',
-                auth=self.oauth_auth(access_token)
-            )['guid']['value']
-        except ValueError:
-            raise AuthUnknownError('Error during user id retrieval, '
-                                   'please, try again later')
+        return self.get_json(
+            'http://social.yahooapis.com/v1/me/guid?format=json',
+            auth=self.oauth_auth(access_token)
+        )['guid']['value']

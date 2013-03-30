@@ -54,9 +54,6 @@ class YandexOAuth2(BaseOAuth2):
                 'last_name': last_name}
 
     def user_data(self, access_token, response, *args, **kwargs):
-        try:
-            return self.get_json('https://login.yandex.ru/info',
-                                 params={'oauth_token': access_token,
-                                         'format': 'json'})
-        except (ValueError, IndexError):
-            return None
+        return self.get_json('https://login.yandex.ru/info',
+                             params={'oauth_token': access_token,
+                                     'format': 'json'})

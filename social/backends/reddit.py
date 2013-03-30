@@ -3,10 +3,8 @@ Reddit OAuth2 support as detailed at:
     https://github.com/reddit/reddit/wiki/OAuth2
 """
 import base64
-from requests import HTTPError
 
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthTokenError
 
 
 class RedditOAuth2(BaseOAuth2):
@@ -35,15 +33,10 @@ class RedditOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json(
-                'https://oauth.reddit.com/api/v1/me.json',
-                headers={'Authorization': 'bearer ' + access_token}
-            )
-        except ValueError:
-            return None
-        except HTTPError:
-            raise AuthTokenError(self)
+        return self.get_json(
+            'https://oauth.reddit.com/api/v1/me.json',
+            headers={'Authorization': 'bearer ' + access_token}
+        )
 
     def auth_headers(self):
         return {

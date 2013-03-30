@@ -68,6 +68,9 @@ class OAuthAuth(BaseAuth):
         """Loads user data from service. Implement in subclass"""
         return {}
 
+    def process_error(self, data):
+        return
+
 
 class BaseOAuth1(OAuthAuth):
     """Consumer based mechanism OAuth authentication, fill the needed
@@ -92,9 +95,16 @@ class BaseOAuth1(OAuthAuth):
         self.strategy.session_set(name, tokens)
         return self.oauth_authorization_request(token)
 
+    def process_error(self, data):
+        if 'oauth_problem' in data:
+            if data['oauth_problem'] == 'user_refused':
+                raise AuthCanceled(self, 'User refused the access')
+            raise AuthUnknownError(self, 'Error was ' + data['oauth_problem'])
+
     def auth_complete(self, *args, **kwargs):
         """Return user, might be logged in"""
         # Multiple unauthorized tokens are supported (see #521)
+        self.process_error(self.data)
         name = self.name + 'unauthorized_token_name'
         token = None
         unauthed_tokens = self.strategy.session_get(name, [])
@@ -265,11 +275,6 @@ class BaseOAuth2(OAuthAuth):
                 raise AuthStateForbidden(self)
         return state
 
-    def process_error(self, data):
-        if data.get('error'):
-            raise AuthFailed(self, data.get('error_description') or
-                                   data['error'])
-
     def auth_complete_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
         return {
@@ -286,6 +291,15 @@ class BaseOAuth2(OAuthAuth):
 
     def request_access_token(self, *args, **kwargs):
         return self.get_json(*args, **kwargs)
+
+    def process_error(self, data):
+        if data.get('error'):
+            if data['error'] == 'denied' or data['error'] == 'access_denied':
+                raise AuthCanceled(self, data.get('error_description', ''))
+            raise AuthFailed(self, data.get('error_description') or
+                                   data['error'])
+        elif 'denied' in data:
+            raise AuthCanceled(self, data['denied'])
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""

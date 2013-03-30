@@ -4,7 +4,6 @@ XING OAuth support
 No extra configurations are needed to make this work.
 """
 from social.backends.oauth import BaseOAuth1
-from social.exceptions import AuthCanceled, AuthUnknownError
 
 
 class XingOAuth(BaseOAuth1):
@@ -31,28 +30,14 @@ class XingOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        try:
-            profile = self.get_json('https://api.xing.com/v1/users/me.json',
-                                    auth=self.oauth_auth(access_token))
-            profile = profile['users'][0]
-        except (ValueError, KeyError, IndexError):
-            pass
-        else:
-            return {
-                'user_id': profile['id'],
-                'id': profile['id'],
-                'first_name': profile['first_name'],
-                'last_name': profile['last_name'],
-                'email': profile['active_email']
-            }
-
-    def auth_complete(self, *args, **kwargs):
-        """Complete auth process. Check Xing error response."""
-        oauth_problem = self.data.get('oauth_problem')
-        if oauth_problem:
-            if oauth_problem == 'user_refused':
-                raise AuthCanceled(self, '')
-            else:
-                raise AuthUnknownError(self, 'Xing error was %s' %
-                                                    oauth_problem)
-        return super(XingOAuth, self).auth_complete(*args, **kwargs)
+        profile = self.get_json(
+            'https://api.xing.com/v1/users/me.json',
+            auth=self.oauth_auth(access_token)
+        )['users'][0]
+        return {
+            'user_id': profile['id'],
+            'id': profile['id'],
+            'first_name': profile['first_name'],
+            'last_name': profile['last_name'],
+            'email': profile['active_email']
+        }

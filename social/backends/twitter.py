@@ -11,7 +11,6 @@ User screen name is used to generate username.
 By default account id is stored in extra_data field, check OAuthBackend
 class for details on how to extend it.
 """
-from social.exceptions import AuthCanceled
 from social.backends.oauth import BaseOAuth1
 
 
@@ -42,9 +41,3 @@ class TwitterOAuth(BaseOAuth1):
             'https://api.twitter.com/1.1/account/verify_credentials.json',
             auth=self.oauth_auth(access_token)
         )
-
-    def auth_complete(self, *args, **kwargs):
-        """Completes login process, must return user instance"""
-        if 'denied' in self.data:
-            raise AuthCanceled(self)
-        return super(TwitterOAuth, self).auth_complete(*args, **kwargs)
