@@ -33,3 +33,22 @@ class StocktwitsOAuth2Test(OAuth2Test):
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
+
+
+class StocktwitsOAuth2UsernameAlternativeTest(StocktwitsOAuth2Test):
+    user_data_body = json.dumps({
+        'response': {
+            'status': 200
+        },
+        'user': {
+            'username': 'foobar',
+            'name': 'Foobar',
+            'classification': [],
+            'avatar_url': 'http://avatars.stocktwits.net/images/'
+                          'default_avatar_thumb.jpg',
+            'avatar_url_ssl': 'https://s3.amazonaws.com/st-avatars/images/'
+                              'default_avatar_thumb.jpg',
+            'id': 101010,
+            'identity': 'User'
+        }
+    })
