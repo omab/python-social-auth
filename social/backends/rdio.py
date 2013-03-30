@@ -31,13 +31,6 @@ class RdioOAuth1(BaseRdio, BaseOAuth1):
         ('streamRegion', 'rdio_stream_region'),
     ]
 
-    @classmethod
-    def tokens(cls, instance):
-        token = super(RdioOAuth1, cls).tokens(instance)
-        if token and 'access_token' in token:
-            token = parse_qs(token['access_token'])
-        return token
-
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
         params = {'method': 'currentUser',

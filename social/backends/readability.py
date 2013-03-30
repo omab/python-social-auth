@@ -43,20 +43,3 @@ class ReadabilityOAuth(BaseOAuth1):
             raise AuthCanceled(self)
         else:
             return super(ReadabilityOAuth, self).auth_complete(*args, **kwargs)
-
-    @classmethod
-    def tokens(cls, instance):
-        """Return the tokens needed to authenticate the access to any API the
-        service might provide. Readability uses a pair of OAuthToken consisting
-        of an oauth_token and oauth_token_secret.
-
-        instance must be a UserSocialAuth instance.
-        """
-        token = super(ReadabilityOAuth, cls).tokens(instance)
-        if token and 'access_token' in token:
-            # Split the OAuth query string and only return the values needed
-            token = dict(filter(lambda x: x[0] in ['oauth_token',
-                                                   'oauth_token_secret'],
-                         map(lambda x: x.split('='),
-                             token['access_token'].split('&'))))
-        return token

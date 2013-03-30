@@ -168,14 +168,3 @@ class BaseAuth(object):
         service provider. Must return (key, secret), order *must* be respected.
         """
         return self.setting('KEY'), self.setting('SECRET')
-
-    @classmethod
-    def tokens(cls, instance):
-        """Return the tokens needed to authenticate the access to any API the
-        service might provide. The return value will be a dictionary with the
-        token type name as key and the token value.
-        """
-        if instance.extra_data and 'access_token' in instance.extra_data:
-            return {'access_token': instance.extra_data['access_token']}
-        else:
-            return {}
