@@ -11,9 +11,8 @@ class BaseModel(object):
 
     @classmethod
     def next_id(cls):
-        id = cls.NEXT_ID
         cls.NEXT_ID += 1
-        return id
+        return cls.NEXT_ID - 1
 
     @classmethod
     def get(cls, key):
@@ -25,6 +24,8 @@ class BaseModel(object):
 
 
 class User(BaseModel):
+    _is_active = True
+
     def __init__(self, username, email=None):
         self.id = User.next_id()
         self.username = username
@@ -32,6 +33,14 @@ class User(BaseModel):
         self.password = None
         self.social = []
         self.extra_data = {}
+        self.save()
+
+    def is_active(self):
+        return self._is_active
+
+    @classmethod
+    def set_active(cls, is_active=True):
+        cls._is_active = is_active
 
     def set_password(self, password):
         self.password = password

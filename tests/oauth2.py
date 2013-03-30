@@ -94,6 +94,8 @@ class OAuth2Test(unittest.TestCase):
         expect(self.strategy.session_get('username')).to.equal(
             self.expected_username
         )
+        expect(self.strategy.get_user(user.id)).to.equal(user)
+        expect(self.strategy.backend.get_user(user.id)).to.equal(user)
 
     def do_partial_pipeline(self):
         self.strategy.set_settings({

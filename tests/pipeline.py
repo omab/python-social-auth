@@ -7,3 +7,7 @@ def ask_for_password(strategy, *args, **kwargs):
 
 def set_password(strategy, user, *args, **kwargs):
     user.set_password(kwargs['password'])
+
+
+def remove_user(strategy, user, *args, **kwargs):
+    return {'user': None}
