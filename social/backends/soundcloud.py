@@ -35,10 +35,9 @@ class SoundcloudOAuth2(BaseOAuth2):
         fullname = response.get('full_name')
         full_name = fullname.split(' ')
         first_name = full_name[0]
+        last_name = ''
         if len(full_name) > 1:
             last_name = full_name[-1]
-        else:
-            last_name = ''
         return {'username': response.get('username'),
                 'email': response.get('email') or '',
                 'fullname': fullname,

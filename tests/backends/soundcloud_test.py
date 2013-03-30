@@ -16,7 +16,7 @@ class SoundcloudOAuth2Test(OAuth2Test):
         'myspace_name': None,
         'public_favorites_count': 0,
         'followings_count': 0,
-        'full_name': '',
+        'full_name': 'Foo Bar',
         'id': 10101010,
         'city': None,
         'track_count': 0,
