@@ -1,8 +1,7 @@
 import json
 
 from social.p3 import urlencode
-from tests.oauth1 import OAuth1Test
-from tests.oauth2 import OAuth2Test
+from tests.oauth import OAuth1Test, OAuth2Test
 
 
 class LinkedinOAuth1Test(OAuth1Test):

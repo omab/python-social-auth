@@ -6,8 +6,6 @@ from tests.strategy import TestStrategy
 from social.backends.utils import load_backends, get_backend
 from social.backends.github import GithubOAuth2
 
-# social.backends.utils              28     22    21%   27-32, 42-51, 66-76
-
 
 class BackendUtilsTest(unittest.TestCase):
     def setUp(self):

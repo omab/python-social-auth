@@ -1,6 +1,6 @@
 import json
 
-from tests.oauth2 import OAuth2Test
+from tests.oauth import OAuth2Test
 
 
 class LiveOAuth2Test(OAuth2Test):

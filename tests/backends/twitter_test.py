@@ -1,7 +1,7 @@
 import json
 
 from social.p3 import urlencode
-from tests.oauth1 import OAuth1Test
+from tests.oauth import OAuth1Test
 
 
 class TwitterOAuth1Test(OAuth1Test):

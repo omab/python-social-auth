@@ -1,7 +1,7 @@
 import json
 
 from social.p3 import urlencode
-from tests.oauth2 import OAuth2Test
+from tests.oauth import OAuth2Test
 
 
 class FacebookOAuth2Test(OAuth2Test):
