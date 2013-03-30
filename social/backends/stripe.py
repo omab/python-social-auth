@@ -52,7 +52,6 @@ class StripeOAuth2(BaseOAuth2):
         return {'Accept': 'application/json',
                 'Authorization': 'Bearer %s' % client_secret}
 
-    @classmethod
-    def refresh_token_params(cls, refresh_token, *args, **kwargs):
+    def refresh_token_params(self, refresh_token, *args, **kwargs):
         return {'refresh_token': refresh_token,
                 'grant_type': 'refresh_token'}
