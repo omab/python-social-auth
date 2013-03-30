@@ -43,10 +43,10 @@ def do_complete(strategy, login, user=None, redirect_name='next',
         idx, backend, xargs, xkwargs = strategy.from_session(
             strategy.session_pop('partial_pipeline')
         )
-        kwargs = kwargs.copy()
-        kwargs.setdefault('user', user)
-        kwargs.update(xkwargs)
         if backend == strategy.backend_name:
+            kwargs = kwargs.copy()
+            kwargs.setdefault('user', user)
+            kwargs.update(xkwargs)
             user = strategy.continue_pipeline(pipeline_index=idx,
                                               *xargs, **xkwargs)
         else:
