@@ -12,7 +12,6 @@ enabled.
 from requests import request
 
 from social.utils import module_member, parse_qs
-from social.exceptions import StopPipeline
 
 
 class BaseAuth(object):
@@ -88,18 +87,14 @@ class BaseAuth(object):
         for idx, name in enumerate(pipeline):
             out['pipeline_index'] = pipeline_index + idx
             func = module_member(name)
-
-            try:
-                result = func(*args, **out) or {}
-            except StopPipeline:
-                self.strategy.clean_partial_pipeline()
-                break
+            result = func(*args, **out) or {}
             if not isinstance(result, dict):
                 return result
             out.update(result)
         user = out['user']
-        user.social_user = out['social_user']
-        user.is_new = out['is_new']
+        if user:
+            user.social_user = out['social_user']
+            user.is_new = out['is_new']
         return user
 
     def extra_data(self, user, uid, response, details):

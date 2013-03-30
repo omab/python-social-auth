@@ -40,9 +40,6 @@ than just the ``ValueError`` usually raised.
     the social account, probably because the user lacks a password or another
     social account.
 
-``StopPipeline``
-    Used internally by pipelines to stop the halt the process.
-
 ``AuthStateMissing``
     The state parameter is missing from the server response.
 

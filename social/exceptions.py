@@ -16,14 +16,6 @@ class NotAllowedToDisconnect(SocialAuthBaseException):
     pass
 
 
-class StopPipeline(SocialAuthBaseException):
-    """Stop pipeline process exception.
-    Raise this exception to stop the rest of the pipeline process.
-    """
-    def __unicode__(self):
-        return 'Stop pipeline'
-
-
 class AuthException(SocialAuthBaseException):
     """Auth process exception."""
     def __init__(self, backend, *args, **kwargs):
