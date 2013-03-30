@@ -1,7 +1,6 @@
 """
 Yammer OAuth2 support
 """
-from social.utils import parse_qs
 from social.backends.oauth import BaseOAuth2
 
 
@@ -33,21 +32,6 @@ class YammerOAuth2(BaseOAuth2):
             'last_name': last_name,
             'picture_url': mugshot_url
         }
-
-    def auth_complete(self, *args, **kwargs):
-        """Yammer API is a little strange"""
-        self.process_error(self.data)
-        # now we need to clean up the data params
-        data = self.data.copy()
-        redirect_state = data.get('redirect_state')
-        if redirect_state and '?' in redirect_state:
-            redirect_state, extra = redirect_state.split('?', 1)
-            extra = parse_qs(extra)
-            data['redirect_state'] = redirect_state
-            if 'code' in extra:
-                data['code'] = extra['code']
-        self.data = data
-        return super(YammerOAuth2, self).auth_complete(*args, **kwargs)
 
 
 class YammerStagingOAuth2(YammerOAuth2):
