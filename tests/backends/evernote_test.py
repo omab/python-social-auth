@@ -1,4 +1,8 @@
+from requests import HTTPError
+
 from social.p3 import urlencode
+from social.exceptions import AuthCanceled
+
 from tests.oauth import OAuth1Test
 
 
@@ -24,3 +28,23 @@ class EvernoteOAuth1Test(OAuth1Test):
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
+
+
+class EvernoteOAuth1CanceledTest(EvernoteOAuth1Test):
+    access_token_status = 401
+
+    def test_login(self):
+        self.do_login.when.called_with().should.throw(AuthCanceled)
+
+    def test_partial_pipeline(self):
+        self.do_partial_pipeline.when.called_with().should.throw(AuthCanceled)
+
+
+class EvernoteOAuth1ErrorTest(EvernoteOAuth1Test):
+    access_token_status = 500
+
+    def test_login(self):
+        self.do_login.when.called_with().should.throw(HTTPError)
+
+    def test_partial_pipeline(self):
+        self.do_partial_pipeline.when.called_with().should.throw(HTTPError)

@@ -1,11 +1,8 @@
-import sys
 import requests
 import unittest
 
 from sure import expect
 from httpretty import HTTPretty
-
-sys.path.insert(0, '..')
 
 from social.utils import parse_qs, module_member
 from social.p3 import urlparse
@@ -22,6 +19,7 @@ class BaseOAuthTest(unittest.TestCase):
     user_data_url = ''
     user_data_content_type = 'text/json'
     access_token_body = None
+    access_token_status = 200
     expected_username = ''
     raw_complete_url = ''
 
@@ -78,7 +76,7 @@ class BaseOAuthTest(unittest.TestCase):
                                body='foobar')
         HTTPretty.register_uri(self._method(self.backend.ACCESS_TOKEN_METHOD),
                                uri=self.backend.ACCESS_TOKEN_URL,
-                               status=200,
+                               status=self.access_token_status,
                                body=self.access_token_body or '',
                                content_type='text/json')
         if self.user_data_url:
