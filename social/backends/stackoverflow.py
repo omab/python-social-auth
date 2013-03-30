@@ -35,15 +35,11 @@ class StackoverflowOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json(
-                'https://api.stackexchange.com/2.1/me',
-                params={'site': 'stackoverflow',
-                        'access_token': access_token,
-                        'key': self.setting('API_KEY')}
-            )['items'][0]
-        except (ValueError, TypeError):
-            return None
+        return self.get_json('https://api.stackexchange.com/2.1/me',
+                             params={'site': 'stackoverflow',
+                                     'access_token': access_token,
+                                     'key': self.setting('API_KEY')}
+        )['items'][0]
 
     def request_access_token(self, *args, **kwargs):
         return self.get_querystring(*args, **kwargs)

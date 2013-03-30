@@ -11,8 +11,6 @@ User screen name is used to generate username.
 By default account id is stored in extra_data field, check OAuthBackend
 class for details on how to extend it.
 """
-from requests import HTTPError
-
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthCanceled
 
@@ -32,11 +30,8 @@ class DailymotionOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        try:
-            return self.get_json('https://api.dailymotion.com/me/',
-                                 params={'access_token': access_token})
-        except (ValueError, HTTPError):
-            return None
+        return self.get_json('https://api.dailymotion.com/me/',
+                             params={'access_token': access_token})
 
     def auth_complete(self, *args, **kwargs):
         """Completes login process, must return user instance"""

@@ -1,4 +1,3 @@
-from social.utils import parse_qs
 from social.backends.oauth import BaseOAuth1, BaseOAuth2, OAuthAuth
 
 

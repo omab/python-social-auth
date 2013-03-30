@@ -23,13 +23,9 @@ class UserMixin(object):
         return get_backend(strategy.backends, self.provider)
 
     @property
-    def tokens(self, strategy):
+    def tokens(self):
         """Return access_token stored in extra_data or None"""
-        backend = self.get_backend(strategy)
-        if backend:
-            return backend.tokens(self)
-        else:
-            return {}
+        return self.extra_data.get('access_token')
 
     def refresh_token(self, strategy, *args, **kwargs):
         token = self.extra_data.get('refresh_token') or \

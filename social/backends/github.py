@@ -35,12 +35,9 @@ class GithubOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json('https://api.github.com/user', params={
-                'access_token': access_token
-            })
-        except ValueError:
-            return None
+        return self.get_json('https://api.github.com/user', params={
+            'access_token': access_token
+        })
 
 
 class GithubOrganizationOAuth2(GithubOAuth2):
@@ -58,17 +55,16 @@ class GithubOrganizationOAuth2(GithubOAuth2):
         user_data = super(GithubOrganizationOAuth2, self).user_data(
             access_token, *args, **kwargs
         )
-        if user_data:
-            org = self.setting('NAME')
-            url = 'https://api.github.com/orgs/{org}/members/{username}'\
-                        .format(org=org, username=user_data.get('login'))
-            try:
-                self.request(url, params={'access_token': access_token})
-            except HTTPError as err:
+        org = self.setting('NAME')
+        url = 'https://api.github.com/orgs/{org}/members/{username}'\
+                    .format(org=org, username=user_data.get('login'))
+        try:
+            self.request(url, params={'access_token': access_token})
+        except HTTPError as err:
+            user_data = None
+        else:
+            # if the user is a member of the organization, response code
+            # will be 204, see http://bit.ly/ZS6vFl
+            if err.response.status_code != 204:
                 user_data = None
-            else:
-                # if the user is a member of the organization, response code
-                # will be 204, see http://bit.ly/ZS6vFl
-                if err.response.status_code != 204:
-                    user_data = None
         return user_data

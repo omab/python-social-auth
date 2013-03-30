@@ -47,14 +47,12 @@ class SoundcloudOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json('https://api.soundcloud.com/me.json',
-                                 params={'oauth_token': access_token})
-        except ValueError:
-            return None
+        return self.get_json('https://api.soundcloud.com/me.json',
+                             params={'oauth_token': access_token})
 
     def auth_url(self):
         """Return redirect url"""
+        state = None
         if self.STATE_PARAMETER or self.REDIRECT_STATE:
             # Store state in session for further request validation. The state
             # value is passed as state parameter (as specified in OAuth2 spec),
@@ -64,8 +62,6 @@ class SoundcloudOAuth2(BaseOAuth2):
             name = self.name + '_state'
             state = self.strategy.session_get(name) or self.state_token()
             self.strategy.session_set(name, state)
-        else:
-            state = None
 
         params = self.auth_params(state)
         params.update(self.get_scope_argument())

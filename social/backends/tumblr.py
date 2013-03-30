@@ -32,23 +32,5 @@ class TumblrOAuth(BaseOAuth1):
         return data
 
     def user_data(self, access_token):
-        try:
-            return self.get_json('http://api.tumblr.com/v2/user/info',
-                                 auth=self.oauth_auth(access_token))
-        except ValueError:
-            return None
-
-    @classmethod
-    def tokens(cls, instance):
-        """
-        Return the tokens needed to authenticate the access to any API the
-        service might provide. Tumblr uses a pair of OAuthToken consisting
-        on a oauth_token and oauth_token_secret.
-
-        instance must be a UserSocialAuth instance.
-        """
-        token = super(TumblrOAuth, cls).tokens(instance)
-        if token and 'access_token' in token:
-            token = dict(tok.split('=')
-                            for tok in token['access_token'].split('&'))
-        return token
+        return self.get_json('http://api.tumblr.com/v2/user/info',
+                             auth=self.oauth_auth(access_token))

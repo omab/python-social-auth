@@ -22,8 +22,5 @@ class FoursquareOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json('https://api.foursquare.com/v2/users/self',
-                                 params={'oauth_token': access_token})
-        except ValueError:
-            return None
+        return self.get_json('https://api.foursquare.com/v2/users/self',
+                             params={'oauth_token': access_token})

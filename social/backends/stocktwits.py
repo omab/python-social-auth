@@ -29,10 +29,7 @@ class StocktwitsOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json(
-                'https://api.stocktwits.com/api/2/account/verify.json',
-                params={'access_token': access_token}
-            )
-        except ValueError:
-            return None
+        return self.get_json(
+            'https://api.stocktwits.com/api/2/account/verify.json',
+            params={'access_token': access_token}
+        )

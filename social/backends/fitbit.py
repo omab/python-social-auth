@@ -27,10 +27,7 @@ class FitbitOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json(
-                'https://api.fitbit.com/1/user/-/profile.json',
-                auth=self.oauth_auth(access_token)
-            )['user']
-        except ValueError:
-            return None
+        return self.get_json(
+            'https://api.fitbit.com/1/user/-/profile.json',
+            auth=self.oauth_auth(access_token)
+        )['user']

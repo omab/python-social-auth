@@ -32,17 +32,11 @@ class SkyrockOAuth(BaseOAuth1):
 
     def user_data(self, access_token):
         """Return user data provided"""
-        try:
-            return self.get_json(
-                'https://api.skyrock.com/v2/user/get.json',
-                auth=self.oauth_auth(access_token)
-            )
-        except ValueError:
-            return None
+        return self.get_json('https://api.skyrock.com/v2/user/get.json',
+                             auth=self.oauth_auth(access_token))
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         if 'denied' in self.data:
             raise AuthCanceled('Authentication denied')
-        else:
-            return super(SkyrockOAuth, self).auth_complete(*args, **kwargs)
+        return super(SkyrockOAuth, self).auth_complete(*args, **kwargs)

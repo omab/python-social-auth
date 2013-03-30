@@ -37,12 +37,8 @@ class LiveOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Live Connect account"""
-        try:
-            email = response['emails']['account']
-        except KeyError:
-            email = ''
         return {'username': response.get('name'),
-                'email': email,
+                'email': response.get('emails', {}).get('account', ''),
                 'first_name': response.get('first_name'),
                 'last_name': response.get('last_name')}
 

@@ -21,8 +21,5 @@ class InstagramOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json('https://api.instagram.com/v1/users/self',
-                                 params={'access_token': access_token})
-        except ValueError:
-            return None
+        return self.get_json('https://api.instagram.com/v1/users/self',
+                             params={'access_token': access_token})

@@ -34,8 +34,5 @@ class DropboxOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json('https://api.dropbox.com/1/account/info',
-                                 auth=self.oauth_auth(access_token))
-        except ValueError:
-            return None
+        return self.get_json('https://api.dropbox.com/1/account/info',
+                             auth=self.oauth_auth(access_token))

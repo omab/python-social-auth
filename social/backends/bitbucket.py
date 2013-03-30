@@ -37,39 +37,19 @@ class BitbucketOAuth(BaseOAuth1):
                 'first_name': response.get('first_name'),
                 'last_name': response.get('last_name')}
 
-    @classmethod
-    def tokens(cls, instance):
-        """Return the tokens needed to authenticate the access to any API the
-        service might provide. Bitbucket uses a pair of OAuthToken consisting
-        on a oauth_token and oauth_token_secret.
-
-        instance must be a UserSocialAuth instance.
-        """
-        token = super(BitbucketOAuth, cls).tokens(instance)
-        if token and 'access_token' in token:
-            token = dict(tok.split('=')
-                            for tok in token['access_token'].split('&'))
-        return token
-
     def user_data(self, access_token):
         """Return user data provided"""
         # Bitbucket has a bit of an indirect route to obtain user data from an
         # authenticated query: First obtain the user's email via an
-        # authenticated GET
-        try:
-            # Then retrieve the user's primary email address or the top email
-            email_addresses = self.get_json(
-                'https://bitbucket.org/api/1.0/emails/',
-                auth=self.oauth_auth(access_token)
-            )
-            for email_address in reversed(email_addresses):
-                if email_address['active']:
-                    email = email_address['email']
-                    if email_address['primary']:
-                        break
-            return dict(self.get_json('https://bitbucket.org/api/1.0/users/' +
-                                      email)['user'],
-                        email=email)
-        except ValueError:
-            return None
-        return None
+        # authenticated GET, then retrieve the user's primary email address or
+        # the top email
+        emails = self.get_json('https://bitbucket.org/api/1.0/emails/',
+                               auth=self.oauth_auth(access_token))
+        for address in reversed(emails):
+            if address['active']:
+                email = address['email']
+                if address['primary']:
+                    break
+        return dict(self.get_json('https://bitbucket.org/api/1.0/users/' +
+                                  email)['user'],
+                    email=email)

@@ -31,11 +31,8 @@ class ReadabilityOAuth(BaseOAuth1):
                 'last_name': response['last_name']}
 
     def user_data(self, access_token):
-        try:
-            return self.get_json(READABILITY_API + '/users/_current',
-                                 auth=self.oauth_auth(access_token))
-        except ValueError:
-            return None
+        return self.get_json(READABILITY_API + '/users/_current',
+                             auth=self.oauth_auth(access_token))
 
     def auth_complete(self, *args, **kwargs):
         """Completes login process, must return user instance"""
