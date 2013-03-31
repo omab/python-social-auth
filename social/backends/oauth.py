@@ -37,19 +37,20 @@ class OAuthAuth(BaseAuth):
         names = (self.EXTRA_DATA or []) + \
                 self.setting('EXTRA_DATA', [])
         for entry in names:
-            if len(entry) == 2:
-                (name, alias), discard = entry, False
-            elif len(entry) == 3:
-                name, alias, discard = entry
-            elif len(entry) == 1:
-                name = alias = entry
-            else:  # ???
-                continue
-
-            value = response.get(name)
-            if discard and not value:
-                continue
-            data[alias] = value
+            if not isinstance(entry, (list, tuple)):
+                entry = (entry,)
+            size = len(entry)
+            if size >= 1 and size <= 3:
+                if size == 3:
+                    name, alias, discard = entry
+                elif size == 2:
+                    (name, alias), discard = entry, False
+                elif size == 1:
+                    name = alias = entry
+                value = response.get(name)
+                if discard and not value:
+                    continue
+                data[alias] = value
         return data
 
     def get_scope(self):
@@ -67,9 +68,6 @@ class OAuthAuth(BaseAuth):
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service. Implement in subclass"""
         return {}
-
-    def process_error(self, data):
-        return
 
 
 class BaseOAuth1(OAuthAuth):
