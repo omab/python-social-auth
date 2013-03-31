@@ -6,7 +6,6 @@ from datetime import datetime, timedelta
 
 from openid.association import Association as OpenIdAssociation
 
-from social.utils import utc
 from social.backends.utils import get_backend
 
 
@@ -53,15 +52,14 @@ class UserMixin(object):
             except (ValueError, TypeError):
                 return None
 
-            now = datetime.now()
-            now_timestamp = time.mktime(now.timetuple())
+            now = datetime.utcnow()
 
             # Detect if expires is a timestamp
-            if expires > now_timestamp:  # expires is a datetime
-                return datetime.utcfromtimestamp(expires) \
-                               .replace(tzinfo=utc) - \
-                       now.replace(tzinfo=utc)
-            else:  # expires is a timedelta
+            if expires > time.mktime(now.timetuple()):
+                # expires is a datetime
+                return datetime.fromtimestamp(expires) - now
+            else:
+                # expires is a timedelta
                 return timedelta(seconds=expires)
 
     def set_extra_data(self, extra_data=None):

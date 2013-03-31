@@ -4,8 +4,6 @@ import unicodedata
 import six
 import collections
 
-from datetime import timedelta, tzinfo
-
 from social.p3 import urlparse, urlunparse, urlencode, \
                       parse_qs as battery_parse_qs
 
@@ -33,23 +31,6 @@ def url_add_parameters(url, params):
         fragments[4] = urlencode(value)
         url = urlunparse(fragments)
     return url
-
-
-class UTC(tzinfo):
-    """UTC implementation taken from django 1.4."""
-    def __repr__(self):
-        return '<UTC>'
-
-    def utcoffset(self, dt):
-        return timedelta(0)
-
-    def tzname(self, dt):
-        return 'UTC'
-
-    def dst(self, dt):
-        return timedelta(0)
-
-utc = UTC()
 
 
 def setting_name(*names):
