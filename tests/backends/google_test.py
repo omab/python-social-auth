@@ -33,6 +33,12 @@ class GoogleOAuth2Test(OAuth2Test):
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
 
+    def test_with_unique_user_id(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_OAUTH2_USE_UNIQUE_USER_ID': True
+        })
+        self.do_login()
+
 
 class GoogleOAuth1Test(OAuth1Test):
     backend_path = 'social.backends.google.GoogleOAuth'
@@ -49,7 +55,8 @@ class GoogleOAuth1Test(OAuth1Test):
     })
     user_data_body = urlencode({
         'email': 'foobar@gmail.com',
-        'isVerified': 'true'
+        'isVerified': 'true',
+        'id': '101010101010101010101'
     })
 
     def test_login(self):
@@ -57,3 +64,16 @@ class GoogleOAuth1Test(OAuth1Test):
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
+
+    def test_with_unique_user_id(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_OAUTH_USE_UNIQUE_USER_ID': True
+        })
+        self.do_login()
+
+    def test_with_anonymous_key_and_secret(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_OAUTH_KEY': None,
+            'SOCIAL_AUTH_GOOGLE_OAUTH_SECRET': None
+        })
+        self.do_login()
