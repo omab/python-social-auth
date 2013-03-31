@@ -179,14 +179,9 @@ class BaseOAuth1(OAuthAuth):
                       verifier=oauth_verifier,
                       signature_type=signature_type)
 
-    def oauth_request(self, token, url, extra_params=None, method='GET'):
+    def oauth_request(self, token, url, params=None, method='GET'):
         """Generate OAuth request, setups callback url"""
-        # params = {'oauth_callback': self.redirect_uri}
-        # params.update(extra_params or {})
-        # oauth_verifier = self.data.get('oauth_verifier')
-        # if oauth_verifier:
-        #     params['oauth_verifier'] = oauth_verifier
-        return self.request(url, method=method, params=extra_params,
+        return self.request(url, method=method, params=params,
                             auth=self.oauth_auth(token))
 
     def access_token(self, token):

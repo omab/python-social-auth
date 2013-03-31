@@ -157,9 +157,9 @@ class OpenIdAuth(BaseAuth):
         else:
             raise AuthUnknownError(self, response.status)
 
-    def setup_request(self, extra_params=None):
+    def setup_request(self, params=None):
         """Setup request"""
-        request = self.openid_request(extra_params)
+        request = self.openid_request(params)
         # Request some user details. Use attribute exchange if provider
         # advertises support.
         if request.endpoint.supportsType(ax.AXMessage.ns_uri):
@@ -212,11 +212,11 @@ class OpenIdAuth(BaseAuth):
         """
         return self.openid_request().shouldSendRedirect()
 
-    def openid_request(self, extra_params=None):
+    def openid_request(self, params=None):
         """Return openid request"""
         try:
             return self.consumer().begin(url_add_parameters(self.openid_url(),
-                                         extra_params))
+                                         params))
         except DiscoveryFailure as err:
             raise AuthException(self, 'OpenID discovery error: %s' % err)
 

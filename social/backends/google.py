@@ -75,14 +75,14 @@ class GoogleOAuth(BaseGoogleAuth, BaseOAuth1):
             auth=self.oauth_auth(access_token)
         )
 
-    def oauth_request(self, token, url, extra_params=None):
-        extra_params = extra_params or {}
+    def oauth_request(self, token, url, params=None):
+        params = params or {}
         scope = self.DEFAULT_SCOPE + self.setting('EXTRA_SCOPE', [])
-        extra_params.update({'scope': ' '.join(scope)})
+        params.update({'scope': ' '.join(scope)})
         if self.get_key_and_secret() != ('anonymous', 'anonymous'):
             xoauth_displayname = self.setting('DISPLAY_NAME', 'Social Auth')
-            extra_params['xoauth_displayname'] = xoauth_displayname
-        return super(GoogleOAuth, self).oauth_request(token, url, extra_params)
+            params['xoauth_displayname'] = xoauth_displayname
+        return super(GoogleOAuth, self).oauth_request(token, url, params)
 
     def get_key_and_secret(self):
         """Return Google OAuth Consumer Key and Consumer Secret pair, uses

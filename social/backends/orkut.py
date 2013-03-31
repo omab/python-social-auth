@@ -45,8 +45,8 @@ class OrkutOAuth(GoogleOAuth):
         request = self.oauth_request(access_token, url, params)
         return self.get_json(request.to_url())['data']
 
-    def oauth_request(self, token, url, extra_params=None):
-        extra_params = extra_params or {}
+    def oauth_request(self, token, url, params=None):
+        params = params or {}
         scope = self.DEFAULT_SCOPE + self.setting('EXTRA_SCOPE', [])
-        extra_params['scope'] = self.SCOPE_SEPARATOR.join(scope)
-        return super(OrkutOAuth, self).oauth_request(token, url, extra_params)
+        params['scope'] = self.SCOPE_SEPARATOR.join(scope)
+        return super(OrkutOAuth, self).oauth_request(token, url, params)
