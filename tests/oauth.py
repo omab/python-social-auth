@@ -18,7 +18,7 @@ class BaseOAuthTest(unittest.TestCase):
     backend_path = None
     user_data_body = None
     user_data_url = ''
-    user_data_content_type = 'text/json'
+    user_data_content_type = 'application/json'
     access_token_body = None
     access_token_status = 200
     expected_username = ''
