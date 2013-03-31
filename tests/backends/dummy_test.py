@@ -56,6 +56,10 @@ class DummyOAuth2Test(OAuth2Test):
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
 
+    def test_tokens(self):
+        user = self.do_login()
+        expect(user.social[0].tokens).to.equal('foobar')
+
 
 DELTA = datetime.timedelta(days=1)
 
