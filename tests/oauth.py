@@ -124,6 +124,7 @@ class BaseOAuthTest(unittest.TestCase):
         expect(len(user_backends['associated'])).to.equal(1)
         expect(len(user_backends['not_associated'])).to.equal(1)
         expect(len(user_backends['backends'])).to.equal(2)
+        return user
 
     def pipeline_settings(self):
         self.strategy.set_settings({
@@ -170,6 +171,7 @@ class BaseOAuthTest(unittest.TestCase):
 
         expect(user.username).to.equal(self.expected_username)
         expect(user.password).to.equal(password)
+        return user
 
 
 class OAuth1Test(BaseOAuthTest):

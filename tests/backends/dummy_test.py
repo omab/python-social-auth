@@ -1,4 +1,7 @@
 import json
+import datetime
+import time
+from sure import expect
 
 from social.backends.oauth import BaseOAuth2
 
@@ -52,3 +55,25 @@ class DummyOAuth2Test(OAuth2Test):
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
+
+
+DELTA = datetime.timedelta(days=1)
+
+
+class ExpirationTimeTest(DummyOAuth2Test):
+    user_data_body = json.dumps({
+        'id': 1,
+        'username': 'foobar',
+        'url': 'http://dummy.com/user/foobar',
+        'first_name': 'Foo',
+        'last_name': 'Bar',
+        'email': 'foo@bar.com',
+        'expires': time.mktime((datetime.datetime.utcnow() +
+                                DELTA).timetuple())
+    })
+
+    def test_expires_time(self):
+        user = self.do_login()
+        social = user.social[0]
+        expiration = social.expiration_datetime()
+        expect(expiration <= DELTA).to.equal(True)
