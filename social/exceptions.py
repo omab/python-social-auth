@@ -26,11 +26,10 @@ class AuthException(SocialAuthBaseException):
 class AuthFailed(AuthException):
     """Auth process failed for some reason."""
     def __str__(self):
-        if self.message == 'access_denied':
+        msg = super(AuthFailed, self).__str__()
+        if msg == 'access_denied':
             return 'Authentication process was canceled'
-        else:
-            msg = super(AuthFailed, self).__str__()
-            return 'Authentication failed: %s' % msg
+        return 'Authentication failed: %s' % msg
 
 
 class AuthCanceled(AuthException):
