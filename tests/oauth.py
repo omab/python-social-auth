@@ -4,8 +4,9 @@ import unittest
 from sure import expect
 from httpretty import HTTPretty
 
-from social.utils import parse_qs, module_member
 from social.p3 import urlparse
+from social.utils import parse_qs, module_member
+from social.backends.utils import user_backends_data, load_backends
 
 from tests.models import TestStorage, User, TestUserSocialAuth, TestNonce, \
                          TestAssociation
@@ -33,7 +34,16 @@ class BaseOAuthTest(unittest.TestCase):
         self.strategy.set_settings({
             'SOCIAL_AUTH_' + name + '_KEY': 'a-key',
             'SOCIAL_AUTH_' + name + '_SECRET': 'a-secret-key',
+            'SOCIAL_AUTH_AUTHENTICATION_BACKENDS': (
+                self.backend_path,
+                'tests.backends.broken_test.BrokenBackendAuth'
+            )
         })
+        # Force backends loading to trash PSA cache
+        load_backends(
+            self.strategy.get_setting('SOCIAL_AUTH_AUTHENTICATION_BACKENDS'),
+            force_load=True
+        )
 
     def tearDown(self):
         self.strategy = None
@@ -102,6 +112,18 @@ class BaseOAuthTest(unittest.TestCase):
         expect(self.strategy.session_get('username')).to.equal(username)
         expect(self.strategy.get_user(user.id)).to.equal(user)
         expect(self.strategy.backend.get_user(user.id)).to.equal(user)
+        user_backends = user_backends_data(
+            user,
+            self.strategy.get_setting('SOCIAL_AUTH_AUTHENTICATION_BACKENDS'),
+            self.strategy.storage
+        )
+        expect(len(list(user_backends.keys()))).to.equal(3)
+        expect('associated' in user_backends).to.equal(True)
+        expect('not_associated' in user_backends).to.equal(True)
+        expect('backends' in user_backends).to.equal(True)
+        expect(len(user_backends['associated'])).to.equal(1)
+        expect(len(user_backends['not_associated'])).to.equal(1)
+        expect(len(user_backends['backends'])).to.equal(2)
 
     def pipeline_settings(self):
         self.strategy.set_settings({

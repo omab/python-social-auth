@@ -4,7 +4,7 @@ from social.backends.base import BaseAuth
 
 
 class BrokenBackendAuth(BaseAuth):
-    pass
+    name = 'broken'
 
 
 class BrokenBackendTest(unittest.TestCase):

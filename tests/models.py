@@ -60,7 +60,7 @@ class TestUserSocialAuth(UserMixin, BaseModel):
 
     @classmethod
     def changed(cls, user):
-        user.save()
+        pass
 
     @classmethod
     def get_username(cls, user):
