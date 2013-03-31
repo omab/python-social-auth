@@ -13,6 +13,7 @@ field, check OAuthBackend class for details on how to extend it.
 """
 from requests import HTTPError
 
+from social.exceptions import AuthFailed
 from social.backends.oauth import BaseOAuth2
 
 
@@ -64,5 +65,5 @@ class GithubOrganizationOAuth2(GithubOAuth2):
             # if the user is a member of the organization, response code
             # will be 204, see http://bit.ly/ZS6vFl
             if err.response.status_code != 204:
-                user_data = None
+                raise AuthFailed('User doesn\'t belong to the organization')
         return user_data
