@@ -38,15 +38,10 @@ class YandexOAuth2(BaseOAuth2):
     REDIRECT_STATE = False
 
     def get_user_details(self, response):
-        first_name, last_name = '', ''
-        real_name = response.get('real_name')
-        if real_name:
-            if ' ' in real_name:
-                first_name, last_name = real_name.split(' ', 1)
-            else:
-                first_name = real_name
-        else:
-            first_name = response.get('display_name')
+        first_name = response.get('real_name') or response.get('display_name')
+        last_name = ''
+        if ' ' in first_name:
+            first_name, last_name = first_name.split(' ', 1)
         return {'username': response.get('display_name'),
                 'email': response.get('default_email') or
                          response.get('emails', [''])[0],
