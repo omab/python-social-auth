@@ -49,10 +49,7 @@ def sanitize_redirect(host, redirect_to):
         return None
 
     # Heavier security check, don't allow redirection to a different host.
-    try:
-        netloc = urlparse(redirect_to)[1]
-    except TypeError:  # not valid redirect_to value
-        return None
+    netloc = urlparse(redirect_to)[1]
     if netloc and netloc != host:
         return None
     return redirect_to
