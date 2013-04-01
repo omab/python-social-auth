@@ -21,7 +21,11 @@ class DjangoTemplateStrategy(BaseTemplateStrategy):
 class DjangoStrategy(BaseStrategy):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('tpl', DjangoTemplateStrategy)
-        return super(DjangoStrategy, self).__init__(*args, **kwargs)
+        super(DjangoStrategy, self).__init__(*args, **kwargs)
+        if self.request:
+            self.session = self.request.session
+        else:
+            self.session = {}
 
     def get_setting(self, name):
         return getattr(settings, name)
@@ -64,21 +68,18 @@ class DjangoStrategy(BaseStrategy):
         return authenticate(*args, **kwargs)
 
     def session_get(self, name, default=None):
-        if self.request:
-            return self.request.session.get(name, default)
+        return self.session.get(name, default)
 
     def session_set(self, name, value):
-        if self.request:
-            self.request.session[name] = value
-            self.request.session.modified = True
+        self.session[name] = value
+        if hasattr(self.session, 'modified'):
+            self.session.modified = True
 
     def session_pop(self, name):
-        if self.request:
-            self.request.session.pop(name, None)
+        self.session.pop(name, None)
 
     def session_setdefault(self, name, value):
-        if self.request:
-            return self.request.session.setdefault(name, value)
+        return self.session.setdefault(name, value)
 
     def to_session(self, next, backend, *args, **kwargs):
         """Returns dict to store on session for partial pipeline."""
