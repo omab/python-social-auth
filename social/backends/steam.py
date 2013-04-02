@@ -2,7 +2,6 @@
 import re
 
 from social.backends.open_id import OpenIdAuth
-from social_auth.exceptions import AuthFailed
 
 
 STEAM_ID = re.compile('steamcommunity.com/openid/id/(.*?)$')
