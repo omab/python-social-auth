@@ -65,13 +65,19 @@ class TestStrategy(BaseStrategy):
 
     def build_absolute_uri(self, path=None):
         """Build absolute URI with given (optional) path"""
-        return TEST_URI + (path or '')
+        path = path or ''
+        if path.startswith('http://') or path.startswith('https://'):
+            return path
+        return TEST_URI + path
 
     def set_settings(self, values):
         self._settings.update(values)
 
     def set_request_data(self, values):
         self._request_data.update(values)
+
+    def remove_from_request_data(self, name):
+        self._request_data.pop(name, None)
 
     def authenticate(self, *args, **kwargs):
         user = super(TestStrategy, self).authenticate(*args, **kwargs)

@@ -6,9 +6,6 @@ from social.storage.base import UserMixin, NonceMixin, AssociationMixin, \
 
 
 class BaseModel(object):
-    NEXT_ID = 1
-    cache = {}
-
     @classmethod
     def next_id(cls):
         cls.NEXT_ID += 1
@@ -24,6 +21,8 @@ class BaseModel(object):
 
 
 class User(BaseModel):
+    NEXT_ID = 1
+    cache = {}
     _is_active = True
 
     def __init__(self, username, email=None):
@@ -50,6 +49,9 @@ class User(BaseModel):
 
 
 class TestUserSocialAuth(UserMixin, BaseModel):
+    NEXT_ID = 1
+    cache = {}
+
     def __init__(self, user, provider, uid, extra_data=None):
         self.id = TestUserSocialAuth.next_id()
         self.user = user
@@ -118,6 +120,9 @@ class TestUserSocialAuth(UserMixin, BaseModel):
 
 
 class TestNonce(NonceMixin, BaseModel):
+    NEXT_ID = 1
+    cache = {}
+
     def __init__(self, server_url, timestamp, salt):
         self.id = TestNonce.next_id()
         self.server_url = server_url
@@ -132,6 +137,9 @@ class TestNonce(NonceMixin, BaseModel):
 
 
 class TestAssociation(AssociationMixin, BaseModel):
+    NEXT_ID = 1
+    cache = {}
+
     def __init__(self, server_url, handle):
         self.id = TestAssociation.next_id()
         self.server_url = server_url
