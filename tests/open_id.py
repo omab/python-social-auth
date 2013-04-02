@@ -3,7 +3,14 @@ import sys
 import requests
 import unittest
 from openid import oidutil
-from HTMLParser import HTMLParser
+
+PY3 = sys.version_info[0] == 3
+
+if PY3:
+    from html.parser import HTMLParser
+    HTMLParser  # placate pyflakes
+else:
+    from HTMLParser import HTMLParser
 
 from sure import expect
 from httpretty import HTTPretty
