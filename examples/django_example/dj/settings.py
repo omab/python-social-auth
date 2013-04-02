@@ -160,6 +160,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.skyrock.SkyrockOAuth',
     'social.backends.tumblr.TumblrOAuth',
     'social.backends.reddit.RedditOAuth2',
+    'social.backends.steam.SteamOpenId',
     'django.contrib.auth.backends.ModelBackend',
 )
 
