@@ -76,7 +76,8 @@ class BaseActionTest(unittest.TestCase):
         TestAssociation.reset_cache()
         HTTPretty.disable()
 
-    def do_login(self, after_complete_checks=True):
+    def do_login(self, after_complete_checks=True, user_data_body=None,
+                 expected_username=None):
         self.strategy.set_settings({
             'SOCIAL_AUTH_GITHUB_KEY': 'a-key',
             'SOCIAL_AUTH_GITHUB_SECRET': 'a-secret-key',
@@ -111,8 +112,9 @@ class BaseActionTest(unittest.TestCase):
                                content_type='text/json')
 
         if self.user_data_url:
+            user_data_body = user_data_body or self.user_data_body or ''
             HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
-                                   body=self.user_data_body or '',
+                                   body=user_data_body,
                                    content_type='text/json')
         self.strategy.set_request_data(location_query)
         redirect = do_complete(
@@ -123,7 +125,7 @@ class BaseActionTest(unittest.TestCase):
         )
         if after_complete_checks:
             expect(self.strategy.session_get('username')).to.equal(
-                self.expected_username
+                expected_username or self.expected_username
             )
             expect(redirect.url).to.equal(self.login_redirect_url)
         return redirect
@@ -203,48 +205,3 @@ class BaseActionTest(unittest.TestCase):
             self.expected_username
         )
         expect(redirect.url).to.equal(self.login_redirect_url)
-
-    def do_fields_stored_in_session(self):
-        self.strategy.set_settings({
-            'SOCIAL_AUTH_FIELDS_STORED_IN_SESSION': ['foo', 'bar']
-        })
-        self.strategy.set_request_data({'foo': '1', 'bar': '2'})
-        self.do_login()
-        expect(self.strategy.session_get('foo')).to.equal('1')
-        expect(self.strategy.session_get('bar')).to.equal('2')
-
-    def do_redirect_value(self):
-        self.strategy.set_request_data({'next': '/after-login'})
-        redirect = self.do_login(after_complete_checks=False)
-        expect(redirect.url).to.equal('/after-login')
-
-    def do_invalid_pipeline(self):
-        def before_complete():
-            partial = self.strategy.session_get('partial_pipeline')
-            partial['backend'] = 'foobar'
-            self.strategy.session_set('partial_pipeline', partial)
-        self.do_login_with_partial_pipeline(before_complete)
-
-    def do_inactive_user(self):
-        self.strategy.set_settings({
-            'SOCIAL_AUTH_INACTIVE_USER_URL': '/inactive'
-        })
-        User.set_active(False)
-        redirect = self.do_login(after_complete_checks=False)
-        expect(redirect.url).to.equal('/inactive')
-
-    def do_invalidate_user(self):
-        self.strategy.set_settings({
-            'SOCIAL_AUTH_LOGIN_ERROR_URL': '/error',
-            'SOCIAL_AUTH_PIPELINE': (
-                'social.pipeline.social_auth.social_user',
-                'social.pipeline.user.get_username',
-                'social.pipeline.user.create_user',
-                'social.pipeline.social_auth.associate_user',
-                'social.pipeline.social_auth.load_extra_data',
-                'social.pipeline.user.user_details',
-                'tests.pipeline.remove_user'
-            )
-        })
-        redirect = self.do_login(after_complete_checks=False)
-        expect(redirect.url).to.equal('/error')

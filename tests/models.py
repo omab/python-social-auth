@@ -51,6 +51,7 @@ class User(BaseModel):
 class TestUserSocialAuth(UserMixin, BaseModel):
     NEXT_ID = 1
     cache = {}
+    cache_by_uid = {}
 
     def __init__(self, user, provider, uid, extra_data=None):
         self.id = TestUserSocialAuth.next_id()
@@ -59,6 +60,12 @@ class TestUserSocialAuth(UserMixin, BaseModel):
         self.uid = uid
         self.extra_data = extra_data or {}
         self.user.social.append(self)
+        TestUserSocialAuth.cache_by_uid[uid] = self
+
+    @classmethod
+    def reset_cache(cls):
+        cls.cache = {}
+        cls.cache_by_uid = {}
 
     @classmethod
     def changed(cls, user):
@@ -83,7 +90,7 @@ class TestUserSocialAuth(UserMixin, BaseModel):
     @classmethod
     def disconnect(cls, name, user, association_id=None):
         if cls.allowed_to_disconnect(user, name, association_id):
-            TestUserSocialAuth.cache.pop(association_id, None)
+            cls.cache.pop(association_id, None)
             user.social = [s for s in user.social
                                 if association_id and association_id != s.id or
                                    s.provider != name]
@@ -106,7 +113,7 @@ class TestUserSocialAuth(UserMixin, BaseModel):
 
     @classmethod
     def get_social_auth(cls, provider, uid):
-        social_user = TestUserSocialAuth.cache.get(uid)
+        social_user = cls.cache_by_uid.get(uid)
         if social_user and social_user.provider == provider:
             return social_user
 
@@ -116,7 +123,7 @@ class TestUserSocialAuth(UserMixin, BaseModel):
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):
-        return TestUserSocialAuth(user=user, provider=provider, uid=uid)
+        return cls(user=user, provider=provider, uid=uid)
 
 
 class TestNonce(NonceMixin, BaseModel):
