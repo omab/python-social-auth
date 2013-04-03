@@ -2,6 +2,7 @@ import json
 import datetime
 
 from social.p3 import urlencode
+from social.exceptions import AuthFailed
 from tests.oauth import OAuth1Test, OAuth2Test
 from tests.open_id import OpenIdTest
 
@@ -185,3 +186,35 @@ class GoogleOpenIdTest(OpenIdTest):
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
+
+
+class WhitelistEmailsGoogleOAuth2Test(GoogleOAuth2Test):
+    def test_valid_login(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_WHITE_LISTED_EMAILS': [
+                'foo@bar.com'
+            ]
+        })
+        self.do_login()
+
+    def test_invalid_login(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_WHITE_LISTED_EMAILS': [
+                'foo2@bar.com'
+            ]
+        })
+        self.do_login.when.called_with().should.throw(AuthFailed)
+
+
+class WhitelistDomainsGoogleOAuth2Test(GoogleOAuth2Test):
+    def test_valid_login(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_WHITE_LISTED_DOMAINS': ['bar.com']
+        })
+        self.do_login()
+
+    def test_invalid_login(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_WHITE_LISTED_EMAILS': ['bar2.com']
+        })
+        self.do_login.when.called_with().should.throw(AuthFailed)
