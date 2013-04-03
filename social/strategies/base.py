@@ -126,10 +126,8 @@ class BaseStrategy(object):
             random.SystemRandom()
         except NotImplementedError:
             key = self.setting('SECRET_KEY', '')
-            random.seed(hashlib.sha256('%s%s%s' % (random.getstate(),
-                                                   time.time(),
-                                                   key))
-                               .digest())
+            seed = '%s%s%s' % (random.getstate(), time.time(), key)
+            random.seed(hashlib.sha256(seed.encode()).digest())
         return ''.join([random.choice(chars) for i in range(length)])
 
     def is_integrity_error(self, exception):
