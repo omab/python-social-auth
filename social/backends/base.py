@@ -22,7 +22,6 @@ class BaseAuth(object):
     ID_KEY = None
 
     def __init__(self, strategy=None, redirect_uri=None, *args, **kwargs):
-        self.titled_name = self.name.upper().replace('-', '_')
         self.strategy = strategy
         self.redirect_uri = redirect_uri
         self.data = {}

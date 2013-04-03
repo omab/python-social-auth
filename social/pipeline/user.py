@@ -43,8 +43,8 @@ def create_user(strategy, details, response, uid, username, user=None, *args,
         return None
     return {
         'is_new': True,
-        'user': strategy.storage.user.create_user(username=username,
-                                                  email=details.get('email'))
+        'user': strategy.create_user(username=username,
+                                     email=details.get('email'))
     }
 
 

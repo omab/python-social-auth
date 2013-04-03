@@ -238,7 +238,7 @@ class BaseOAuth2(OAuthAuth):
             # but also added to redirect, that way we can still verify the
             # request if the provider doesn't implement the state parameter.
             # Reuse token if any.
-            name = self.titled_name + '_state'
+            name = self.name + '_state'
             state = self.strategy.session_get(name)
             if state is None:
                 state = self.state_token()
@@ -256,7 +256,7 @@ class BaseOAuth2(OAuthAuth):
         value if valid."""
         if not self.STATE_PARAMETER and not self.REDIRECT_STATE:
             return None
-        state = self.strategy.session_get(self.titled_name + '_state')
+        state = self.strategy.session_get(self.name + '_state')
         if state:
             request_state = self.data.get('state') or \
                             self.data.get('redirect_state')

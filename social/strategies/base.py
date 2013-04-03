@@ -15,15 +15,15 @@ class BaseTemplateStrategy(object):
             raise ValueError('Missing template or html parameters')
         context = context or {}
         if tpl:
-            return self.render_template(tpl, **context)
+            return self.render_template(tpl, context)
         else:
-            return self.render_string(html, **context)
+            return self.render_string(html, context)
 
     def render_template(self, tpl, context):
-        raise NotImplemented('Implement in subclass')
+        raise NotImplementedError('Implement in subclass')
 
     def render_string(self, html, context):
-        raise NotImplemented('Implement in subclass')
+        raise NotImplementedError('Implement in subclass')
 
 
 class BaseStrategy(object):
@@ -33,6 +33,7 @@ class BaseStrategy(object):
 
     def __init__(self, backend=None, storage=None, request=None, tpl=None,
                  backends=None, *args, **kwargs):
+        tpl = tpl or BaseTemplateStrategy
         if not isinstance(tpl, BaseTemplateStrategy):
             tpl = tpl(self)
         self.tpl = tpl
@@ -47,7 +48,7 @@ class BaseStrategy(object):
             self.backend = backend
 
     def setting(self, name, default=None):
-        names = (setting_name(self.backend.titled_name, name),
+        names = (setting_name(self.backend_name, name),
                  setting_name(name),
                  name)
         for name in names:
@@ -124,9 +125,10 @@ class BaseStrategy(object):
         try:
             random.SystemRandom()
         except NotImplementedError:
+            key = self.setting('SECRET_KEY', '')
             random.seed(hashlib.sha256('%s%s%s' % (random.getstate(),
                                                    time.time(),
-                                                   self.setting('SECRET_KEY')))
+                                                   key))
                                .digest())
         return ''.join([random.choice(chars) for i in range(length)])
 
@@ -176,4 +178,4 @@ class BaseStrategy(object):
         raise NotImplementedError('Implement in subclass')
 
     def is_response(self, value):
-        raise NotImplemented('Implement in subclass')
+        raise NotImplementedError('Implement in subclass')
