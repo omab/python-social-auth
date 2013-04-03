@@ -10,13 +10,13 @@ def social_user(strategy, uid, user=None, *args, **kwargs):
             raise AuthAlreadyAssociated(strategy.backend, msg)
         elif not user:
             user = social.user
-    return {'social_user': social,
+    return {'social': social,
             'user': user,
             'new_association': False}
 
 
 def associate_user(strategy, user, uid, *args, **kwargs):
-    if kwargs.get('social_user') or not user:
+    if kwargs.get('social') or not user:
         return None
 
     try:
@@ -31,13 +31,13 @@ def associate_user(strategy, user, uid, *args, **kwargs):
         #   https://github.com/omab/django-social-auth/issues/131
         return social_user(strategy, uid, user, *args, **kwargs)
     else:
-        return {'social_user': social,
+        return {'social': social,
                 'user': social.user,
                 'new_association': True}
 
 
 def load_extra_data(strategy, details, response, uid, user, *args, **kwargs):
-    social = kwargs.get('social_user') or \
+    social = kwargs.get('social') or \
              strategy.storage.user.get_social_auth(strategy.backend.name,
                                                         uid)
     if social:

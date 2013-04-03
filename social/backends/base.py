@@ -91,7 +91,7 @@ class BaseAuth(object):
             out.update(result)
         user = out['user']
         if user:
-            user.social_user = out['social_user']
+            user.social_user = out['social']
             user.is_new = out['is_new']
         return user
 
