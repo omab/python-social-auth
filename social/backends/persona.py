@@ -37,10 +37,10 @@ class PersonaAuth(BaseAuth):
         if not 'assertion' in self.data:
             raise AuthMissingParameter(self, 'assertion')
 
-        response = self.get_json('https://browserid.org/verify', params={
+        response = self.get_json('https://browserid.org/verify', data={
             'assertion': self.data['assertion'],
             'audience': self.strategy.request_host()
-        })
+        }, method='POST')
         if response.get('status') == 'failure':
             raise AuthFailed(self)
         kwargs.update({'response': response, 'backend': self})
