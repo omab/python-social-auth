@@ -28,7 +28,7 @@ class UserMixin(object):
 
     def refresh_token(self, strategy, *args, **kwargs):
         token = self.extra_data.get('refresh_token') or \
-               self.extra_data.get('access_token')
+                self.extra_data.get('access_token')
         backend = self.get_backend(strategy)
         if token and backend and hasattr(backend, 'refresh_token'):
             backend = backend(strategy=strategy)
