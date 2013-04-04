@@ -1,5 +1,7 @@
 import json
 
+from sure import expect
+
 from tests.oauth import OAuth2Test
 
 
@@ -36,9 +38,24 @@ class RedditOAuth2Test(OAuth2Test):
         'has_verified_email': False,
         'id': '33bma'
     })
+    refresh_token_body = json.dumps({
+        'access_token': 'foobar-new-token',
+        'token_type': 'bearer',
+        'expires_in': 3600.0,
+        'refresh_token': 'foobar-new-refresh-token',
+        'scope': 'identity'
+    })
 
     def test_login(self):
         self.do_login()
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
+
+    def refresh_token_arguments(self):
+        uri = self.strategy.build_absolute_uri('/complete/reddit/')
+        return {'redirect_uri': uri}
+
+    def test_refresh_token(self):
+        user, social = self.do_refresh_token()
+        expect(social.extra_data['access_token']).to.equal('foobar-new-token')

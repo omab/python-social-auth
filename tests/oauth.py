@@ -192,3 +192,20 @@ class OAuth1Test(BaseOAuthTest):
 
 class OAuth2Test(BaseOAuthTest):
     raw_complete_url = '/complete/{0}/?code=foobar'
+    refresh_token_body = ''
+
+    def refresh_token_arguments(self):
+        return {}
+
+    def do_refresh_token(self):
+        self.do_login()
+        HTTPretty.register_uri(self._method(self.backend.REFRESH_TOKEN_METHOD),
+                               self.backend.REFRESH_TOKEN_URL or
+                               self.backend.ACCESS_TOKEN_URL,
+                               status=200,
+                               body=self.refresh_token_body)
+        user = list(User.cache.values())[0]
+        social = user.social[0]
+        social.refresh_token(strategy=self.strategy,
+                             **self.refresh_token_arguments())
+        return user, social

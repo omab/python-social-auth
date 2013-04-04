@@ -62,6 +62,9 @@ class TestUserSocialAuth(UserMixin, BaseModel):
         self.user.social.append(self)
         TestUserSocialAuth.cache_by_uid[uid] = self
 
+    def save(self):
+        pass
+
     @classmethod
     def reset_cache(cls):
         cls.cache = {}
