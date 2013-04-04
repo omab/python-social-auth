@@ -142,12 +142,6 @@ class BaseAuth(object):
         otherwise return false."""
         return True
 
-    def disconnect(self, user, association_id=None):
-        """Deletes current backend from user if associated.
-        Override if extra operations are needed.
-        """
-        self.strategy.disconnect(user=user, association_id=association_id)
-
     def request(self, url, method='GET', *args, **kwargs):
         kwargs.setdefault('timeout', self.setting('REQUESTS_TIMEOUT') or
                                      self.setting('URLOPEN_TIMEOUT'))
