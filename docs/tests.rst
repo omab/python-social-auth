@@ -19,7 +19,8 @@ Installing dependencies
 -----------------------
 
 Go to the tests_ directory and install the dependencies listed in the
-requirements.txt_. Then run with ``nosetests`` command.
+requirements.txt_. Then run with ``nosetests`` command, or with the
+``run_tests.sh`` script.
 
 
 Pending
@@ -29,15 +30,7 @@ At the moment only OAuth1 and OAuth2 backends are being tested, and just
 login and partial pipeline features are covered by the test. There's still
 a lot to work on, like:
 
-    * OpenId backends
     * Frameworks support
-    * Failure cases (like authentication canceled, etc)
-    * Extra data saving
-    * Application actions
-        - Login
-        - Associate
-        - Partial pipeline
-        - Disconnect
 
 .. _HTTPretty: https://github.com/gabrielfalcao/HTTPretty
 .. _tests: https://github.com/omab/python-social-auth/tree/master/tests
