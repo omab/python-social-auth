@@ -11,6 +11,7 @@ def get_username(strategy, details, user=None, *args, **kwargs):
         uuid_length = strategy.setting('UUID_LENGTH', 16)
         max_length = storage.user.username_max_length()
         do_slugify = strategy.setting('SLUGIFY_USERNAMES', False)
+        do_clean = strategy.setting('CLEAN_USERNAMES', True)
 
         if email_as_username and details.get('email'):
             username = details['email']
@@ -20,7 +21,9 @@ def get_username(strategy, details, user=None, *args, **kwargs):
             username = uuid4().hex
 
         short_username = username[:max_length - uuid_length]
-        final_username = storage.user.clean_username(username[:max_length])
+        final_username = username[:max_length]
+        if do_clean:
+            final_username = storage.user.clean_username(final_username)
         if do_slugify:
             final_username = slugify(final_username)
 
@@ -29,7 +32,9 @@ def get_username(strategy, details, user=None, *args, **kwargs):
         # username is cut to avoid any field max_length.
         while storage.user.user_exists(final_username):
             username = short_username + uuid4().hex[:uuid_length]
-            final_username = storage.user.clean_username(username[:max_length])
+            final_username = username[:max_length]
+            if do_clean:
+                final_username = storage.user.clean_username(final_username)
             if do_slugify:
                 final_username = slugify(final_username)
     else:

@@ -159,6 +159,11 @@ to control usernames generation.
     this setting to ``True``. The feature is disabled by default to to not
     force this option to all projects.
 
+``SOCIAL_AUTH_CLEAN_USERNAMES = True``
+    By default the regex ``r'[^\w.@+-_]+'`` is applied over usernames to clean
+    them from usual undesired characters like spaces. Set this setting to
+    ``False`` to disable this behavior.
+
 
 Extra arguments on auth processes
 ---------------------------------
