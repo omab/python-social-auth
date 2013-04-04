@@ -2,7 +2,7 @@ import time
 import random
 import hashlib
 
-from social.utils import setting_name
+from social.utils import setting_name, to_setting_name
 from social.store import OpenIdStore
 
 
@@ -50,6 +50,7 @@ class BaseStrategy(object):
     def setting(self, name, default=None):
         names = (setting_name(self.backend_name, name),
                  setting_name(name),
+                 to_setting_name(self.backend_name, name),
                  name)
         for name in names:
             try:

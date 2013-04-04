@@ -33,9 +33,12 @@ def url_add_parameters(url, params):
     return url
 
 
+def to_setting_name(*names):
+    return '_'.join([name.upper().replace('-', '_') for name in names])
+
+
 def setting_name(*names):
-    names = [val.upper().replace('-', '_') for val in names if val]
-    return '_'.join((SETTING_PREFIX,) + tuple(names))
+    return to_setting_name(*((SETTING_PREFIX,) + names))
 
 
 def sanitize_redirect(host, redirect_to):
