@@ -41,7 +41,7 @@ class RedditOAuth2(BaseOAuth2):
     def auth_headers(self):
         return {
             'Authorization': 'Basic %s' % base64.urlsafe_b64encode(
-                '%s:%s' % self.get_key_and_secret()
+                ('%s:%s' % self.get_key_and_secret()).encode()
             )
         }
 
