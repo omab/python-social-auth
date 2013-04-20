@@ -80,6 +80,7 @@ class VKontakteOAuth2(BaseOAuth2):
     ID_KEY = 'user_id'
     AUTHORIZATION_URL = 'http://oauth.vk.com/authorize'
     ACCESS_TOKEN_URL = 'https://oauth.vk.com/access_token'
+    ACCESS_TOKEN_METHOD = 'POST'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires')
