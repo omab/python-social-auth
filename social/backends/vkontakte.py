@@ -141,9 +141,9 @@ class VKontakteAppOAuth2(VKontakteOAuth2):
         # Verify signature, if present
         key, secret = self.get_key_and_secret()
         if auth_key:
-            check_key = md5('_'.join([self.data.get('api_id'),
+            check_key = md5('_'.join([key,
                                       self.data.get('viewer_id'),
-                                      key])).hexdigest()
+                                      secret])).hexdigest()
             if check_key != auth_key:
                 raise ValueError('VKontakte authentication failed: invalid '
                                  'auth key')
