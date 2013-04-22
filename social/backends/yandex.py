@@ -52,3 +52,27 @@ class YandexOAuth2(BaseOAuth2):
         return self.get_json('https://login.yandex.ru/info',
                              params={'oauth_token': access_token,
                                      'format': 'json'})
+
+
+class YaruOAuth2(BaseOAuth2):
+    name = 'yaru'
+    AUTHORIZATION_URL = 'https://oauth.yandex.com/authorize'
+    ACCESS_TOKEN_URL = 'https://oauth.yandex.com/token'
+    ACCESS_TOKEN_METHOD = 'POST'
+    REDIRECT_STATE = False
+
+    def get_user_details(self, response):
+        first_name = response.get('real_name') or response.get('display_name')
+        last_name = ''
+        if ' ' in first_name:
+            first_name, last_name = first_name.split(' ', 1)
+        return {'username': response.get('display_name'),
+                'email': response.get('default_email') or
+                         response.get('emails', [''])[0],
+                'first_name': first_name,
+                'last_name': last_name}
+
+    def user_data(self, access_token, response, *args, **kwargs):
+        return self.get_json('https://login.yandex.ru/info',
+                             params={'oauth_token': access_token,
+                                     'format': 'json'})
