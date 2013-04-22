@@ -34,7 +34,7 @@ def url_add_parameters(url, params):
 
 
 def to_setting_name(*names):
-    return '_'.join([name.upper().replace('-', '_') for name in names])
+    return '_'.join([name.upper().replace('-', '_') for name in names if name])
 
 
 def setting_name(*names):
