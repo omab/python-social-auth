@@ -174,10 +174,8 @@ class VKontakteAppOAuth2(VKontakteOAuth2):
 
 def vkontakte_api(backend, method, data):
     """Calls VKontakte OpenAPI method
-        http://vkontakte.ru/apiclub,
-        http://vkontakte.ru/pages.php?o=-1&p=%C2%FB%EF%EE%EB%ED%E5%ED%E8%E5%20
-                                             %E7%E0%EF%F0%EE%F1%EE%E2%20%EA%20
-                                             API
+        https://vk.com/apiclub,
+        https://vk.com/pages.php?o=-1&p=%C2%FB%EF%EE%EB%ED%E5%ED%E8%E5%20%E7%E0%EF%F0%EE%F1%EE%E2%20%EA%20API
     """
     # We need to perform server-side call if no access_token
     if not 'access_token' in data:
@@ -190,11 +188,11 @@ def vkontakte_api(backend, method, data):
 
         data['method'] = method
         data['format'] = 'json'
-        url = 'http://api.vkontakte.ru/api.php'
+        url = 'http://api.vk.com/api.php'
         param_list = sorted(list(item + '=' + data[item] for item in data))
         data['sig'] = md5(''.join(param_list) + secret).hexdigest()
     else:
-        url = 'https://api.vkontakte.ru/method/' + method
+        url = 'https://api.vk.com/method/' + method
 
     try:
         return backend.get_json(url, params=data)
