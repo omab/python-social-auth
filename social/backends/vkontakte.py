@@ -159,14 +159,17 @@ class VKontakteAppOAuth2(VKontakteOAuth2):
                                         {'uid': user_id}).get('response', 0)
             if not int(is_user):
                 return None
-        return self.strategy.authenticate(*args, **{'auth': self,
+
+        auth_data = {
+            'auth': self,
             'backend': self,
             'request': self.request,
             'response': {
-                'response': self.user_profile(user_id),
                 'user_id': user_id,
             }
-        })
+        }
+        auth_data['response'].update(self.user_profile(user_id))
+        return self.strategy.authenticate(*args, **auth_data)
 
 
 def vkontakte_api(backend, method, data):
