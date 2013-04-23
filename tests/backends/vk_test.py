@@ -7,7 +7,7 @@ import json
 
 
 class VKOAuth2Test(OAuth2Test):
-    backend_path = 'social.backends.vkontakte.VKontakteOAuth2'
+    backend_path = 'social.backends.vk.VKOAuth2'
     user_data_url = 'https://api.vk.com/method/users.get'
     expected_username = 'durov'
     access_token_body = json.dumps({
