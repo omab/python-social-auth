@@ -136,7 +136,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.foursquare.FoursquareOAuth2',
     'social.backends.instagram.InstagramOAuth2',
     'social.backends.live.LiveOAuth2',
-    'social.backends.vkontakte.VKontakteOAuth2',
+    'social.backends.vk.VKOAuth2',
     'social.backends.dailymotion.DailymotionOAuth2',
     'social.backends.disqus.DisqusOAuth2',
     'social.backends.dropbox.DropboxOAuth',
