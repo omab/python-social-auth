@@ -78,7 +78,7 @@ or extend current one):
     * Tumblr_ OAuth1
     * Twilio_ Auth
     * Twitter_ OAuth1
-    * Vkontakte_ OpenAPI, OAuth2 and OAuth2 for Applications
+    * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
     * Xing_ OAuth1
     * Yahoo_ OpenId and OAuth1
@@ -199,7 +199,7 @@ check `django-social-auth LICENCE`_ for details:
 .. _Tripit: https://www.tripit.com
 .. _Twilio: https://www.twilio.com
 .. _Twitter: http://twitter.com
-.. _Vkontakte: http://vk.com
+.. _VK.com: http://vk.com
 .. _Weibo: https://weibo.com
 .. _Xing: https://www.xing.com
 .. _Yahoo: http://yahoo.com

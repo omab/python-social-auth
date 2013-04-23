@@ -54,7 +54,7 @@ Here's the list of currently supported backends.
    tumblr
    twilio
    twitter
-   vkontakte
+   vk
    weibo
    yahoo
 
