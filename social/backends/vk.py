@@ -2,7 +2,8 @@
 """
 VK.com (former Vkontakte) OpenAPI and OAuth 2.0 support.
 
-This backend adds support for VK.com OpenAPI, OAuth2 and OAuth2 for IFrame applications.
+This backend adds support for VK.com OpenAPI, OAuth2 and OAuth2 for IFrame
+applications.
 """
 from time import time
 from hashlib import md5
@@ -172,9 +173,10 @@ class VKAppOAuth2(VKOAuth2):
 
 
 def vk_api(backend, method, data):
-    """Calls VK.com OpenAPI method
-        https://vk.com/apiclub,
-        https://vk.com/pages.php?o=-1&p=%C2%FB%EF%EE%EB%ED%E5%ED%E8%E5%20%E7%E0%EF%F0%EE%F1%EE%E2%20%EA%20API
+    """
+    Calls VK.com OpenAPI method, check:
+        https://vk.com/apiclub
+        http://goo.gl/yLcaa
     """
     # We need to perform server-side call if no access_token
     if not 'access_token' in data:
