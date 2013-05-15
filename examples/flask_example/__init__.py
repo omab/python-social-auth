@@ -19,7 +19,11 @@ from social.apps.flask_app.template_filters import backends
 # App
 app = Flask(__name__)
 app.config.from_object('flask_example.settings')
-app.config.from_object('flask_example.local_settings')
+
+try:
+    app.config.from_object('flask_example.local_settings')
+except ImportError:
+    pass
 
 # DB
 db = SQLAlchemy(app)
