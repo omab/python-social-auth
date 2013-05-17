@@ -1,5 +1,5 @@
 from flask import current_app, request, redirect, make_response, session, \
-                  render_template, render_template_string, Response
+    render_template, render_template_string, Response
 
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 

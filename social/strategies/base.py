@@ -102,8 +102,8 @@ class BaseStrategy(object):
         }
 
     def from_session(self, session):
-        return session['next'], session['backend'], \
-               session['args'], session['kwargs']
+        return (session['next'], session['backend'],
+                session['args'], session['kwargs'])
 
     def clean_partial_pipeline(self):
         self.session_pop('partial_pipeline')
@@ -118,8 +118,7 @@ class BaseStrategy(object):
             'social.pipeline.user.create_user',
             'social.pipeline.social_auth.associate_user',
             'social.pipeline.social_auth.load_extra_data',
-            'social.pipeline.user.user_details'
-       ))
+            'social.pipeline.user.user_details'))
 
     def random_string(self, length=12, chars=ALLOWED_CHARS):
         # Implementation borrowed from django 1.4

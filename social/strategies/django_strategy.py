@@ -88,18 +88,19 @@ class DjangoStrategy(BaseStrategy):
             'backend': backend.name,
             'args': tuple(map(self._ctype, args)),
             'kwargs': dict((key, self._ctype(val))
-                                for key, val in kwargs.items())
+                           for key, val in kwargs.items())
         }
 
     def from_session(self, session):
         """Takes session saved data to continue pipeline and merges with any
         new extra argument needed. Returns tuple with next pipeline index
         entry, arguments and keyword arguments to continue the process."""
-        next, backend, args, kwargs = super(DjangoStrategy, self).\
-                                            from_session(session)
-        return next, backend, \
-               list(map(self._model, args)), \
-               dict((key, self._model(val)) for key, val in kwargs.items())
+        next, backend, args, kwargs = \
+            super(DjangoStrategy, self).from_session(session)
+        return (next,
+                backend,
+                list(map(self._model, args)),
+                dict((key, self._model(val)) for key, val in kwargs.items()))
 
     def build_absolute_uri(self, path=None):
         if self.request:
