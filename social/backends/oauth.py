@@ -1,3 +1,5 @@
+import six
+
 from requests import HTTPError
 from requests_oauthlib import OAuth1
 from oauthlib.oauth1 import SIGNATURE_TYPE_AUTH_HEADER
@@ -146,10 +148,14 @@ class BaseOAuth1(OAuthAuth):
         params = self.request_token_extra_arguments()
         params.update(self.get_scope_argument())
         key, secret = self.get_key_and_secret()
+        # decoding='utf-8' produces errors with python-requests on Python3
+        # since the final URL will be of type bytes
+        decoding = None if six.PY3 else 'utf-8'
         response = self.request(self.REQUEST_TOKEN_URL,
                                 params=params,
                                 auth=OAuth1(key, secret,
-                                            callback_uri=self.redirect_uri),
+                                            callback_uri=self.redirect_uri,
+                                            decoding=decoding),
                                 method=self.REQUEST_TOKEN_METHOD)
         return response.content
 
@@ -170,12 +176,16 @@ class BaseOAuth1(OAuthAuth):
         key, secret = self.get_key_and_secret()
         oauth_verifier = oauth_verifier or self.data.get('oauth_verifier')
         token = token or {}
+        # decoding='utf-8' produces errors with python-requests on Python3
+        # since the final URL will be of type bytes
+        decoding = None if six.PY3 else 'utf-8'
         return OAuth1(key, secret,
                       resource_owner_key=token.get('oauth_token'),
                       resource_owner_secret=token.get('oauth_token_secret'),
                       callback_uri=self.redirect_uri,
                       verifier=oauth_verifier,
-                      signature_type=signature_type)
+                      signature_type=signature_type,
+                      decoding=decoding)
 
     def oauth_request(self, token, url, params=None, method='GET'):
         """Generate OAuth request, setups callback url"""
