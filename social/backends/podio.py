@@ -1,0 +1,38 @@
+"""
+Podio OAuth2 support
+
+https://developers.podio.com/authentication/server_side
+"""
+
+from social.backends.oauth import BaseOAuth2
+
+
+class PodioOAuth2(BaseOAuth2):
+    """Podio OAuth authentication backend"""
+
+    name = 'podio'
+    AUTHORIZATION_URL = 'https://podio.com/oauth/authorize'
+    ACCESS_TOKEN_URL = 'https://podio.com/oauth/token'
+    ACCESS_TOKEN_METHOD = 'POST'
+    EXTRA_DATA = [
+        ('access_token', 'access_token'),
+        ('token_type', 'token_type'),
+        ('expires_in', 'expires'),
+        ('refresh_token', 'refresh_token'),
+    ]
+
+    def get_user_id(self, details, response):
+        return response['ref']['id']
+
+    def get_user_details(self, response):
+        details = self.get_json('https://api.podio.com/user/status',
+            headers={'Authorization': 'OAuth2 ' + response["access_token"]})
+        fullname = details['profile']['name']
+        first_name, _, last_name = fullname.partition(' ')
+        return {
+            'username': 'user_%d' % details['user']['user_id'],
+            'email': details['user']['mail'],
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name,
+        }

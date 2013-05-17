@@ -161,6 +161,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.tumblr.TumblrOAuth',
     'social.backends.reddit.RedditOAuth2',
     'social.backends.steam.SteamOpenId',
+    'social.backends.podio.PodioOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
