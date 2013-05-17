@@ -25,14 +25,16 @@ class PodioOAuth2(BaseOAuth2):
         return response['ref']['id']
 
     def get_user_details(self, response):
-        details = self.get_json('https://api.podio.com/user/status',
-            headers={'Authorization': 'OAuth2 ' + response["access_token"]})
-        fullname = details['profile']['name']
+        fullname = response['profile']['name']
         first_name, _, last_name = fullname.partition(' ')
         return {
-            'username': 'user_%d' % details['user']['user_id'],
-            'email': details['user']['mail'],
+            'username': 'user_%d' % response['user']['user_id'],
+            'email': response['user']['mail'],
             'fullname': fullname,
             'first_name': first_name,
             'last_name': last_name,
         }
+
+    def user_data(self, access_token, *args, **kwargs):
+        return self.get_json('https://api.podio.com/user/status',
+            headers={'Authorization': 'OAuth2 ' + access_token})
