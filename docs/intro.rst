@@ -57,6 +57,7 @@ or extend current one):
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
     * Orkut_ OAuth1
+    * Podio_ OAuth2
     * Rdio_ OAuth1 and OAuth2
     * Readability_ OAuth1
     * Shopify_ OAuth2
@@ -125,6 +126,7 @@ suits your project. Check `Authentication Pipeline`_ section.
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
 .. _Orkut: http://www.orkut.com
+.. _Podio: https://podio.com
 .. _Shopify: http://shopify.com
 .. _Skyrock: https://skyrock.com
 .. _Soundcloud: https://soundcloud.com

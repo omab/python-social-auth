@@ -47,4 +47,5 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.twilio.TwilioAuth',
     'social.backends.xing.XingOAuth',
     'social.backends.yandex.YandexOAuth2',
+    'social.backends.podio.PodioOAuth2',
 )
