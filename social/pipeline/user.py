@@ -59,8 +59,8 @@ def user_details(strategy, details, response, user=None, *args, **kwargs):
         return
 
     changed = False  # flag to track changes
-    keep = ('username', 'id', 'pk') + \
-           tuple(strategy.setting('PROTECTED_USER_FIELDS', []))
+    protected = strategy.setting('PROTECTED_USER_FIELDS', [])
+    keep = ('username', 'id', 'pk') + tuple(protected)
 
     for name, value in details.items():
         # do not update username, it was already generated

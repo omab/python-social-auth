@@ -37,9 +37,10 @@ def associate_user(strategy, user, uid, *args, **kwargs):
 
 
 def load_extra_data(strategy, details, response, uid, user, *args, **kwargs):
-    social = kwargs.get('social') or \
-             strategy.storage.user.get_social_auth(strategy.backend.name,
-                                                        uid)
+    social = kwargs.get('social') or strategy.storage.user.get_social_auth(
+        strategy.backend.name,
+        uid
+    )
     if social:
         extra_data = strategy.backend.extra_data(user, uid, response, details)
         social.set_extra_data(extra_data)
