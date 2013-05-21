@@ -1,21 +1,23 @@
 """
 Trello OAuth support.
 
-This contribution adds support for Trello OAuth service. The settings          
-SOCIAL_AUTH_TRELLO_KEY and SOCIAL_AUTH_TRELLO_SECRET must be defined with the values            
-given by `https://trello.com/1/appKey/generate`.   
+This contribution adds support for Trello OAuth service. The settings
+SOCIAL_AUTH_TRELLO_KEY and SOCIAL_AUTH_TRELLO_SECRET must be defined with
+the values given by `https://trello.com/1/appKey/generate`.
 
-Extended permissions are supported by defining TRELLO_EXTENDED_PERMISSIONS     
-setting, it must be a list of values to request.                               
-                                                                               
-By default account id and token expiration time are stored in extra_data       
-field, check OAuthBackend class for details on how to extend it. 
+Extended permissions are supported by defining TRELLO_EXTENDED_PERMISSIONS
+setting, it must be a list of values to request.
+
+By default account id and token expiration time are stored in extra_data
+field, check OAuthBackend class for details on how to extend it.
 
 """
 
 from social.backends.oauth import BaseOAuth1
 
+
 class TrelloOAuth(BaseOAuth1):
+
     """Trello OAuth authentication backend"""
     name = 'trello'
     ID_KEY = 'username'
@@ -31,10 +33,9 @@ class TrelloOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Trello account"""
-        print response
         return {'username': response.get('username'),
-            'email': response.get('email'), 
-            'fullName': response.get('fullName')}
+                'email': response.get('email'),
+                'fullName': response.get('fullName')}
 
     def user_data(self, access_token):
         """Return user data provided"""
