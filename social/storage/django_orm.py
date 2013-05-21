@@ -49,11 +49,13 @@ class DjangoUserMixin(UserMixin):
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.
         """
-        return cls.user_model().objects.filter(username=username).count() > 0
+        username_field = getattr(cls.user_model(), 'USERNAME_FIELD', 'username')
+        return cls.user_model().objects.filter(**{username_field:username}).count() > 0
 
     @classmethod
     def get_username(cls, user):
-        return getattr(user, 'username', None)
+        username_field = getattr(cls.user_model(), 'USERNAME_FIELD', 'username')
+        return getattr(user, username_field, None)
 
     @classmethod
     def create_user(cls, username, email=None):
