@@ -28,6 +28,13 @@ def long_description():
         return LONG_DESCRIPTION
 
 
+requires = ['requests>=1.1.0', 'oauthlib>=0.3.8', 'six>=1.2.0']
+if PY3:
+    requires += ['python3-openid>=3.0.1',
+                 'requests-oauthlib>=0.3.0,<0.3.2,>0.3.2']
+else:
+    requires += ['python-openid>=2.2', 'requests-oauthlib>=0.3.0']
+
 setup(name='python-social-auth',
       version=version,
       author='Matías Aguirre',
@@ -49,12 +56,7 @@ setup(name='python-social-auth',
                 'social.strategies'],
       #package_data={'social': ['locale/*/LC_MESSAGES/*']},
       long_description=long_description(),
-      install_requires=[PY3 and 'python3-openid>=3.0.1' or
-                                'python-openid>=2.2',
-                        'requests>=1.1.0',
-                        'oauthlib>=0.3.8',
-                        'requests-oauthlib>=0.3.0',
-                        'six>=1.2.0'],
+      install_requires=requires,
       classifiers=['Development Status :: 4 - Beta',
                    'Topic :: Internet',
                    'License :: OSI Approved :: BSD License',
