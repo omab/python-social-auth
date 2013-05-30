@@ -162,6 +162,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.reddit.RedditOAuth2',
     'social.backends.steam.SteamOpenId',
     'social.backends.podio.PodioOAuth2',
+    'social.backends.amazon.AmazonOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 

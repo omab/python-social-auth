@@ -22,6 +22,7 @@ Here's the list of currently supported backends.
    oauth
    openid
 
+   amazon
    angel
    behance
    bitbucket
