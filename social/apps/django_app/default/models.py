@@ -39,7 +39,7 @@ class UserSocialAuth(models.Model, DjangoUserMixin):
 
     @classmethod
     def username_max_length(cls):
-        username_field = getattr(UserSocialAuth.user_model(), 'USERNAME_FIELD', 'username')
+        username_field = cls.username_field()
         field = UserSocialAuth.user_model()._meta.get_field(username_field)
         return field.max_length
 

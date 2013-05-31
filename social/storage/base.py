@@ -106,7 +106,7 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def user_exists(cls, username):
+    def user_exists(cls, *args, **kwargs):
         """
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.
@@ -114,8 +114,8 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def create_user(cls, username, email=None):
-        """Create a user with given username and (optional) email"""
+    def create_user(cls, *args, **kwargs):
+        """Create a user instance"""
         raise NotImplementedError('Implement in subclass')
 
     @classmethod

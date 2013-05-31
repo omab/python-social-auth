@@ -3,7 +3,12 @@ from uuid import uuid4
 from social.utils import slugify
 
 
+USER_FIELDS = ['username', 'email']
+
+
 def get_username(strategy, details, user=None, *args, **kwargs):
+    if 'username' not in strategy.setting('USER_FIELDS', USER_FIELDS):
+        return
     storage = strategy.storage
 
     if not user:
@@ -42,14 +47,19 @@ def get_username(strategy, details, user=None, *args, **kwargs):
     return {'username': final_username}
 
 
-def create_user(strategy, details, response, uid, username, user=None, *args,
-                **kwargs):
-    if user or not username:
-        return None
+def create_user(strategy, details, response, uid, user=None, *args, **kwargs):
+    if user:
+        return
+
+    fields = dict((name, kwargs.get(name) or details.get(name))
+                        for name in strategy.setting('USER_FIELDS',
+                                                      USER_FIELDS))
+    if not fields:
+        return
+
     return {
         'is_new': True,
-        'user': strategy.create_user(username=username,
-                                     email=details.get('email'))
+        'user': strategy.create_user(**fields)
     }
 
 
@@ -65,9 +75,12 @@ def user_details(strategy, details, response, user=None, *args, **kwargs):
     for name, value in details.items():
         # do not update username, it was already generated
         # do not update configured fields if user already existed
-        if name not in keep:
+        if name not in keep and hasattr(user, name):
             if value and value != getattr(user, name, None):
-                setattr(user, name, value)
-                changed = True
+                try:
+                    setattr(user, name, value)
+                    changed = True
+                except AttributeError:
+                    pass
     if changed:
         strategy.storage.user.changed(user)

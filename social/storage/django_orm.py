@@ -44,23 +44,28 @@ class DjangoUserMixin(UserMixin):
             raise NotAllowedToDisconnect()
 
     @classmethod
-    def user_exists(cls, username):
+    def username_field(cls):
+        return getattr(cls.user_model(), 'USERNAME_FIELD', 'username')
+
+    @classmethod
+    def user_exists(cls, *args, **kwargs):
         """
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.
         """
-        username_field = getattr(cls.user_model(), 'USERNAME_FIELD', 'username')
-        return cls.user_model().objects.filter(**{username_field:username}).count() > 0
+        if 'username' in kwargs:
+            kwargs[cls.username_field()] = kwargs.pop('username')
+        return cls.user_model().objects.filter(*args, **kwargs).count() > 0
 
     @classmethod
     def get_username(cls, user):
-        username_field = getattr(cls.user_model(), 'USERNAME_FIELD', 'username')
-        return getattr(user, username_field, None)
+        return getattr(user, cls.username_field(), None)
 
     @classmethod
-    def create_user(cls, username, email=None):
-        return cls.user_model().objects.create_user(username=username,
-                                                    email=email)
+    def create_user(cls, *args, **kwargs):
+        if 'username' in kwargs:
+            kwargs[cls.username_field()] = kwargs.pop('username')
+        return cls.user_model().objects.create_user(*args, **kwargs)
 
     @classmethod
     def get_user(cls, pk):

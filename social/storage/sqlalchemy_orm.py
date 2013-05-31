@@ -72,21 +72,20 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
         return cls._session().query(cls.user_model())
 
     @classmethod
-    def user_exists(cls, username):
+    def user_exists(cls, *args, **kwargs):
         """
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.
         """
-        return cls.user_query().filter_by(username=username).count() > 0
+        return cls.user_query().filter_by(*args, **kwargs).count() > 0
 
     @classmethod
     def get_username(cls, user):
         return getattr(user, 'username', None)
 
     @classmethod
-    def create_user(cls, username, email=None):
-        return cls._new_instance(cls.user_model(), username=username,
-                                email=email)
+    def create_user(cls, *args, **kwargs):
+        return cls._new_instance(cls.user_model(), *args, **kwargs)
 
     @classmethod
     def get_user(cls, pk):
