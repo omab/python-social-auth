@@ -39,10 +39,9 @@ def do_complete(strategy, login, user=None, redirect_name='next',
     login_error_url = strategy.setting('LOGIN_ERROR_URL') or \
                       strategy.setting('LOGIN_URL')
 
-    if strategy.session_get('partial_pipeline'):
-        idx, backend, xargs, xkwargs = strategy.from_session(
-            strategy.session_pop('partial_pipeline')
-        )
+    partial = strategy.session_get('partial_pipeline', None)
+    if partial is not None:
+        idx, backend, xargs, xkwargs = strategy.from_session(partial)
         if backend == strategy.backend_name:
             kwargs = kwargs.copy()
             kwargs.setdefault('user', user)
