@@ -66,6 +66,3 @@ class WebpyStrategy(BaseStrategy):
         if path.startswith('http://') or path.startswith('https://'):
             return path
         return web.ctx.protocol + '://' + web.ctx.host + path
-
-    def is_response(self, value):
-        return isinstance(value, web.Storage)

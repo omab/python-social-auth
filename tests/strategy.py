@@ -1,5 +1,3 @@
-import six
-
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 
 
@@ -84,6 +82,3 @@ class TestStrategy(BaseStrategy):
         if isinstance(user, self.storage.user.user_model()):
             self.session_set('username', user.username)
         return user
-
-    def is_response(self, value):
-        return isinstance(value, (Redirect, six.string_types))

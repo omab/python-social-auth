@@ -1,5 +1,5 @@
 from flask import current_app, request, redirect, make_response, session, \
-    render_template, render_template_string, Response
+                  render_template, render_template_string
 
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 
@@ -60,6 +60,3 @@ class FlaskStrategy(BaseStrategy):
         if request.host_url.endswith('/') and path.startswith('/'):
             path = path[1:]
         return request.host_url + (path or '')
-
-    def is_response(self, value):
-        return isinstance(value, Response)

@@ -133,6 +133,3 @@ class DjangoStrategy(BaseStrategy):
             ModelClass = ctype.model_class()
             val = ModelClass.objects.get(pk=val['pk'])
         return val
-
-    def is_response(self, value):
-        return isinstance(value, HttpResponse)

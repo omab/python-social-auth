@@ -164,11 +164,6 @@ class BrokenStrategyTests(unittest.TestCase):
             .called_with('/foobar') \
             .should.throw(NotImplementedError, 'Implement in subclass')
 
-    def test_is_response(self):
-        self.strategy.is_response.when \
-            .called_with(None) \
-            .should.throw(NotImplementedError, 'Implement in subclass')
-
     def test_render_html_with_tpl(self):
         self.strategy.render_html.when \
             .called_with('foobar.html', context={}) \

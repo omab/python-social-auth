@@ -56,7 +56,7 @@ def do_complete(strategy, login, user=None, redirect_name='next',
         user = strategy.complete(user=user, request=strategy.request,
                                  *args, **kwargs)
 
-    if strategy.is_response(user):
+    if user and not isinstance(user, strategy.storage.user.user_model()):
         return user
 
     if is_authenticated:

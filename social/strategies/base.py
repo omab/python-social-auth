@@ -174,6 +174,3 @@ class BaseStrategy(object):
     def build_absolute_uri(self, path=None):
         """Build absolute URI with given (optional) path"""
         raise NotImplementedError('Implement in subclass')
-
-    def is_response(self, value):
-        raise NotImplementedError('Implement in subclass')
