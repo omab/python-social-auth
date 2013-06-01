@@ -93,17 +93,30 @@ class BaseStrategy(object):
         self.session_set(name, value)
         return self.session_get(name)
 
-    def to_session(self, next, backend, *args, **kwargs):
+    def to_session_value(self, val):
+        return val
+
+    def from_session_value(self, val):
+        return val
+
+    def to_session(self, next, backend, storage, request=None,
+                   *args, **kwargs):
         return {
             'next': next,
             'backend': backend.name,
-            'args': args,
-            'kwargs': kwargs
+            'args': tuple(map(self.to_session_value, args)),
+            'kwargs': dict((key, self.to_session_value(val))
+                           for key, val in kwargs.items())
         }
 
     def from_session(self, session):
-        return (session['next'], session['backend'],
-                session['args'], session['kwargs'])
+        return (
+            session['next'],
+            session['backend'],
+            list(map(self.from_session_value, session['args'])),
+            dict((key, self.from_session_value(val))
+                    for key, val in session['kwargs'].items())
+        )
 
     def clean_partial_pipeline(self):
         self.session_pop('partial_pipeline')

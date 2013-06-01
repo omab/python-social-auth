@@ -81,27 +81,6 @@ class DjangoStrategy(BaseStrategy):
     def session_setdefault(self, name, value):
         return self.session.setdefault(name, value)
 
-    def to_session(self, next, backend, *args, **kwargs):
-        """Returns dict to store on session for partial pipeline."""
-        return {
-            'next': next,
-            'backend': backend.name,
-            'args': tuple(map(self._ctype, args)),
-            'kwargs': dict((key, self._ctype(val))
-                           for key, val in kwargs.items())
-        }
-
-    def from_session(self, session):
-        """Takes session saved data to continue pipeline and merges with any
-        new extra argument needed. Returns tuple with next pipeline index
-        entry, arguments and keyword arguments to continue the process."""
-        next, backend, args, kwargs = \
-            super(DjangoStrategy, self).from_session(session)
-        return (next,
-                backend,
-                list(map(self._model, args)),
-                dict((key, self._model(val)) for key, val in kwargs.items()))
-
     def build_absolute_uri(self, path=None):
         if self.request:
             return self.request.build_absolute_uri(path)
@@ -116,7 +95,7 @@ class DjangoStrategy(BaseStrategy):
         else:
             return get_random_string(length, chars)
 
-    def _ctype(self, val):
+    def to_session_value(self, val):
         """Converts values that are instance of Model to a dictionary
         with enough information to retrieve the instance back later."""
         if isinstance(val, Model):
@@ -126,7 +105,7 @@ class DjangoStrategy(BaseStrategy):
             }
         return val
 
-    def _model(self, val):
+    def from_session_value(self, val):
         """Converts back the instance saved by self._ctype function."""
         if isinstance(val, dict) and 'pk' in val and 'ctype' in val:
             ctype = ContentType.objects.get_for_id(val['ctype'])
