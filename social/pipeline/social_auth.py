@@ -12,6 +12,7 @@ def social_user(strategy, uid, user=None, *args, **kwargs):
             user = social.user
     return {'social': social,
             'user': user,
+            'is_new': user is None,
             'new_association': False}
 
 
