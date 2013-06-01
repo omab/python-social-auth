@@ -93,6 +93,7 @@ class BaseAuth(object):
         if user:
             user.social_user = out['social']
             user.is_new = out['is_new']
+        self.strategy.clean_partial_pipeline()
         return user
 
     def extra_data(self, user, uid, response, details):
