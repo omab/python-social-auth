@@ -31,12 +31,12 @@ db.metadata.bind = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'],
                        convert_unicode=True)
-db_session = scoped_session(sessionmaker(bind=engine))
+session = scoped_session(sessionmaker(bind=engine))
 Base = declarative_base()
-Base.query = db_session.query_property()
+Base.query = session.query_property()
 
 app.register_blueprint(social_auth)
-social_storage = init_social(app, Base)
+social_storage = init_social(app, Base, session)
 
 login_manager = login.LoginManager()
 login_manager.login_view = 'main'
@@ -63,12 +63,12 @@ def global_user():
 @app.teardown_appcontext
 def commit_on_success(error=None):
     if error is None:
-        db_session.commit()
+        session.commit()
 
 
 @app.teardown_request
 def shutdown_session(exception=None):
-    db_session.remove()
+    session.remove()
 
 
 @app.context_processor
