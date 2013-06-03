@@ -17,11 +17,17 @@ class FlaskStorage(BaseSQLAlchemyStorage):
     association = None
 
 
-def init_social(app, Base):
+def init_social(app, Base, session):
     UID_LENGTH = app.config.get(setting_name('UID_LENGTH'), 255)
     User = module_member(app.config[setting_name('USER_MODEL')])
+    app_session = session
 
-    class UserSocialAuth(Base, SQLAlchemyUserMixin):
+    class _AppSession(object):
+        @classmethod
+        def _session(cls):
+            return app_session
+
+    class UserSocialAuth(Base, SQLAlchemyUserMixin, _AppSession):
         """Social Auth association model"""
         __tablename__ = 'social_auth_usersocialauth'
         __table_args__ = (UniqueConstraint('provider', 'uid'),)
@@ -41,15 +47,7 @@ def init_social(app, Base):
         def user_model(cls):
             return User
 
-        @classmethod
-        def _session(cls):
-            return cls.query.session
-
-        @classmethod
-        def _query(cls):
-            return cls.query
-
-    class Nonce(Base, SQLAlchemyNonceMixin):
+    class Nonce(Base, SQLAlchemyNonceMixin, _AppSession):
         """One use numbers"""
         __tablename__ = 'social_auth_nonce'
         __table_args__ = (UniqueConstraint('server_url', 'timestamp', 'salt'),)
@@ -58,15 +56,7 @@ def init_social(app, Base):
         timestamp = Column(Integer)
         salt = Column(String(40))
 
-        @classmethod
-        def _session(cls):
-            return cls.query.session
-
-        @classmethod
-        def _query(cls):
-            return cls.query
-
-    class Association(Base, SQLAlchemyAssociationMixin):
+    class Association(Base, SQLAlchemyAssociationMixin, _AppSession):
         """OpenId account association"""
         __tablename__ = 'social_auth_association'
         __table_args__ = (UniqueConstraint('server_url', 'handle'),)
@@ -77,14 +67,6 @@ def init_social(app, Base):
         issued = Column(Integer)
         lifetime = Column(Integer)
         assoc_type = Column(String(64))
-
-        @classmethod
-        def _session(cls):
-            return cls.query.session
-
-        @classmethod
-        def _query(cls):
-            return cls.query
 
     # Set the references in the storage class
     FlaskStorage.user = UserSocialAuth
