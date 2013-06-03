@@ -27,7 +27,7 @@ def init_social(app, Base, session):
         def _session(cls):
             return app_session
 
-    class UserSocialAuth(Base, SQLAlchemyUserMixin, _AppSession):
+    class UserSocialAuth(_AppSession, Base, SQLAlchemyUserMixin):
         """Social Auth association model"""
         __tablename__ = 'social_auth_usersocialauth'
         __table_args__ = (UniqueConstraint('provider', 'uid'),)
@@ -47,7 +47,7 @@ def init_social(app, Base, session):
         def user_model(cls):
             return User
 
-    class Nonce(Base, SQLAlchemyNonceMixin, _AppSession):
+    class Nonce(_AppSession, Base, SQLAlchemyNonceMixin):
         """One use numbers"""
         __tablename__ = 'social_auth_nonce'
         __table_args__ = (UniqueConstraint('server_url', 'timestamp', 'salt'),)
@@ -56,7 +56,7 @@ def init_social(app, Base, session):
         timestamp = Column(Integer)
         salt = Column(String(40))
 
-    class Association(Base, SQLAlchemyAssociationMixin, _AppSession):
+    class Association(_AppSession, Base, SQLAlchemyAssociationMixin):
         """OpenId account association"""
         __tablename__ = 'social_auth_association'
         __table_args__ = (UniqueConstraint('server_url', 'handle'),)
