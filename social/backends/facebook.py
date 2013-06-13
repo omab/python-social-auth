@@ -63,8 +63,7 @@ class FacebookOAuth2(BaseOAuth2):
             'code': self.data['code']
         })
         access_token = response['access_token']
-        return self.do_auth(access_token, response=response,
-                            *args, **kwargs)
+        return self.do_auth(access_token, response, *args, **kwargs)
 
     def process_refresh_token_response(self, response, *args, **kwargs):
         return parse_qs(response.content)
@@ -106,7 +105,6 @@ class FacebookAppOAuth2(FacebookOAuth2):
 
     def auth_complete(self, *args, **kwargs):
         access_token = None
-        expires = None
 
         if 'signed_request' in self.data:
             key, secret = self.get_key_and_secret()
@@ -118,15 +116,13 @@ class FacebookAppOAuth2(FacebookOAuth2):
                 access_token = response.get('access_token') or \
                                response['oauth_token'] or \
                                self.data.get('access_token')
-                if 'expires' in response:
-                    expires = response['expires']
 
         if access_token is None:
             if self.data.get('error') == 'access_denied':
                 raise AuthCanceled(self)
             else:
                 raise AuthException(self)
-        return self.do_auth(access_token, expires=expires, *args, **kwargs)
+        return self.do_auth(access_token, response, *args, **kwargs)
 
     def auth_html(self):
         key, secret = self.get_key_and_secret()
