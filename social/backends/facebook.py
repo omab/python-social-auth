@@ -77,7 +77,9 @@ class FacebookOAuth2(BaseOAuth2):
             'client_secret': client_secret
         }
 
-    def do_auth(self, access_token, response={}, *args, **kwargs):
+    def do_auth(self, access_token, response=None, *args, **kwargs):
+        response = response or {}
+
         data = self.user_data(access_token)
 
         if not isinstance(data, dict):
