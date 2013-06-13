@@ -105,6 +105,7 @@ class FacebookAppOAuth2(FacebookOAuth2):
 
     def auth_complete(self, *args, **kwargs):
         access_token = None
+        response = {}
 
         if 'signed_request' in self.data:
             key, secret = self.get_key_and_secret()
