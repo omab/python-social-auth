@@ -158,7 +158,7 @@ Support
 If you're having problems with using the project, use the support forum at CodersClan.
 
 .. image:: http://www.codersclan.net/graphics/getSupport_github4.png
-    :target: http://codersclan.net/forum/index.php?repo_id=7
+    :target: http://codersclan.net/forum/index.php?repo_id=8
 
 
 Copyrights and Licence
