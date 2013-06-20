@@ -25,6 +25,7 @@ class SQLAlchemyMixin(object):
 
     @classmethod
     def _save_instance(cls, instance):
+        cls._session().add(instance)
         cls._session().commit()
         return instance
 
