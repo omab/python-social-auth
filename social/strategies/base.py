@@ -31,9 +31,14 @@ class BaseStrategy(object):
                     'ABCDEFGHIJKLMNOPQRSTUVWXYZ' \
                     '0123456789'
 
-    def __init__(self, backend=None, storage=None, request=None, tpl=None,
-                 backends=None, *args, **kwargs):
-        tpl = tpl or BaseTemplateStrategy
+    def __init__(self, *args, **kwargs):
+        backend = kwargs.pop('backend', None)
+        storage = kwargs.pop('storage', None)
+        request = kwargs.pop('request', None)
+        redirect_uri = kwargs.pop('redirect_uri', None)
+        tpl = kwargs.pop('tpl', BaseTemplateStrategy)
+        backends = kwargs.pop('backends', None)
+
         if not isinstance(tpl, BaseTemplateStrategy):
             tpl = tpl(self)
         self.tpl = tpl
@@ -42,7 +47,7 @@ class BaseStrategy(object):
         self.backends = backends
         if backend:
             self.backend_name = backend.name
-            self.backend = backend(strategy=self, *args, **kwargs)
+            self.backend = backend(strategy=self, backend=backend, storage=storage, request=request, redirect_uri=redirect_uri)
         else:
             self.backend_name = None
             self.backend = backend

@@ -2,8 +2,10 @@ from social.utils import module_member
 from social.backends.utils import get_backend
 
 
-def get_strategy(backends, strategy, storage, request=None, backend=None,
-                 *args, **kwargs):
+def get_strategy(backends, strategy, storage, *args, **kwargs):
+    request = kwargs.pop('request', None)
+    backend = kwargs.pop('backend', None)
+
     if backend:
         Backend = get_backend(backends, backend)
         if not Backend:
@@ -12,5 +14,8 @@ def get_strategy(backends, strategy, storage, request=None, backend=None,
         Backend = None
     Strategy = module_member(strategy)
     Storage = module_member(storage)
-    return Strategy(Backend, Storage, request, backends=backends,
-                    *args, **kwargs)
+    kwargs.setdefault('backends', backends)
+    kwargs.setdefault('backend', Backend)
+    kwargs.setdefault('storage', Storage)
+    kwargs.setdefault('request', request)
+    return Strategy(*args, **kwargs)
