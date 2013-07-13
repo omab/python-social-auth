@@ -1,3 +1,4 @@
+import pickle
 from flask import current_app, request, redirect, make_response, session, \
                   render_template, render_template_string
 
@@ -51,7 +52,7 @@ class FlaskStrategy(BaseStrategy):
         session.pop(name, None)
 
     def session_setdefault(self, name, value):
-        return session.setdefault(name, value)
+        return SessionWrapper(session.setdefault(name, value))
 
     def build_absolute_uri(self, path=None):
         path = path or ''
@@ -60,3 +61,40 @@ class FlaskStrategy(BaseStrategy):
         if request.host_url.endswith('/') and path.startswith('/'):
             path = path[1:]
         return request.host_url + (path or '')
+
+
+class SessionWrapper(object):
+    name_mapping = {
+        '_yadis_services__openid_consumer_':    'yoc',
+        '_openid_consumer_last_token':          'lt'
+    }
+
+    def __init__(self, ext):
+        self.ext = ext
+
+    def __getitem__(self, name):
+        rv = session[self.name_mapping.get(name, name)]
+        if isinstance(rv, dict) and len(rv) == 1 and ' p' in rv:
+            return pickle.loads(rv[' p'])
+        return rv
+
+    def __setitem__(self, name, value):
+        if not getattr(current_app.session_interface, 'pickle_based', True):
+            value = {' p': pickle.dumps(value, 0)}
+        session[self.name_mapping.get(name, name)] = value
+
+    def __delitem__(self, name):
+        del session[self.name_mapping.get(name, name)]
+
+    def get(self, name, default=None):
+        try:
+            return self[name]
+        except KeyError:
+            return default
+
+    def __contains__(self, name):
+        try:
+            self[name]
+            return True
+        except KeyError:
+            return False
