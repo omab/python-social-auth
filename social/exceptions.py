@@ -83,3 +83,9 @@ class AuthTokenRevoked(AuthException):
     """User revoked the access_token in the provider."""
     def __str__(self):
         return 'User revoke access to the token'
+
+
+class AuthForbidden(AuthException):
+    """Authentication for this user is forbidden"""
+    def __str__(self):
+        return 'Your credentials aren\'t allowed'

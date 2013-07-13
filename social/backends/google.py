@@ -13,19 +13,28 @@ APIs console https://code.google.com/apis/console/ Identity option.
 
 OpenID also works straightforward, it doesn't need further configurations.
 """
-from social.exceptions import AuthFailed
 from social.backends.open_id import OpenIdAuth
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
 
 
-class BaseGoogleAuth(object):
+class GoogleWhitelistCheck(object):
+    def auth_allowed(self, response, details):
+        email = details['email']
+        domain = email.split('@', 1)[1]
+        emails = self.setting('GOOGLE_WHITE_LISTED_EMAILS', [])
+        domains = self.setting('GOOGLE_WHITE_LISTED_DOMAINS', [])
+        return (not emails and not domains) or \
+               (emails and email in emails) or \
+               (domains and domain in domains)
+
+
+class BaseGoogleAuth(GoogleWhitelistCheck):
     def get_user_id(self, details, response):
         """Use google email as unique id"""
-        email = validate_whitelists(self, details['email'])
         if self.setting('USE_UNIQUE_USER_ID', False):
             return response['id']
         else:
-            return email
+            return details['email']
 
     def get_user_details(self, response):
         """Return user details from Orkut account"""
@@ -87,7 +96,7 @@ class GoogleOAuth(BaseGoogleAuth, BaseOAuth1):
         return key_secret
 
 
-class GoogleOpenId(OpenIdAuth):
+class GoogleOpenId(GoogleWhitelistCheck, OpenIdAuth):
     name = 'google'
     URL = 'https://www.google.com/accounts/o8/id'
 
@@ -97,13 +106,4 @@ class GoogleOpenId(OpenIdAuth):
         is unique enought to flag a single user. Email comes from schema:
         http://axschema.org/contact/email
         """
-        return validate_whitelists(self, details['email'])
-
-
-def validate_whitelists(backend, email):
-    domain = email.split('@', 1)[1]
-    emails = backend.setting('GOOGLE_WHITE_LISTED_EMAILS', [])
-    domains = backend.setting('GOOGLE_WHITE_LISTED_DOMAINS', [])
-    if (emails and email not in emails) or (domains and domain not in domains):
-        raise AuthFailed(backend, 'Email or domain not allowed')
-    return email
+        return details['email']

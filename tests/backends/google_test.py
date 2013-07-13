@@ -2,7 +2,7 @@ import json
 import datetime
 
 from social.p3 import urlencode
-from social.exceptions import AuthFailed
+from social.exceptions import AuthForbidden
 from tests.oauth import OAuth1Test, OAuth2Test
 from tests.open_id import OpenIdTest
 
@@ -203,7 +203,7 @@ class WhitelistEmailsGoogleOAuth2Test(GoogleOAuth2Test):
                 'foo2@bar.com'
             ]
         })
-        self.do_login.when.called_with().should.throw(AuthFailed)
+        self.do_login.when.called_with().should.throw(AuthForbidden)
 
 
 class WhitelistDomainsGoogleOAuth2Test(GoogleOAuth2Test):
@@ -217,4 +217,4 @@ class WhitelistDomainsGoogleOAuth2Test(GoogleOAuth2Test):
         self.strategy.set_settings({
             'SOCIAL_AUTH_GOOGLE_WHITE_LISTED_EMAILS': ['bar2.com']
         })
-        self.do_login.when.called_with().should.throw(AuthFailed)
+        self.do_login.when.called_with().should.throw(AuthForbidden)

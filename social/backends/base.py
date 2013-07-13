@@ -12,6 +12,7 @@ enabled.
 from requests import request
 
 from social.utils import module_member, parse_qs
+from social.exceptions import AuthForbidden
 
 
 class BaseAuth(object):
@@ -73,6 +74,8 @@ class BaseAuth(object):
         else:
             details = self.get_user_details(kwargs['response'])
             uid = self.get_user_id(details, kwargs['response'])
+            if not self.auth_allowed(kwargs['response'], details):
+                raise AuthForbidden(self)
             return self.pipeline(pipeline, details=details, uid=uid,
                                  is_new=False, *args, **kwargs)
 
@@ -99,6 +102,10 @@ class BaseAuth(object):
     def extra_data(self, user, uid, response, details):
         """Return default blank user extra data"""
         return {}
+
+    def auth_allowed(self, response, details):
+        """Return True if the user should be allowed to authenticate"""
+        return True
 
     def get_user_id(self, details, response):
         """Must return a unique ID from values returned on details"""
