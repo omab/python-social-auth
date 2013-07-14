@@ -93,6 +93,9 @@ class BaseStrategy(object):
         self.session_set(name, value)
         return self.session_get(name)
 
+    def openid_session_dict(self, name):
+        return self.session_setdefault(name, {})
+
     def to_session_value(self, val):
         return val
 

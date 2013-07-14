@@ -201,7 +201,7 @@ class OpenIdAuth(BaseAuth):
         """Create an OpenID Consumer object for the given Django request."""
         if not hasattr(self, '_consumer'):
             self._consumer = Consumer(
-                self.strategy.session_setdefault(SESSION_NAME, {}),
+                self.strategy.openid_session_dict(SESSION_NAME),
                 self.strategy.openid_store()
             )
         return self._consumer

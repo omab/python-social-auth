@@ -1,4 +1,5 @@
 import pickle
+
 from flask import current_app, request, redirect, make_response, session, \
                   render_template, render_template_string
 
@@ -52,7 +53,24 @@ class FlaskStrategy(BaseStrategy):
         session.pop(name, None)
 
     def session_setdefault(self, name, value):
-        return SessionWrapper(session.setdefault(name, value))
+        return session.setdefault(name, value)
+
+    def openid_session_dict(self, name):
+        # Since Flask 0.10, session is serialized with JSON instead of pickle,
+        # sadly python-openid stores classes instances in the session which
+        # fails the JSON serialization, these classes are:
+        #   openid.yadis.manager.YadisServiceManager
+        #   openid.consumer.discover.OpenIDServiceEndpoint
+        #
+        # This method will return a wrapper over the session value used with
+        # openid (a dict) which will automatically keep a pickled value
+        #
+        # current_app.session_interface has a pickle_based=False attribute if
+        # Flask >= 0.10
+        value = super(FlaskStrategy, self).openid_session_value(name)
+        if not getattr(current_app.session_interface, 'pickle_based', True):
+            value = OpenIdSessionWrapper(value)
+        return value
 
     def build_absolute_uri(self, path=None):
         path = path or ''
@@ -63,38 +81,25 @@ class FlaskStrategy(BaseStrategy):
         return request.host_url + (path or '')
 
 
-class SessionWrapper(object):
-    name_mapping = {
-        '_yadis_services__openid_consumer_':    'yoc',
-        '_openid_consumer_last_token':          'lt'
-    }
-
-    def __init__(self, ext):
-        self.ext = ext
+class OpenIdSessionWrapper(dict):
+    pickle_instances = (
+        '_yadis_services__openid_consumer_',
+        '_openid_consumer_last_token'
+    )
 
     def __getitem__(self, name):
-        rv = session[self.name_mapping.get(name, name)]
-        if isinstance(rv, dict) and len(rv) == 1 and ' p' in rv:
-            return pickle.loads(rv[' p'])
-        return rv
+        value = super(OpenIdSessionWrapper, self).__getitem__(name)
+        if name in self.pickle_instances:
+            value = pickle.loads(value)
+        return value
 
     def __setitem__(self, name, value):
-        if not getattr(current_app.session_interface, 'pickle_based', True):
-            value = {' p': pickle.dumps(value, 0)}
-        session[self.name_mapping.get(name, name)] = value
-
-    def __delitem__(self, name):
-        del session[self.name_mapping.get(name, name)]
+        if name in self.pickle_instances:
+            value = pickle.dumps(value, 0)
+        super(OpenIdSessionWrapper, self).__setitem__(name, value)
 
     def get(self, name, default=None):
         try:
             return self[name]
         except KeyError:
             return default
-
-    def __contains__(self, name):
-        try:
-            self[name]
-            return True
-        except KeyError:
-            return False
