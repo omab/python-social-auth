@@ -9,7 +9,6 @@ from social.backends.oauth import BaseOAuth2
 
 class PodioOAuth2(BaseOAuth2):
     """Podio OAuth authentication backend"""
-
     name = 'podio'
     AUTHORIZATION_URL = 'https://podio.com/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://podio.com/oauth/token'
