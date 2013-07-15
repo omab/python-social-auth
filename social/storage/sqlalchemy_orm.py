@@ -64,6 +64,7 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
             else:
                 qs = qs.filter_by(provider=name)
             qs.delete()
+            cls._session().commit()
         else:
             raise NotAllowedToDisconnect()
 
