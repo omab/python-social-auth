@@ -2,6 +2,7 @@
 import re
 
 from social.backends.open_id import OpenIdAuth
+from social.exceptions import AuthFailed
 
 
 STEAM_ID = re.compile('steamcommunity.com/openid/id/(.*?)$')
@@ -34,4 +35,7 @@ class SteamOpenId(OpenIdAuth):
         return details
 
     def _user_id(self, response):
-        return STEAM_ID.search(response.identity_url)
+        match = STEAM_ID.search(response.identity_url)
+        if match is None:
+            raise AuthFailed(self, 'Missing Steam Id')
+        return match.group(1)
