@@ -146,7 +146,7 @@ class SQLAlchemyAssociationMixin(SQLAlchemyMixin, AssociationMixin):
 
     @classmethod
     def remove(cls, ids_to_delete):
-        cls._query().filter(cls.id.in_(ids_to_delete)).delete()
+        cls._query().filter(cls.id.in_(ids_to_delete)).delete(synchronize_session='fetch')
 
 
 class BaseSQLAlchemyStorage(BaseStorage):
