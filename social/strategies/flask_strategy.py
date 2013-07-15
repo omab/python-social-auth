@@ -67,7 +67,7 @@ class FlaskStrategy(BaseStrategy):
         #
         # current_app.session_interface has a pickle_based=False attribute if
         # Flask >= 0.10
-        value = super(FlaskStrategy, self).openid_session_value(name)
+        value = super(FlaskStrategy, self).openid_session_dict(name)
         if not getattr(current_app.session_interface, 'pickle_based', True):
             value = OpenIdSessionWrapper(value)
         return value
