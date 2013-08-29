@@ -1,6 +1,6 @@
 """Flask SQLAlchemy ORM models for Social Auth"""
 from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.schema import UniqueConstraint
 
 from social.utils import setting_name, module_member
@@ -37,7 +37,8 @@ def init_social(app, Base, session):
         extra_data = Column(JSONType)
         user_id = Column(Integer, ForeignKey(User.id),
                          nullable=False, index=True)
-        user = relationship(User, backref='social_auth')
+        user = relationship(User, backref=backref('social_auth',
+                                                  lazy='dynamic'))
 
         @classmethod
         def username_max_length(cls):
