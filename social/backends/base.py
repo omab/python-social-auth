@@ -28,7 +28,7 @@ class BaseAuth(object):
         self.data = {}
         if strategy:
             self.data = self.strategy.request_data()
-            self.redirect_uri = self.strategy.build_absolute_uri(
+            self.redirect_uri = self.strategy.absolute_uri(
                 self.redirect_uri
             )
 

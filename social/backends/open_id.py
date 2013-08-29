@@ -114,13 +114,13 @@ class OpenIdAuth(BaseAuth):
         """Return auth URL returned by service"""
         openid_request = self.setup_request(self.auth_extra_arguments())
         # Construct completion URL, including page we should redirect to
-        return_to = self.strategy.build_absolute_uri(self.redirect_uri)
+        return_to = self.strategy.absolute_uri(self.redirect_uri)
         return openid_request.redirectURL(self.trust_root(), return_to)
 
     def auth_html(self):
         """Return auth HTML returned by service"""
         openid_request = self.setup_request(self.auth_extra_arguments())
-        return_to = self.strategy.build_absolute_uri(self.redirect_uri)
+        return_to = self.strategy.absolute_uri(self.redirect_uri)
         form_tag = {'id': 'openid_message'}
         return openid_request.htmlMarkup(self.trust_root(), return_to,
                                          form_tag_attrs=form_tag)
@@ -128,12 +128,12 @@ class OpenIdAuth(BaseAuth):
     def trust_root(self):
         """Return trust-root option"""
         return self.setting('OPENID_TRUST_ROOT') or \
-               self.strategy.build_absolute_uri('/')
+               self.strategy.absolute_uri('/')
 
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""
         response = self.consumer().complete(dict(self.data.items()),
-                                            self.strategy.build_absolute_uri(
+                                            self.strategy.absolute_uri(
                                                 self.redirect_uri
                                             ))
         kwargs.update({'response': response, 'backend': self})
@@ -142,7 +142,7 @@ class OpenIdAuth(BaseAuth):
     def auth_complete(self, *args, **kwargs):
         """Complete auth process"""
         response = self.consumer().complete(dict(self.data.items()),
-                                            self.strategy.build_absolute_uri(
+                                            self.strategy.absolute_uri(
                                                 self.redirect_uri
                                             ))
         if not response:

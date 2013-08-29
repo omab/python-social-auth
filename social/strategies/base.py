@@ -149,6 +149,12 @@ class BaseStrategy(object):
     def is_integrity_error(self, exception):
         return self.storage.is_integrity_error(exception)
 
+    def absolute_uri(self, path=None):
+        uri = self.build_absolute_uri(path)
+        if self.setting('ON_HTTPS'):
+            uri = uri.replace('http://', 'https://')
+        return uri
+
     # Implement the following methods on strategies sub-classes
 
     def redirect(self, url):
