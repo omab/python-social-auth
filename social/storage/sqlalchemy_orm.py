@@ -93,6 +93,10 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
         return cls.user_query().get(pk)
 
     @classmethod
+    def get_users_by_email(cls, email):
+        return cls.user_query().filter_by(email=email)
+
+    @classmethod
     def get_social_auth(cls, provider, uid):
         if not isinstance(uid, six.string_types):
             uid = str(uid)

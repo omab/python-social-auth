@@ -124,6 +124,11 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
+    def get_users_by_email(cls, email):
+        """Return users instances for given email address"""
+        raise NotImplementedError('Implement in subclass')
+
+    @classmethod
     def get_social_auth(cls, provider, uid):
         """Return UserSocialAuth for given provider and uid"""
         raise NotImplementedError('Implement in subclass')

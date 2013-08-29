@@ -1,4 +1,4 @@
-from social.exceptions import AuthAlreadyAssociated
+from social.exceptions import AuthAlreadyAssociated, AuthException
 
 
 def social_user(strategy, uid, user=None, *args, **kwargs):
@@ -35,6 +35,36 @@ def associate_user(strategy, user, uid, *args, **kwargs):
         return {'social': social,
                 'user': social.user,
                 'new_association': True}
+
+
+def associate_by_email(strategy, details, user=None, *args, **kwargs):
+    """
+    Associate current auth with a user with the same email address in the DB.
+
+    This pipeline entry is not 100% secure unless you know that the providers
+    enabled enforce email verification on their side, otherwise a user can
+    attempt to take over another user account by using the same (not validated)
+    email address on some provider.  This pipeline entry is disabled by
+    default.
+    """
+    if user:
+        return None
+
+    email = details.get('email')
+    if email:
+        # Try to associate accounts registered with the same email address,
+        # only if it's a single object. AuthException is raised if multiple
+        # objects are returned.
+        users = strategy.storage.user.get_users_by_email(email)
+        if len(users) == 0:
+            return None
+        elif len(users) > 1:
+            raise AuthException(
+                strategy.backend,
+                'The given email address is associated with multiple accounts'
+            )
+        else:
+            return {'user': users[0]}
 
 
 def load_extra_data(strategy, details, response, uid, user, *args, **kwargs):

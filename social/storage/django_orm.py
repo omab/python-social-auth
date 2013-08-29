@@ -75,6 +75,10 @@ class DjangoUserMixin(UserMixin):
             return None
 
     @classmethod
+    def get_users_by_email(cls, email):
+        return cls.user_model().objects.filter(email=email)
+
+    @classmethod
     def get_social_auth(cls, provider, uid):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
