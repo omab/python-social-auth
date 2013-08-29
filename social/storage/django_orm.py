@@ -32,16 +32,8 @@ class DjangoUserMixin(UserMixin):
         return valid_password or qs.count() > 0
 
     @classmethod
-    def disconnect(cls, name, user, association_id=None):
-        if cls.allowed_to_disconnect(user, name, association_id):
-            qs = cls.get_social_auth_for_user(user)
-            if association_id:
-                qs = qs.get(id=association_id)
-            else:
-                qs = qs.filter(provider=name)
-            qs.delete()
-        else:
-            raise NotAllowedToDisconnect()
+    def disconnect(cls, entry):
+        entry.delete()
 
     @classmethod
     def username_field(cls):
@@ -88,8 +80,13 @@ class DjangoUserMixin(UserMixin):
             return None
 
     @classmethod
-    def get_social_auth_for_user(cls, user):
-        return user.social_auth.all()
+    def get_social_auth_for_user(cls, user, provider=None, id=None):
+        qs = user.social_auth.all()
+        if provider:
+            qs = qs.filter(provider=provider)
+        if id:
+            qs = qs.filter(id=id)
+        return qs
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):

@@ -5,7 +5,6 @@ import six
 # from sqlalchemy.orm import Query
 from sqlalchemy.exc import IntegrityError
 
-from social.exceptions import NotAllowedToDisconnect
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
                                 BaseStorage
 
@@ -48,25 +47,16 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
             qs = cls._query().filter(cls.provider != backend_name)
         qs = qs.filter(cls.user == user)
 
-        if hasattr(user, 'has_usable_password'):
-            # TODO
+        if hasattr(user, 'has_usable_password'):  # TODO
             valid_password = user.has_usable_password()
         else:
             valid_password = True
         return valid_password or qs.count() > 0
 
     @classmethod
-    def disconnect(cls, name, user, association_id=None):
-        if cls.allowed_to_disconnect(user, name, association_id):
-            qs = cls.get_social_auth_for_user(user)
-            if association_id:
-                qs = qs.filter_by(id=association_id)
-            else:
-                qs = qs.filter_by(provider=name)
-            qs.delete()
-            cls._session().commit()
-        else:
-            raise NotAllowedToDisconnect()
+    def disconnect(cls, entry):
+        entry.delete()
+        cls._session().commit()
 
     @classmethod
     def user_query(cls):
@@ -107,8 +97,13 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
             return None
 
     @classmethod
-    def get_social_auth_for_user(cls, user):
-        return cls._query().filter_by(user_id=user.id)
+    def get_social_auth_for_user(cls, user, provider=None, id=None):
+        qs = cls._query().filter_by(user_id=user.id)
+        if provider:
+            qs = qs.filter_by(provider=provider)
+        if id:
+            qs = qs.filter_by(id=id)
+        return qs
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):

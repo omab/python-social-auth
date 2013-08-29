@@ -1,6 +1,5 @@
 import base64
 
-from social.exceptions import NotAllowedToDisconnect
 from social.storage.base import UserMixin, NonceMixin, AssociationMixin, \
                                 BaseStorage
 
@@ -91,14 +90,9 @@ class TestUserSocialAuth(UserMixin, BaseModel):
         return user.password or len(user.social) > 1
 
     @classmethod
-    def disconnect(cls, name, user, association_id=None):
-        if cls.allowed_to_disconnect(user, name, association_id):
-            cls.cache.pop(association_id, None)
-            user.social = [s for s in user.social
-                                if association_id and association_id != s.id or
-                                   s.provider != name]
-        else:
-            raise NotAllowedToDisconnect()
+    def disconnect(cls, entry):
+        cls.cache.pop(entry.id, None)
+        entry.user.social = [s for s in entry.user.social if entry != s]
 
     @classmethod
     def user_exists(cls, username):
@@ -121,7 +115,7 @@ class TestUserSocialAuth(UserMixin, BaseModel):
             return social_user
 
     @classmethod
-    def get_social_auth_for_user(cls, user):
+    def get_social_auth_for_user(cls, user, provider=None, id=None):
         return user.social
 
     @classmethod

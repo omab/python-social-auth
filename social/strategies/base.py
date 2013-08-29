@@ -3,6 +3,7 @@ import random
 import hashlib
 
 from social.utils import setting_name, to_setting_name
+from social.exceptions import NotAllowedToDisconnect
 from social.store import OpenIdStore
 
 
@@ -74,8 +75,15 @@ class BaseStrategy(object):
         return self.backend.continue_pipeline(*args, **kwargs)
 
     def disconnect(self, user, association_id=None):
-        self.storage.user.disconnect(name=self.backend.name, user=user,
-                                     association_id=association_id)
+        name = self.backend.name
+        user_storage = self.storage.user
+        if user_storage.allowed_to_disconnect(user, name, association_id):
+            entries = user_storage.get_social_auth_for_user(user, name,
+                                                            association_id)
+            for entry in entries:
+                user_storage.disconnect(entry)
+        else:
+            raise NotAllowedToDisconnect()
 
     def authenticate(self, *args, **kwargs):
         kwargs['strategy'] = self

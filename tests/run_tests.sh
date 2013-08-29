@@ -1,3 +1,3 @@
 #!/bin/sh
 
-nosetests --with-coverage --cover-package=social
+nosetests --with-coverage --cover-package=social --stop

@@ -101,7 +101,7 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def disconnect(cls, name, user, association_id=None):
+    def disconnect(cls, entry):
         """Disconnect the social account for the given user"""
         raise NotImplementedError('Implement in subclass')
 
@@ -134,7 +134,7 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def get_social_auth_for_user(cls, user):
+    def get_social_auth_for_user(cls, user, provider=None, id=None):
         """Return all the UserSocialAuth instances for given user"""
         raise NotImplementedError('Implement in subclass')
 
