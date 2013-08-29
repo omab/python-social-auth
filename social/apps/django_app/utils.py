@@ -20,7 +20,7 @@ def load_strategy(*args, **kwargs):
     return get_strategy(BACKENDS, STRATEGY, STORAGE, *args, **kwargs)
 
 
-def strategy(redirect_uri=None):
+def strategy(redirect_uri=None, load_strategy=load_strategy):
     def decorator(func):
         @wraps(func)
         def wrapper(request, backend, *args, **kwargs):
