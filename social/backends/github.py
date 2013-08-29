@@ -36,9 +36,21 @@ class GithubOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        return self.get_json('https://api.github.com/user', params={
-            'access_token': access_token
-        })
+        data = self._user_data(access_token)
+        if data.get('email') is None:
+            try:
+                email = self._user_data('/emails')[0]
+            except (HTTPError, IndexError, ValueError, TypeError):
+                email = ''
+
+            if isinstance(email, dict):
+                email = email.get('email', '')
+            data['email'] = email
+        return data
+
+    def _user_data(self, access_token, path=None):
+        url = 'https://api.github.com/user{}'.format(path or '')
+        return self.get_json(url, params={'access_token': access_token})
 
 
 class GithubOrganizationOAuth2(GithubOAuth2):
