@@ -15,6 +15,12 @@ USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \
              getattr(settings, 'AUTH_USER_MODEL', None) or \
              'auth.User'
 UID_LENGTH = getattr(settings, setting_name('UID_LENGTH'), 255)
+NONCE_SERVER_URL_LENGTH = getattr(
+    settings, setting_name('NONCE_SERVER_URL_LENGTH'), 255)
+ASSOCIATION_SERVER_URL_LENGTH = getattr(
+    settings, setting_name('ASSOCIATION_SERVER_URL_LENGTH'), 255)
+ASSOCIATION_HANDLE_LENGTH = getattr(
+    settings, setting_name('ASSOCIATION_HANDLE_LENGTH'), 255)
 
 
 class UserSocialAuth(models.Model, DjangoUserMixin):
@@ -50,7 +56,7 @@ class UserSocialAuth(models.Model, DjangoUserMixin):
 
 class Nonce(models.Model, DjangoNonceMixin):
     """One use numbers"""
-    server_url = models.CharField(max_length=255)
+    server_url = models.CharField(max_length=NONCE_SERVER_URL_LENGTH)
     timestamp = models.IntegerField()
     salt = models.CharField(max_length=40)
 
@@ -60,8 +66,8 @@ class Nonce(models.Model, DjangoNonceMixin):
 
 class Association(models.Model, DjangoAssociationMixin):
     """OpenId account association"""
-    server_url = models.CharField(max_length=255)
-    handle = models.CharField(max_length=255)
+    server_url = models.CharField(max_length=ASSOCIATION_SERVER_URL_LENGTH)
+    handle = models.CharField(max_length=ASSOCIATION_HANDLE_LENGTH)
     secret = models.CharField(max_length=255)  # Stored base64 encoded
     issued = models.IntegerField()
     lifetime = models.IntegerField()
