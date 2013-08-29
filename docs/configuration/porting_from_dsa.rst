@@ -60,7 +60,7 @@ Porting settings
 ----------------
 
 All python-social-auth_ settings are prefixed with ``SOCIAL_AUTH_``, except for
-some exception on Django framework, ``AUTHENTICATION_BACKENDS`` reminds the
+some exception on Django framework, ``AUTHENTICATION_BACKENDS`` remains the
 same for obvious reasons.
 
 All backends settings have the backend name into it, all uppercase and with
