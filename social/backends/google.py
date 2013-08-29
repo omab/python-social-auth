@@ -53,6 +53,8 @@ class GoogleOAuth2(BaseGoogleAuth, BaseOAuth2):
     AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/auth'
     ACCESS_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
     ACCESS_TOKEN_METHOD = 'POST'
+    REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
+    REVOKE_TOKEN_METHOD = 'GET'
     DEFAULT_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
                      'https://www.googleapis.com/auth/userinfo.profile']
     EXTRA_DATA = [
@@ -67,6 +69,12 @@ class GoogleOAuth2(BaseGoogleAuth, BaseOAuth2):
             'https://www.googleapis.com/oauth2/v1/userinfo',
             params={'access_token': access_token, 'alt': 'json'}
         )
+
+    def revoke_token_params(self, token, uid):
+        return {'token': token}
+
+    def revoke_token_headers(self, token, uid):
+        return {'Content-type': 'application/json'}
 
 
 class GoogleOAuth(BaseGoogleAuth, BaseOAuth1):

@@ -77,10 +77,15 @@ class BaseStrategy(object):
     def disconnect(self, user, association_id=None):
         name = self.backend.name
         user_storage = self.storage.user
+        revoke_token = self.setting('REVOKE_TOKENS_ON_DISCONNECT', False)
         if user_storage.allowed_to_disconnect(user, name, association_id):
             entries = user_storage.get_social_auth_for_user(user, name,
                                                             association_id)
             for entry in entries:
+                if revoke_token:
+                    backend = entry.get_backend(self)
+                    if getattr(backend, 'REVOKE_TOKEN_URL', None):
+                        backend.revoke_token()
                 user_storage.disconnect(entry)
         else:
             raise NotAllowedToDisconnect()

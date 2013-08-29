@@ -30,6 +30,8 @@ class FacebookOAuth2(BaseOAuth2):
     SCOPE_SEPARATOR = ','
     AUTHORIZATION_URL = 'https://www.facebook.com/dialog/oauth'
     ACCESS_TOKEN_URL = 'https://graph.facebook.com/oauth/access_token'
+    REVOKE_TOKEN_URL = 'https://graph.facebook.com/{uid}/permissions'
+    REVOKE_TOKEN_METHOD = 'DELETE'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires')
@@ -96,6 +98,15 @@ class FacebookOAuth2(BaseOAuth2):
             data['expires'] = response['expires']
         kwargs.update({'backend': self, 'response': data})
         return self.strategy.authenticate(*args, **kwargs)
+
+    def revoke_token_url(self, token, uid):
+        return self.REVOKE_TOKEN_URL.format(uid=uid)
+
+    def revoke_token_params(self, token, uid):
+        return {'access_token': token}
+
+    def process_revoke_token_response(self, response):
+        return response.code == 200 and response.content == 'true'
 
 
 class FacebookAppOAuth2(FacebookOAuth2):
