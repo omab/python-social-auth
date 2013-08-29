@@ -1,6 +1,6 @@
 from uuid import uuid4
 
-from social.utils import slugify
+from social.utils import slugify, module_member
 
 
 USER_FIELDS = ['username', 'email']
@@ -18,6 +18,20 @@ def get_username(strategy, details, user=None, *args, **kwargs):
         do_slugify = strategy.setting('SLUGIFY_USERNAMES', False)
         do_clean = strategy.setting('CLEAN_USERNAMES', True)
 
+        if do_clean:
+            clean_func = storage.user.clean_username
+        else:
+            clean_func = lambda val: val
+
+        if do_slugify:
+            override_slug = strategy.setting('SLUGIFY_FUNCTION')
+            if override_slug:
+                slug_func = module_member(override_slug)
+            else:
+                slug_func = slugify
+        else:
+            slug_func = lambda val: val
+
         if email_as_username and details.get('email'):
             username = details['email']
         elif details.get('username'):
@@ -26,22 +40,14 @@ def get_username(strategy, details, user=None, *args, **kwargs):
             username = uuid4().hex
 
         short_username = username[:max_length - uuid_length]
-        final_username = username[:max_length]
-        if do_clean:
-            final_username = storage.user.clean_username(final_username)
-        if do_slugify:
-            final_username = slugify(final_username)
+        final_username = slug_func(clean_func(username[:max_length]))
 
         # Generate a unique username for current user using username
         # as base but adding a unique hash at the end. Original
         # username is cut to avoid any field max_length.
         while storage.user.user_exists(username=final_username):
             username = short_username + uuid4().hex[:uuid_length]
-            final_username = username[:max_length]
-            if do_clean:
-                final_username = storage.user.clean_username(final_username)
-            if do_slugify:
-                final_username = slugify(final_username)
+            final_username = slug_func(clean_func(username[:max_length]))
     else:
         final_username = storage.user.get_username(user)
     return {'username': final_username}
