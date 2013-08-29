@@ -155,6 +155,10 @@ class BaseStrategy(object):
             uri = uri.replace('http://', 'https://')
         return uri
 
+    def get_language(self):
+        """Return current language"""
+        return ''
+
     # Implement the following methods on strategies sub-classes
 
     def redirect(self, url):

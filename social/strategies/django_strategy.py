@@ -4,6 +4,7 @@ from django.db.models import Model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
 from django.template import TemplateDoesNotExist, RequestContext, loader
+from django.utils.translation import get_language
 
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 
@@ -112,3 +113,7 @@ class DjangoStrategy(BaseStrategy):
             ModelClass = ctype.model_class()
             val = ModelClass.objects.get(pk=val['pk'])
         return val
+
+    def get_language(self):
+        """Return current language"""
+        return get_language()

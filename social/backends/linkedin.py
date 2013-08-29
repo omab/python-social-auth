@@ -32,6 +32,14 @@ class BaseLinkedinAuth(object):
         fields_selectors = ','.join(fields_selectors)
         return self.USER_DETAILS % fields_selectors
 
+    def user_data_headers(self):
+        lang = self.setting('FORCE_PROFILE_LANGUAGE')
+        if lang:
+            return {
+                'Accept-Language': lang if lang is not True
+                                        else self.strategy.get_language()
+            }
+
 
 class LinkedinOAuth(BaseLinkedinAuth, BaseOAuth1):
     """Linkedin OAuth authentication backend"""
@@ -46,7 +54,8 @@ class LinkedinOAuth(BaseLinkedinAuth, BaseOAuth1):
         return self.get_json(
             self.user_details_url(),
             params={'format': 'json'},
-            auth=self.oauth_auth(access_token)
+            auth=self.oauth_auth(access_token),
+            headers=self.user_data_headers()
         )
 
     def unauthorized_token(self):
@@ -67,7 +76,9 @@ class LinkedinOAuth2(BaseLinkedinAuth, BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
 
     def user_data(self, access_token, *args, **kwargs):
-        return self.get_json(self.user_details_url(), params={
-            'oauth2_access_token': access_token,
-            'format': 'json'
-        })
+        return self.get_json(
+            self.user_details_url(),
+            params={'oauth2_access_token': access_token,
+                    'format': 'json'},
+            headers=self.user_data_headers()
+        )
