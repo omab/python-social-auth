@@ -29,6 +29,7 @@ class User(BaseModel):
         self.username = username
         self.email = email
         self.password = None
+        self.slug = None
         self.social = []
         self.extra_data = {}
         self.save()

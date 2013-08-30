@@ -131,12 +131,14 @@ class BaseOAuthTest(unittest.TestCase):
             'SOCIAL_AUTH_PIPELINE': (
                 'social.pipeline.partial.save_status_to_session',
                 'tests.pipeline.ask_for_password',
+                'tests.pipeline.ask_for_slug',
                 'social.pipeline.social_auth.social_user',
                 'social.pipeline.user.get_username',
                 'social.pipeline.user.create_user',
                 'social.pipeline.social_auth.associate_user',
                 'social.pipeline.social_auth.load_extra_data',
                 'tests.pipeline.set_password',
+                'tests.pipeline.set_slug',
                 'social.pipeline.user.user_details'
             )
         })
@@ -155,13 +157,34 @@ class BaseOAuthTest(unittest.TestCase):
         self.strategy.session_set('password', data['password'])
         return password
 
+    def pipeline_slug_handling(self, url):
+        slug = 'foo-bar'
+        requests.get(url)
+        requests.post(url, data={'slug': slug})
+
+        data = parse_qs(HTTPretty.last_request.body)
+        expect(data['slug']).to.equal(slug)
+        self.strategy.session_set('slug', data['slug'])
+        return slug
+
     def do_partial_pipeline(self):
         url = self.strategy.build_absolute_uri('/password')
         self.pipeline_settings()
         redirect = self.do_start()
         expect(redirect.url).to.equal(url)
         self.pipeline_handlers(url)
+
         password = self.pipeline_password_handling(url)
+        data = self.strategy.session_pop('partial_pipeline')
+        idx, backend, xargs, xkwargs = self.strategy.from_session(data)
+        expect(backend).to.equal(self.backend.name)
+        redirect = self.strategy.continue_pipeline(pipeline_index=idx,
+                                                   *xargs, **xkwargs)
+
+        url = self.strategy.build_absolute_uri('/slug')
+        expect(redirect.url).to.equal(url)
+        self.pipeline_handlers(url)
+        slug = self.pipeline_slug_handling(url)
 
         data = self.strategy.session_pop('partial_pipeline')
         idx, backend, xargs, xkwargs = self.strategy.from_session(data)
@@ -170,6 +193,7 @@ class BaseOAuthTest(unittest.TestCase):
                                                *xargs, **xkwargs)
 
         expect(user.username).to.equal(self.expected_username)
+        expect(user.slug).to.equal(slug)
         expect(user.password).to.equal(password)
         return user
 
