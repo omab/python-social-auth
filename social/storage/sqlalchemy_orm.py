@@ -55,7 +55,7 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
 
     @classmethod
     def disconnect(cls, entry):
-        entry.delete()
+        cls._session().delete(entry)
         cls._session().commit()
 
     @classmethod
