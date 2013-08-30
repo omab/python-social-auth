@@ -150,8 +150,8 @@ class FacebookAppOAuth2(FacebookOAuth2):
             'FACEBOOK_EXTENDED_PERMISSIONS': scope,
             'FACEBOOK_COMPLETE_URI': self.redirect_uri,
         }
-        html = self.setting('LOCAL_HTML', 'facebook.html')
-        return self.strategy.render_html(html, ctx)
+        tpl = self.setting('LOCAL_HTML', 'facebook.html')
+        return self.strategy.render_html(tpl=tpl, context=ctx)
 
     def load_signed_request(self, signed_request):
         def base64_url_decode(data):
