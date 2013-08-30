@@ -50,7 +50,7 @@ class StripeOAuth2(BaseOAuth2):
     def auth_headers(self):
         client_id, client_secret = self.get_key_and_secret()
         return {'Accept': 'application/json',
-                'Authorization': 'Bearer %s' % client_secret}
+                'Authorization': 'Bearer {0}'.format(client_secret)}
 
     def refresh_token_params(self, refresh_token, *args, **kwargs):
         return {'refresh_token': refresh_token,

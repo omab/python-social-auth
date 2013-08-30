@@ -56,5 +56,5 @@ class DoubanOAuth2(BaseOAuth2):
         """Return user data provided"""
         return self.get_json(
             'https://api.douban.com/v2/user/~me',
-            headers={'Authorization': 'Bearer %s' % access_token}
+            headers={'Authorization': 'Bearer {0}'.format(access_token)}
         )

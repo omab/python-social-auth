@@ -57,15 +57,15 @@ class YahooOAuth(BaseOAuth1):
             email = ''
         return {'username': response.get('nickname'),
                 'email': email,
-                'fullname': '%s %s' % (fname, lname),
+                'fullname': '{0} {1}'.format(fname, lname),
                 'first_name': fname,
                 'last_name': lname}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
+        url = 'http://social.yahooapis.com/v1/user/{0}/profile?format=json'
         return self.get_json(
-            'http://social.yahooapis.com/v1/user/%s/profile?format=json' %
-                self._get_guid(access_token),
+            url.format(self._get_guid(access_token)),
             auth=self.oauth_auth(access_token)
         )['profile']
 

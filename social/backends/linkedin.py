@@ -10,7 +10,7 @@ class BaseLinkedinAuth(object):
     EXTRA_DATA = [('id', 'id'),
                   ('first-name', 'first_name'),
                   ('last-name', 'last_name')]
-    USER_DETAILS = 'https://api.linkedin.com/v1/people/~:(%s)'
+    USER_DETAILS = 'https://api.linkedin.com/v1/people/~:({0})'
 
     def get_user_details(self, response):
         """Return user details from Linkedin account"""
@@ -30,7 +30,7 @@ class BaseLinkedinAuth(object):
         # user sort to ease the tests URL mocking
         fields_selectors.sort()
         fields_selectors = ','.join(fields_selectors)
-        return self.USER_DETAILS % fields_selectors
+        return self.USER_DETAILS.format(fields_selectors)
 
     def user_data_headers(self):
         lang = self.setting('FORCE_PROFILE_LANGUAGE')

@@ -39,7 +39,7 @@ def _do_login(strategy, user):
     login(strategy.request, user)
     strategy.session_set('original_' + BACKEND_SESSION_KEY,
                          strategy.session_get(BACKEND_SESSION_KEY))
-    strategy.session_set(BACKEND_SESSION_KEY, '%s.%s' % (
+    strategy.session_set(BACKEND_SESSION_KEY, '{0}.{1}'.format(
         BackendWrapper.__module__,
         BackendWrapper.__name__
     ))

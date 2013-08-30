@@ -91,7 +91,7 @@ def do_complete(strategy, login, user=None, redirect_name='next',
     if redirect_value and redirect_value != url:
         redirect_value = quote(redirect_value)
         url += ('?' in url and '&' or '?') + \
-               '%s=%s' % (redirect_name, redirect_value)
+               '{0}={1}'.format(redirect_name, redirect_value)
     return strategy.redirect(url)
 
 

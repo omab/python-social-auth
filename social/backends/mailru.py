@@ -32,8 +32,8 @@ class MailruOAuth2(BaseOAuth2):
                   'first_name': unquote(response['first_name']),
                   'last_name': unquote(response['last_name'])}
         if values['first_name'] and values['last_name']:
-            values['fullname'] = '%s %s' % (values['first_name'],
-                                            values['last_name'])
+            values['fullname'] = '{0} {1}'.format(values['first_name'],
+                                                  values['last_name'])
         return values
 
     def user_data(self, access_token, *args, **kwargs):
