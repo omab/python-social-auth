@@ -4,6 +4,7 @@ import datetime
 from httpretty import HTTPretty
 
 from social.p3 import urlencode
+from social.exceptions import AuthFailed
 
 from tests.open_id import OpenIdTest
 
@@ -77,7 +78,7 @@ class SteamOpenIdTest(OpenIdTest):
         }
     })
 
-    def _login_setup(self):
+    def _login_setup(self, user_url=None):
         self.strategy.set_settings({
             'SOCIAL_AUTH_STEAM_API_KEY': '123abc'
         })
@@ -85,10 +86,12 @@ class SteamOpenIdTest(OpenIdTest):
                                'https://steamcommunity.com/openid/login',
                                status=200,
                                body=self.server_response)
-        HTTPretty.register_uri(HTTPretty.GET,
-                               'https://steamcommunity.com/openid/id/123',
-                               status=200,
-                               body=self.user_discovery_body)
+        HTTPretty.register_uri(
+            HTTPretty.GET,
+            user_url or 'https://steamcommunity.com/openid/id/123',
+            status=200,
+            body=self.user_discovery_body
+        )
         HTTPretty.register_uri(HTTPretty.GET,
                                INFO_URL,
                                status=200,
@@ -101,3 +104,13 @@ class SteamOpenIdTest(OpenIdTest):
     def test_partial_pipeline(self):
         self._login_setup()
         self.do_partial_pipeline()
+
+
+class SteamOpenIdMissingSteamIdTest(SteamOpenIdTest):
+    def test_login(self):
+        self._login_setup(user_url='https://steamcommunity.com/openid/BROKEN')
+        self.do_login.when.called_with().should.throw(AuthFailed)
+
+    def test_partial_pipeline(self):
+        self._login_setup(user_url='https://steamcommunity.com/openid/BROKEN')
+        self.do_partial_pipeline.when.called_with().should.throw(AuthFailed)
