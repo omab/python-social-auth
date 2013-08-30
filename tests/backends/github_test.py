@@ -55,6 +55,58 @@ class GithubOAuth2Test(OAuth2Test):
         self.do_partial_pipeline()
 
 
+class GithubOAuth2NoEmailTest(GithubOAuth2Test):
+    user_data_body = json.dumps({
+        'login': 'foobar',
+        'id': 1,
+        'avatar_url': 'https://github.com/images/error/foobar_happy.gif',
+        'gravatar_id': 'somehexcode',
+        'url': 'https://api.github.com/users/foobar',
+        'name': 'monalisa foobar',
+        'company': 'GitHub',
+        'blog': 'https://github.com/blog',
+        'location': 'San Francisco',
+        'email': '',
+        'hireable': False,
+        'bio': 'There once was...',
+        'public_repos': 2,
+        'public_gists': 1,
+        'followers': 20,
+        'following': 0,
+        'html_url': 'https://github.com/foobar',
+        'created_at': '2008-01-14T04:33:35Z',
+        'type': 'User',
+        'total_private_repos': 100,
+        'owned_private_repos': 100,
+        'private_gists': 81,
+        'disk_usage': 10000,
+        'collaborators': 8,
+        'plan': {
+            'name': 'Medium',
+            'space': 400,
+            'collaborators': 10,
+            'private_repos': 20
+        }
+    })
+
+    def test_login(self):
+        url = 'https://api.github.com/user/emails'
+        HTTPretty.register_uri(HTTPretty.GET, url, status=200,
+                               body=json.dumps(['foo@bar.com']),
+                               content_type='application/json')
+        self.do_login()
+
+    def test_login_next_format(self):
+        url = 'https://api.github.com/user/emails'
+        HTTPretty.register_uri(HTTPretty.GET, url, status=200,
+                               body=json.dumps([{'email': 'foo@bar.com'}]),
+                               content_type='application/json')
+        self.do_login()
+
+    def test_partial_pipeline(self):
+        self.do_partial_pipeline()
+
+
 class GithubOrganizationOAuth2Test(GithubOAuth2Test):
     backend_path = 'social.backends.github.GithubOrganizationOAuth2'
 

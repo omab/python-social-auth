@@ -37,9 +37,9 @@ class GithubOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         data = self._user_data(access_token)
-        if data.get('email') is None:
+        if not data.get('email'):
             try:
-                email = self._user_data('/emails')[0]
+                email = self._user_data(access_token, '/emails')[0]
             except (HTTPError, IndexError, ValueError, TypeError):
                 email = ''
 
