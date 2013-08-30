@@ -49,7 +49,7 @@ class GithubOAuth2(BaseOAuth2):
         return data
 
     def _user_data(self, access_token, path=None):
-        url = 'https://api.github.com/user{}'.format(path or '')
+        url = 'https://api.github.com/user{0}'.format(path or '')
         return self.get_json(url, params={'access_token': access_token})
 
 
