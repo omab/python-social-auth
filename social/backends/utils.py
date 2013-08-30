@@ -35,7 +35,7 @@ def load_backends(backends, force_load=False):
     return BACKENDSCACHE
 
 
-def get_backend(backends, name, *args, **kwargs):
+def get_backend(backends, name):
     """Returns a backend by name. Backends are stored in the BACKENDSCACHE
     cache dict. If not found, each of the modules referenced in
     AUTHENTICATION_BACKENDS is imported and checked for a BACKENDS
