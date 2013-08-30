@@ -27,7 +27,7 @@ class TwilioAuth(BaseAuth):
         callback = self.strategy.absolute_uri(self.redirect_uri)
         callback = sub(r'^https', 'http', callback)
         query = urlencode({'cb': callback})
-        return 'https://www.twilio.com/authorize/%s?%s' % (key, query)
+        return 'https://www.twilio.com/authorize/{0}?{1}'.format(key, query)
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""

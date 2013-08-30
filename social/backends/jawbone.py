@@ -40,5 +40,7 @@ class JawboneOAuth2(BaseOAuth2):
             if error == 'access_denied':
                 raise AuthCanceled(self)
             else:
-                raise AuthUnknownError(self, 'Jawbone error was %s' % error)
+                raise AuthUnknownError(self, 'Jawbone error was {0}'.format(
+                    error
+                ))
         return super(JawboneOAuth2, self).process_error(data)

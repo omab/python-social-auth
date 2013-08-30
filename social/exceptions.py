@@ -8,7 +8,9 @@ class WrongBackend(SocialAuthBaseException):
         self.backend_name = backend_name
 
     def __str__(self):
-        return 'Incorrect authentication service "%s"' % self.backend_name
+        return 'Incorrect authentication service "{0}"'.format(
+            self.backend_name
+        )
 
 
 class NotAllowedToDisconnect(SocialAuthBaseException):
@@ -29,7 +31,7 @@ class AuthFailed(AuthException):
         msg = super(AuthFailed, self).__str__()
         if msg == 'access_denied':
             return 'Authentication process was canceled'
-        return 'Authentication failed: %s' % msg
+        return 'Authentication failed: {0}'.format(msg)
 
 
 class AuthCanceled(AuthException):
@@ -42,14 +44,14 @@ class AuthUnknownError(AuthException):
     """Unknown auth process error."""
     def __str__(self):
         msg = super(AuthUnknownError, self).__str__()
-        return 'An unknown error happened while authenticating %s' % msg
+        return 'An unknown error happened while authenticating {0}'.format(msg)
 
 
 class AuthTokenError(AuthException):
     """Auth token error."""
     def __str__(self):
         msg = super(AuthTokenError, self).__str__()
-        return 'Token error: %s' % msg
+        return 'Token error: {0}'.format(msg)
 
 
 class AuthMissingParameter(AuthException):
@@ -59,7 +61,7 @@ class AuthMissingParameter(AuthException):
         super(AuthMissingParameter, self).__init__(backend, *args, **kwargs)
 
     def __str__(self):
-        return 'Missing needed parameter %s' % self.parameter
+        return 'Missing needed parameter {0}'.format(self.parameter)
 
 
 class AuthStateMissing(AuthException):
