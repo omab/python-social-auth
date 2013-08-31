@@ -123,6 +123,10 @@ class TestUserSocialAuth(UserMixin, BaseModel):
     def create_social_auth(cls, user, uid, provider):
         return cls(user=user, provider=provider, uid=uid)
 
+    @classmethod
+    def get_users_by_email(cls, email):
+        return [user for user in User.cache.values() if user.email == email]
+
 
 class TestNonce(NonceMixin, BaseModel):
     NEXT_ID = 1

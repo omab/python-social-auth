@@ -82,3 +82,13 @@ class TestStrategy(BaseStrategy):
         if isinstance(user, self.storage.user.user_model()):
             self.session_set('username', user.username)
         return user
+
+    def get_pipeline(self):
+        return self.setting('PIPELINE', (
+            'social.pipeline.social_auth.social_user',
+            'social.pipeline.user.get_username',
+            'social.pipeline.social_auth.associate_by_email',
+            'social.pipeline.user.create_user',
+            'social.pipeline.social_auth.associate_user',
+            'social.pipeline.social_auth.load_extra_data',
+            'social.pipeline.user.user_details'))

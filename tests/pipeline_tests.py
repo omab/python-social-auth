@@ -2,6 +2,8 @@ import json
 
 from sure import expect
 
+from social.exceptions import AuthException
+
 from tests.actions.actions_tests import BaseActionTest
 from tests.models import TestUserSocialAuth, TestStorage, User
 from tests.strategy import TestStrategy
@@ -167,3 +169,22 @@ class RepeatedUsernameTest(BaseActionTest):
         self.do_login(after_complete_checks=False)
         expect(self.strategy.session_get('username').startswith('foobar')) \
                 .to.equal(True)
+
+
+class AssociateByEmailTest(BaseActionTest):
+    def test_multiple_accounts_with_same_email(self):
+        user = User(username='foobar1')
+        user.email = 'foo@bar.com'
+        self.do_login(after_complete_checks=False)
+        expect(self.strategy.session_get('username').startswith('foobar')) \
+                .to.equal(True)
+
+
+class MultipleAccountsWithSameEmailTest(BaseActionTest):
+    def test_multiple_accounts_with_same_email(self):
+        user1 = User(username='foobar1')
+        user2 = User(username='foobar2')
+        user1.email = 'foo@bar.com'
+        user2.email = 'foo@bar.com'
+        self.do_login.when.called_with(after_complete_checks=False)\
+            .should.throw(AuthException)
