@@ -16,25 +16,23 @@ def social_user(strategy, uid, user=None, *args, **kwargs):
             'new_association': False}
 
 
-def associate_user(strategy, user, uid, *args, **kwargs):
-    if kwargs.get('social') or not user:
-        return None
-
-    try:
-        social = strategy.storage.user.create_social_auth(
-            user, uid, strategy.backend.name
-        )
-    except Exception as err:
-        if not strategy.is_integrity_error(err):
-            raise
-        # Protect for possible race condition, those bastard with FTL
-        # clicking capabilities, check issue #131:
-        #   https://github.com/omab/django-social-auth/issues/131
-        return social_user(strategy, uid, user, *args, **kwargs)
-    else:
-        return {'social': social,
-                'user': social.user,
-                'new_association': True}
+def associate_user(strategy, uid, user=None, social=None, *args, **kwargs):
+    if user and not social:
+        try:
+            social = strategy.storage.user.create_social_auth(
+                user, uid, strategy.backend.name
+            )
+        except Exception as err:
+            if not strategy.is_integrity_error(err):
+                raise
+            # Protect for possible race condition, those bastard with FTL
+            # clicking capabilities, check issue #131:
+            #   https://github.com/omab/django-social-auth/issues/131
+            return social_user(strategy, uid, user, *args, **kwargs)
+        else:
+            return {'social': social,
+                    'user': social.user,
+                    'new_association': True}
 
 
 def associate_by_email(strategy, details, user=None, *args, **kwargs):
