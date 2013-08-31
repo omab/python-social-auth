@@ -106,15 +106,28 @@ class SteamOpenIdTest(OpenIdTest):
         self.do_partial_pipeline()
 
 
-# class SteamOpenIdMissingSteamIdTest(SteamOpenIdTest):
-#     def test_login(self):
-#         self._login_setup(
-#             user_url='https://steamcommunity.com/openid/BROKEN'
-#         )
-#         self.do_login.when.called_with().should.throw(AuthFailed)
-#
-#     def test_partial_pipeline(self):
-#         self._login_setup(
-#             user_url='https://steamcommunity.com/openid/BROKEN'
-#         )
-#         self.do_partial_pipeline.when.called_with().should.throw(AuthFailed)
+class SteamOpenIdMissingSteamIdTest(SteamOpenIdTest):
+    server_response = urlencode({
+        'janrain_nonce': JANRAIN_NONCE,
+        'openid.ns': 'http://specs.openid.net/auth/2.0',
+        'openid.mode': 'id_res',
+        'openid.op_endpoint': 'https://steamcommunity.com/openid/login',
+        'openid.claimed_id': 'https://steamcommunity.com/openid/BROKEN',
+        'openid.identity': 'https://steamcommunity.com/openid/BROKEN',
+        'openid.return_to': 'http://myapp.com/complete/steam/?'
+                            'janrain_nonce=' + JANRAIN_NONCE,
+        'openid.response_nonce': JANRAIN_NONCE +
+                                 'oD4UZ3w9chOAiQXk0AqDipqFYRA=',
+        'openid.assoc_handle': '1234567890',
+        'openid.signed': 'signed,op_endpoint,claimed_id,identity,return_to,'
+                         'response_nonce,assoc_handle',
+        'openid.sig': '1az53vj9SVdiBwhk8%2BFQ68R2plo=',
+    })
+
+    def test_login(self):
+        self._login_setup(user_url='https://steamcommunity.com/openid/BROKEN')
+        self.do_login.when.called_with().should.throw(AuthFailed)
+
+    def test_partial_pipeline(self):
+        self._login_setup(user_url='https://steamcommunity.com/openid/BROKEN')
+        self.do_partial_pipeline.when.called_with().should.throw(AuthFailed)
