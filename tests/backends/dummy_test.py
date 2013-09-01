@@ -1,17 +1,23 @@
 import json
 import datetime
 import time
-from sure import expect
 
+from sure import expect
+from httpretty import HTTPretty
+
+from social.actions import do_disconnect
 from social.backends.oauth import BaseOAuth2
 
 from tests.oauth import OAuth2Test
+from tests.models import User
 
 
 class DummyOAuth2(BaseOAuth2):
     name = 'dummy'
     AUTHORIZATION_URL = 'http://dummy.com/oauth/authorize'
     ACCESS_TOKEN_URL = 'http://dummy.com/oauth/access_token'
+    REVOKE_TOKEN_URL = 'https://dummy.com/oauth/revoke'
+    REVOKE_TOKEN_METHOD = 'GET'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires'),
@@ -59,6 +65,19 @@ class DummyOAuth2Test(OAuth2Test):
     def test_tokens(self):
         user = self.do_login()
         expect(user.social[0].tokens).to.equal('foobar')
+
+    def test_revoke_token(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT': True
+        })
+        self.do_login()
+        user = User.get(self.expected_username)
+        user.password = 'password'
+        backend = self.backend
+        HTTPretty.register_uri(self._method(backend.REVOKE_TOKEN_METHOD),
+                               backend.REVOKE_TOKEN_URL,
+                               status=200)
+        do_disconnect(self.strategy, user)
 
 
 DELTA = datetime.timedelta(days=1)
