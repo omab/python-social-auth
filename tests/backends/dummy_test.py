@@ -7,6 +7,7 @@ from httpretty import HTTPretty
 
 from social.actions import do_disconnect
 from social.backends.oauth import BaseOAuth2
+from social.exceptions import AuthForbidden
 
 from tests.oauth import OAuth2Test
 from tests.models import User
@@ -78,6 +79,34 @@ class DummyOAuth2Test(OAuth2Test):
                                backend.REVOKE_TOKEN_URL,
                                status=200)
         do_disconnect(self.strategy, user)
+
+
+class WhitelistEmailsTest(DummyOAuth2Test):
+    def test_valid_login(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_WHITELISTED_EMAILS': ['foo@bar.com']
+        })
+        self.do_login()
+
+    def test_invalid_login(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_WHITELISTED_EMAILS': ['foo2@bar.com']
+        })
+        self.do_login.when.called_with().should.throw(AuthForbidden)
+
+
+class WhitelistDomainsTest(DummyOAuth2Test):
+    def test_valid_login(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_WHITELISTED_DOMAINS': ['bar.com']
+        })
+        self.do_login()
+
+    def test_invalid_login(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_WHITELISTED_EMAILS': ['bar2.com']
+        })
+        self.do_login.when.called_with().should.throw(AuthForbidden)
 
 
 DELTA = datetime.timedelta(days=1)

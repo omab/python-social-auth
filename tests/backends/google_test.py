@@ -4,7 +4,6 @@ import datetime
 from httpretty import HTTPretty
 
 from social.p3 import urlencode
-from social.exceptions import AuthForbidden
 from social.actions import do_disconnect
 
 from tests.models import User
@@ -191,38 +190,6 @@ class GoogleOpenIdTest(OpenIdTest):
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
-
-
-class WhitelistEmailsGoogleOAuth2Test(GoogleOAuth2Test):
-    def test_valid_login(self):
-        self.strategy.set_settings({
-            'SOCIAL_AUTH_WHITELISTED_EMAILS': [
-                'foo@bar.com'
-            ]
-        })
-        self.do_login()
-
-    def test_invalid_login(self):
-        self.strategy.set_settings({
-            'SOCIAL_AUTH_WHITELISTED_EMAILS': [
-                'foo2@bar.com'
-            ]
-        })
-        self.do_login.when.called_with().should.throw(AuthForbidden)
-
-
-class WhitelistDomainsGoogleOAuth2Test(GoogleOAuth2Test):
-    def test_valid_login(self):
-        self.strategy.set_settings({
-            'SOCIAL_AUTH_WHITELISTED_DOMAINS': ['bar.com']
-        })
-        self.do_login()
-
-    def test_invalid_login(self):
-        self.strategy.set_settings({
-            'SOCIAL_AUTH_WHITELISTED_EMAILS': ['bar2.com']
-        })
-        self.do_login.when.called_with().should.throw(AuthForbidden)
 
 
 class GoogleRevokeTokenTest(GoogleOAuth2Test):
