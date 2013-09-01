@@ -83,9 +83,9 @@ class BaseStrategy(object):
                                                             association_id)
             for entry in entries:
                 if revoke_token:
-                    backend = entry.get_backend(self)
-                    if getattr(backend, 'REVOKE_TOKEN_URL', None):
-                        backend.revoke_token()
+                    backend = entry.get_backend(self)(self)
+                    backend.revoke_token(entry.extra_data['access_token'],
+                                         entry.uid)
                 user_storage.disconnect(entry)
         else:
             raise NotAllowedToDisconnect()

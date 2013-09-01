@@ -367,12 +367,14 @@ class BaseOAuth2(OAuthAuth):
         return response.status_code == 200
 
     def revoke_token(self, token, uid):
-        if not self.REVOKE_TOKEN_URL:
-            return
-        url = self.revoke_token_url(token, uid)
-        params = self.revoke_token_params(token, uid) or {}
-        headers = self.revoke_token_headers(token, uid) or {}
-        data = urlencode(params) if self.REVOKE_TOKEN_METHOD != 'GET' else None
-        response = self.request(url, params=params, headers=headers,
-                                data=data, method=self.REVOKE_TOKEN_METHOD)
-        return self.process_revoke_token_response(response)
+        if self.REVOKE_TOKEN_URL:
+            url = self.revoke_token_url(token, uid)
+            params = self.revoke_token_params(token, uid) or {}
+            headers = self.revoke_token_headers(token, uid) or {}
+            if self.REVOKE_TOKEN_METHOD != 'GET':
+                data = urlencode(params)
+            else:
+                data = None
+            response = self.request(url, params=params, headers=headers,
+                                    data=data, method=self.REVOKE_TOKEN_METHOD)
+            return self.process_revoke_token_response(response)
