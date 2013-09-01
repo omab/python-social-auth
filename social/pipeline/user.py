@@ -71,22 +71,21 @@ def create_user(strategy, details, response, uid, user=None, *args, **kwargs):
 
 def user_details(strategy, details, response, user=None, *args, **kwargs):
     """Update user details using data from provider."""
-    if user is None:
-        return
+    if user:
+        changed = False  # flag to track changes
+        protected = strategy.setting('PROTECTED_USER_FIELDS', [])
+        keep = ('username', 'id', 'pk') + tuple(protected)
 
-    changed = False  # flag to track changes
-    protected = strategy.setting('PROTECTED_USER_FIELDS', [])
-    keep = ('username', 'id', 'pk') + tuple(protected)
+        for name, value in details.items():
+            # do not update username, it was already generated
+            # do not update configured fields if user already existed
+            if name not in keep and hasattr(user, name):
+                if value and value != getattr(user, name, None):
+                    try:
+                        setattr(user, name, value)
+                        changed = True
+                    except AttributeError:
+                        pass
 
-    for name, value in details.items():
-        # do not update username, it was already generated
-        # do not update configured fields if user already existed
-        if name not in keep and hasattr(user, name):
-            if value and value != getattr(user, name, None):
-                try:
-                    setattr(user, name, value)
-                    changed = True
-                except AttributeError:
-                    pass
-    if changed:
-        strategy.storage.user.changed(user)
+        if changed:
+            strategy.storage.user.changed(user)
