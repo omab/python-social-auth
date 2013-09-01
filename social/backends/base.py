@@ -104,8 +104,16 @@ class BaseAuth(object):
         return {}
 
     def auth_allowed(self, response, details):
-        """Return True if the user should be allowed to authenticate"""
-        return True
+        """Return True if the user should be allowed to authenticate, by
+        default check if email is whitelisted (if there's a whitelist)"""
+        emails = self.setting('WHITELISTED_EMAILS', [])
+        domains = self.setting('WHITELISTED_DOMAINS', [])
+        email = details.get('email')
+        allowed = True
+        if email and (emails or domains):
+            domain = email.split('@', 1)[1]
+            allowed = email in emails or domain in domains
+        return allowed
 
     def get_user_id(self, details, response):
         """Must return a unique ID from values returned on details"""

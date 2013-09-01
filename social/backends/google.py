@@ -17,18 +17,7 @@ from social.backends.open_id import OpenIdAuth
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
 
 
-class GoogleWhitelistCheck(object):
-    def auth_allowed(self, response, details):
-        email = details['email']
-        domain = email.split('@', 1)[1]
-        emails = self.setting('GOOGLE_WHITE_LISTED_EMAILS', [])
-        domains = self.setting('GOOGLE_WHITE_LISTED_DOMAINS', [])
-        return (not emails and not domains) or \
-               (emails and email in emails) or \
-               (domains and domain in domains)
-
-
-class BaseGoogleAuth(GoogleWhitelistCheck):
+class BaseGoogleAuth(object):
     def get_user_id(self, details, response):
         """Use google email as unique id"""
         if self.setting('USE_UNIQUE_USER_ID', False):
@@ -104,7 +93,7 @@ class GoogleOAuth(BaseGoogleAuth, BaseOAuth1):
         return key_secret
 
 
-class GoogleOpenId(GoogleWhitelistCheck, OpenIdAuth):
+class GoogleOpenId(OpenIdAuth):
     name = 'google'
     URL = 'https://www.google.com/accounts/o8/id'
 

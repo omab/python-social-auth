@@ -196,7 +196,7 @@ class GoogleOpenIdTest(OpenIdTest):
 class WhitelistEmailsGoogleOAuth2Test(GoogleOAuth2Test):
     def test_valid_login(self):
         self.strategy.set_settings({
-            'SOCIAL_AUTH_GOOGLE_WHITE_LISTED_EMAILS': [
+            'SOCIAL_AUTH_WHITELISTED_EMAILS': [
                 'foo@bar.com'
             ]
         })
@@ -204,7 +204,7 @@ class WhitelistEmailsGoogleOAuth2Test(GoogleOAuth2Test):
 
     def test_invalid_login(self):
         self.strategy.set_settings({
-            'SOCIAL_AUTH_GOOGLE_WHITE_LISTED_EMAILS': [
+            'SOCIAL_AUTH_WHITELISTED_EMAILS': [
                 'foo2@bar.com'
             ]
         })
@@ -214,13 +214,13 @@ class WhitelistEmailsGoogleOAuth2Test(GoogleOAuth2Test):
 class WhitelistDomainsGoogleOAuth2Test(GoogleOAuth2Test):
     def test_valid_login(self):
         self.strategy.set_settings({
-            'SOCIAL_AUTH_GOOGLE_WHITE_LISTED_DOMAINS': ['bar.com']
+            'SOCIAL_AUTH_WHITELISTED_DOMAINS': ['bar.com']
         })
         self.do_login()
 
     def test_invalid_login(self):
         self.strategy.set_settings({
-            'SOCIAL_AUTH_GOOGLE_WHITE_LISTED_EMAILS': ['bar2.com']
+            'SOCIAL_AUTH_WHITELISTED_EMAILS': ['bar2.com']
         })
         self.do_login.when.called_with().should.throw(AuthForbidden)
 
