@@ -7,7 +7,7 @@ from tests.models import User
 from tests.actions.actions_tests import BaseActionTest
 
 
-class LoginActionTest(BaseActionTest):
+class DisconnectActionTest(BaseActionTest):
     def test_not_allowed_to_disconnect(self):
         self.do_login()
         user = User.get(self.expected_username)
