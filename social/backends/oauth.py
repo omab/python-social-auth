@@ -358,10 +358,10 @@ class BaseOAuth2(OAuthAuth):
         return self.REVOKE_TOKEN_URL
 
     def revoke_token_params(self, token, uid):
-        return None
+        return {}
 
     def revoke_token_headers(self, token, uid):
-        return None
+        return {}
 
     def process_revoke_token_response(self, response):
         return response.status_code == 200
@@ -369,12 +369,10 @@ class BaseOAuth2(OAuthAuth):
     def revoke_token(self, token, uid):
         if self.REVOKE_TOKEN_URL:
             url = self.revoke_token_url(token, uid)
-            params = self.revoke_token_params(token, uid) or {}
-            headers = self.revoke_token_headers(token, uid) or {}
-            if self.REVOKE_TOKEN_METHOD != 'GET':
-                data = urlencode(params)
-            else:
-                data = None
+            params = self.revoke_token_params(token, uid)
+            headers = self.revoke_token_headers(token, uid)
+            data = urlencode(params) if self.REVOKE_TOKEN_METHOD != 'GET' \
+                                     else None
             response = self.request(url, params=params, headers=headers,
                                     data=data, method=self.REVOKE_TOKEN_METHOD)
             return self.process_revoke_token_response(response)
