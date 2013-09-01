@@ -1,8 +1,13 @@
 import json
 import datetime
 
+from httpretty import HTTPretty
+
 from social.p3 import urlencode
 from social.exceptions import AuthForbidden
+from social.actions import do_disconnect
+
+from tests.models import User
 from tests.oauth import OAuth1Test, OAuth2Test
 from tests.open_id import OpenIdTest
 
@@ -218,3 +223,18 @@ class WhitelistDomainsGoogleOAuth2Test(GoogleOAuth2Test):
             'SOCIAL_AUTH_GOOGLE_WHITE_LISTED_EMAILS': ['bar2.com']
         })
         self.do_login.when.called_with().should.throw(AuthForbidden)
+
+
+class GoogleRevokeTokenTest(GoogleOAuth2Test):
+    def test_revoke_token(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_OAUTH2_REVOKE_TOKENS_ON_DISCONNECT': True
+        })
+        self.do_login()
+        user = User.get(self.expected_username)
+        user.password = 'password'
+        backend = self.backend
+        HTTPretty.register_uri(self._method(backend.REVOKE_TOKEN_METHOD),
+                               backend.REVOKE_TOKEN_URL,
+                               status=200)
+        do_disconnect(self.strategy, user)
