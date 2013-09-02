@@ -44,6 +44,7 @@
 <a href="{% url 'social:begin' "reddit" %}">Reddit OAuth2</a> <br />
 <a href="{% url 'social:begin' "podio" %}">Podio OAuth2</a> <br />
 <a href="{% url 'social:begin' "amazon" %}">Amazon OAuth2</a> <br />
+<a href="{% url 'social:begin' "steam" %}">Steam OpenId</a> <br />
 
 <form action="{% url 'social:begin' "openid" %}" method="post">{% csrf_token %}
   <div>
