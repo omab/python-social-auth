@@ -53,7 +53,7 @@ def associate_by_email(strategy, details, user=None, *args, **kwargs):
         # Try to associate accounts registered with the same email address,
         # only if it's a single object. AuthException is raised if multiple
         # objects are returned.
-        users = strategy.storage.user.get_users_by_email(email)
+        users = list(strategy.storage.user.get_users_by_email(email))
         if len(users) == 0:
             return None
         elif len(users) > 1:
