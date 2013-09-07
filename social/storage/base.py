@@ -33,10 +33,15 @@ class UserMixin(object):
         if token and backend and hasattr(backend, 'refresh_token'):
             backend = backend(strategy=strategy)
             response = backend.refresh_token(token, *args, **kwargs)
-            self.extra_data.update(
-                backend.extra_data(self.user, self.uid, response)
-            )
-            self.save()
+            access_token = response.get('access_token')
+            refresh_token = response.get('refresh_token')
+
+            if access_token or refresh_token:
+                if access_token:
+                    self.extra_data['access_token'] = access_token
+                if refresh_token:
+                    self.extra_data['refresh_token'] = refresh_token
+                self.save()
 
     def expiration_datetime(self):
         """Return provider session live seconds. Returns a timedelta ready to
