@@ -48,7 +48,8 @@ class OAuthAuth(BaseAuth):
                 elif size == 2:
                     (name, alias), discard = entry, False
                 elif size == 1:
-                    name = alias = entry
+                    name = alias = entry[0]
+                    discard = False
                 value = response.get(name)
                 if discard and not value:
                     continue
