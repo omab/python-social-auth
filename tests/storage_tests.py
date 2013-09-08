@@ -77,6 +77,11 @@ class BrokenUserTests(unittest.TestCase):
             .called_with(User('foobar'), 1, 'foo') \
             .should.throw(NotImplementedError, 'Implement in subclass')
 
+    def test_disconnect(self):
+        self.user.disconnect\
+            .when.called_with(BrokenUser())\
+            .should.throw(NotImplementedError, 'Implement in subclass')
+
 
 class BrokenAssociationTests(unittest.TestCase):
     def setUp(self):
