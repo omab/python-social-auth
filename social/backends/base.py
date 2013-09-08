@@ -12,7 +12,6 @@ enabled.
 from requests import request
 
 from social.utils import module_member, parse_qs
-from social.exceptions import AuthForbidden
 
 
 class BaseAuth(object):
@@ -67,23 +66,33 @@ class BaseAuth(object):
         self.redirect_uri = self.redirect_uri or kwargs.get('redirect_uri')
         self.data = self.strategy.request_data()
         pipeline = self.strategy.get_pipeline()
-
+        kwargs.setdefault('is_new', False)
         if 'pipeline_index' in kwargs:
-            return self.pipeline(pipeline[kwargs['pipeline_index']:],
-                                 *args, **kwargs)
-        else:
-            details = self.get_user_details(kwargs['response'])
-            uid = self.get_user_id(details, kwargs['response'])
-            if not self.auth_allowed(kwargs['response'], details):
-                raise AuthForbidden(self)
-            return self.pipeline(pipeline, details=details, uid=uid,
-                                 is_new=False, *args, **kwargs)
+            pipeline = pipeline[kwargs['pipeline_index']:]
+        return self.pipeline(pipeline, *args, **kwargs)
 
     def pipeline(self, pipeline, pipeline_index=0, *args, **kwargs):
-        kwargs['strategy'] = self.strategy
+        out = self.run_pipeline(pipeline, pipeline_index, *args, **kwargs)
+        if not isinstance(out, dict):
+            return out
+        user = out.get('user')
+        if user:
+            user.social_user = out.get('social')
+            user.is_new = out.get('is_new')
+        return user
 
+    def disconnect(self, *args, **kwargs):
+        pipeline = self.strategy.get_disconnect_pipeline()
+        if 'pipeline_index' in kwargs:
+            pipeline = pipeline[kwargs['pipeline_index']:]
+        kwargs['name'] = self.strategy.backend.name
+        kwargs['user_storage'] = self.strategy.storage.user
+        return self.run_pipeline(pipeline, *args, **kwargs)
+
+    def run_pipeline(self, pipeline, pipeline_index=0, *args, **kwargs):
         out = kwargs.copy()
-        out.pop(self.name, None)
+        out.setdefault('strategy', self.strategy)
+        out.setdefault('backend', out.pop(self.name, None) or self)
 
         for idx, name in enumerate(pipeline):
             out['pipeline_index'] = pipeline_index + idx
@@ -92,12 +101,8 @@ class BaseAuth(object):
             if not isinstance(result, dict):
                 return result
             out.update(result)
-        user = out['user']
-        if user:
-            user.social_user = out['social']
-            user.is_new = out['is_new']
         self.strategy.clean_partial_pipeline()
-        return user
+        return out
 
     def extra_data(self, user, uid, response, details):
         """Return default blank user extra data"""

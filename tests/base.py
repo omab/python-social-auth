@@ -36,6 +36,9 @@ class BaseBackendTest(unittest.TestCase):
     def pipeline_settings(self):
         self.strategy.set_settings({
             'SOCIAL_AUTH_PIPELINE': (
+                'social.pipeline.social_auth.social_details',
+                'social.pipeline.social_auth.social_uid',
+                'social.pipeline.social_auth.auth_allowed',
                 'social.pipeline.partial.save_status_to_session',
                 'tests.pipeline.ask_for_password',
                 'tests.pipeline.ask_for_slug',

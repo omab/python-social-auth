@@ -33,6 +33,13 @@ class LoginActionTest(BaseActionTest):
             self.strategy.session_set('partial_pipeline', partial)
         self.do_login_with_partial_pipeline(before_complete)
 
+    def test_new_user(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_NEW_USER_REDIRECT_URL': '/new-user'
+        })
+        redirect = self.do_login(after_complete_checks=False)
+        expect(redirect.url).to.equal('/new-user')
+
     def test_inactive_user(self):
         self.strategy.set_settings({
             'SOCIAL_AUTH_INACTIVE_USER_URL': '/inactive'
@@ -45,6 +52,9 @@ class LoginActionTest(BaseActionTest):
         self.strategy.set_settings({
             'SOCIAL_AUTH_LOGIN_ERROR_URL': '/error',
             'SOCIAL_AUTH_PIPELINE': (
+                'social.pipeline.social_auth.social_details',
+                'social.pipeline.social_auth.social_uid',
+                'social.pipeline.social_auth.auth_allowed',
                 'social.pipeline.social_auth.social_user',
                 'social.pipeline.user.get_username',
                 'social.pipeline.user.create_user',

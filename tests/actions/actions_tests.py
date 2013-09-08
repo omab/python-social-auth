@@ -139,6 +139,9 @@ class BaseActionTest(unittest.TestCase):
                 'social.backends.github.GithubOAuth2',
             ),
             'SOCIAL_AUTH_PIPELINE': (
+                'social.pipeline.social_auth.social_details',
+                'social.pipeline.social_auth.social_uid',
+                'social.pipeline.social_auth.auth_allowed',
                 'social.pipeline.partial.save_status_to_session',
                 'tests.pipeline.ask_for_password',
                 'social.pipeline.social_auth.social_user',

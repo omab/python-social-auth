@@ -1,6 +1,6 @@
 from social.p3 import quote
 from social.utils import sanitize_redirect, user_is_authenticated, \
-                         user_is_active
+                         user_is_active, partial_pipeline_data
 
 
 def do_auth(strategy, redirect_name='next'):
@@ -39,16 +39,12 @@ def do_complete(strategy, login, user=None, redirect_name='next',
     login_error_url = strategy.setting('LOGIN_ERROR_URL') or \
                       strategy.setting('LOGIN_URL')
 
-    partial = strategy.session_get('partial_pipeline', None)
+    partial = partial_pipeline_data(strategy, user, *args, **kwargs)
     if partial is not None:
-        idx, backend, xargs, xkwargs = strategy.from_session(partial)
+        idx, backend, xargs, xkwargs = partial
         if backend == strategy.backend_name:
-            kwargs = kwargs.copy()
-            kwargs.setdefault('user', user)
-            kwargs.setdefault('request', strategy.request)
-            kwargs.update(xkwargs)
             user = strategy.continue_pipeline(pipeline_index=idx,
-                                              *xargs, **kwargs)
+                                              *xargs, **xkwargs)
         else:
             strategy.clean_partial_pipeline()
             user = strategy.complete(user=user, request=strategy.request,
@@ -96,9 +92,26 @@ def do_complete(strategy, login, user=None, redirect_name='next',
     return strategy.redirect(url)
 
 
-def do_disconnect(strategy, user, association_id=None, redirect_name='next'):
-    strategy.disconnect(user=user, association_id=association_id)
-    data = strategy.request_data()
-    return strategy.redirect(data.get(redirect_name, '') or
-                             strategy.setting('DISCONNECT_REDIRECT_URL') or
-                             strategy.setting('LOGIN_REDIRECT_URL'))
+def do_disconnect(strategy, user, association_id=None, redirect_name='next',
+                  *args, **kwargs):
+    partial = partial_pipeline_data(strategy, user, *args, **kwargs)
+    if partial is not None:
+        idx, backend, xargs, xkwargs = partial
+        if backend == strategy.backend_name:
+            out = strategy.disconnect(pipeline_index=idx, user=user,
+                                      association_id=association_id,
+                                      *args, **kwargs)
+        else:
+            strategy.clean_partial_pipeline()
+            out = strategy.disconnect(user=user, association_id=association_id,
+                                      *args, **kwargs)
+    else:
+        out = strategy.disconnect(user=user, association_id=association_id,
+                                  *args, **kwargs)
+    if not isinstance(out, dict):
+        return out
+    else:
+        data = strategy.request_data()
+        return strategy.redirect(data.get(redirect_name, '') or
+                                 strategy.setting('DISCONNECT_REDIRECT_URL') or
+                                 strategy.setting('LOGIN_REDIRECT_URL'))
