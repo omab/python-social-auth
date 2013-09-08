@@ -5,11 +5,14 @@ Requires MongoEngine 0.6.10
 """
 import six
 
+from django.conf import settings
+
 from mongoengine import DictField, Document, IntField, ReferenceField, \
                         StringField
 from mongoengine.django.auth import User
 from mongoengine.queryset import OperationError
 
+from social.utils import setting_name, module_member
 from social.storage.django_orm import DjangoUserMixin, \
                                       DjangoAssociationMixin, \
                                       DjangoNonceMixin, \
@@ -19,9 +22,16 @@ from social.storage.django_orm import DjangoUserMixin, \
 UNUSABLE_PASSWORD = '!'  # Borrowed from django 1.4
 
 
+USER_MODEL = module_member(
+    getattr(settings, setting_name('USER_MODEL'), None) or
+    getattr(settings, 'AUTH_USER_MODEL', None) or
+    'mongoengine.django.auth.User'
+)
+
+
 class UserSocialAuth(Document, DjangoUserMixin):
     """Social Auth association model"""
-    user = ReferenceField(User)
+    user = ReferenceField(USER_MODEL, dbref=True)
     provider = StringField(max_length=32)
     uid = StringField(max_length=255, unique_with='provider')
     extra_data = DictField()
