@@ -1,4 +1,18 @@
-from social.exceptions import AuthAlreadyAssociated, AuthException
+from social.exceptions import AuthAlreadyAssociated, AuthException, \
+                              AuthForbidden
+
+
+def social_details(strategy, response, *args, **kwargs):
+    return {'details': strategy.backend.get_user_details(response)}
+
+
+def social_uid(strategy, details, response, *args, **kwargs):
+    return {'uid': strategy.backend.get_user_id(details, response)}
+
+
+def auth_allowed(strategy, details, response, *args, **kwargs):
+    if not strategy.backend.auth_allowed(response, details):
+        raise AuthForbidden(strategy.backend)
 
 
 def social_user(strategy, uid, user=None, *args, **kwargs):

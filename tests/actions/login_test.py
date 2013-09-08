@@ -52,6 +52,9 @@ class LoginActionTest(BaseActionTest):
         self.strategy.set_settings({
             'SOCIAL_AUTH_LOGIN_ERROR_URL': '/error',
             'SOCIAL_AUTH_PIPELINE': (
+                'social.pipeline.social_auth.social_details',
+                'social.pipeline.social_auth.social_uid',
+                'social.pipeline.social_auth.auth_allowed',
                 'social.pipeline.social_auth.social_user',
                 'social.pipeline.user.get_username',
                 'social.pipeline.user.create_user',

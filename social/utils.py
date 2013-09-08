@@ -119,3 +119,14 @@ def drop_lists(value):
             val = six.text_type(val, 'utf-8')
         out[key] = val
     return out
+
+
+def partial_pipeline_data(strategy, user, *args, **kwargs):
+    partial = strategy.session_get('partial_pipeline', None)
+    if partial is not None:
+        idx, backend, xargs, xkwargs = strategy.from_session(partial)
+        kwargs = kwargs.copy()
+        kwargs.setdefault('user', user)
+        kwargs.setdefault('request', strategy.request)
+        kwargs.update(xkwargs)
+        return idx, backend, xargs, xkwargs

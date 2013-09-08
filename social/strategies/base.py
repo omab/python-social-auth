@@ -74,21 +74,11 @@ class BaseStrategy(object):
     def continue_pipeline(self, *args, **kwargs):
         return self.backend.continue_pipeline(*args, **kwargs)
 
-    def disconnect(self, user, association_id=None):
-        name = self.backend.name
-        user_storage = self.storage.user
-        revoke_token = self.setting('REVOKE_TOKENS_ON_DISCONNECT', False)
-        if user_storage.allowed_to_disconnect(user, name, association_id):
-            entries = user_storage.get_social_auth_for_user(user, name,
-                                                            association_id)
-            for entry in entries:
-                if revoke_token:
-                    backend = entry.get_backend(self)(self)
-                    backend.revoke_token(entry.extra_data['access_token'],
-                                         entry.uid)
-                user_storage.disconnect(entry)
-        else:
-            raise NotAllowedToDisconnect()
+    def disconnect(self, user, association_id=None, *args, **kwargs):
+        return self.backend.disconnect(
+            user=user, association_id=association_id,
+            *args, **kwargs
+        )
 
     def authenticate(self, *args, **kwargs):
         kwargs['strategy'] = self
@@ -115,8 +105,7 @@ class BaseStrategy(object):
     def from_session_value(self, val):
         return val
 
-    def to_session(self, next, backend, storage, request=None,
-                   *args, **kwargs):
+    def to_session(self, next, backend, request=None, *args, **kwargs):
         return {
             'next': next,
             'backend': backend.name,
@@ -134,14 +123,17 @@ class BaseStrategy(object):
                     for key, val in session['kwargs'].items())
         )
 
-    def clean_partial_pipeline(self):
-        self.session_pop('partial_pipeline')
+    def clean_partial_pipeline(self, name='partial_pipeline'):
+        self.session_pop(name)
 
     def openid_store(self):
         return OpenIdStore(self)
 
     def get_pipeline(self):
         return self.setting('PIPELINE', (
+            'social.pipeline.social_auth.social_details',
+            'social.pipeline.social_auth.social_uid',
+            'social.pipeline.social_auth.auth_allowed',
             'social.pipeline.social_auth.social_user',
             'social.pipeline.user.get_username',
             # 'social.pipeline.social_auth.associate_by_email',
@@ -149,6 +141,13 @@ class BaseStrategy(object):
             'social.pipeline.social_auth.associate_user',
             'social.pipeline.social_auth.load_extra_data',
             'social.pipeline.user.user_details'))
+
+    def get_disconnect_pipeline(self):
+        return self.setting('DISCONNECT_PIPELINE', (
+            'social.pipeline.disconnect.allowed_to_disconnect',
+            'social.pipeline.disconnect.get_entries',
+            'social.pipeline.disconnect.revoke_tokens',
+            'social.pipeline.disconnect.disconnect'))
 
     def random_string(self, length=12, chars=ALLOWED_CHARS):
         # Implementation borrowed from django 1.4

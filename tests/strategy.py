@@ -85,6 +85,9 @@ class TestStrategy(BaseStrategy):
 
     def get_pipeline(self):
         return self.setting('PIPELINE', (
+            'social.pipeline.social_auth.social_details',
+            'social.pipeline.social_auth.social_uid',
+            'social.pipeline.social_auth.auth_allowed',
             'social.pipeline.social_auth.social_user',
             'social.pipeline.user.get_username',
             'social.pipeline.social_auth.associate_by_email',
