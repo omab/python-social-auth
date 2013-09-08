@@ -39,3 +39,5 @@ local_settings.py
 sessions/
 _build/
 fabfile.py
+
+.DS_Store
