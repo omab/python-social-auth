@@ -28,6 +28,7 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.angel.AngelOAuth2',
     'social.backends.behance.BehanceOAuth2',
     'social.backends.bitbucket.BitbucketOAuth',
+    'social.backends.box.BoxOAuth2',
     'social.backends.linkedin.LinkedinOAuth',
     'social.backends.github.GithubOAuth2',
     'social.backends.foursquare.FoursquareOAuth2',
