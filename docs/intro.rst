@@ -64,6 +64,7 @@ or extend current one):
     * Shopify_ OAuth2
     * Skyrock_ OAuth1
     * Soundcloud_ OAuth2
+    * ThisIsMyJam_ OAuth1
     * Stackoverflow_ OAuth2
     * Steam_ OpenId
     * Stocktwits_ OAuth2
@@ -132,6 +133,7 @@ suits your project. Check `Authentication Pipeline`_ section.
 .. _Shopify: http://shopify.com
 .. _Skyrock: https://skyrock.com
 .. _Soundcloud: https://soundcloud.com
+.. _ThisIsMyJam: https://thisismyjam.com
 .. _Stocktwits: https://stocktwits.com
 .. _Stripe: https://stripe.com
 .. _Tripit: https://www.tripit.com
