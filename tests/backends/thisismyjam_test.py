@@ -19,7 +19,10 @@ class ThisIsMyJameOAuth1Test(OAuth1Test):
     })
     user_data_body = json.dumps({
         'id': 10101010,
-        'name': 'Foo',
+        'person': {
+            'name': 'foobar',
+            'fullname': 'Foo Bar'
+        }
     })
 
     def test_login(self):
