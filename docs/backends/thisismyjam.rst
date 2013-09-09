@@ -8,8 +8,8 @@ ThisIsMyJam uses OAuth1 for its auth mechanism.
 
 - Fill ``Client Id`` and ``Client Secret`` values in the settings::
 
-      THISISMYJAM_CONSUMER_ID = ''
-      THISISMYJAM_CONSUMER_SECRET = ''
+      SOCIAL_AUTH_THISISMYJAM_KEY = ''
+      SOCIAL_AUTH_THISISMYJAM_SECRET = ''
 
 
 Check the rest of their doc at `ThisIsMyJam API Docs`_.

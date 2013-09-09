@@ -3,7 +3,7 @@ ThisIsMyJam OAuth support.
 
 This contribution adds support for ThisIsMyJam service.
 
-The settings THISISMYJAM_CLIENT_ID & THISISMYJAM_CLIENT_SECRET must be defined
+The settings SOCIAL_AUTH_THISISMYJAM_KEY & SOCIAL_AUTH_THISISMYJAM_SECRET must be defined
 with the values given by SoundCloud application registration process.
 
 http://www.thisismyjam.com/developers
@@ -38,6 +38,3 @@ class ThisIsMyJamOAuth1(BaseOAuth1):
         return self.get_json('http://api.thisismyjam.com/1/verify.json',
                              auth=self.oauth_auth(access_token)
                          )
-
-    def get_key_and_secret(self):
-        return self.setting("THISISMYJAM_CONSUMER_ID"),self.setting("THISISMYJAM_CONSUMER_SECRET")
