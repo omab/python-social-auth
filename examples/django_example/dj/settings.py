@@ -147,6 +147,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.flickr.FlickrOAuth',
     'social.backends.livejournal.LiveJournalOpenId',
     'social.backends.soundcloud.SoundcloudOAuth2',
+    'social.backends.thisismyjam.ThisIsMyJamOAuth1',
     'social.backends.stocktwits.StocktwitsOAuth2',
     'social.backends.tripit.TripItOAuth',
     'social.backends.twilio.TwilioAuth',

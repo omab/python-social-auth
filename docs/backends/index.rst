@@ -47,6 +47,7 @@ Here's the list of currently supported backends.
    shopify
    skyrock
    soundcloud
+   thisismyjam
    stackoverflow
    steam
    stocktwits
