@@ -1,4 +1,4 @@
-SoundCloud
+ThisIsMyJam
 ==========
 
 ThisIsMyJam uses OAuth1 for its auth mechanism.
