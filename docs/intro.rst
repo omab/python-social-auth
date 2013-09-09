@@ -35,6 +35,7 @@ or extend current one):
     * Angel_ OAuth2
     * Behance_ OAuth2
     * Bitbucket_ OAuth1
+    * Box_ OAuth2
     * Dailymotion_ OAuth2
     * Disqus_ OAuth2
     * Douban_ OAuth1 and OAuth2
@@ -105,6 +106,7 @@ suits your project. Check `Authentication Pipeline`_ section.
 .. _Angel: https://angel.co
 .. _Behance: https://www.behance.net
 .. _Bitbucket: https://bitbucket.org
+.. _Box: https://www.box.com
 .. _Dailymotion: https://dailymotion.com
 .. _Disqus: https://disqus.com
 .. _Douban: http://www.douban.com
