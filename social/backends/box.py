@@ -26,15 +26,6 @@ class BoxOAuth2(BaseOAuth2):
         ('refresh_token', 'refresh_token', True),
         ('id', 'id'),
         ('expires', 'expires'),
-        ('created_at', 'created_at'),
-        ('modified_at', 'modified_at'),
-        ('status', 'status'),
-        ('type', 'type'),
-        ('language', 'language'),
-        ('avatar_url', 'avatar_url'),
-        ('max_upload_size', 'max_upload_size'),
-        ('space_amount', 'space_amount'),
-        ('space_used', 'space_used'),
     ]
 
     def do_auth(self, access_token, response=None, *args, **kwargs):
