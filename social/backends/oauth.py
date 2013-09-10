@@ -4,7 +4,7 @@ from requests import HTTPError
 from requests_oauthlib import OAuth1
 from oauthlib.oauth1 import SIGNATURE_TYPE_AUTH_HEADER
 
-from social.p3 import urlencode
+from social.p3 import urlencode, unquote
 from social.utils import url_add_parameters, parse_qs
 from social.exceptions import AuthFailed, AuthCanceled, AuthUnknownError, \
                               AuthMissingParameter, AuthStateMissing, \
@@ -262,7 +262,7 @@ class BaseOAuth2(OAuthAuth):
         params = self.auth_params(state)
         params.update(self.get_scope_argument())
         params.update(self.auth_extra_arguments())
-        return self.AUTHORIZATION_URL + '?' + urlencode(params)
+        return self.AUTHORIZATION_URL + '?' + unquote(urlencode(params))
 
     def validate_state(self):
         """Validate state value. Raises exception on error, returns state
