@@ -262,10 +262,12 @@ class BaseOAuth2(OAuthAuth):
         params = self.auth_params(state)
         params.update(self.get_scope_argument())
         params.update(self.auth_extra_arguments())
-        if self.REDIRECT_STATE: # redirect_uri is not strictly enforced. Encode the redirect state into the redirect_uri to prevent forgery.
-            return self.AUTHORIZATION_URL + '?' + urlencode(params)
-        else: # redirect_uri matching is strictly enforced, so match the providers value exactly.
-            return self.AUTHORIZATION_URL + '?' + unquote(urlencode(params))
+        params = urlencode(params)
+        if not self.REDIRECT_STATE:
+            # redirect_uri matching is strictly enforced, so match the
+            # providers value exactly.
+            params = unquote(params)
+        return self.AUTHORIZATION_URL + '?' + params
 
     def validate_state(self):
         """Validate state value. Raises exception on error, returns state
