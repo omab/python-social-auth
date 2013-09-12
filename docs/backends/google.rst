@@ -23,7 +23,7 @@ anonymous values will be used if not configured as described in their
 
 - setup any needed extra scope in::
 
-      SOCIAL_AUTH_GOOGLE_OAUTH_EXTRA_SCOPE = [...]
+      SOCIAL_AUTH_GOOGLE_OAUTH_SCOPE = [...]
 
 
 Google OAuth2
