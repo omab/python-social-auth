@@ -21,14 +21,6 @@ Check `Google OAuth`_ and make your choice.
 anonymous values will be used if not configured as described in their
 `OAuth reference`_
 
-- configure the display name to be used in the **grant permissions** dialog
-  that Google will display to users in::
-
-      SOCIAL_AUTH_GOOGLE_OAUTH_DISPLAY_NAME = ''
-
-  shows 'Social Auth' by default, but that might not play well with your
-  application.
-
 - setup any needed extra scope in::
 
       SOCIAL_AUTH_GOOGLE_OAUTH_EXTRA_SCOPE = [...]
@@ -55,7 +47,7 @@ To enable OAuth2 support:
 
 - setup any needed extra scope::
 
-      SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_SCOPE = [...]
+      SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [...]
 
 Check which applications can be included in their `Google Data Protocol Directory`_
 
@@ -86,7 +78,7 @@ Check `Google support`_ and `Orkut API`_ for details on getting keys.
 
 - configure extra scopes in::
 
-      SOCIAL_AUTH_ORKUT_EXTRA_SCOPES = [...]
+      SOCIAL_AUTH_ORKUT_SCOPE = [...]
 
 
 White listed domains and email addresses

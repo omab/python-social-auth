@@ -13,7 +13,7 @@ Live uses OAuth2 for its connect workflow, notice that it isn't OAuth WRAP.
 
 - Also it's possible to define extra permissions with::
 
-     SOCIAL_AUTH_LIVE_EXTENDED_PERMISSIONS = [...]
+     SOCIAL_AUTH_LIVE_SCOPE = [...]
 
   Defaults are ``wl.basic`` and ``wl.emails``. Latter one is necessary to
   retrieve user email.

@@ -44,11 +44,11 @@ If you want to authenticate users in your IFrame application,
 
 - sign a public offer and do some bureaucracy
 
-You may also use:
+You may also use::
 
-SOCIAL_AUTH_ODNOKLASSNIKIAPP_EXTRA_USER_DATA_LIST
-    Defaults to empty tuple, for the list of available fields see
-    `Documentation on user.getInfo`_
+    SOCIAL_AUTH_ODNOKLASSNIKIAPP_EXTRA_USER_DATA_LIST
+
+Defaults to empty tuple, for the list of available fields see `Documentation on user.getInfo`_
 
 .. _OAuth registration form: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188
 .. _Rules for application developers: http://dev.odnoklassniki.ru/wiki/display/ok/Odnoklassniki.ru+Third+Party+Platform

@@ -35,8 +35,8 @@ can find documentation at `Douban Developers`_. To setup OAuth2 follow:
 
 - Fill **Consumer Key** and **Consumer Secret** values in settings::
 
-      SOCIAL_AUTH_DOUBAN2_KEY = ''
-      SOCIAL_AUTH_DOUBAN2_SECRET = ''
+      SOCIAL_AUTH_DOUBAN_OAUTH2_KEY = ''
+      SOCIAL_AUTH_DOUBAN_OAUTH2_SECRET = ''
 
 - Add ``'social.backends.douban.DoubanOAuth2'`` into your
   ``SOCIAL_AUTH_AUTHENTICATION_BACKENDS``.

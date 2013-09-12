@@ -13,7 +13,7 @@ Github works similar to Facebook (OAuth).
 
 - Also it's possible to define extra permissions with::
 
-      SOCIAL_AUTH_GITHUB_EXTENDED_PERMISSIONS = [...]
+      SOCIAL_AUTH_GITHUB_SCOPE = [...]
 
 
 Github for Organizations

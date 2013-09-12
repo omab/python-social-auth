@@ -94,7 +94,7 @@ HTML template with JavaScript code to authenticate, check below for an example.
 
 - Get an OpenAPI App Id and add it to the settings::
 
-    SOCIAL_AUTH_VK_APP_ID = ''
+    SOCIAL_AUTH_VK_OPENAPI_ID = ''
 
   This app id will be passed to the template as ``VK_APP_ID``.
 
