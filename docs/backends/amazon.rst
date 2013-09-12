@@ -33,6 +33,7 @@ the ``:80`` from those URLs, but this renders the service very unusable at the
 moment.
 
 User data returned by Amazon doesn't follow the documented format::
+
     {
         Request-Id: "02GGTU7CWMNFTV3KH3J6",
         Profile: {
@@ -43,6 +44,7 @@ User data returned by Amazon doesn't follow the documented format::
     }
 
 Instead of::
+
     {
         "user_id": "amzn1.account.ABCDE1234",
         "email": "foo@bar.com",

@@ -35,6 +35,7 @@ Each pipeline function will receive the following parameters:
     * ``is_new`` flag (initialized as ``False``)
     * Any arguments passed to ``auth_complete`` backend method, default views
       pass this arguments:
+
         - current logged in user (if it's logged in, otherwise ``None``)
         - current request
 

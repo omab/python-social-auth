@@ -1,5 +1,5 @@
 Box.net
-======
+=======
 
 Box works similar to Facebook (OAuth2).
 
@@ -10,9 +10,8 @@ Box works similar to Facebook (OAuth2).
     SOCIAL_AUTH_BOX_KEY = ''
     SOCIAL_AUTH_BOX_SECRET = ''
 
-- By default the token is not permanent, it will last an hour::
-
-  To refresh the access token just do::
+- By default the token is not permanent, it will last an hour. To refresh the
+  access token just do::
 
     from social.apps.django_app.utils import load_strategy
 

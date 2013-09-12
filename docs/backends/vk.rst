@@ -1,5 +1,5 @@
 VK.com (former Vkontakte)
-=========
+=========================
 
 VK.com (former Vkontakte) auth service support.
 
