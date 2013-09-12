@@ -37,8 +37,13 @@ class UserSocialAuth(Document, DjangoUserMixin):
     extra_data = DictField()
 
     @classmethod
-    def get_social_auth_for_user(cls, user):
-        return cls.objects(user=user)
+    def get_social_auth_for_user(cls, user, provider=None, id=None):
+        qs = cls.objects
+        if provider:
+            qs = qs.filter(provider=provider)
+        if id:
+            qs = qs.filter(id=id)
+        return qs.filter(user=user)
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):
