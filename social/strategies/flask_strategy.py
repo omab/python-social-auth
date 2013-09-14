@@ -50,7 +50,7 @@ class FlaskStrategy(BaseStrategy):
         session[name] = value
 
     def session_pop(self, name):
-        session.pop(name, None)
+        return session.pop(name, None)
 
     def session_setdefault(self, name, value):
         return session.setdefault(name, value)
