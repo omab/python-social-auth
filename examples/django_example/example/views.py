@@ -15,3 +15,11 @@ def done(request):
     """Login complete view, displays user data"""
     return render_to_response('done.html', {'user': request.user},
                               RequestContext(request))
+
+
+def require_email(request):
+    if request.method == 'POST':
+        request.session['saved_email'] = request.POST.get('email')
+        backend = request.session['partial_pipeline']['backend']
+        return redirect('social:complete', backend=backend)
+    return render_to_response('email.html', RequestContext(request))

@@ -77,7 +77,7 @@ class DjangoStrategy(BaseStrategy):
             self.session.modified = True
 
     def session_pop(self, name):
-        self.session.pop(name, None)
+        return self.session.pop(name, None)
 
     def session_setdefault(self, name, value):
         return self.session.setdefault(name, value)

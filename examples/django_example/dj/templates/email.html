@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+<form action="" method="post">
+  {% csrf_token %}
+  <label for="email">Email address:</label>
+  <input id="email" type="email" name="email" value="" />
+  <button>Save</button>
+</form>
+{% endblock %}

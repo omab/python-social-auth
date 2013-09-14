@@ -11,6 +11,8 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^%s$' % PATH, 'example.views.home'),
     url(r'^%sdone/$' % PATH, 'example.views.done', name='done'),
+    url(r'^%semail/$' % PATH, 'example.views.require_email',
+        name='require_email'),
     url(r'%s' % PATH, include('social.apps.django_app.urls',
         namespace='social'))
 )
