@@ -130,3 +130,13 @@ def partial_pipeline_data(strategy, user, *args, **kwargs):
         kwargs.setdefault('request', strategy.request)
         kwargs.update(xkwargs)
         return idx, backend, xargs, xkwargs
+
+
+def build_absolute_uri(host_url, path=None):
+    """Build absolute URI with given (optional) path"""
+    path = path or ''
+    if path.startswith('http://') or path.startswith('https://'):
+        return path
+    if host_url.endswith('/') and path.startswith('/'):
+        path = path[1:]
+    return host_url + path

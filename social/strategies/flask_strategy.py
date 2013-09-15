@@ -3,6 +3,7 @@ import pickle
 from flask import current_app, request, redirect, make_response, session, \
                   render_template, render_template_string
 
+from social.utils import build_absolute_uri
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 
 
@@ -73,12 +74,7 @@ class FlaskStrategy(BaseStrategy):
         return value
 
     def build_absolute_uri(self, path=None):
-        path = path or ''
-        if path.startswith('http://') or path.startswith('https://'):
-            return path
-        if request.host_url.endswith('/') and path.startswith('/'):
-            path = path[1:]
-        return request.host_url + (path or '')
+        return build_absolute_uri(request.host_url, path)
 
 
 class OpenIdSessionWrapper(dict):
