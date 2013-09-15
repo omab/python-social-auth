@@ -93,6 +93,7 @@ class BaseAuth(object):
         out = kwargs.copy()
         out.setdefault('strategy', self.strategy)
         out.setdefault('backend', out.pop(self.name, None) or self)
+        out.setdefault('request', self.strategy.request)
 
         for idx, name in enumerate(pipeline):
             out['pipeline_index'] = pipeline_index + idx
