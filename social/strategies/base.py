@@ -3,7 +3,6 @@ import random
 import hashlib
 
 from social.utils import setting_name, to_setting_name
-from social.exceptions import NotAllowedToDisconnect
 from social.store import OpenIdStore
 
 
