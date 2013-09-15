@@ -1,11 +1,11 @@
 Python Social Auth
 ==================
 
-Python Social Auth is an easy to setup social authentication/registration
+Python Social Auth is an easy-to-setup social authentication/registration
 mechanism with support for several frameworks and auth providers.
 
-Crafted using base code from django-social-auth, implements a common interface
-to define new authentication providers from third parties. And to bring support
+Crafted using base code from django-social-auth, it implements a common interface
+to define new authentication providers from third parties, and to bring support
 for more frameworks and ORMs.
 
 .. image:: https://travis-ci.org/omab/python-social-auth.png?branch=master
@@ -18,13 +18,13 @@ Features
 ========
 
 This application provides user registration and login using social sites
-credentials, here are some features, probably not a full list yet.
+credentials. Here are some features, which is probably not a full list yet.
 
 
 Supported frameworks
 --------------------
 
-Multiple frameworks support:
+Multiple frameworks are supported:
 
     * Django_
     * Flask_
@@ -37,8 +37,8 @@ once the code matures).
 Auth providers
 --------------
 
-Several supported service by simple backends definition (easy to add new ones
-or extend current one):
+Several services are supported by simply defining backends (new ones can be easily added
+or current ones extended):
 
     * Angel_ OAuth2
     * Behance_ OAuth2
@@ -91,7 +91,7 @@ or extend current one):
 User data
 ---------
 
-Basic user data population, to allows custom fields values from providers
+Basic user data population, to allow custom field values from provider's
 response.
 
 
@@ -111,14 +111,14 @@ suits your project.
 Dependencies
 ============
 
-Dependencies that **must** be meet to use the application:
+Dependencies that **must** be met to use the application:
 
 - OpenId_ support depends on python-openid_
 
 - OAuth_ support depends on python-oauth2_ (despite the name, this is just for
   OAuth1)
 
-- Several backends demands application registration on their corresponding
+- Several backends demand application registration on their corresponding
   sites and other dependencies like sqlalchemy_ on Flask and Webpy.
 
 
