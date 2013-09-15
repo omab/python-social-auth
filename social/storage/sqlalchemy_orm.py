@@ -10,6 +10,8 @@ from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
 
 
 class SQLAlchemyMixin(object):
+    COMMIT_SESSION = True
+
     @classmethod
     def _session(cls):
         raise NotImplementedError('Implement in subclass')
@@ -25,7 +27,8 @@ class SQLAlchemyMixin(object):
     @classmethod
     def _save_instance(cls, instance):
         cls._session().add(instance)
-        cls._session().commit()
+        if cls.COMMIT_SESSION:
+            cls._session().commit()
         return instance
 
 
