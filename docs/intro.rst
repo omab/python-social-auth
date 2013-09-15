@@ -20,6 +20,7 @@ Multiple frameworks support:
 
     * Django_
     * Flask_
+    * Pyramid_
     * Webpy_
 
 More frameworks can be added easily (and should be even easier in the future
@@ -152,5 +153,6 @@ suits your project. Check `Authentication Pipeline`_ section.
 .. _Tumblr: http://www.tumblr.com/
 .. _Django: https://github.com/omab/python-social-auth/tree/master/social/apps/django_app
 .. _Flask: https://github.com/omab/python-social-auth/tree/master/social/apps/flask_app
+.. _Pyramid: http://www.pylonsproject.org/projects/pyramid/about
 .. _Webpy: https://github.com/omab/python-social-auth/tree/master/social/apps/webpy_app
 .. _Authentication Pipeline: pipeline.html

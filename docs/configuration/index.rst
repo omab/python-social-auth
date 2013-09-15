@@ -18,5 +18,6 @@ Contents:
    settings
    django
    flask
+   pyramid
    webpy
    porting_from_dsa
