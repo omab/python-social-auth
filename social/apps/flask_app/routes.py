@@ -8,13 +8,13 @@ from social.apps.flask_app.utils import strategy
 social_auth = Blueprint('social', __name__)
 
 
-@social_auth.route('/login/<string:backend>/', methods=['GET', 'POST'])
+@social_auth.route('/login/<string:backend>/', methods=('GET', 'POST'))
 @strategy('social.complete')
 def auth(backend):
     return do_auth(g.strategy)
 
 
-@social_auth.route('/complete/<string:backend>/', methods=['GET', 'POST'])
+@social_auth.route('/complete/<string:backend>/', methods=('GET', 'POST'))
 @strategy('social.complete')
 def complete(backend, *args, **kwargs):
     """Authentication complete view, override this view if transaction
@@ -23,9 +23,9 @@ def complete(backend, *args, **kwargs):
                        user=g.user, *args, **kwargs)
 
 
-@social_auth.route('/disconnect/<string:backend>/', methods=['POST'])
+@social_auth.route('/disconnect/<string:backend>/', methods=('POST',))
 @social_auth.route('/disconnect/<string:backend>/<int:association_id>/',
-                   methods=['POST'])
+                   methods=('POST',))
 @login_required
 @strategy()
 def disconnect(backend, association_id=None):
