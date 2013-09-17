@@ -95,11 +95,12 @@ Social accounts association
 Multiple social accounts can be associated to a single user.
 
 
-Authentication processing
--------------------------
+Authentication and disconnection processing
+-------------------------------------------
 
-Extensible pipeline to handle authentication/association mechanism in ways that
-suits your project. Check `Authentication Pipeline`_ section.
+Extensible pipeline to handle authentication, association and disconnection
+mechanism in ways that suits your project. Check `Authentication Pipeline`_
+section.
 
 
 .. _OpenId: http://openid.net/

@@ -1,5 +1,26 @@
+Pipeline
+========
+
+python-social-auth_ uses an extendible pipeline mechanism where developers can
+introduce their functions during the authentication, association and
+disconnection flows.
+
+The functions will receive a variable set of arguments related to the current
+process, common arguments are the current ``strategy``, ``user`` (if any) and
+``request``. It's recommended that all the function also define an ``**kwargs``
+in the parameters to avoid errors for unexpected arguments.
+
+Each pipeline entry can return a ``dict`` or ``None``, any other type of return
+value is treated as a response instance and returned directly to the client,
+check *Partial Piepeline* below for details.
+
+If a ``dict`` is returned, the value in the set will be merged into the
+``kwargs`` argument for the next pipeline entry, ``None`` is taken as if ``{}``
+was returned.
+
+
 Authentication Pipeline
-=======================
+-----------------------
 
 The final process of the authentication workflow is handled by an operations
 pipeline where custom functions can be added or default items can be removed to
@@ -37,46 +58,56 @@ Each pipeline function will receive the following parameters:
     * User details given by authentication provider
     * ``is_new`` flag (initialized as ``False``)
     * Any arguments passed to ``auth_complete`` backend method, default views
-      pass this arguments:
-
+      pass these arguments:
         - current logged in user (if it's logged in, otherwise ``None``)
         - current request
 
-Each pipeline entry can return a ``dict``, ``None``, any other type of return
-value is treated as a response instance and returned directly to the client,
-check Partial Piepeline below for details.
 
-If a ``dict`` is returned, any value in the set will be merged into the
-``kwargs`` argument for the next pipeline entry, ``None`` is taken as if ``{}``
-was returned.
+Disconnection Pipeline
+----------------------
 
-The workflow will be cut if the exception ``social.exceptions.StopPipeline``
-is raised at any point, but this should be done after a user and
-social user instance are created.
+Like the authentication pipeline, it's possible to define a disconnection
+pipeline if needed.
+
+For example, this can be useful on sites where a user that disconnects all the
+related social account is required to fill a password to ensure the
+authentication process in the future. This can be accomplished by overriding
+the default disconnection pipeline and setup a function that checks if the user
+has a password, in case it doesn't a redirect to a fill-your-password form can
+be returned and later continue the disconnection process. Check *Partial
+Pipeline* below.
+
+In order to override the disconnection pipeline, just define the setting::
+
+    SOCIAL_AUTH_DISCONNECT_PIPELINE = (
+        'social.pipeline.disconnect.allowed_to_disconnect',
+        'social.pipeline.disconnect.get_entries',
+        'social.pipeline.disconnect.revoke_tokens',
+        'social.pipeline.disconnect.disconnect'
+    )
 
 
 Partial Pipeline
 ----------------
 
 It's possible to cut the pipeline process to return to the user asking for more
-data and resume the process later. To accomplish this, add the entry
-``social.pipeline.partial.save_status_to_session`` (or a similar implementation)
-to the pipeline setting before any entry that returns an response instance::
+data and resume the process later. To accomplish this decorate the function
+that will cut the process with the ``@partial`` decorator located at
+``social/pipeline/partial.py``.
 
-    SOCIAL_AUTH_PIPELINE = (
-        ...
-        social.pipeline.partial.save_status_to_session,
-        app.pipeline.redirect_to_basic_user_data_form
-        ...
-    )
+The old ``social.pipeline.partial.save_status_to_session`` is now deprecated.
 
-When it's time to resume the process just redirect the user to
-``/complete/<backend>/`` view. By default the pipeline will be resumed in the
-next entry after ``save_status_to_session``.
+When it's time to resume the process just redirect the user to ``/complete/<backend>/``
+or ``/disconnect/<backend>/`` view. The pipeline will resume in the same
+function that cut the process.
 
-``save_status_to_session`` saves needed data into user session under the key
-``partial_pipeline``.
+``@partial`` and ``save_status_to_session`` stores needed data into user session
+under the key ``partial_pipeline``. To get the backend in order to redirect to
+any social view, just do::
+
+    backend = session['partial_pipeline']['backend']
 
 Check the `example applications`_ to check a basic usage.
 
+.. _python-social-auth: https://github.com/omab/python-social-auth
 .. _example applications: https://github.com/omab/python-social-auth/tree/master/examples
