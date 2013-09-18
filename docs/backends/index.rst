@@ -26,6 +26,7 @@ Here's the list of currently supported backends.
    angel
    behance
    bitbucket
+   box
    disqus
    douban
    dropbox
