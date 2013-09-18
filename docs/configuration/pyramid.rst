@@ -1,14 +1,14 @@
 Pyramid Framework
 =================
 
-Pyramid reusable applications are tricky (or I'm not capable enough). Here are
+Pyramid_ reusable applications are tricky (or I'm not capable enough). Here are
 details on how to enable this application on Pyramid.
 
 
 Dependencies
 ------------
 
-The `Pyramid built-in app` depends on sqlalchemy_, there's no support for others
+The `Pyramid built-in app`_ depends on sqlalchemy_, there's no support for others
 ORMs yet but pull-requests are welcome.
 
 
@@ -130,6 +130,7 @@ instances related to the given user. ``not_associated`` will have the backends
 names not associated and backends will have all the enabled backends names.
 
 
+.. _Pyramid: http://www.pylonsproject.org/projects/pyramid/about
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _Pyramid built-in app: https://github.com/omab/python-social-auth/tree/master/social/apps/pyramid_app
 .. _sqlalchemy: http://www.sqlalchemy.org/

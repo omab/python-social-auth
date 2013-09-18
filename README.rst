@@ -28,6 +28,7 @@ Multiple frameworks are supported:
 
     * Django_
     * Flask_
+    * Pyramid_
     * Webpy_
 
 More frameworks can be added easily (and should be even easier in the future
@@ -224,6 +225,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Tumblr: http://www.tumblr.com/
 .. _Django: https://github.com/omab/python-social-auth/tree/master/social/apps/django_app
 .. _Flask: https://github.com/omab/python-social-auth/tree/master/social/apps/flask_app
+.. _Pyramid: http://www.pylonsproject.org/projects/pyramid/about
 .. _Webpy: https://github.com/omab/python-social-auth/tree/master/social/apps/webpy_app
 .. _python-openid: http://pypi.python.org/pypi/python-openid/
 .. _python-oauth2: https://github.com/simplegeo/python-oauth2
