@@ -36,7 +36,7 @@ def strategy(redirect_uri=None):
             self.strategy = load_strategy(request=web.ctx, backend=backend,
                                           redirect_uri=uri, *args, **kwargs)
             if backend:
-                return func(self, backend=backend, *args, **kwargs)
+                return func(self, backend, *args, **kwargs)
             else:
                 return func(self, *args, **kwargs)
         return wrapper

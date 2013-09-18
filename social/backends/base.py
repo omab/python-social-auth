@@ -21,7 +21,7 @@ class BaseAuth(object):
     supports_inactive_user = False  # Django auth
     ID_KEY = None
 
-    def __init__(self, strategy=None, redirect_uri=None, *args, **kwargs):
+    def __init__(self, strategy=None, backend=None, storage=None, request=None, redirect_uri=None):
         self.strategy = strategy
         self.redirect_uri = redirect_uri
         self.data = {}
