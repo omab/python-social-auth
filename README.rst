@@ -162,18 +162,18 @@ If you're having problems with using the project, use the support forum at Coder
     :target: http://codersclan.net/forum/index.php?repo_id=8
 
 
-Copyrights and Licence
+Copyrights and License
 ======================
 
-``python-social-auth`` is protected by BSD licence. Check the LICENCE_ for
+``python-social-auth`` is protected by BSD license. Check the LICENSE_ for
 details.
 
 The base work was derived from django-social-auth_ work and copyrighted too,
-check `django-social-auth LICENCE`_ for details:
+check `django-social-auth LICENSE`_ for details:
 
-.. _LICENCE: https://github.com/omab/python-social-auth/blob/master/LICENSE
+.. _LICENSE: https://github.com/omab/python-social-auth/blob/master/LICENSE
 .. _django-social-auth: https://github.com/omab/django-social-auth
-.. _django-social-auth LICENCE: https://github.com/omab/django-social-auth/blob/master/LICENSE
+.. _django-social-auth LICENSE: https://github.com/omab/django-social-auth/blob/master/LICENSE
 .. _OpenId: http://openid.net/
 .. _OAuth: http://oauth.net/
 .. _myOpenID: https://www.myopenid.com/
