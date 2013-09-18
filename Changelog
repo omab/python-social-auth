@@ -1,5 +1,11 @@
-2013-09-17 HEAD (unreleased)
+2013-09-18 HEAD (unreleased)
 ============================
+
+  * 2013-09-17 Jonathan Tsai <jontsai@jontsai.com>
+    Update README.rst
+
+  * 2013-09-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Update pipeline docs with disconnection-pipeline feature
 
   * 2013-09-17 Jonathan Tsai <jontsai@jontsai.com>
     Update pipeline.rst
