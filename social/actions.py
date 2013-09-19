@@ -89,6 +89,8 @@ def do_complete(strategy, login, user=None, redirect_name='next',
         redirect_value = quote(redirect_value)
         url += ('?' in url and '&' or '?') + \
                '{0}={1}'.format(redirect_name, redirect_value)
+    if strategy.setting('SANITIZE_REDIRECTS', True):
+        url = sanitize_redirect(strategy.request_host(), url)
     return strategy.redirect(url)
 
 
