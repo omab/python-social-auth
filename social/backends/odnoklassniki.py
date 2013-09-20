@@ -28,6 +28,7 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
     """Odnoklassniki authentication backend"""
     name = 'odnoklassniki-oauth2'
     ID_KEY = 'uid'
+    ACCESS_TOKEN_METHOD = 'POST'
     AUTHORIZATION_URL = 'http://www.odnoklassniki.ru/oauth/authorize'
     ACCESS_TOKEN_URL = 'http://api.odnoklassniki.ru/oauth/token.do'
     EXTRA_DATA = [('refresh_token', 'refresh_token'),
