@@ -3,8 +3,9 @@ from social.pipeline.partial import partial
 
 
 @partial
-def mail_validation(strategy, details, user=None, *args, **kwargs):
-    if user is None and details.get('email'):
+def mail_validation(strategy, details, user=None, is_new=False,
+                    *args, **kwargs):
+    if user is None or is_new and details.get('email'):
         data = strategy.request_data()
         if 'code' in data:
             strategy.session_pop('email_validation_address')
