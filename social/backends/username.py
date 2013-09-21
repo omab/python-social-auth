@@ -9,7 +9,7 @@ class UsernameAuth(BaseAuth):
         return details['username']
 
     def get_user_details(self, response):
-        """Return user details, BrowserID only provides Email."""
+        """Return user details"""
         fullname = response.get('fullname', '')
         first_name = response.get('first_name', '')
         last_name = response.get('last_name', '')

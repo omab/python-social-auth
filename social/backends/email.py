@@ -10,7 +10,7 @@ class EmailAuth(BaseAuth):
         return details['email']
 
     def get_user_details(self, response):
-        """Return user details, BrowserID only provides Email."""
+        """Return user details"""
         email = response['email']
         fullname = response.get('fullname', '')
         first_name = response.get('first_name', '')
