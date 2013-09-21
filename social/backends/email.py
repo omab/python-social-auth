@@ -4,6 +4,7 @@ from social.exceptions import AuthMissingParameter
 
 class EmailAuth(BaseAuth):
     name = 'email'
+    REQUIRES_EMAIL_VALIDATION = True
 
     def get_user_id(self, details, response):
         return details['email']

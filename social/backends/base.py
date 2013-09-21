@@ -20,6 +20,7 @@ class BaseAuth(object):
     name = ''  # provider name, it's stored in database
     supports_inactive_user = False  # Django auth
     ID_KEY = None
+    REQUIRES_EMAIL_VALIDATION = False
 
     def __init__(self, strategy=None, redirect_uri=None, *args, **kwargs):
         self.strategy = strategy
