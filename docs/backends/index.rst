@@ -19,6 +19,9 @@ Here's the list of currently supported backends.
 .. toctree::
    :maxdepth: 2
 
+   email
+   username
+
    oauth
    openid
 
