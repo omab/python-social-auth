@@ -21,6 +21,12 @@ def signup_email(request):
     return render_to_response('email_signup.html', {}, RequestContext(request))
 
 
+def validation_sent(request):
+    return render_to_response('validation_sent.html', {
+        'email': request.session.get('email_validation_address')
+    }, RequestContext(request))
+
+
 def require_email(request):
     if request.method == 'POST':
         request.session['saved_email'] = request.POST.get('email')

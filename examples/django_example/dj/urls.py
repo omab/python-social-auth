@@ -10,6 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^signup-email/', 'example.views.signup_email'),
+    url(r'^email-sent/', 'example.views.validation_sent'),
     url(r'^%s$' % PATH, 'example.views.home'),
     url(r'^%sdone/$' % PATH, 'example.views.done', name='done'),
     url(r'^%semail/$' % PATH, 'example.views.require_email',
