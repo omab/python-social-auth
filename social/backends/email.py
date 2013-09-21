@@ -29,12 +29,6 @@ class EmailAuth(BaseAuth):
             'last_name': last_name
         }
 
-    def extra_data(self, user, uid, response, details):
-        """Return users extra data, pops password if preset"""
-        data = dict(response)
-        data.pop('password', None)
-        return data
-
     def auth_url(self):
         return self.setting('FORM_URL')
 
@@ -49,8 +43,5 @@ class EmailAuth(BaseAuth):
         """Completes loging process, must return user instance"""
         if 'email' not in self.data:
             raise AuthMissingParameter(self, 'email')
-        if self.setting('REQUIRES_PASSWORD', True):
-            if not self.data.get('password'):
-                raise AuthMissingParameter(self, 'password')
         kwargs.update({'response': self.data, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
