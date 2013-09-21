@@ -2,7 +2,7 @@ import time
 import random
 import hashlib
 
-from social.utils import setting_name, to_setting_name
+from social.utils import setting_name, to_setting_name, module_member
 from social.store import OpenIdStore
 
 
@@ -170,6 +170,21 @@ class BaseStrategy(object):
     def get_language(self):
         """Return current language"""
         return ''
+
+    def send_email_validation(self, email):
+        email_validation = self.setting('EMAIL_VALIDATION_FUNCTION')
+        send_email = module_member(email_validation)
+        code = self.storage.code.make_code(email)
+        send_email(self, code)
+        return code
+
+    def validate_email(self, email, code):
+        verification_code = self.storage.code.get_code(code)
+        if not verification_code or verification_code.code != code:
+            return False
+        else:
+            verification_code.verify()
+            return True
 
     # Implement the following methods on strategies sub-classes
 

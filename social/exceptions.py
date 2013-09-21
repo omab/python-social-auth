@@ -91,3 +91,8 @@ class AuthForbidden(AuthException):
     """Authentication for this user is forbidden"""
     def __str__(self):
         return 'Your credentials aren\'t allowed'
+
+
+class InvalidEmail(AuthException):
+    def __str__(self):
+        return 'Email couldn\'t be validated'
