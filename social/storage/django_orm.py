@@ -2,9 +2,8 @@
 import base64
 import six
 
-from social.exceptions import NotAllowedToDisconnect
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
-                                BaseStorage
+                                CodeMixin, BaseStorage
 
 
 class DjangoUserMixin(UserMixin):
@@ -128,7 +127,17 @@ class DjangoAssociationMixin(AssociationMixin):
         cls.objects.filter(pk__in=ids_to_delete).delete()
 
 
+class DjangoCodeMixin(CodeMixin):
+    @classmethod
+    def get_code(cls, code):
+        try:
+            return cls.objects.get(code=code)
+        except cls.DoesNotExist:
+            return None
+
+
 class BaseDjangoStorage(BaseStorage):
     user = DjangoUserMixin
     nonce = DjangoNonceMixin
     association = DjangoAssociationMixin
+    code = DjangoCodeMixin

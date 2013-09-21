@@ -2,6 +2,7 @@
 import re
 import time
 import base64
+import uuid
 from datetime import datetime, timedelta
 
 from openid.association import Association as OpenIdAssociation
@@ -201,10 +202,38 @@ class AssociationMixin(object):
         raise NotImplementedError('Implement in subclass')
 
 
+class CodeMixin(object):
+    email = ''
+    code = ''
+    verified = False
+
+    def verify(self):
+        self.verified = True
+        self.save()
+
+    @classmethod
+    def generate_code(cls):
+        return uuid.uuid4().hex
+
+    @classmethod
+    def make_code(cls, email):
+        code = cls()
+        code.email = email
+        code.code = cls.generate_code()
+        code.verified = False
+        code.save()
+        return code
+
+    @classmethod
+    def get_code(cls, code):
+        raise NotImplementedError('Implement in subclass')
+
+
 class BaseStorage(object):
     user = UserMixin
     nonce = NonceMixin
     association = AssociationMixin
+    code = CodeMixin
 
     @classmethod
     def is_integrity_error(cls, exception):

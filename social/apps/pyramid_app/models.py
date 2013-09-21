@@ -7,6 +7,7 @@ from social.utils import setting_name, module_member
 from social.storage.sqlalchemy_orm import SQLAlchemyUserMixin, \
                                           SQLAlchemyAssociationMixin, \
                                           SQLAlchemyNonceMixin, \
+                                          SQLAlchemyCodeMixin, \
                                           BaseSQLAlchemyStorage
 from social.apps.pyramid_app.fields import JSONType
 
@@ -73,7 +74,15 @@ def init_social(config, Base, session):
         lifetime = Column(Integer)
         assoc_type = Column(String(64))
 
+    class Code(_AppSession, Base, SQLAlchemyCodeMixin):
+        __tablename__ = 'social_auth_code'
+        __table_args__ = (UniqueConstraint('code', 'email'),)
+        id = Column(Integer, primary_key=True)
+        email = Column(String(200))
+        code = Column(String(32), index=True)
+
     # Set the references in the storage class
     PyramidStorage.user = UserSocialAuth
     PyramidStorage.nonce = Nonce
     PyramidStorage.association = Association
+    PyramidStorage.code = Code

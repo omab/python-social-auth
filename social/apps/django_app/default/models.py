@@ -7,6 +7,7 @@ from social.utils import setting_name
 from social.storage.django_orm import DjangoUserMixin, \
                                       DjangoAssociationMixin, \
                                       DjangoNonceMixin, \
+                                      DjangoCodeMixin, \
                                       BaseDjangoStorage
 from social.apps.django_app.default.fields import JSONField
 
@@ -77,10 +78,21 @@ class Association(models.Model, DjangoAssociationMixin):
         db_table = 'social_auth_association'
 
 
+class Code(models.Model, DjangoCodeMixin):
+    email = models.EmailField()
+    code = models.CharField(max_length=32, db_index=True)
+    verified = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'social_auth_code'
+        unique_together = ('email', 'code')
+
+
 class DjangoStorage(BaseDjangoStorage):
     user = UserSocialAuth
     nonce = Nonce
     association = Association
+    code = Code
 
     @classmethod
     def is_integrity_error(cls, exception):

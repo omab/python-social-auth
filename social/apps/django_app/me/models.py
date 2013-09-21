@@ -8,7 +8,7 @@ import six
 from django.conf import settings
 
 from mongoengine import DictField, Document, IntField, ReferenceField, \
-                        StringField
+                        StringField, EmailField, BooleanField
 from mongoengine.django.auth import User
 from mongoengine.queryset import OperationError
 
@@ -16,6 +16,7 @@ from social.utils import setting_name, module_member
 from social.storage.django_orm import DjangoUserMixin, \
                                       DjangoAssociationMixin, \
                                       DjangoNonceMixin, \
+                                      DjangoCodeMixin, \
                                       BaseDjangoStorage
 
 
@@ -100,10 +101,17 @@ class Association(Document, DjangoAssociationMixin):
     assoc_type = StringField(max_length=64)
 
 
+class Code(Document, DjangoCodeMixin):
+    email = EmailField()
+    code = StringField(max_length=32)
+    verified = BooleanField(default=False)
+
+
 class DjangoStorage(BaseDjangoStorage):
     user = UserSocialAuth
     nonce = Nonce
     association = Association
+    code = Code
 
     @classmethod
     def is_integrity_error(cls, exception):

@@ -2,11 +2,10 @@
 import base64
 import six
 
-# from sqlalchemy.orm import Query
 from sqlalchemy.exc import IntegrityError
 
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
-                                BaseStorage
+                                CodeMixin, BaseStorage
 
 
 class SQLAlchemyMixin(object):
@@ -153,10 +152,17 @@ class SQLAlchemyAssociationMixin(SQLAlchemyMixin, AssociationMixin):
         )
 
 
+class SQLAlchemyCodeMixin(SQLAlchemyMixin, CodeMixin):
+    @classmethod
+    def get_code(cls, code):
+        return cls._query().filter(cls.code == code).first()
+
+
 class BaseSQLAlchemyStorage(BaseStorage):
     user = SQLAlchemyUserMixin
     nonce = SQLAlchemyNonceMixin
     association = SQLAlchemyAssociationMixin
+    code = SQLAlchemyCodeMixin
 
     @classmethod
     def is_integrity_error(cls, exception):

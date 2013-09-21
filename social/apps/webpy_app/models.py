@@ -10,6 +10,7 @@ from social.utils import setting_name, module_member
 from social.storage.sqlalchemy_orm import SQLAlchemyUserMixin, \
                                           SQLAlchemyAssociationMixin, \
                                           SQLAlchemyNonceMixin, \
+                                          SQLAlchemyCodeMixin, \
                                           BaseSQLAlchemyStorage
 from social.apps.flask_app.fields import JSONType
 
@@ -47,7 +48,6 @@ class UserSocialAuth(SQLAlchemyUserMixin, SocialBase):
 
 class Nonce(SQLAlchemyNonceMixin, SocialBase):
     """One use numbers"""
-    #__metaclass__ = WebpyQueryMetaclass
     __tablename__ = 'social_auth_nonce'
     __table_args__ = (UniqueConstraint('server_url', 'timestamp', 'salt'),)
     id = Column(Integer, primary_key=True)
@@ -62,7 +62,6 @@ class Nonce(SQLAlchemyNonceMixin, SocialBase):
 
 class Association(SQLAlchemyAssociationMixin, SocialBase):
     """OpenId account association"""
-    #__metaclass__ = WebpyQueryMetaclass
     __tablename__ = 'social_auth_association'
     __table_args__ = (UniqueConstraint('server_url', 'handle'),)
     id = Column(Integer, primary_key=True)
@@ -78,7 +77,16 @@ class Association(SQLAlchemyAssociationMixin, SocialBase):
         return web.db_session
 
 
+class Code(SQLAlchemyCodeMixin, SocialBase):
+    __tablename__ = 'social_auth_code'
+    __table_args__ = (UniqueConstraint('code', 'email'),)
+    id = Column(Integer, primary_key=True)
+    email = Column(String(200))
+    code = Column(String(32), index=True)
+
+
 class WebpyStorage(BaseSQLAlchemyStorage):
     user = UserSocialAuth
     nonce = Nonce
     association = Association
+    code = Code
