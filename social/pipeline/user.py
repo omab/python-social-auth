@@ -3,7 +3,7 @@ from uuid import uuid4
 from social.utils import slugify, module_member
 
 
-USER_FIELDS = ['username', 'email']
+USER_FIELDS = ['username', 'email', 'password']
 
 
 def get_username(strategy, details, user=None, *args, **kwargs):
