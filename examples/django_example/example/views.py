@@ -17,6 +17,10 @@ def done(request):
                               RequestContext(request))
 
 
+def signup_email(request):
+    return render_to_response('email_signup.html', {}, RequestContext(request))
+
+
 def require_email(request):
     if request.method == 'POST':
         request.session['saved_email'] = request.POST.get('email')
