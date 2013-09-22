@@ -1,5 +1,90 @@
-2013-09-18 HEAD (unreleased)
-============================
+2013-09-22 v0.1.13
+==================
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Move common code to base class
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Small improve to email partial pipeline on example app
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix titles and sections on some docs
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Link to pipeline section
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Code model docs
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Move email validation docs to pipeline.rst
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Improve email validation to only validate new accounts
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Email and Username backends docs
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Docstring fix
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Username backend
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Drop password
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Email validation only on new accounts
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Drop password support, let that to developers in pipeline
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Validate email only if needed
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Small improvement on partial decorator
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable password on user save fields
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Email validation on django example app
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Email validation pipeline and strategy functions
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Verification code models
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Django example for email auth
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Initial email auth backend (no email validation yet)
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove complex class definition on django json field. Refs #35
+
+  * 2013-09-20 Matías Aguirre <matiasaguirre@gmail.com>
+    Define 'POST' method for access token retrieval in Odnoklassniki backend. 
+    Refs #33 
+
+  * 2013-09-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Sanitize redirects on complete before sending it
+
+  * 2013-09-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Link to Box doc
+
+  * 2013-09-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Link Pyramid and add it to list on README
+
+  * 2013-09-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Changelog update
+
+  * 2013-09-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Changelog file
 
   * 2013-09-17 Jonathan Tsai <jontsai@jontsai.com>
     Update README.rst
@@ -52,8 +137,8 @@
   * 2013-09-14 Matías Aguirre <matiasaguirre@gmail.com>
     Partial pipeline on django example
 
-2013-09-13 v01.1.12
-===================
+2013-09-13 v0.1.12
+==================
 
   * 2013-09-12 Matías Aguirre <matiasaguirre@gmail.com>
     Fix get_social_auth_for_user on mongoengine storage
