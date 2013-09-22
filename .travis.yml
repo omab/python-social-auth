@@ -8,6 +8,3 @@ install:
   - "pip install -r tests/requirements.txt --use-mirrors"
 script:
   - "nosetests --with-coverage --cover-package=social"
-after_success:
-  - "pip install --quiet python-coveralls"
-  - "coveralls"
