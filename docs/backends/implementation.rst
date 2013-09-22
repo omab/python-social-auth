@@ -1,13 +1,13 @@
-Adding new backend support
-==========================
+Adding a new backend
+====================
 
 Add new backends is quite easy, usually adding just a ``class`` with a couple
 settings and methods overrides to retrieve user data from services API. Follow
 the details below.
 
 
-OAuth providers
-===============
+OAuth
+-----
 
 OAuth1 and OAuth2 provide share some common definitions based on the shared
 behavior during the auth process, like a successful API response from
@@ -15,7 +15,7 @@ behavior during the auth process, like a successful API response from
 
 
 Shared attributes
------------------
+*****************
 
 ``name``
     This defines the backend name and identifies it during the auth process.
@@ -58,7 +58,7 @@ Shared attributes
 
 
 OAuth2
-------
+******
 
 OAuth2 backends are fair simple to implement, just a few settings, a method
 override and it's mostly ready to go.
@@ -132,7 +132,7 @@ Example code::
 
 
 OAuth1
-------
+******
 
 OAuth1 process is a bit more trickier, `Twitter Docs`_ explains it quite well.
 Beside the ``AUTHORIZATION_URL`` and ``ACCESS_TOKEN_URL`` attributes, a third

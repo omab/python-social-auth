@@ -26,8 +26,8 @@ requirements.txt_. Then run with ``nosetests`` command, or with the
 Pending
 -------
 
-At the moment only OAuth1 and OAuth2 backends are being tested, and just
-login and partial pipeline features are covered by the test. There's still
+At the moment only OAuth1, OAuth2 and OpenId backends are being tested, and
+just login and partial pipeline features are covered by the test. There's still
 a lot to work on, like:
 
     * Frameworks support

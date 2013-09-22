@@ -7,14 +7,14 @@ and 2), OpenId_ and others.
 
 
 Features
-========
+--------
 
 This application provides user registration and login using social sites
 credentials, here are some features, probably not a full list yet.
 
 
 Supported frameworks
---------------------
+********************
 
 Multiple frameworks support:
 
@@ -28,7 +28,7 @@ once the code matures).
 
 
 Auth providers
---------------
+**************
 
 Several supported service by simple backends definition (easy to add new ones
 or extend current one):
@@ -83,20 +83,20 @@ or extend current one):
 
 
 User data
----------
+*********
 
 Basic user data population, to allows custom fields values from providers
 response.
 
 
 Social accounts association
----------------------------
+***************************
 
 Multiple social accounts can be associated to a single user.
 
 
 Authentication and disconnection processing
--------------------------------------------
+*******************************************
 
 Extensible pipeline to handle authentication, association and disconnection
 mechanism in ways that suits your project. Check `Authentication Pipeline`_
