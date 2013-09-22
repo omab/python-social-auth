@@ -56,7 +56,6 @@ class UsernameTest(BaseBackendTest):
         start_url = self.strategy.start().url
         start_url = self.strategy.build_absolute_uri(start_url)
         complete_url = self.strategy.build_absolute_uri('/complete/username')
-        print "COMPLETE_URL:", complete_url
 
         HTTPretty.register_uri(HTTPretty.GET, start_url, status=200, body=FORM)
         HTTPretty.register_uri(HTTPretty.POST, complete_url, status=200,
