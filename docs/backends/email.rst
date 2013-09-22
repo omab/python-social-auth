@@ -55,4 +55,4 @@ Here's an example of password handling to add to the pipeline::
 
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _EmailAuth: https://github.com/omab/python-social-auth/blob/master/social/backends/email.py#L5
-.. _pipeline docs: ../pipeline.html
+.. _pipeline docs: ../pipeline.html#email-validation

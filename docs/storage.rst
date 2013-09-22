@@ -194,4 +194,4 @@ App`_, and `Webpy App`_ for examples of implementations.
 .. _Flask App: https://github.com/omab/python-social-auth/blob/master/social/apps/flask_app/models.py
 .. _Pyramid App: https://github.com/omab/python-social-auth/blob/master/social/apps/pyramid_app/models.py
 .. _Webpy App: https://github.com/omab/python-social-auth/blob/master/social/apps/webpy_app/models.py
-.. _pipeline docs: pipeline.html
+.. _pipeline docs: pipeline.html#email-validation
