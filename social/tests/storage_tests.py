@@ -6,7 +6,7 @@ from sure import expect
 
 from social.strategies.base import BaseStrategy
 from social.storage.base import UserMixin, NonceMixin, AssociationMixin, \
-                                BaseStorage
+                                CodeMixin, BaseStorage
 
 from social.tests.models import User
 
@@ -20,6 +20,10 @@ class BrokenAssociation(AssociationMixin):
 
 
 class BrokenNonce(NonceMixin):
+    pass
+
+
+class BrokenCode(CodeMixin):
     pass
 
 
@@ -104,7 +108,7 @@ class BrokenAssociationTests(unittest.TestCase):
             .should.throw(NotImplementedError, 'Implement in subclass')
 
 
-class BrokenNoseTests(unittest.TestCase):
+class BrokenNonceTests(unittest.TestCase):
     def setUp(self):
         self.nonce = BrokenNonce
 
@@ -114,6 +118,19 @@ class BrokenNoseTests(unittest.TestCase):
     def test_use(self):
         self.nonce.use.when \
             .called_with('http://foobar.com', 1364951922, 'foobar123') \
+            .should.throw(NotImplementedError, 'Implement in subclass')
+
+
+class BrokenCodeTest(unittest.TestCase):
+    def setUp(self):
+        self.code = BrokenCode
+
+    def tearDown(self):
+        self.code = None
+
+    def test_get_code(self):
+        self.code.get_code.when \
+            .called_with('foobar') \
             .should.throw(NotImplementedError, 'Implement in subclass')
 
 

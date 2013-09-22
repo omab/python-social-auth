@@ -1,7 +1,7 @@
 import base64
 
 from social.storage.base import UserMixin, NonceMixin, AssociationMixin, \
-                                BaseStorage
+                                CodeMixin, BaseStorage
 
 
 class BaseModel(object):
@@ -188,7 +188,19 @@ class TestAssociation(AssociationMixin, BaseModel):
             TestAssociation.cache.pop((a.server_url, a.handle), None)
 
 
+class TestCode(CodeMixin, BaseModel):
+    NEXT_ID = 1
+    cache = {}
+
+    @classmethod
+    def get_code(cls, code):
+        for c in cls.cache.values():
+            if c.code == code:
+                return c
+
+
 class TestStorage(BaseStorage):
     user = TestUserSocialAuth
     nonce = TestNonce
     association = TestAssociation
+    code = TestCode
