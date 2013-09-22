@@ -74,8 +74,10 @@ related social account is required to fill a password to ensure the
 authentication process in the future. This can be accomplished by overriding
 the default disconnection pipeline and setup a function that checks if the user
 has a password, in case it doesn't a redirect to a fill-your-password form can
-be returned and later continue the disconnection process. Check *Partial
-Pipeline* below.
+be returned and later continue the disconnection process, take into account
+that disconnection ensures the POST method by default, a simple method to
+ensure this, is to make your form POST to ``/disconnect/`` and set the needed
+password in your pipeline function. Check *Partial Pipeline* below.
 
 In order to override the disconnection pipeline, just define the setting::
 
