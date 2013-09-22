@@ -131,6 +131,23 @@ override the needed methods::
         raise NotImplementedError('Implement in subclass')
 
 
+Validation code
+---------------
+
+This class is used to keep track of email validations codes following the usual
+email validation mechanism of sending an email to the user with a unique code.
+This model is used by the partial pipeline ``social.pipeline.mail.mail_validation``.
+Check the docs at *Email validation* in `pipeline docs`_.
+
+When implementing the model for your framework only one method needs to be
+overridden::
+
+    @classmethod
+    def get_code(cls, code):
+        """Return the Code instance with the given code value"""
+        raise NotImplementedError('Implement in subclass')
+
+
 Storage interface
 -----------------
 
@@ -145,6 +162,7 @@ models references and implement the needed method::
         user = UserModel
         nonce = NonceModel
         association = AssociationModel
+        code = CodeModel
 
         @classmethod
         def is_integrity_error(cls, exception):
@@ -162,8 +180,8 @@ Currently there are partial implementations of mixins for `Sqlalchemy ORM`_ and
 Models Examples
 ---------------
 
-Check for current implementations for `Django App`_, `Flask App`_ and `Webpy
-App`_ for examples of implementations.
+Check for current implementations for `Django App`_, `Flask App`_, `Pyramid
+App`_, and `Webpy App`_ for examples of implementations.
 
 
 .. _UserMixin: https://github.com/omab/python-social-auth/blob/master/social/storage/base.py#L15
@@ -174,4 +192,6 @@ App`_ for examples of implementations.
 .. _Django ORM: https://github.com/omab/python-social-auth/blob/master/social/storage/django_orm.py
 .. _Django App: https://github.com/omab/python-social-auth/blob/master/social/apps/django_app/default/models.py
 .. _Flask App: https://github.com/omab/python-social-auth/blob/master/social/apps/flask_app/models.py
+.. _Pyramid App: https://github.com/omab/python-social-auth/blob/master/social/apps/pyramid_app/models.py
 .. _Webpy App: https://github.com/omab/python-social-auth/blob/master/social/apps/webpy_app/models.py
+.. _pipeline docs: pipeline.html
