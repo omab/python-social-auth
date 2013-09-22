@@ -97,17 +97,15 @@ def do_complete(strategy, login, user=None, redirect_name='next',
 def do_disconnect(strategy, user, association_id=None, redirect_name='next',
                   *args, **kwargs):
     partial = partial_pipeline_data(strategy, user, *args, **kwargs)
+    out = None
     if partial is not None:
         idx, backend, xargs, xkwargs = partial
         if backend == strategy.backend_name:
             out = strategy.disconnect(pipeline_index=idx, user=user,
                                       association_id=association_id,
                                       *args, **kwargs)
-        else:
-            strategy.clean_partial_pipeline()
-            out = strategy.disconnect(user=user, association_id=association_id,
-                                      *args, **kwargs)
-    else:
+    if out is None:
+        strategy.clean_partial_pipeline()
         out = strategy.disconnect(user=user, association_id=association_id,
                                   *args, **kwargs)
     if not isinstance(out, dict):
