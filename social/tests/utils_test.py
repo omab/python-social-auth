@@ -4,7 +4,7 @@ import unittest
 from sure import expect
 
 from social.utils import sanitize_redirect, user_is_authenticated, \
-                         user_is_active, slugify
+                         user_is_active, slugify, build_absolute_uri
 
 
 PY3 = sys.version_info[0] == 3
@@ -88,3 +88,33 @@ class SlugifyTest(unittest.TestCase):
             expect(slugify('FooBar'.decode('utf-8'))).to.equal('foobar')
             expect(slugify('Foo Bar'.decode('utf-8'))).to.equal('foo-bar')
             expect(slugify('Foo (Bar)'.decode('utf-8'))).to.equal('foo-bar')
+
+
+class BuildAbsoluteURITest(unittest.TestCase):
+    def setUp(self):
+        self.host = 'http://foobar.com'
+
+    def tearDown(self):
+        self.host = None
+
+    def test_path_none(self):
+        expect(build_absolute_uri(self.host)).to.equal(self.host)
+
+    def test_path_empty(self):
+        expect(build_absolute_uri(self.host, '')).to.equal(self.host)
+
+    def test_path_http(self):
+        expect(build_absolute_uri(self.host, 'http://barfoo.com')) \
+              .to.equal('http://barfoo.com')
+
+    def test_path_https(self):
+        expect(build_absolute_uri(self.host, 'https://barfoo.com')) \
+              .to.equal('https://barfoo.com')
+
+    def test_host_ends_with_slash_and_path_starts_with_slash(self):
+        expect(build_absolute_uri(self.host + '/', '/foo/bar')) \
+              .to.equal('http://foobar.com/foo/bar')
+
+    def test_absolute_uri(self):
+        expect(build_absolute_uri(self.host, '/foo/bar')) \
+              .to.equal('http://foobar.com/foo/bar')
