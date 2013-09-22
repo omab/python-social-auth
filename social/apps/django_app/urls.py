@@ -15,6 +15,6 @@ urlpatterns = patterns('social.apps.django_app.views',
     # disconnection
     url(r'^disconnect/(?P<backend>[^/]+)/$', 'disconnect',
         name='disconnect'),
-    url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>\d+)/$',
+    url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/$',
         'disconnect', name='disconnect_individual'),
 )

@@ -9,7 +9,6 @@ from django.conf import settings
 
 from mongoengine import DictField, Document, IntField, ReferenceField, \
                         StringField, EmailField, BooleanField
-from mongoengine.django.auth import User
 from mongoengine.queryset import OperationError
 
 from social.utils import setting_name, module_member
@@ -37,6 +36,9 @@ class UserSocialAuth(Document, DjangoUserMixin):
     uid = StringField(max_length=255, unique_with='provider')
     extra_data = DictField()
 
+    def str_id(self):
+        return str(self.id)
+
     @classmethod
     def get_social_auth_for_user(cls, user, provider=None, id=None):
         qs = cls.objects
@@ -58,7 +60,7 @@ class UserSocialAuth(Document, DjangoUserMixin):
 
     @classmethod
     def user_model(cls):
-        return User
+        return USER_MODEL
 
     @classmethod
     def create_user(cls, *args, **kwargs):
