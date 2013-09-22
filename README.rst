@@ -11,6 +11,12 @@ for more frameworks and ORMs.
 .. image:: https://travis-ci.org/omab/python-social-auth.png?branch=master
    :target: https://travis-ci.org/omab/python-social-auth
 
+.. image:: https://badge.fury.io/py/python-social-auth.png
+   :target: http://badge.fury.io/py/python-social-auth
+
+.. image:: https://pypip.in/d/python-social-auth/badge.png
+   :target: https://crate.io/packages/python-social-auth?version=latest
+
 .. contents:: Table of Contents
 
 
