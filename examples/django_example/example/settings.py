@@ -1,8 +1,6 @@
 import sys
 from os.path import abspath, dirname, join
 
-import mongoengine
-
 
 sys.path.insert(0, '../..')
 
@@ -64,10 +62,10 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'dj.urls'
+ROOT_URLCONF = 'example.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'dj.wsgi.application'
+WSGI_APPLICATION = 'example.wsgi.application'
 
 TEMPLATE_DIRS = (
     join(ROOT_PATH, 'templates'),
@@ -81,9 +79,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mongoengine.django.mongo_auth',
-    'social.apps.django_app.me',
-    'example',
+    'social.apps.django_app.default',
+    'example.app',
 )
 
 LOGGING = {
@@ -118,11 +115,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'social.apps.django_app.context_processors.backends',
 )
-
-SESSION_ENGINE = 'mongoengine.django.sessions'
-MONGOENGINE_USER_DOCUMENT = 'mongoengine.django.auth.User'
-mongoengine.connect('psa', host='mongodb://localhost/psa')
-SOCIAL_AUTH_USER_MODEL = 'mongoengine.django.auth.User'
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.open_id.OpenIdAuth',
@@ -183,14 +175,14 @@ LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/done/'
 URL_PATH = ''
 SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
-SOCIAL_AUTH_STORAGE = 'social.apps.django_app.me.models.DjangoStorage'
+SOCIAL_AUTH_STORAGE = 'social.apps.django_app.default.models.DjangoStorage'
 SOCIAL_AUTH_GOOGLE_OAUTH_SCOPE = [
     'https://www.googleapis.com/auth/drive',
     'https://www.googleapis.com/auth/userinfo.profile'
 ]
 # SOCIAL_AUTH_EMAIL_FORM_URL = '/signup-email'
 SOCIAL_AUTH_EMAIL_FORM_HTML = 'email_signup.html'
-SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'example.mail.send_validation'
+SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION = 'example.app.mail.send_validation'
 SOCIAL_AUTH_EMAIL_VALIDATION_URL = '/email-sent/'
 # SOCIAL_AUTH_USERNAME_FORM_URL = '/signup-username'
 SOCIAL_AUTH_USERNAME_FORM_HTML = 'username_signup.html'
@@ -201,7 +193,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
     'social.pipeline.user.get_username',
-    'example.pipeline.require_email',
+    'example.app.pipeline.require_email',
     'social.pipeline.mail.mail_validation',
     'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
@@ -210,6 +202,6 @@ SOCIAL_AUTH_PIPELINE = (
 )
 
 try:
-    from dj.local_settings import *
+    from example.local_settings import *
 except ImportError:
     pass
