@@ -220,6 +220,23 @@ allow some tweaks to the behavior of these.
     documentation`_
 
 
+Whitelists
+----------
+
+Registration can be limited to a set of users identified by their email
+address or domain name. To white-list just set any of these settings:
+
+``SOCIAL_AUTH_<BACKEND_NAME>_WHITELISTED_DOMAINS = ['foo.com', 'bar.com']``
+    Supply a list of domain names to be white-listed. Any user with an email
+    address on any of the allowed domains will login successfully, otherwise
+    ``AuthForbidden`` is raised.
+
+``SOCIAL_AUTH_<BACKEND_NAME>_WHITELISTED_EMAILS = ['me@foo.com', 'you@bar.com']``
+    Supply a list of email addresses to be white-listed. Any user with an email
+    address in this list will login successfully, otherwise ``AuthForbidden``
+    is raised.
+
+
 Miscellaneous settings
 ----------------------
 

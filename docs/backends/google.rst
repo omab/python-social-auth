@@ -81,25 +81,6 @@ Check `Google support`_ and `Orkut API`_ for details on getting keys.
       SOCIAL_AUTH_ORKUT_SCOPE = [...]
 
 
-White listed domains and email addresses
-----------------------------------------
-
-Registration can be limited to some Google Apps account domains, or even to
-a restricted list of email addresses.
-
-SOCIAL_AUTH_GOOGLE_OAUTH_WHITE_LISTED_DOMAINS = ['foo.com', 'bar.com']
-    Supply a list of Google Apps account domain strings to be checked. The
-    default (empty list) allows all domains. If a list is provided and a user
-    attempts to sign in with a Google account that is not in the list, then
-    ``ValueError`` will be raised and the user will be redirected to your login
-    error page.
-
-GOOGLE_WHITE_LISTED_EMAILS = ['me@foo.com', 'you@bar.com', 'baz@gmail.com']
-    Supply a list of Google Apps or Gmail email strings to be checked.
-
-Check which applications can be included in their `Google Data Protocol Directory`_
-
-
 User identification
 -------------------
 
@@ -120,7 +101,6 @@ depending on the backends in use.
 .. _Google OAuth: http://code.google.com/apis/accounts/docs/OAuth.html
 .. _Google OAuth2: http://code.google.com/apis/accounts/docs/OAuth2.html
 .. _OAuth2 Registering: http://code.google.com/apis/accounts/docs/OAuth2.html#Registering
-.. _Google Data Protocol Directory: http://code.google.com/apis/gdata/docs/directory.html
 .. _OAuth2 draft: http://tools.ietf.org/html/draft-ietf-oauth-v2-10
 .. _OAuth reference: http://code.google.com/apis/accounts/docs/OAuth_ref.html#SigningOAuth
 .. _Orkut OAuth:  http://code.google.com/apis/orkut/docs/rest/developers_guide_protocol.html#Authenticating
