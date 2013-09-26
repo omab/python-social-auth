@@ -52,6 +52,12 @@ class FacebookOAuth2(BaseOAuth2):
         return self.get_json('https://graph.facebook.com/me',
                              params=params)
 
+    def process_error(self, data):
+        super(FacebookOAuth2, self).process_error(data)
+        if data.get('error_code'):
+            raise AuthCanceled(self, data.get('error_message') or
+                                     data.get('error_code'))
+
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         self.process_error(self.data)
