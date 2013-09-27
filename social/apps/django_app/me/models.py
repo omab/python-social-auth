@@ -31,7 +31,7 @@ USER_MODEL = module_member(
 
 class UserSocialAuth(Document, DjangoUserMixin):
     """Social Auth association model"""
-    user = ReferenceField(USER_MODEL, dbref=True)
+    user = ReferenceField(USER_MODEL)
     provider = StringField(max_length=32)
     uid = StringField(max_length=255, unique_with='provider')
     extra_data = DictField()
