@@ -202,7 +202,7 @@ class BrokenStrategyTests(unittest.TestCase):
             .should.throw(ValueError, 'Missing template or html parameters')
 
     def test_is_integrity_error(self):
-        self.strategy.is_integrity_error.when \
+        self.strategy.storage.is_integrity_error.when \
             .called_with(None) \
             .should.throw(NotImplementedError, 'Implement in subclass')
 
