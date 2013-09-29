@@ -7,4 +7,4 @@ install:
   - "python setup.py -q install"
   - "pip install -r social/tests/requirements.txt --use-mirrors"
 script:
-  - "nosetests --with-coverage --cover-package=social"
+  - "nosetests --with-coverage --cover-package=social --where=social/tests"
