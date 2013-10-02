@@ -7,9 +7,10 @@ def mail_validation(strategy, details, user=None, is_new=False,
                     *args, **kwargs):
     if user is None or is_new and details.get('email'):
         data = strategy.request_data()
-        if 'code' in data:
+        if 'verification_code' in data:
             strategy.session_pop('email_validation_address')
-            if not strategy.validate_email(details['email'], data['code']):
+            if not strategy.validate_email(details['email'],
+                                           data['verification_code']):
                 raise InvalidEmail(strategy.backend)
         elif strategy.backend.REQUIRES_EMAIL_VALIDATION or \
              strategy.setting('FORCE_EMAIL_VALIDATION', False):

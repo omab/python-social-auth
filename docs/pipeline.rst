@@ -140,19 +140,19 @@ a model instance used to validate the email address, it contains three fields:
     Flag marking if the email was verified or not.
 
 You should use the code in this instance the build the link for email
-validation which should go to ``/complete/email?code=<code here>``, if using
+validation which should go to ``/complete/email?verification_code=<code here>``, if using
 Django you can do it with::
 
     from django.core.urlresolvers import reverse
     url = strategy.build_absolute_uri(
         reverse('social:complete', args=(strategy.backend_name,))
-    ) + '?code=' + code.code
+    ) + '?verification_code=' + code.code
 
 On Flask::
 
     from flask import url_for
     url = url_for('social.complete', backend=strategy.backend_name,
-                  _external=True) + '?code=' + code
+                  _external=True) + '?verification_code=' + code
 
 This pipeline can be used globally with any backend if this setting is
 defined::
