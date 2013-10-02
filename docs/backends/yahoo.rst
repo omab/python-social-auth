@@ -8,7 +8,7 @@ OAuth 1.0 workflow, useful if you are planning to use Yahoo's API.
 
 - Fill ``Consumer Key`` and ``Consumer Secret`` values in the settings::
 
-      SOCIAL_AUTH_YAHOO_KEY = ''
-      SOCIAL_AUTH_YAHOO_SECRET = ''
+      SOCIAL_AUTH_YAHOO_OAUTH_KEY = ''
+      SOCIAL_AUTH_YAHOO_OAUTH_SECRET = ''
 
 .. _Yahoo Developer Center: https://developer.apps.yahoo.com/projects/
