@@ -32,6 +32,10 @@ class JSONField(six.with_metaclass(models.SubfieldBase, models.TextField)):
             value = six.text_type(value, 'utf-8')
         if isinstance(value, six.string_types):
             try:
+                # with django 1.6 i have '"{}"' as default value here
+                if value[0] == value[-1] == '"':
+                    value = value[1:-1]
+
                 return json.loads(value)
             except Exception as err:
                 raise ValidationError(str(err))
