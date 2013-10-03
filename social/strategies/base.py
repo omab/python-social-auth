@@ -2,6 +2,8 @@ import time
 import random
 import hashlib
 
+import six
+
 from social.utils import setting_name, to_setting_name, module_member
 from social.store import OpenIdStore
 
@@ -100,22 +102,49 @@ class BaseStrategy(object):
     def from_session_value(self, val):
         return val
 
-    def to_session(self, next, backend, request=None, *args, **kwargs):
+    def partial_to_session(self, next, backend, request=None, *args, **kwargs):
+        user = kwargs.get('user')
+        social = kwargs.get('social')
+        clean_kwargs = {
+            'response': kwargs.get('response') or {},
+            'details': kwargs.get('details') or {},
+            'username': kwargs.get('username'),
+            'uid': kwargs.get('uid'),
+            'is_new': kwargs.get('is_new') or False,
+            'new_association': kwargs.get('new_association') or False,
+            'user': user and user.id or None,
+            'social': social and {
+                'provider': social.provider,
+                'uid': social.uid
+            } or None
+        }
+        # Only allow well-known serializable types
+        types = (dict, list, tuple, set) + six.integer_types + \
+                six.string_types + (six.text_type,) + (six.binary_type,)
+        clean_kwargs.update((name, value) for name, value in kwargs.items()
+                                if isinstance(value, types))
         return {
             'next': next,
             'backend': backend.name,
             'args': tuple(map(self.to_session_value, args)),
             'kwargs': dict((key, self.to_session_value(val))
-                           for key, val in kwargs.items())
+                                for key, val in clean_kwargs.items())
         }
 
-    def from_session(self, session):
+    def partial_from_session(self, session):
+        kwargs = session['kwargs'].copy()
+        user = kwargs.get('user')
+        social = kwargs.get('social')
+        if isinstance(social, dict):
+            kwargs['social'] = self.storage.user.get_social_auth(**social)
+        if user:
+            kwargs['user'] = self.storage.user.get_user(user)
         return (
             session['next'],
             session['backend'],
             list(map(self.from_session_value, session['args'])),
             dict((key, self.from_session_value(val))
-                    for key, val in session['kwargs'].items())
+                    for key, val in kwargs.items())
         )
 
     def clean_partial_pipeline(self, name='partial_pipeline'):

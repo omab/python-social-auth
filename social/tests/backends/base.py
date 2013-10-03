@@ -133,7 +133,7 @@ class BaseBackendTest(unittest.TestCase):
 
         password = self.pipeline_password_handling(url)
         data = self.strategy.session_pop('partial_pipeline')
-        idx, backend, xargs, xkwargs = self.strategy.from_session(data)
+        idx, backend, xargs, xkwargs = self.strategy.partial_from_session(data)
         expect(backend).to.equal(self.backend.name)
         redirect = self.strategy.continue_pipeline(pipeline_index=idx,
                                                    *xargs, **xkwargs)
@@ -144,7 +144,7 @@ class BaseBackendTest(unittest.TestCase):
         slug = self.pipeline_slug_handling(url)
 
         data = self.strategy.session_pop('partial_pipeline')
-        idx, backend, xargs, xkwargs = self.strategy.from_session(data)
+        idx, backend, xargs, xkwargs = self.strategy.partial_from_session(data)
         expect(backend).to.equal(self.backend.name)
         user = self.strategy.continue_pipeline(pipeline_index=idx,
                                                *xargs, **xkwargs)
