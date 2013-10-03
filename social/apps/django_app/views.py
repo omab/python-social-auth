@@ -54,7 +54,9 @@ def _do_login(strategy, user):
         expiration = social_user.expiration_datetime()
         if expiration:
             try:
-                strategy.request.session.set_expiry(expiration)
+                strategy.request.session.set_expiry(
+                    expiration.seconds + expiration.days * 86400
+                )
             except OverflowError:
                 # Handle django time zone overflow
                 strategy.request.session.set_expiry(None)
