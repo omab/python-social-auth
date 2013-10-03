@@ -11,11 +11,10 @@ except ImportError:
     from django.utils.encoding import smart_text
 
 
-class JSONField(models.TextField):
+class JSONField(six.with_metaclass(models.SubfieldBase, models.TextField)):
     """Simple JSON field that stores python structures as JSON strings
     on database.
     """
-    __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('default', '{}')
@@ -33,6 +32,10 @@ class JSONField(models.TextField):
             value = six.text_type(value, 'utf-8')
         if isinstance(value, six.string_types):
             try:
+                # with django 1.6 i have '"{}"' as default value here
+                if value[0] == value[-1] == '"':
+                    value = value[1:-1]
+
                 return json.loads(value)
             except Exception as err:
                 raise ValidationError(str(err))
