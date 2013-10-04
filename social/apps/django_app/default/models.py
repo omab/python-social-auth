@@ -1,4 +1,6 @@
 """Django ORM models for Social Auth"""
+import six
+
 from django.db import models
 from django.conf import settings
 from django.db.utils import IntegrityError
@@ -52,7 +54,11 @@ class UserSocialAuth(models.Model, DjangoUserMixin):
 
     @classmethod
     def user_model(cls):
-        return UserSocialAuth._meta.get_field('user').rel.to
+        user_model = UserSocialAuth._meta.get_field('user').rel.to
+        if isinstance(user_model, six.string_types):
+            app_label, model_name = user_model.split('.')
+            return models.get_model(app_label, model_name)
+        return user_model
 
 
 class Nonce(models.Model, DjangoNonceMixin):
