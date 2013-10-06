@@ -52,11 +52,83 @@ To enable OAuth2 support:
 Check which applications can be included in their `Google Data Protocol Directory`_
 
 
+Google+ Sign-In
+---------------
+
+`Google+ Sign In`_ works a lot like OAuth2, but most of the initial work is
+done by their Javascript which thens calls a defined handler to complete the
+auth process.
+
+* To enable the backend create an application using the `Google console`_ and
+  fill the key settings::
+
+    SOCIAL_AUTH_GOOGLE_PLUS_KEY = '...'
+    SOCIAL_AUTH_GOOGLE_PLUS_SECRET = '...'
+
+* Add their button snippet to your template::
+
+    <div id="signinButton">
+        <span class="g-signin" data-scope="{{ plus_scope }}"
+                               data-clientid="{{ plus_id }}"
+                               data-redirecturi="postmessage"
+                               data-accesstype="offline"
+                               data-cookiepolicy="single_host_origin"
+                               data-callback="signInCallback">
+        </span>
+    </div>
+
+  ``signInCallback`` is the name of your Javascript callback function.
+
+* The scope can be generated doing::
+
+    from social.backends.google import GooglePlusAuth
+    plus_scope = ' '.join(GooglePlusAuth.DEFAULT_SCOPE)
+
+  Or get the value from settings if it was overridden. ``plus_id`` is the value
+  from ``SOCIAL_AUTH_GOOGLE_PLUS_KEY``.
+
+* Add the Javascript snippet::
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        (function () {
+            var po = document.createElement('script');
+            po.type = 'text/javascript';
+            po.async = true;
+            po.src = 'https://plus.google.com/js/client:plusone.js?onload=start';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(po, s);
+        })();
+    </script>
+
+* Define your Javascript callback function::
+
+    <script type="text/javascript">
+        var signInCallback = function (result) {
+            if (result['error']) {
+                alert('An error happened:', result['error']);
+            } else {
+                $('#code').attr('value', result['code']);
+                $('#at').attr('value', result['access_token']);
+                $('#google-plus').submit();
+            }
+        };
+    </script>
+
+  In the example above the values needed to complete the auth process are
+  posted using a form like this but this is just a simple example::
+
+    <form id="google-plus" method="post" action="{% url 'social:complete' "google-plus" %}">{% csrf_token %}
+        <input id="at" type="hidden" name="access_token" value="" />
+        <input id="code" type="hidden" name="code" value="" />
+    </form>
+
+
 Google OpenId
 -------------
 
-Google OpenId works strightforward, not settings are needed. Domains or emails
-whitlists can be applied too, check the whitelists_ settings for details.
+Google OpenId works straightforward, not settings are needed. Domains or emails
+whitelists can be applied too, check the whitelists_ settings for details.
 
 
 Orkut
@@ -106,3 +178,5 @@ depending on the backends in use.
 .. _Orkut OAuth:  http://code.google.com/apis/orkut/docs/rest/developers_guide_protocol.html#Authenticating
 .. _Google Data Protocol Directory: http://code.google.com/apis/gdata/docs/directory.html
 .. _whitelists: ../configuration/settings.html#whitelists
+.. _Google+ Sign In: https://developers.google.com/+/web/signin/
+.. _Google console: https://code.google.com/apis/console
