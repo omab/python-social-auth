@@ -15,6 +15,7 @@ OpenID also works straightforward, it doesn't need further configurations.
 """
 from social.backends.open_id import OpenIdAuth
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
+from social.exceptions import AuthMissingParameter
 
 
 class BaseGoogleAuth(object):
@@ -35,7 +36,16 @@ class BaseGoogleAuth(object):
                 'last_name': response.get('family_name', '')}
 
 
-class GoogleOAuth2(BaseGoogleAuth, BaseOAuth2):
+class BaseGoogleOAuth2API(BaseGoogleAuth):
+    def user_data(self, access_token, *args, **kwargs):
+        """Return user data from Google API"""
+        return self.get_json(
+            'https://www.googleapis.com/oauth2/v1/userinfo',
+            params={'access_token': access_token, 'alt': 'json'}
+        )
+
+
+class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
     """Google OAuth2 authentication backend"""
     name = 'google-oauth2'
     REDIRECT_STATE = False
@@ -52,18 +62,41 @@ class GoogleOAuth2(BaseGoogleAuth, BaseOAuth2):
         ('token_type', 'token_type', True)
     ]
 
-    def user_data(self, access_token, *args, **kwargs):
-        """Return user data from Google API"""
-        return self.get_json(
-            'https://www.googleapis.com/oauth2/v1/userinfo',
-            params={'access_token': access_token, 'alt': 'json'}
-        )
-
     def revoke_token_params(self, token, uid):
         return {'token': token}
 
     def revoke_token_headers(self, token, uid):
         return {'Content-type': 'application/json'}
+
+
+class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
+    name = 'google-plus'
+    REDIRECT_STATE = False
+    DEFAULT_SCOPE = ['https://www.googleapis.com/auth/plus.login',
+                     'https://www.googleapis.com/auth/userinfo.email',
+                     'https://www.googleapis.com/auth/userinfo.profile']
+    EXTRA_DATA = [
+        ('user_id', 'user_id'),
+        ('refresh_token', 'refresh_token', True),
+        ('expires_in', 'expires'),
+        ('access_type', 'access_type', True)
+    ]
+
+    def extra_data(self, user, uid, response, details):
+        return {'code': response.get('code')}
+
+    def auth_complete(self, *args, **kwargs):
+        token = self.data.get('access_token')
+        if not token:
+            raise AuthMissingParameter(self, 'access_token')
+        verification = self.get_json(
+            'https://www.googleapis.com/oauth2/v1/tokeninfo',
+            params={'access_token': token}
+        )
+        self.process_error(verification)
+        verification.update({'access_token': token,
+                             'code': self.data.get('code')})
+        return self.do_auth(token, response=verification, *args, **kwargs)
 
 
 class GoogleOAuth(BaseGoogleAuth, BaseOAuth1):
