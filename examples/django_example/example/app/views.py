@@ -1,20 +1,29 @@
-from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
+from django.contrib.auth.decorators import login_required
+
+from social.backends.google import GooglePlusAuth
 
 
 def home(request):
     """Home view, displays login mechanism"""
     if request.user.is_authenticated():
         return redirect('done')
-    return render_to_response('home.html', {}, RequestContext(request))
+    return render_to_response('home.html', {
+        'plus_id': getattr(settings, 'SOCIAL_AUTH_GOOGLE_PLUS_KEY', None)
+    }, RequestContext(request))
 
 
 @login_required
 def done(request):
     """Login complete view, displays user data"""
-    return render_to_response('done.html', {'user': request.user},
-                              RequestContext(request))
+    scope = ' '.join(GooglePlusAuth.DEFAULT_SCOPE)
+    return render_to_response('done.html', {
+        'user': request.user,
+        'plus_id': getattr(settings, 'SOCIAL_AUTH_GOOGLE_PLUS_KEY', None),
+        'plus_scope': scope
+    }, RequestContext(request))
 
 
 def signup_email(request):
