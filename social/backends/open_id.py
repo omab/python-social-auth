@@ -145,17 +145,19 @@ class OpenIdAuth(BaseAuth):
                                             self.strategy.absolute_uri(
                                                 self.redirect_uri
                                             ))
-        if not response:
+        self.process_error(response)
+        kwargs.update({'response': response, 'backend': self})
+        return self.strategy.authenticate(*args, **kwargs)
+
+    def process_error(self, data):
+        if not data:
             raise AuthException(self, 'OpenID relying party endpoint')
-        elif response.status == SUCCESS:
-            kwargs.update({'response': response, 'backend': self})
-            return self.strategy.authenticate(*args, **kwargs)
-        elif response.status == FAILURE:
-            raise AuthFailed(self, response.message)
-        elif response.status == CANCEL:
+        elif data.status == FAILURE:
+            raise AuthFailed(self, data.message)
+        elif data.status == CANCEL:
             raise AuthCanceled(self)
-        else:
-            raise AuthUnknownError(self, response.status)
+        elif data.status != SUCCESS:
+            raise AuthUnknownError(self, data.status)
 
     def setup_request(self, params=None):
         """Setup request"""
