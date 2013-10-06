@@ -56,8 +56,8 @@ Google OpenId
 -------------
 
 Google OpenId works strightforward, not settings are needed. Domains or emails
-whitlists can be applied too, check `White listed domains and email addresses`_
-for details.
+whitlists can be applied too, check the whitelists_ settings for details.
+
 
 Orkut
 -----
@@ -104,3 +104,5 @@ depending on the backends in use.
 .. _OAuth2 draft: http://tools.ietf.org/html/draft-ietf-oauth-v2-10
 .. _OAuth reference: http://code.google.com/apis/accounts/docs/OAuth_ref.html#SigningOAuth
 .. _Orkut OAuth:  http://code.google.com/apis/orkut/docs/rest/developers_guide_protocol.html#Authenticating
+.. _Google Data Protocol Directory: http://code.google.com/apis/gdata/docs/directory.html
+.. _whitelists: ../configuration/settings.html#whitelists
