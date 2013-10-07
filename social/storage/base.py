@@ -5,6 +5,8 @@ import base64
 import uuid
 from datetime import datetime, timedelta
 
+import six
+
 from openid.association import Association as OpenIdAssociation
 
 from social.backends.utils import get_backend
@@ -177,14 +179,18 @@ class AssociationMixin(object):
         if handle is not None:
             kwargs['handle'] = handle
         return sorted([
-                (assoc.id,
-                 OpenIdAssociation(assoc.handle,
-                                   base64.decodestring(assoc.secret.encode()),
-                                   assoc.issued,
-                                   assoc.lifetime,
-                                   assoc.assoc_type))
+            (assoc.id, cls.openid_association(assoc))
                 for assoc in cls.get(**kwargs)
         ], key=lambda x: x[1].issued, reverse=True)
+
+    @classmethod
+    def openid_association(cls, assoc):
+        secret = assoc.secret
+        if not isinstance(secret, six.binary_type):
+            secret = secret.encode()
+        return OpenIdAssociation(assoc.handle, base64.decodestring(secret),
+                                 assoc.issued, assoc.lifetime,
+                                 assoc.assoc_type)
 
     @classmethod
     def store(cls, server_url, association):
