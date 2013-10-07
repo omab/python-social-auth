@@ -1,5 +1,10 @@
 import time
 
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
+
 from openid.store.interface import OpenIDStore as BaseOpenIDStore
 from openid.store.nonce import SKEW
 
@@ -46,3 +51,27 @@ class OpenIdStore(BaseOpenIDStore):
         if abs(timestamp - time.time()) > SKEW:
             return False
         return self.nonce.use(server_url, timestamp, salt)
+
+
+class OpenIdSessionWrapper(dict):
+    pickle_instances = (
+        '_yadis_services__openid_consumer_',
+        '_openid_consumer_last_token'
+    )
+
+    def __getitem__(self, name):
+        value = super(OpenIdSessionWrapper, self).__getitem__(name)
+        if name in self.pickle_instances:
+            value = pickle.loads(value)
+        return value
+
+    def __setitem__(self, name, value):
+        if name in self.pickle_instances:
+            value = pickle.dumps(value, 0)
+        super(OpenIdSessionWrapper, self).__setitem__(name, value)
+
+    def get(self, name, default=None):
+        try:
+            return self[name]
+        except KeyError:
+            return default

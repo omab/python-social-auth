@@ -1,5 +1,3 @@
-import pickle
-
 from flask import current_app, request, redirect, make_response, session, \
                   render_template, render_template_string
 
@@ -56,46 +54,5 @@ class FlaskStrategy(BaseStrategy):
     def session_setdefault(self, name, value):
         return session.setdefault(name, value)
 
-    def openid_session_dict(self, name):
-        # Since Flask 0.10, session is serialized with JSON instead of pickle,
-        # sadly python-openid stores classes instances in the session which
-        # fails the JSON serialization, these classes are:
-        #   openid.yadis.manager.YadisServiceManager
-        #   openid.consumer.discover.OpenIDServiceEndpoint
-        #
-        # This method will return a wrapper over the session value used with
-        # openid (a dict) which will automatically keep a pickled value
-        #
-        # current_app.session_interface has a pickle_based=False attribute if
-        # Flask >= 0.10
-        value = super(FlaskStrategy, self).openid_session_dict(name)
-        if not getattr(current_app.session_interface, 'pickle_based', True):
-            value = OpenIdSessionWrapper(value)
-        return value
-
     def build_absolute_uri(self, path=None):
         return build_absolute_uri(request.host_url, path)
-
-
-class OpenIdSessionWrapper(dict):
-    pickle_instances = (
-        '_yadis_services__openid_consumer_',
-        '_openid_consumer_last_token'
-    )
-
-    def __getitem__(self, name):
-        value = super(OpenIdSessionWrapper, self).__getitem__(name)
-        if name in self.pickle_instances:
-            value = pickle.loads(value)
-        return value
-
-    def __setitem__(self, name, value):
-        if name in self.pickle_instances:
-            value = pickle.dumps(value, 0)
-        super(OpenIdSessionWrapper, self).__setitem__(name, value)
-
-    def get(self, name, default=None):
-        try:
-            return self[name]
-        except KeyError:
-            return default
