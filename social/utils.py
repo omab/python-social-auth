@@ -49,7 +49,10 @@ def sanitize_redirect(host, redirect_to):
     on django.contrib.auth.views.
     """
     # Quick sanity check.
-    if not redirect_to or not isinstance(redirect_to, six.string_types):
+    if not redirect_to or \
+       (not isinstance(redirect_to, six.string_types) and \
+        getattr(redirect_to, 'decode', None) and \
+        not isinstance(redirect_to.decode(), six.string_types)):
         return None
 
     # Heavier security check, don't allow redirection to a different host.
