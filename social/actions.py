@@ -91,6 +91,8 @@ def do_complete(strategy, login, user=None, redirect_name='next',
                '{0}={1}'.format(redirect_name, redirect_value)
     if strategy.setting('SANITIZE_REDIRECTS', True):
         url = sanitize_redirect(strategy.request_host(), url)
+        if url is None:
+            url = strategy.setting('LOGIN_REDIRECT_URL')
     return strategy.redirect(url)
 
 
