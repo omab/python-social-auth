@@ -1,3 +1,140 @@
+2013-10-07 v0.1.14
+============================
+
+  * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Always wrap openid session value
+
+  * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Encode value to avoid Python3 errors. Refs #776
+
+  * 2013-10-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Google plus sign in docs
+
+  * 2013-10-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix links on google docs
+
+  * 2013-10-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Google+ Sign In backend example
+
+  * 2013-10-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Working Google+ Sign In backend
+
+  * 2013-10-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Move process_error() to upper class
+
+  * 2013-10-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable json serializer on example app
+
+  * 2013-10-04 Markus Holtermann <info@markusholtermann.eu>
+    Fixes #45 -- AttributeError while resolving the user model in Django
+
+  * 2013-10-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Serialize only well-known types, rename function to remark the usage. Refs
+    #36
+
+  * 2013-10-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Use seconds to set session expiration. Refs #36
+
+  * 2013-10-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename verification code parameter to avoid clashing with backends
+    parameters
+
+  * 2013-10-02 nvbn <nvbn.rm@gmail.com>
+    Fix work with django 1.6
+
+  * 2013-10-02 nvbn <nvbn.rm@gmail.com>
+    Make JSONField compatible with python 3
+
+  * 2013-10-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Update docs regarding yahoo keys. Refs #43
+
+  * 2013-09-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Small code changes
+
+  * 2013-09-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove path from urls
+
+  * 2013-09-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Only run tests on social/tests
+
+  * 2013-09-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Mention pyramid in keywords
+
+  * 2013-09-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove python-coveralls
+
+  * 2013-09-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Django tests
+
+  * 2013-09-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Move base classes to directories
+
+  * 2013-09-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove dbref=True from ReferenceField. Refs #42
+
+  * 2013-09-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Process facebook errors on complete. Refs #40
+
+  * 2013-09-24 Matías Aguirre <matiasaguirre@gmail.com>
+    White list setting
+
+  * 2013-09-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplified django example applications
+
+  * 2013-09-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Add mongoengine to requirements
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Mongoengine example
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix url for django mongoengine support, add str_id() helper
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Refactor common code on username/email backends tests
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Email backend test
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove print line
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Code model on tests
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    build_absolute_uri test case
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Small simplification on disconnect action
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Username backend test case
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Test suite defined on setup.py
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Move tests inside the social package
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove coveralls
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    First try with coveralls
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    More badges to README.rst
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove python 2.5 support from setup.py
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Doc clarification
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Changelog update
+
 2013-09-22 v0.1.13
 ==================
 
@@ -68,8 +205,8 @@
     Remove complex class definition on django json field. Refs #35
 
   * 2013-09-20 Matías Aguirre <matiasaguirre@gmail.com>
-    Define 'POST' method for access token retrieval in Odnoklassniki backend. 
-    Refs #33 
+    Define 'POST' method for access token retrieval in Odnoklassniki backend.
+    Refs #33
 
   * 2013-09-19 Matías Aguirre <matiasaguirre@gmail.com>
     Sanitize redirects on complete before sending it
@@ -162,8 +299,8 @@
     Added workaround for REDIRECT_STATE and urlencoding.
 
   * 2013-09-09 Roman <roman@server.fake>
-    Fixed auth redirect URL for BaseOauth2 always redirecting wrong. OAuth2 
-    providers expect the url to be an unquoted value. 
+    Fixed auth redirect URL for BaseOauth2 always redirecting wrong. OAuth2
+    providers expect the url to be an unquoted value.
 
   * 2013-09-09 Matías Aguirre <matiasaguirre@gmail.com>
     Fix thisismyjam test
@@ -184,8 +321,8 @@
     Adding Support For ThisIsMyJam
 
   * 2013-09-08 Matías Aguirre <matiasaguirre@gmail.com>
-    Disconnect pipeline, move details/uid extraction to pipeline methods too. 
-    Refactor pipeline run code 
+    Disconnect pipeline, move details/uid extraction to pipeline methods too.
+    Refactor pipeline run code
 
   * 2013-09-08 Matías Aguirre <matiasaguirre@gmail.com>
     New user redirect test
@@ -218,8 +355,8 @@
     Fix extra data case for tuple with single value
 
   * 2013-09-07 Matías Aguirre <matiasaguirre@gmail.com>
-    Set request if not present on pipeline continuation, fix args passed to 
-    continue_pipeline 
+    Set request if not present on pipeline continuation, fix args passed to
+    continue_pipeline
 
 2013-09-03 v0.1.11
 ==================
@@ -471,8 +608,8 @@
 =================
 
   * 2013-05-31 Matías Aguirre <matiasaguirre@gmail.com>
-    Unrestricted user fields on instance creation, defaults to username and 
-    email 
+    Unrestricted user fields on instance creation, defaults to username and
+    email
 
 2013-05-31 v0.1.3
 =================
@@ -502,12 +639,12 @@
     PEP8
 
   * 2013-05-17 Matías Aguirre <matiasaguirre@gmail.com>
-    Pass decoding=None to oauthlib since the default value (utf-8) creates 
-    problems with python-requests on python3 
+    Pass decoding=None to oauthlib since the default value (utf-8) creates
+    problems with python-requests on python3
 
   * 2013-05-17 George Sakkis <george.sakkis@gmail.com>
-    Podio backend: proper way to split the work between user_data() and 
-    get_user_details() 
+    Podio backend: proper way to split the work between user_data() and
+    get_user_details()
 
   * 2013-05-17 George Sakkis <george.sakkis@gmail.com>
     Podio backend
@@ -537,12 +674,12 @@
     Added test for vkontakte oauth2 backend.
 
   * 2013-04-22 Alexey Boriskin <boriskin@adwz.ru>
-    Update links and API urls: rename vkontatke.ru to vk.com because of social 
-    network official rename 
+    Update links and API urls: rename vkontatke.ru to vk.com because of social
+    network official rename
 
   * 2013-04-22 Alexey Boriskin <boriskin@adwz.ru>
-    Fixed bug, which prevented VK backend from picking user data (first_name 
-    and last_name) 
+    Fixed bug, which prevented VK backend from picking user data (first_name
+    and last_name)
 
   * 2013-04-22 Alexey Boriskin <boriskin@adwz.ru>
     Fix mixed up key and secret
@@ -599,8 +736,8 @@
     Rename pipeline parameter from social_user to social
 
   * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
-    Multiple accounts tests, move code from super class to subclass since it's 
-    where they belong 
+    Multiple accounts tests, move code from super class to subclass since it's
+    where they belong
 
   * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
     Rename handles from octocat to foobar on github data/tests
@@ -615,8 +752,8 @@
     Storage tests
 
   * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
-    Exceptions fixes, remove titled_name attribute from backends, use strategy 
-    function instead of storage 
+    Exceptions fixes, remove titled_name attribute from backends, use strategy
+    function instead of storage
 
   * 2013-04-02 Matías Aguirre <matiasaguirre@gmail.com>
     Google whitelist domains/emails tests
@@ -751,8 +888,8 @@
     Fix partial pipeline arguments to avoid messing with broken pipeline case
 
   * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
-    Simplify tokens helper in models/backends since tokens are stored in 
-    desired format already 
+    Simplify tokens helper in models/backends since tokens are stored in
+    desired format already
 
   * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
     Remove stop-pipeline exception (not used at all)
@@ -773,8 +910,8 @@
     Fix refresh-token method
 
   * 2013-03-26 Matías Aguirre <matiasaguirre@gmail.com>
-    Move strategy loader to outside function to ease strategy creation from 
-    scripts 
+    Move strategy loader to outside function to ease strategy creation from
+    scripts
 
   * 2013-03-25 Matías Aguirre <matiasaguirre@gmail.com>
     Github for organizations backend
@@ -816,15 +953,15 @@
     Move __init__ code into setUp method
 
   * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
-    Partial pipeline tests on actions. Simplify unused code, return backend 
-    stored on session on partial pipelines 
+    Partial pipeline tests on actions. Simplify unused code, return backend
+    stored on session on partial pipelines
 
   * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
     Add travis-ci build status image into README
 
   * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
-    Change install method to avoid python2/python3 dependency issues on 
-    travis-ci 
+    Change install method to avoid python2/python3 dependency issues on
+    travis-ci
 
   * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
     Remove debug print, use print() on docstring
@@ -833,7 +970,7 @@
     Add python3.3 to travis conf
 
   * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
-    Set sorted fields selectors on linkedin to avoid HTTPretty failure on tests 
+    Set sorted fields selectors on linkedin to avoid HTTPretty failure on tests
 
   * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
     Travis YAML
@@ -977,8 +1114,8 @@
     OAuth1 base tests
 
   * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
-    Fix OAuth1 unauth_token check. Support access token method on OAuth1 
-    backends too. Fix test strategry method 
+    Fix OAuth1 unauth_token check. Support access token method on OAuth1
+    backends too. Fix test strategry method
 
   * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
     Move shared code to a method
@@ -1110,8 +1247,8 @@
     Fix behance backend
 
   * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
-    Support backends that don't support state/redirect_state. Angel backend 
-    test 
+    Support backends that don't support state/redirect_state. Angel backend
+    test
 
   * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
     Allow POST method on access_token exchange. Fixes angel backend
@@ -1129,11 +1266,11 @@
     Requirements to run tests
 
   * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
-    Reshape flask example app. Use filter_by instead of filter on disconnect 
-    code 
+    Reshape flask example app. Use filter_by instead of filter on disconnect
+    code
 
   * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
-    Use declarative sqlalchemy base. Drop global update on init_social. Refs #1 
+    Use declarative sqlalchemy base. Drop global update on init_social. Refs #1
 
   * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
     Small fixes
@@ -1163,8 +1300,8 @@
     Fix google oauth1
 
   * 2013-03-13 Matías Aguirre <matiasaguirre@gmail.com>
-    Fix Python2 import, define json field in a compatible way with python 
-    versions 
+    Fix Python2 import, define json field in a compatible way with python
+    versions
 
   * 2013-03-13 Matías Aguirre <matiasaguirre@gmail.com>
     More Python3 support
@@ -1221,8 +1358,8 @@
     Add default url prefix
 
   * 2013-02-27 Matías Aguirre <matiasaguirre@gmail.com>
-    Fix URLs paths for django app, support setting url prefix (to ease demo 
-    setup) 
+    Fix URLs paths for django app, support setting url prefix (to ease demo
+    setup)
 
   * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
     Add fabfile to ignore list
