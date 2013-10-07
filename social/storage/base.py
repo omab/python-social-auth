@@ -179,7 +179,7 @@ class AssociationMixin(object):
         return sorted([
                 (assoc.id,
                  OpenIdAssociation(assoc.handle,
-                                   base64.decodestring(assoc.secret),
+                                   base64.decodestring(assoc.secret.encode()),
                                    assoc.issued,
                                    assoc.lifetime,
                                    assoc.assoc_type))
