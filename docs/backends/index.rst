@@ -72,6 +72,7 @@ Social backends
    shopify
    skyrock
    soundcloud
+   suse
    thisismyjam
    stackoverflow
    steam
