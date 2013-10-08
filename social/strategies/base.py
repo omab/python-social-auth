@@ -119,7 +119,7 @@ class BaseStrategy(object):
         user = kwargs.get('user')
         social = kwargs.get('social')
         clean_kwargs = {
-            'response': dict(kwargs.get('response') or {}),
+            'response': kwargs.get('response') or {},
             'details': kwargs.get('details') or {},
             'username': kwargs.get('username'),
             'uid': kwargs.get('uid'),
@@ -134,12 +134,12 @@ class BaseStrategy(object):
         # Only allow well-known serializable types
         types = (dict, list, tuple, set) + six.integer_types + \
                 six.string_types + (six.text_type,) + (six.binary_type,)
-        for name, value in kwargs.items():
-            if isinstance(value, types):
-                if isinstance(value, dict):
-                    # in case value is an instance of some mergedict kind
-                    value = dict(value)
-                clean_kwargs[name] = value
+        clean_kwargs.update((name, value) for name, value in kwargs.items()
+                                if isinstance(value, types))
+        # Clean any MergeDict data type from the values
+        clean_kwargs.update((name, dict(value))
+                                for name, value in clean_kwargs.items()
+                                    if isinstance(value, dict))
         return {
             'next': next,
             'backend': backend.name,
