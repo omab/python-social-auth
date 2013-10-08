@@ -119,7 +119,7 @@ class BaseStrategy(object):
         user = kwargs.get('user')
         social = kwargs.get('social')
         clean_kwargs = {
-            'response': kwargs.get('response') or {},
+            'response': dict(kwargs.get('response') or {}),
             'details': kwargs.get('details') or {},
             'username': kwargs.get('username'),
             'uid': kwargs.get('uid'),
