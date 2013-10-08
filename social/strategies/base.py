@@ -134,8 +134,12 @@ class BaseStrategy(object):
         # Only allow well-known serializable types
         types = (dict, list, tuple, set) + six.integer_types + \
                 six.string_types + (six.text_type,) + (six.binary_type,)
-        clean_kwargs.update((name, value) for name, value in kwargs.items()
-                                if isinstance(value, types))
+        for name, value in kwargs.items():
+            if isinstance(value, types):
+                if isinstance(value, dict):
+                    # in case value is an instance of some mergedict kind
+                    value = dict(value)
+                clean_kwargs[name] = value
         return {
             'next': next,
             'backend': backend.name,
