@@ -39,11 +39,8 @@ class BaseStrategy(object):
         self.request = request
         self.storage = storage
         self.backends = backends
-        self.backend_name = None
-        self.backend = None
-        if backend:
-            self.backend_name = backend.name
-            self.backend = backend(strategy=self, *args, **kwargs)
+        self.backend = backend(strategy=self, *args, **kwargs) \
+                            if backend else None
 
     def setting(self, name, default=None):
         names = (setting_name(self.backend_name, name),
@@ -56,6 +53,10 @@ class BaseStrategy(object):
             except (AttributeError, KeyError):
                 pass
         return default
+
+    @property
+    def backend_name(self):
+        return self.backend.name if self.backend else None
 
     def start(self):
         # Clean any partial pipeline info before starting the process
