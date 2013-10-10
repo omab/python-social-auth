@@ -42,7 +42,7 @@ def do_complete(strategy, login, user=None, redirect_name='next',
     partial = partial_pipeline_data(strategy, user, *args, **kwargs)
     if partial is not None:
         idx, backend, xargs, xkwargs = partial
-        if backend == strategy.backend_name:
+        if backend == strategy.backend.name:
             user = strategy.continue_pipeline(pipeline_index=idx,
                                               *xargs, **xkwargs)
         else:
@@ -101,7 +101,7 @@ def do_disconnect(strategy, user, association_id=None, redirect_name='next',
     out = None
     if partial is not None:
         idx, backend, xargs, xkwargs = partial
-        if backend == strategy.backend_name:
+        if backend == strategy.backend.name:
             out = strategy.disconnect(pipeline_index=idx, user=user,
                                       association_id=association_id,
                                       *args, **kwargs)

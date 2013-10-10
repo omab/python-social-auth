@@ -4,7 +4,7 @@ import hashlib
 
 import six
 
-from social.utils import setting_name, to_setting_name, module_member
+from social.utils import setting_name, module_member
 from social.store import OpenIdStore, OpenIdSessionWrapper
 
 
@@ -43,20 +43,12 @@ class BaseStrategy(object):
                             if backend else None
 
     def setting(self, name, default=None):
-        names = (setting_name(self.backend_name, name),
-                 setting_name(name),
-                 to_setting_name(self.backend_name, name),
-                 name)
-        for name in names:
+        for name in (setting_name(name), name):
             try:
                 return self.get_setting(name)
             except (AttributeError, KeyError):
                 pass
         return default
-
-    @property
-    def backend_name(self):
-        return self.backend.name if self.backend else None
 
     def start(self):
         # Clean any partial pipeline info before starting the process
