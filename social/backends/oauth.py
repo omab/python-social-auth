@@ -355,9 +355,13 @@ class BaseOAuth2(OAuthAuth):
 
     def refresh_token(self, token, *args, **kwargs):
         params = self.refresh_token_params(token, *args, **kwargs)
-        request = self.request(self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL,
-                               params=params, headers=self.auth_headers(),
-                               method=self.REFRESH_TOKEN_METHOD)
+        url = self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL
+        method = self.REFRESH_TOKEN_METHOD
+        key = 'params' if method == 'GET' else 'data'
+        request_args = {'headers': self.auth_headers(),
+                        'method': method,
+                        key: params}
+        request = self.request(url, **request_args)
         return self.process_refresh_token_response(request, *args, **kwargs)
 
     def revoke_token_url(self, token, uid):
