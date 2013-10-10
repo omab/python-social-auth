@@ -34,7 +34,12 @@ class BaseAuth(object):
 
     def setting(self, name, default=None):
         """Return setting value from strategy"""
-        return self.strategy.setting(setting_name(self.name, name), default)
+        _default = object()
+        for name in (setting_name(self.name, name), name):
+            value = self.strategy.setting(name, _default)
+            if value != _default:
+                return value
+        return default
 
     def auth_url(self):
         """Must return redirect URL to auth provider"""
