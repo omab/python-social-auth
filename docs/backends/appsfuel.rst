@@ -18,16 +18,16 @@ Appsfuel gives you the chance to integrate with **Live** or **Sandbox** env.
 Appsfuel Live
 -------------
 
-- Add 'social_auth.backends.contrib.appsfuel.AppsfuelBackend' into your AUTHENTICATION_BACKENDS.
+- Add 'social.backends.contrib.appsfuel.AppsfuelBackend' into your AUTHENTICATION_BACKENDS.
 
-- Then you can start using {% url 'socialauth_begin' 'appsfuel' %} in your templates
+- Then you can start using {% url social:begin 'appsfuel' %} in your templates
 
 Appsfuel Sandbox
 ----------------
 
-- Add 'social_auth.backends.contrib.appsfuel.AppsfuelSandboxBackend' into your AUTHENTICATION_BACKENDS.
+- Add 'social.backends.contrib.appsfuel.AppsfuelSandboxBackend' into your AUTHENTICATION_BACKENDS.
 
-- Then you can start using {% url 'socialauth_begin' 'appsfuel-sandbox' %} in your templates
+- Then you can start using {% url social:begin 'appsfuel-sandbox' %} in your templates
 
 
 .. _Official Docs: http://docs.appsfuel.com/api_reference#api_integration
