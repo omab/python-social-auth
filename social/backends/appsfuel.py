@@ -4,8 +4,8 @@ You could refer to https://github.com/AppsFuel/django-social-auth-appsfuel for
 issues.
 
 Needed keys are:
-    SOCIAL_AUTH_APPSFUEL_CLIENT_KEY = ''
-    SOCIAL_AUTH_APPSFUEL_CLIENT_SECRET = ''
+    SOCIAL_AUTH_APPSFUEL_KEY = ''
+    SOCIAL_AUTH_APPSFUEL_SECRET = ''
 """
 from social.backends.oauth import BaseOAuth2
 
