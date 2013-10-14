@@ -48,6 +48,7 @@ Social backends
 
    amazon
    angel
+   appsfuel
    behance
    bitbucket
    box
