@@ -48,6 +48,7 @@ Several services are supported by simply defining backends (new ones can be easi
 or current ones extended):
 
     * Angel_ OAuth2
+    * Appsfuel_ OAuth2
     * Behance_ OAuth2
     * Bitbucket_ OAuth1
     * Box_ OAuth2
@@ -185,6 +186,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _OAuth: http://oauth.net/
 .. _myOpenID: https://www.myopenid.com/
 .. _Angel: https://angel.co
+.. _Appsfuel: http://docs.appsfuel.com
 .. _Behance: https://www.behance.net
 .. _Bitbucket: https://bitbucket.org
 .. _Box: https://www.box.com
