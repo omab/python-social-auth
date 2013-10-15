@@ -16,6 +16,7 @@ class FlaskStorage(BaseSQLAlchemyStorage):
     user = None
     nonce = None
     association = None
+    code = None
 
 
 def init_social(app, Base, session):
