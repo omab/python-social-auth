@@ -2,7 +2,7 @@
 Facebook OAuth support.
 
 This contribution adds support for Facebook OAuth service. The settings
-SOCIAL_AUHT_FACEBOOK_KEY and SOCIAL_AUTH_FACEBOOK_SECRET must be defined with
+SOCIAL_AUTH_FACEBOOK_KEY and SOCIAL_AUTH_FACEBOOK_SECRET must be defined with
 the values given by Facebook application registration process.
 
 Extended permissions are supported by defining
