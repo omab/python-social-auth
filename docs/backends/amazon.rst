@@ -2,7 +2,7 @@ Amazon
 ======
 
 Amazon implemented OAuth2 protocol for their authentication mechanism. To
-enable ``django-social-auth`` support follow this steps:
+enable ``python-social-auth`` support follow this steps:
 
 1. Go to `Amazon App Console`_ and create an application.
 
