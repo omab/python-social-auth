@@ -31,14 +31,21 @@ class OpenIdStore(BaseOpenIDStore):
         if associations_ids:
             self.assoc.remove(associations_ids)
 
+    def expiresIn(self, assoc):
+        if hasattr(assoc, 'getExpiresIn'):
+            return assoc.getExpiresIn()
+        else:  # python3-openid 3.0.2
+            return assoc.expiresIn
+
     def getAssociation(self, server_url, handle=None):
         """Return stored assocition"""
-        oid_associations = self.assoc.oids(server_url, handle)
-        associations = [association
-                        for assoc_id, association in oid_associations
-                        if association.getExpiresIn() > 0]
-        expired = [assoc_id for assoc_id, association in oid_associations
-                   if association.getExpiresIn() == 0]
+        associations, expired = [], []
+        for assoc_id, association in self.assoc.oids(server_url, handle):
+            expires = self.expiresIn(association)
+            if expires > 0:
+                associations.append(association)
+            elif expires == 0:
+                expired.append(association)
 
         if expired:  # clear expired associations
             self.assoc.remove(expired)
