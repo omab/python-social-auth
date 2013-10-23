@@ -47,9 +47,12 @@ Auth providers
 Several services are supported by simply defining backends (new ones can be easily added
 or current ones extended):
 
+    * Amazon_ OAuth2 http://login.amazon.com/website
     * Angel_ OAuth2
+    * AOL_ OpenId http://www.aol.com/
     * Appsfuel_ OAuth2
     * Behance_ OAuth2
+    * BelgiumEIDOpenId_ OpenId https://www.e-contract.be/
     * Bitbucket_ OAuth1
     * Box_ OAuth2
     * Dailymotion_ OAuth2
@@ -57,7 +60,9 @@ or current ones extended):
     * Douban_ OAuth1 and OAuth2
     * Dropbox_ OAuth1
     * Evernote_ OAuth1
+    * Exacttarget OAuth2
     * Facebook_ OAuth2 and OAuth2 for Applications
+    * Fedora_ OpenId http://fedoraproject.org/wiki/OpenID
     * Fitbit_ OAuth1
     * Flickr_ OAuth1
     * Foursquare_ OAuth2
@@ -65,18 +70,22 @@ or current ones extended):
     * Github_ OAuth2
     * Google_ OAuth1, OAuth2 and OpenId
     * Instagram_ OAuth2
+    * Jawbone_ OAuth2 https://jawbone.com/up/developer/authentication
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
     * Mailru_ OAuth2
+    * Mendeley_ OAuth1 http://mendeley.com
     * Mixcloud_ OAuth2
     * `Mozilla Persona`_
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
+    * OpenSuse_ OpenId http://en.opensuse.org/openSUSE:Connect
     * Orkut_ OAuth1
     * Podio_ OAuth2
     * Rdio_ OAuth1 and OAuth2
     * Readability_ OAuth1
+    * Reddit_ OAuth2 https://github.com/reddit/reddit/wiki/OAuth2
     * Shopify_ OAuth2
     * Skyrock_ OAuth1
     * Soundcloud_ OAuth2
@@ -84,6 +93,8 @@ or current ones extended):
     * Steam_ OpenId
     * Stocktwits_ OAuth2
     * Stripe_ OAuth2
+    * ThisIsMyJam_ OAuth1 https://www.thisismyjam.com/developers/authentication
+    * Trello_ OAuth1 https://trello.com/docs/gettingstarted/oauth.html
     * Tripit_ OAuth1
     * Tumblr_ OAuth1
     * Twilio_ Auth
@@ -231,6 +242,16 @@ check `django-social-auth LICENSE`_ for details:
 .. _Steam: http://steamcommunity.com/
 .. _Rdio: https://www.rdio.com
 .. _Tumblr: http://www.tumblr.com/
+.. _Amazon: http://login.amazon.com/website
+.. _AOL: http://www.aol.com/
+.. _BelgiumEIDOpenId: https://www.e-contract.be/
+.. _Fedora: http://fedoraproject.org/wiki/OpenID
+.. _Jawbone: https://jawbone.com/up/developer/authentication
+.. _Mendeley: http://mendeley.com
+.. _Reddit: https://github.com/reddit/reddit/wiki/OAuth2
+.. _OpenSuse: http://en.opensuse.org/openSUSE:Connect
+.. _ThisIsMyJam: https://www.thisismyjam.com/developers/authentication
+.. _Trello: https://trello.com/docs/gettingstarted/oauth.html
 .. _Django: https://github.com/omab/python-social-auth/tree/master/social/apps/django_app
 .. _Flask: https://github.com/omab/python-social-auth/tree/master/social/apps/flask_app
 .. _Pyramid: http://www.pylonsproject.org/projects/pyramid/about
