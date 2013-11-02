@@ -2,7 +2,7 @@ SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
 
 SOCIAL_AUTH_LOGIN_URL = '/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/done/'
-SOCIAL_AUTH_USER_MODEL = 'flask_example.models.user.User'
+SOCIAL_AUTH_USER_MODEL = 'models.User'
 SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.open_id.OpenIdAuth',
     'social.backends.google.GoogleOpenId',

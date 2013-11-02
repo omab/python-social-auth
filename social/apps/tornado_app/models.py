@@ -19,9 +19,9 @@ class TornadoStorage(BaseSQLAlchemyStorage):
     code = None
 
 
-def init_social(app, Base, session):
-    UID_LENGTH = app.config.get(setting_name('UID_LENGTH'), 255)
-    User = module_member(app.config[setting_name('USER_MODEL')])
+def init_social(Base, session, settings):
+    UID_LENGTH = settings.get(setting_name('UID_LENGTH'), 255)
+    User = module_member(settings[setting_name('USER_MODEL')])
     app_session = session
 
     class _AppSession(object):

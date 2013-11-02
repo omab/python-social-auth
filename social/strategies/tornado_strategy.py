@@ -1,3 +1,5 @@
+import json
+
 from tornado import template
 
 from social.utils import build_absolute_uri
@@ -38,19 +40,32 @@ class TornadoStrategy(BaseStrategy):
         pass
 
     def session_get(self, name, default=None):
-        return self.request.cookies.get(name, default)
+        return self.request_handler.get_secure_cookie(name, value=default)
 
     def session_set(self, name, value):
-        self.request_handler.cookies[name] = value
+        self.request_handler.set_secure_cookie(name, str(value))
 
     def session_pop(self, name):
-        return self.request.cookies.pop(name, None)
+        value = self.request_handler.get_secure_cookie(name)
+        self.request_handler.set_secure_cookie(name, '')
+        return value
 
     def session_setdefault(self, name, value):
-        return self.request_handler.cookies.setdefault(name, value)
+        pass
 
     def build_absolute_uri(self, path=None):
         return build_absolute_uri(
             '%s://%s' % (self.request.protocol, self.request.host),
             path
         )
+
+    def partial_to_session(self, next, backend, request=None, *args, **kwargs):
+        return json.dumps(super(TornadoStrategy, self).partial_to_session(
+            next, backend, request=request, *args, **kwargs
+        ))
+
+    def partial_from_session(self, session):
+        if session:
+            return super(TornadoStrategy, self).partial_to_session(
+                json.loads(session)
+            )
