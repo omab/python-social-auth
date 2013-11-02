@@ -16,10 +16,9 @@ class TornadoTemplateStrategy(BaseTemplateStrategy):
 
 
 class TornadoStrategy(BaseStrategy):
-    def __init__(self, request_handler, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         kwargs.setdefault('tpl', TornadoTemplateStrategy)
-        self.request_handler = request_handler
-        self.request = request_handler.request
+        self.request_handler = kwargs.get('request_handler')
         super(TornadoStrategy, self).__init__(*args, **kwargs)
 
     def get_setting(self, name):
@@ -32,29 +31,26 @@ class TornadoStrategy(BaseStrategy):
         return self.request.host
 
     def redirect(self, url):
-        return self.request.redirect(url)
+        return self.request_handler.redirect(url)
 
     def html(self, content):
         # TODO
         pass
 
     def session_get(self, name, default=None):
-        return self.request.cookies.get_cookie(name, default)
+        return self.request.cookies.get(name, default)
 
     def session_set(self, name, value):
-        self.request_handler.cookies.set_cookie(name, value)
+        self.request_handler.cookies[name] = value
 
     def session_pop(self, name):
-        value = self.request.cookies.get_cookie(name, None)
-        self.request_handler.cookies.clear_cookie(name)
-        return value
+        return self.request.cookies.pop(name, None)
 
     def session_setdefault(self, name, value):
         return self.request_handler.cookies.setdefault(name, value)
 
     def build_absolute_uri(self, path=None):
         return build_absolute_uri(
-            '$s://$s' % (self.request.protocol, self.request.host),
+            '%s://%s' % (self.request.protocol, self.request.host),
             path
         )
-

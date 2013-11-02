@@ -6,9 +6,12 @@ from social.actions import do_auth, do_complete, do_disconnect
 
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
-        user_json = self.get_secure_cookie("auth_user")
-        if not user_json: return None
-        return tornado.escape.json_decode(user_json)
+        return self.strategy.get_user(
+            self.get_secure_cookie("user_id")
+        )
+
+    def login_user(self, user):
+        self.set_secure_cookie("user_id", user.id)
 
 
 class AuthHandler(tornado.web.RequestHandler):
@@ -32,7 +35,9 @@ class CompleteHandler(tornado.web.RequestHandler):
 
     @strategy("complete")
     def _complete(self, backend):
-        do_complete()
+        do_complete(self.strategy,
+                    login=lambda strategy, user: self.login_user(user),
+                    user=self.get_current_user())
 
 
 class DisconnectHandler(tornado.web.RequestHandler):

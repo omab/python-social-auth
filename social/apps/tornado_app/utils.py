@@ -19,7 +19,8 @@ def load_strategy(request_handler, *args, **kwargs):
     backends = get_helper(request_handler, 'AUTHENTICATION_BACKENDS')
     strategy = get_helper(request_handler, 'STRATEGY')
     storage = get_helper(request_handler, 'STORAGE')
-    return get_strategy(backends, strategy, storage, *args, **kwargs)
+    return get_strategy(backends, strategy, storage, request_handler.request,
+                        request_handler=request_handler, *args, **kwargs)
 
 
 def strategy(redirect_uri=None):
@@ -32,6 +33,6 @@ def strategy(redirect_uri=None):
             self.strategy = load_strategy(self,
                                           backend=backend,
                                           redirect_uri=uri, *args, **kwargs)
-            return func(backend, *args, **kwargs)
+            return func(self, backend, *args, **kwargs)
         return wrapper
     return decorator
