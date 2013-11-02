@@ -275,16 +275,19 @@ class BaseOAuth2(OAuthAuth):
         if not self.STATE_PARAMETER and not self.REDIRECT_STATE:
             return None
         state = self.strategy.session_get(self.name + '_state')
-        if state:
-            request_state = self.data.get('state') or \
-                            self.data.get('redirect_state')
-            if not request_state:
-                raise AuthMissingParameter(self, 'state')
-            elif not state:
-                raise AuthStateMissing(self, 'state')
-            elif not request_state == state:
-                raise AuthStateForbidden(self)
-        return state
+        request_state = self.data.get('state') or \
+                        self.data.get('redirect_state')
+        if request_state and isinstance(request_state, list):
+            request_state = request_state[0]
+
+        if not request_state:
+            raise AuthMissingParameter(self, 'state')
+        elif not state:
+            raise AuthStateMissing(self, 'state')
+        elif not request_state == state:
+            raise AuthStateForbidden(self)
+        else:
+            return state
 
     def auth_complete_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
