@@ -1,6 +1,6 @@
 import json
 
-from tornado import template
+from tornado.template import Loader, Template
 
 from social.utils import build_absolute_uri
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
@@ -8,13 +8,11 @@ from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 
 class TornadoTemplateStrategy(BaseTemplateStrategy):
     def render_template(self, tpl, context):
-        dir, tpl = tpl.rsplit('/', 1)
-        loader = template.Loader(dir)
-        return loader.load(tpl).generate(**context)
+        path, tpl = tpl.rsplit('/', 1)
+        return Loader(path).load(tpl).generate(**context)
 
     def render_string(self, html, context):
-        tpl = template.Template(html)
-        return tpl.generate(**context)
+        return Template(html).generate(**context)
 
 
 class TornadoStrategy(BaseStrategy):
@@ -36,8 +34,7 @@ class TornadoStrategy(BaseStrategy):
         return self.request_handler.redirect(url)
 
     def html(self, content):
-        # TODO
-        pass
+        self.request_handler.write(content)
 
     def session_get(self, name, default=None):
         return self.request_handler.get_secure_cookie(name, value=default)
@@ -54,10 +51,9 @@ class TornadoStrategy(BaseStrategy):
         pass
 
     def build_absolute_uri(self, path=None):
-        return build_absolute_uri(
-            '%s://%s' % (self.request.protocol, self.request.host),
-            path
-        )
+        return build_absolute_uri('{0}://{1}'.format(self.request.protocol,
+                                                     self.request.host),
+                                  path)
 
     def partial_to_session(self, next, backend, request=None, *args, **kwargs):
         return json.dumps(super(TornadoStrategy, self).partial_to_session(

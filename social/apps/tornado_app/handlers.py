@@ -1,10 +1,10 @@
-import tornado.web
+from tornado.web import RequestHandler
 
 from social.apps.tornado_app.utils import strategy
 from social.actions import do_auth, do_complete, do_disconnect
 
 
-class BaseHandler(tornado.web.RequestHandler):
+class BaseHandler(RequestHandler):
     def user_id(self):
         return self.get_secure_cookie('user_id')
 
