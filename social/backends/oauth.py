@@ -285,8 +285,6 @@ class BaseOAuth2(OAuthAuth):
         elif not state:
             raise AuthStateMissing(self, 'state')
         elif not request_state == state:
-            print "REQ:", request_state
-            print "STATE:", state
             raise AuthStateForbidden(self)
         else:
             return state
