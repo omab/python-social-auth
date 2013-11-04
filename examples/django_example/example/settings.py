@@ -169,6 +169,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.steam.SteamOpenId',
     'social.backends.podio.PodioOAuth2',
     'social.backends.amazon.AmazonOAuth2',
+    'social.backends.runkeeper.RunKeeperOAuth2',
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
     'social.apps.django_app.utils.BackendWrapper',
