@@ -171,7 +171,7 @@ Or::
 
     $ cd python-social-auth
     $ sudo python setup.py install
-    
+
 Support
 ---------------------
 
