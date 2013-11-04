@@ -1,5 +1,114 @@
+2013-11-04 v0.1.15
+==================
+
+  * 2013-11-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Test runkeeper backend
+
+  * 2013-11-02 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and implement missing method
+
+  * 2013-11-02 Martin Santos <msantos@itsgiddy.com>
+    Removed prints
+
+  * 2013-11-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Fixes to Tornado application (mostly cookies handling)
+
+  * 2013-11-02 Martin Santos <msantos@itsgiddy.com>
+    WIP: More changes
+
+  * 2013-11-02 Martin Santos <msantos@itsgiddy.com>
+    WIP: strategy and example app
+
+  * 2013-11-01 Martin Santos <msantos@itsgiddy.com>
+    Initial tornado support
+
+  * 2013-10-28 Andrey Mitroshin <mit@akamit.com>
+    Function user_data returns list. This leads to exception in
+    social/backends/oauth.py (line 340): "ValueError, dictionary update
+    sequence element #0 has length 31; 2 is required". Taking 1st elementt of
+    that list fixes the error.
+
+  * 2013-10-23 Jason Sanford <jason.sanford@mapmyfitness.com>
+    Add RunKeeper.
+
+  * 2013-10-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix reference
+
+  * 2013-10-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Add missing links
+
+  * 2013-10-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Support python3-openid last changes on Association class
+
+  * 2013-10-23 Hannes Ljungberg <hannes@5monkeys.se>
+    Make partial_pipeline JSON serializable for django 1.6
+
+  * 2013-10-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Add missing attribute to flask storage
+
+  * 2013-10-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix typo. Closes #61
+
+  * 2013-10-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Small fixes to apfuel doc. Refs #59
+
+  * 2013-10-14 z4r <24erre@gmail.com>
+    Appsfuel doc from dsa to psa
+
+  * 2013-10-14 z4r <24erre@gmail.com>
+    Appsfuel doc from dsa to psa
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Make BackendWrapper respect backends interface. Refs #53
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Docs regarding Django 1.6 and backends enforced into
+    AUTHENTICATION_BACKENDS. Refs #53
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Try setting with backend name and without
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove backend_name property
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix arguments on refresh_token() method. Refs #52
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Make backend_name a property. Refs #52
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Pass the correct name to strategy setting method
+
+  * 2013-10-08 Michal Čihař <mcihar@suse.cz>
+    Add openSUSE OpenID login
+
+  * 2013-10-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix url check type. Refs #49
+
+  * 2013-10-08 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and small simplification on sanitize_url check. Refs #49
+
+  * 2013-10-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Clean every mergedict data type
+
+  * 2013-10-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Force dict type over response (convert mergedict types)
+
+  * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Enforce dict() on values
+
+  * 2013-10-07 Daniel Barreto <dbarreto@talpor.com>
+    Check for None when `sanitize_redirect` returns in `do_complete`.
+
+  * 2013-10-07 Daniel Barreto <dbarreto@talpor.com>
+    Make `sanitize_redirect` aware of possible proxies.
+
 2013-10-07 v0.1.14
-============================
+==================
+
+  * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix encoding string between python2 and 3
 
   * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
     Always wrap openid session value
