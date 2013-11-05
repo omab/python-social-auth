@@ -1,6 +1,7 @@
 import sys
 import unittest
 
+import mock
 from sure import expect
 
 from social.utils import sanitize_redirect, user_is_authenticated, \
@@ -122,17 +123,15 @@ class BuildAbsoluteURITest(unittest.TestCase):
 
 
 class PartialPipelineData(unittest.TestCase):
-    class MockStrategy(object):
-        request = None
-
-        def session_get(self, name, default=None):
-            return object()
-
-        def partial_from_session(self, session):
-            return object(), object(), [], {}
 
     def test_kwargs_included_in_result(self):
+        strategy = mock.Mock()
+        strategy.session_get.return_value = object()
+        partial_from_session = (object(), object(), [], {})
+        strategy.partial_from_session.return_value = partial_from_session
         kwargitem = ('foo', 'bar')
-        _, _, _, xkwargs = partial_pipeline_data(self.MockStrategy(), None,
+
+        _, _, _, xkwargs = partial_pipeline_data(strategy, None,
                                                  **dict([kwargitem]))
+
         xkwargs.should.have.key(kwargitem[0]).being.equal(kwargitem[1])
