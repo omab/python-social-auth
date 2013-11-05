@@ -4,7 +4,8 @@ import unittest
 from sure import expect
 
 from social.utils import sanitize_redirect, user_is_authenticated, \
-                         user_is_active, slugify, build_absolute_uri
+                         user_is_active, slugify, build_absolute_uri, \
+                         partial_pipeline_data
 
 
 PY3 = sys.version_info[0] == 3
@@ -118,3 +119,23 @@ class BuildAbsoluteURITest(unittest.TestCase):
     def test_absolute_uri(self):
         expect(build_absolute_uri(self.host, '/foo/bar')) \
               .to.equal('http://foobar.com/foo/bar')
+
+
+class PartialPipelineData(unittest.TestCase):
+
+    class MockStrategy(object):
+
+        request = None
+
+        def session_get(self, name, default=None):
+            return object()
+
+        def partial_from_session(self, session):
+            return object(), object(), [], {}
+
+
+    def test_kwargs_included_in_result(self):
+        kwargitem = ('foo', 'bar')
+        _, _, _, xkwargs = partial_pipeline_data(self.MockStrategy(), None,
+                                                 **dict([kwargitem]))
+        xkwargs.should.have.key(kwargitem[0]).being.equal(kwargitem[1])
