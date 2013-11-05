@@ -132,7 +132,7 @@ def partial_pipeline_data(strategy, user, *args, **kwargs):
         kwargs.setdefault('user', user)
         kwargs.setdefault('request', strategy.request)
         kwargs.update(xkwargs)
-        return idx, backend, xargs, xkwargs
+        return idx, backend, xargs, kwargs
 
 
 def build_absolute_uri(host_url, path=None):
