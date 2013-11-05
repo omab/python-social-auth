@@ -120,9 +120,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 SESSION_ENGINE = 'mongoengine.django.sessions'
-MONGOENGINE_USER_DOCUMENT = 'mongoengine.django.auth.User'
 mongoengine.connect('psa', host='mongodb://localhost/psa')
-SOCIAL_AUTH_USER_MODEL = 'mongoengine.django.auth.User'
+MONGOENGINE_USER_DOCUMENT = 'example.app.models.User'
+SOCIAL_AUTH_USER_MODEL = 'example.app.models.User'
+
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.open_id.OpenIdAuth',

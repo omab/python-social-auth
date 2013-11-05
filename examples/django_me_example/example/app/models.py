@@ -1,3 +1,7 @@
-from django.db import models
+from mongoengine.fields import ListField
+from mongoengine.django.auth import User
 
-# Create your models here.
+
+class User(User):
+    """Extend Mongo Engine User model"""
+    foo = ListField(default=[])
