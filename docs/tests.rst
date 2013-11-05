@@ -22,6 +22,16 @@ Go to the tests_ directory and install the dependencies listed in the
 requirements.txt_. Then run with ``nosetests`` command, or with the
 ``run_tests.sh`` script.
 
+Tox
+---
+
+You can use tox_ to test compatibility against all supported Python versions:
+
+.. code-block:: bash
+
+    $ pip install tox  # if not present
+    $ tox
+
 
 Pending
 -------
@@ -35,3 +45,4 @@ a lot to work on, like:
 .. _HTTPretty: https://github.com/gabrielfalcao/HTTPretty
 .. _tests: https://github.com/omab/python-social-auth/tree/master/tests
 .. _requirements.txt: https://github.com/omab/python-social-auth/blob/master/tests/requirements.txt
+.. _tox: http://tox.readthedocs.org/
