@@ -36,6 +36,7 @@ Multiple frameworks are supported:
     * Flask_
     * Pyramid_
     * Webpy_
+    * Tornado_
 
 More frameworks can be added easily (and should be even easier in the future
 once the code matures).
@@ -256,6 +257,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Flask: https://github.com/omab/python-social-auth/tree/master/social/apps/flask_app
 .. _Pyramid: http://www.pylonsproject.org/projects/pyramid/about
 .. _Webpy: https://github.com/omab/python-social-auth/tree/master/social/apps/webpy_app
+.. _Tornado: http://www.tornadoweb.org/
 .. _python-openid: http://pypi.python.org/pypi/python-openid/
 .. _python-oauth2: https://github.com/simplegeo/python-oauth2
 .. _sqlalchemy: http://www.sqlalchemy.org/

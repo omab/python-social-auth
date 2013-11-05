@@ -22,6 +22,7 @@ Multiple frameworks support:
     * Flask_
     * Pyramid_
     * Webpy_
+    * Tornado_
 
 More frameworks can be added easily (and should be even easier in the future
 once the code matures).
@@ -156,4 +157,5 @@ section.
 .. _Flask: https://github.com/omab/python-social-auth/tree/master/social/apps/flask_app
 .. _Pyramid: http://www.pylonsproject.org/projects/pyramid/about
 .. _Webpy: https://github.com/omab/python-social-auth/tree/master/social/apps/webpy_app
+.. _Tornado: http://www.tornadoweb.org/
 .. _Authentication Pipeline: pipeline.html
