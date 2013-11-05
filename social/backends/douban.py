@@ -39,6 +39,7 @@ class DoubanOAuth2(BaseOAuth2):
     name = 'douban-oauth2'
     AUTHORIZATION_URL = 'https://www.douban.com/service/auth2/auth'
     ACCESS_TOKEN_URL = 'https://www.douban.com/service/auth2/token'
+    ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
     EXTRA_DATA = [
         ('id', 'id'),
