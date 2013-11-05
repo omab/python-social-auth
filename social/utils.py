@@ -128,11 +128,10 @@ def partial_pipeline_data(strategy, user, *args, **kwargs):
     partial = strategy.session_get('partial_pipeline', None)
     if partial:
         idx, backend, xargs, xkwargs = strategy.partial_from_session(partial)
-        kwargs = kwargs.copy()
-        kwargs.setdefault('user', user)
+        kwargs['user'] = user
         kwargs.setdefault('request', strategy.request)
-        kwargs.update(xkwargs)
-        return idx, backend, xargs, kwargs
+        xkwargs.update(kwargs)
+        return idx, backend, xargs, xkwargs
 
 
 def build_absolute_uri(host_url, path=None):

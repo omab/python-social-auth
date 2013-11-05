@@ -135,3 +135,13 @@ class PartialPipelineData(unittest.TestCase):
                                                  **dict([kwargitem]))
 
         xkwargs.should.have.key(kwargitem[0]).being.equal(kwargitem[1])
+
+    def test_update_user(self):
+        strategy = mock.Mock()
+        strategy.session_get.return_value = object()
+        partial_from_session = (object(), object(), [], {'user': None})
+        strategy.partial_from_session.return_value = partial_from_session
+        user = object()
+
+        _, _, _, xkwargs = partial_pipeline_data(strategy, user)
+        xkwargs.should.have.key('user').being.equal(user)
