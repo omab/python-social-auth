@@ -122,9 +122,7 @@ class BuildAbsoluteURITest(unittest.TestCase):
 
 
 class PartialPipelineData(unittest.TestCase):
-
     class MockStrategy(object):
-
         request = None
 
         def session_get(self, name, default=None):
@@ -132,7 +130,6 @@ class PartialPipelineData(unittest.TestCase):
 
         def partial_from_session(self, session):
             return object(), object(), [], {}
-
 
     def test_kwargs_included_in_result(self):
         kwargitem = ('foo', 'bar')

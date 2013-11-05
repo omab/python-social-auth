@@ -37,7 +37,8 @@ class SocialAuthExceptionMiddleware(object):
                                extra_tags='social-auth ' + backend_name)
             else:
                 url += ('?' in url and '&' or '?') + \
-                       'message={0}&backend={1}'.format(urlquote(message), backend_name)
+                       'message={0}&backend={1}'.format(urlquote(message),
+                                                        backend_name)
             return redirect(url)
 
     def raise_exception(self, request, exception):
