@@ -4,11 +4,7 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
 
 from social.actions import do_auth, do_complete, do_disconnect
-from social.apps.django_app.utils import strategy, setting, BackendWrapper
-
-
-DEFAULT_REDIRECT = setting('LOGIN_REDIRECT_URL')
-LOGIN_ERROR_URL = setting('LOGIN_ERROR_URL', setting('LOGIN_URL'))
+from social.apps.django_app.utils import strategy, BackendWrapper
 
 
 @strategy('social:complete')
