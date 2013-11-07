@@ -154,6 +154,15 @@ Exception processing is disabled if any of this settings is defined with a
     RAISE_EXCEPTIONS = True
     DEBUG = True
 
+The redirect destination will get two parameters::
+
+``message = ''``
+    Message from the exception raised, in some cases it's the message returned
+    by the provider during the auth process.
+
+``backend = ''``
+    Backend name that was used, if it was a valid backend.
+
 
 Django 1.6
 ----------
