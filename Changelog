@@ -1,5 +1,51 @@
+2013-11-07 v0.1.15
+==================
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove or check which always default to settings.DEBUG if RAISE_EXCEPTIONS
+    was False
+
+  * 2013-11-07 Michal Čihař <mcihar@suse.cz>
+    Include actions module in distribution
+
+  * 2013-11-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Ensure IDs to openid association removal. Closes #76
+
+  * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Link to tornado docs
+
+  * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix to douban access token retrieval method. Closes #72
+
+  * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Custom user model in mongoengine example app. Refs #70
+
+  * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Mention tornado on readme and docs intro
+
+  * 2013-11-05 Axel Haustant <noirbizarre@gmail.com>
+    Talk about tox in test documentation
+
+  * 2013-11-05 Axel Haustant <noirbizarre@gmail.com>
+    Upgrade HTTPretty for OSX/Requets 2.0 compatibility
+
+  * 2013-11-05 Axel Haustant <noirbizarre@gmail.com>
+    Added tox configuration
+
+  * 2013-11-05 Axel Haustant <noirbizarre@gmail.com>
+    quote message for url inclusion
+
+  * 2013-11-04 Branden Rolston <branden@disqus.com>
+    Return the updated dict.
+
 2013-11-04 v0.1.15
 ==================
+
+  * 2013-11-04 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.15
 
   * 2013-11-04 Matías Aguirre <matiasaguirre@gmail.com>
     Test runkeeper backend
