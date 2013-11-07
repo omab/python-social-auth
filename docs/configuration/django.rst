@@ -154,7 +154,7 @@ Exception processing is disabled if any of this settings is defined with a
     RAISE_EXCEPTIONS = True
     DEBUG = True
 
-The redirect destination will get two parameters:
+The redirect destination will get two ``GET`` parameters:
 
 ``message = ''``
     Message from the exception raised, in some cases it's the message returned
