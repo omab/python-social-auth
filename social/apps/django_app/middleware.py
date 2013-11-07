@@ -42,7 +42,7 @@ class SocialAuthExceptionMiddleware(object):
             return redirect(url)
 
     def raise_exception(self, request, exception):
-        return self.strategy.setting('RAISE_EXCEPTIONS') or settings.DEBUG
+        return self.strategy.setting('RAISE_EXCEPTIONS', settings.DEBUG)
 
     def get_message(self, request, exception):
         return six.text_type(exception)
