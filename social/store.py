@@ -45,7 +45,7 @@ class OpenIdStore(BaseOpenIDStore):
             if expires > 0:
                 associations.append(association)
             elif expires == 0:
-                expired.append(association.id)
+                expired.append(assoc_id)
 
         if expired:  # clear expired associations
             self.assoc.remove(expired)
