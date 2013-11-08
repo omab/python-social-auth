@@ -18,4 +18,4 @@ Live uses OAuth2 for its connect workflow, notice that it isn't OAuth WRAP.
   Defaults are ``wl.basic`` and ``wl.emails``. Latter one is necessary to
   retrieve user email.
 
-.. _Live Connect Developer Center: https://manage.dev.live.com/Applications/Index
+.. _Live Connect Developer Center: https://account.live.com/developers/applications/create
