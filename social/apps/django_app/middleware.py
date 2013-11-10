@@ -21,7 +21,7 @@ class SocialAuthExceptionMiddleware(object):
     get_redirect_uri methods, which each accept request and exception.
     """
     def process_exception(self, request, exception):
-        self.strategy = getattr(request, 'strategy', None)
+        self.strategy = getattr(request, 'social_strategy', None)
         if self.strategy is None or self.raise_exception(request, exception):
             return
 

@@ -9,7 +9,7 @@ from social.apps.django_app.utils import strategy, BackendWrapper
 
 @strategy('social:complete')
 def auth(request, backend):
-    return do_auth(request.strategy, redirect_name=REDIRECT_FIELD_NAME)
+    return do_auth(request.social_strategy, redirect_name=REDIRECT_FIELD_NAME)
 
 
 @csrf_exempt
@@ -17,7 +17,7 @@ def auth(request, backend):
 def complete(request, backend, *args, **kwargs):
     """Authentication complete view, override this view if transaction
     management doesn't suit your needs."""
-    return do_complete(request.strategy, _do_login, request.user,
+    return do_complete(request.social_strategy, _do_login, request.user,
                        redirect_name=REDIRECT_FIELD_NAME, *args, **kwargs)
 
 
@@ -27,7 +27,7 @@ def complete(request, backend, *args, **kwargs):
 @csrf_protect
 def disconnect(request, backend, association_id=None):
     """Disconnects given backend from current logged in user."""
-    return do_disconnect(request.strategy, request.user, association_id,
+    return do_disconnect(request.social_strategy, request.user, association_id,
                          redirect_name=REDIRECT_FIELD_NAME)
 
 

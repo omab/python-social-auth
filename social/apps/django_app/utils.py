@@ -27,8 +27,14 @@ def strategy(redirect_uri=None, load_strategy=load_strategy):
             uri = redirect_uri
             if uri and not uri.startswith('/'):
                 uri = reverse(redirect_uri, args=(backend,))
-            request.strategy = load_strategy(request=request, backend=backend,
-                                             redirect_uri=uri, *args, **kwargs)
+            request.social_strategy = load_strategy(
+                request=request, backend=backend,
+                redirect_uri=uri, *args, **kwargs
+            )
+            # backward compatibility in attribute name, only if not already
+            # defined
+            if not hasattr(request, 'strategy'):
+                request.strategy = request.social_strategy
             return func(request, backend, *args, **kwargs)
         return wrapper
     return decorator
