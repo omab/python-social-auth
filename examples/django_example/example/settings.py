@@ -172,7 +172,6 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.runkeeper.RunKeeperOAuth2',
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
-    'social.apps.django_app.utils.BackendWrapper',
     'django.contrib.auth.backends.ModelBackend',
 )
 

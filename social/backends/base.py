@@ -151,7 +151,9 @@ class BaseAuth(object):
         Return user with given ID from the User model used by this backend.
         This is called by django.contrib.auth.middleware.
         """
-        return self.strategy.get_user(user_id)
+        from social.strategies.utils import get_current_strategy
+        strategy = self.strategy or get_current_strategy()
+        return strategy.get_user(user_id)
 
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""

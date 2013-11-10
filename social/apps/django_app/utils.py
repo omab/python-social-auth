@@ -45,18 +45,3 @@ def setting(name, default=None):
         return getattr(settings, setting_name(name))
     except AttributeError:
         return getattr(settings, name, default)
-
-
-class BackendWrapper(object):
-    # This backends doesn't authenticate, it's just a wrapper to return the
-    # user by the given ID, the user was already authenticated by a previous
-    # backend but since Django 1.6 will enforce backends to be defined on
-    # AUTHENTICATION_BACKENDS (which is not a bad idea) this wrapper needs to
-    # be added the setting, until a better solution is found this backends must
-    # be added to the setting, check:
-    #   https://github.com/omab/python-social-auth/issues/53
-    def authenticate(self, *args, **kwargs):
-        return None
-
-    def get_user(self, user_id):
-        return Strategy(storage=Storage).get_user(user_id)

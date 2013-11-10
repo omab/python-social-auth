@@ -164,30 +164,9 @@ The redirect destination will get two ``GET`` parameters:
     Backend name that was used, if it was a valid backend.
 
 
-Django 1.6
-----------
-
-Since this change `django@dc43fbc`_ Django enforces authentication backends to
-be defined on ``AUTHENTICATION_BACKENDS`` setting, but ``python-social-auth``
-uses a wrapper (BackendWrapper_) in order to get access to the strategy which
-is unknown to backends and application-dependent.
-
-The wrapper is not defined in ``AUTHENTICATION_BACKENDS`` and that breaks the
-authentication flow, until a better solution is implementing (reducing the
-coupling between the classes and easing access to strategies) this wrapper
-**must** be added to ``AUTHENTICATION_BACKENDS`` setting like this::
-
-    AUTHENTICATION_BACKENDS = (
-        # Social backends
-        ...
-        'social.apps.django_app.utils.BackendWrapper',
-        ...
-    )
-
 .. _MongoEngine: http://mongoengine.org
 .. _MongoEngine Django integration: http://mongoengine-odm.readthedocs.org/en/latest/django.html
 .. _django-social-auth: https://github.com/omab/django-social-auth
 .. _Django built-in app: https://github.com/omab/python-social-auth/tree/master/social/apps/django_app
 .. _AUTHENTICATION_BACKENDS: http://docs.djangoproject.com/en/dev/ref/settings/?from=olddocs#authentication-backends
 .. _django@dc43fbc: https://github.com/django/django/commit/dc43fbc2f21c12e34e309d0e8a121020391aa03a
-.. _BackendWrapper: https://github.com/omab/python-social-auth/blob/master/social/apps/django_app/utils.py#L44

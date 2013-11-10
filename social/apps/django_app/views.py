@@ -1,10 +1,10 @@
-from django.contrib.auth import login, REDIRECT_FIELD_NAME, BACKEND_SESSION_KEY
+from django.contrib.auth import login, REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
 
 from social.actions import do_auth, do_complete, do_disconnect
-from social.apps.django_app.utils import strategy, BackendWrapper
+from social.apps.django_app.utils import strategy
 
 
 @strategy('social:complete')
@@ -33,12 +33,6 @@ def disconnect(request, backend, association_id=None):
 
 def _do_login(strategy, user):
     login(strategy.request, user)
-    strategy.session_set('original_' + BACKEND_SESSION_KEY,
-                         strategy.session_get(BACKEND_SESSION_KEY))
-    strategy.session_set(BACKEND_SESSION_KEY, '{0}.{1}'.format(
-        BackendWrapper.__module__,
-        BackendWrapper.__name__
-    ))
     # user.social_user is the used UserSocialAuth instance defined in
     # authenticate process
     social_user = user.social_user
