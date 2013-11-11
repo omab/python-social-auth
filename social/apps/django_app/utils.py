@@ -2,6 +2,7 @@ from functools import wraps
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.http import Http404
 
 from social.utils import setting_name, module_member
 from social.strategies.utils import get_strategy
@@ -27,10 +28,13 @@ def strategy(redirect_uri=None, load_strategy=load_strategy):
             uri = redirect_uri
             if uri and not uri.startswith('/'):
                 uri = reverse(redirect_uri, args=(backend,))
-            request.social_strategy = load_strategy(
-                request=request, backend=backend,
-                redirect_uri=uri, *args, **kwargs
-            )
+            try:
+                request.social_strategy = load_strategy(
+                    request=request, backend=backend,
+                    redirect_uri=uri, *args, **kwargs
+                )
+            except ValueError:  # no such backend
+                raise Http404
             # backward compatibility in attribute name, only if not already
             # defined
             if not hasattr(request, 'strategy'):
