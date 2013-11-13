@@ -1,4 +1,4 @@
-from flask import g, Blueprint
+from flask import g, Blueprint, request
 from flask.ext.login import login_required, login_user
 
 from social.actions import do_auth, do_complete, do_disconnect
@@ -19,8 +19,8 @@ def auth(backend):
 def complete(backend, *args, **kwargs):
     """Authentication complete view, override this view if transaction
     management doesn't suit your needs."""
-    return do_complete(g.strategy, login=lambda strat, user: login_user(user),
-                       user=g.user, *args, **kwargs)
+    return do_complete(g.strategy, login=do_login, user=g.user,
+                       *args, **kwargs)
 
 
 @social_auth.route('/disconnect/<string:backend>/', methods=('POST',))
@@ -31,3 +31,9 @@ def complete(backend, *args, **kwargs):
 def disconnect(backend, association_id=None):
     """Disconnects given backend from current logged in user."""
     return do_disconnect(g.strategy, g.user, association_id)
+
+
+def do_login(strategy, user):
+    return login_user(user, remember=request.cookies.get('remember') or
+                                     request.args.get('remember') or
+                                     request.form.get('remember') or False)
