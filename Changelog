@@ -1,5 +1,39 @@
-2013-11-07 v0.1.15
+2013-11-13 HEAD (unreleased)
+============================
+
+  * 2013-11-11 Алексей <despawn@gmail.com>
+    Raise Http404 in django auth view when the backend is not found
+
+  * 2013-11-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove BackendWrapper reference and set current-strategy cache to access it
+
+  * 2013-11-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Set social_ prefix on request attribute to avoid conflicts with other apps.
+    Keep social attribute if not set (backward compatibility)
+
+  * 2013-11-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Update github docs regarding callback URL. Closes #66
+
+  * 2013-11-08 yegle <cnyegle@gmail.com>
+    Mod: URL for registering Windows Live key/secret
+
+  * 2013-11-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix association id. Closes #78
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Mention method used
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Typo fix
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Update middleware docs
+
+2013-11-07 v0.1.16
 ==================
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unused vars
 
   * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
     Remove or check which always default to settings.DEBUG if RAISE_EXCEPTIONS
@@ -41,11 +75,11 @@
   * 2013-11-04 Branden Rolston <branden@disqus.com>
     Return the updated dict.
 
-2013-11-04 v0.1.15
-==================
-
   * 2013-11-04 Matías Aguirre <matiasaguirre@gmail.com>
     v0.1.15
+
+2013-11-04 v0.1.15
+==================
 
   * 2013-11-04 Matías Aguirre <matiasaguirre@gmail.com>
     Test runkeeper backend
