@@ -42,7 +42,7 @@ Password handling
 Here's an example of password handling to add to the pipeline::
 
     def user_password(strategy, user, is_new=False, *args, **kwargs):
-        if strategy.backend_name != 'email':
+        if strategy.backend.name != 'email':
             return
 
         password = strategy.request_data()['password']
