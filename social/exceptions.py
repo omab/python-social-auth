@@ -13,6 +13,11 @@ class WrongBackend(SocialAuthBaseException):
         )
 
 
+class MissingBackend(WrongBackend):
+    def __str__(self):
+        return 'Missing backend "{0}" entry'.format(self.backend_name)
+
+
 class NotAllowedToDisconnect(SocialAuthBaseException):
     """User is not allowed to disconnect it's social account."""
     pass

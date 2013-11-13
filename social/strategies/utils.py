@@ -1,4 +1,5 @@
 from social.utils import module_member
+from social.exceptions import MissingBackend
 from social.backends.utils import get_backend
 
 
@@ -15,7 +16,7 @@ def get_strategy(backends, strategy, storage, request=None, backend=None,
     if backend:
         Backend = get_backend(backends, backend)
         if not Backend:
-            raise ValueError('Missing backend entry')
+            raise MissingBackend(backend)
     else:
         Backend = None
     Strategy = module_member(strategy)

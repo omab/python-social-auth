@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.http import Http404
 
 from social.utils import setting_name, module_member
+from social.exceptions import MissingBackend
 from social.strategies.utils import get_strategy
 
 
@@ -28,13 +29,15 @@ def strategy(redirect_uri=None, load_strategy=load_strategy):
             uri = redirect_uri
             if uri and not uri.startswith('/'):
                 uri = reverse(redirect_uri, args=(backend,))
+
             try:
                 request.social_strategy = load_strategy(
                     request=request, backend=backend,
                     redirect_uri=uri, *args, **kwargs
                 )
-            except ValueError:  # no such backend
-                raise Http404
+            except MissingBackend:
+                raise Http404('Backend not found')
+
             # backward compatibility in attribute name, only if not already
             # defined
             if not hasattr(request, 'strategy'):
