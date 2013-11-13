@@ -1,5 +1,23 @@
-2013-11-13 HEAD (unreleased)
-============================
+2013-11-13 v0.1.17
+==================
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Support remember flag when calling login on flask app
+
+  * 2013-11-13 Nitish Rathi <nitish7r@yahoo.com>
+    Use strategy.backend.name instead of strategy.backend_name
+
+  * 2013-11-13 Nitish Rathi <nitish7r@yahoo.com>
+    Use strategy.backend.name instead of strategy.backend_name
+
+  * 2013-11-13 Nitish Rathi <nitish7r@yahoo.com>
+    Use strategy.backend.name instead of strategy.backend_name
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Update ChangeLog
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Define exception to signal a backend-not-found error. Refs #83
 
   * 2013-11-11 Алексей <despawn@gmail.com>
     Raise Http404 in django auth view when the backend is not found
