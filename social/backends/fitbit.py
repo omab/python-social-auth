@@ -25,6 +25,9 @@ class FitbitOAuth(BaseOAuth1):
         return {'username': response.get('displayName'),
                 'email': ''}
 
+    def get_user_id(self, details, response):
+        return response['encodedId']
+
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         return self.get_json(
