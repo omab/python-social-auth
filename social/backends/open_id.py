@@ -190,7 +190,7 @@ class OpenIdAuth(BaseAuth):
             except (ValueError, TypeError):
                 max_age = None
 
-        if any((max_age, preferred_policies, preferred_level_types)):
+        if max_age is not None or preferred_policies or preferred_level_types:
             pape_request = pape.Request(
                 max_auth_age=max_age,
                 preferred_auth_policies=preferred_policies,
