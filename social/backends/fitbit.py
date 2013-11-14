@@ -17,6 +17,7 @@ class FitbitOAuth(BaseOAuth1):
     AUTHORIZATION_URL = 'https://api.fitbit.com/oauth/authorize'
     REQUEST_TOKEN_URL = 'https://api.fitbit.com/oauth/request_token'
     ACCESS_TOKEN_URL = 'https://api.fitbit.com/oauth/access_token'
+    ID_KEY = 'encodedId'
     EXTRA_DATA = [('encodedId', 'id'),
                   ('displayName', 'username')]
 
@@ -24,9 +25,6 @@ class FitbitOAuth(BaseOAuth1):
         """Return user details from Fitbit account"""
         return {'username': response.get('displayName'),
                 'email': ''}
-
-    def get_user_id(self, details, response):
-        return response['encodedId']
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
