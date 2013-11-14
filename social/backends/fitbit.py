@@ -17,6 +17,7 @@ class FitbitOAuth(BaseOAuth1):
     AUTHORIZATION_URL = 'https://api.fitbit.com/oauth/authorize'
     REQUEST_TOKEN_URL = 'https://api.fitbit.com/oauth/request_token'
     ACCESS_TOKEN_URL = 'https://api.fitbit.com/oauth/access_token'
+    ID_KEY = 'encodedId'
     EXTRA_DATA = [('encodedId', 'id'),
                   ('displayName', 'username')]
 
