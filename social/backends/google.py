@@ -13,9 +13,11 @@ APIs console https://code.google.com/apis/console/ Identity option.
 
 OpenID also works straightforward, it doesn't need further configurations.
 """
+from requests import HTTPError
+
 from social.backends.open_id import OpenIdAuth
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
-from social.exceptions import AuthMissingParameter
+from social.exceptions import AuthMissingParameter, AuthUnknownError, AuthCanceled
 
 
 class BaseGoogleAuth(object):
@@ -72,18 +74,36 @@ class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
 class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
     name = 'google-plus'
     REDIRECT_STATE = False
+    STATE_PARAMETER = False
+    ACCESS_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
+    ACCESS_TOKEN_METHOD = 'POST'
+    REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
+    REVOKE_TOKEN_METHOD = 'GET'
     DEFAULT_SCOPE = ['https://www.googleapis.com/auth/plus.login',
                      'https://www.googleapis.com/auth/userinfo.email',
                      'https://www.googleapis.com/auth/userinfo.profile']
     EXTRA_DATA = [
-        ('user_id', 'user_id'),
+        ('id', 'user_id'),
         ('refresh_token', 'refresh_token', True),
         ('expires_in', 'expires'),
         ('access_type', 'access_type', True)
     ]
 
     def extra_data(self, user, uid, response, details):
-        return {'code': response.get('code')}
+        data = super(GooglePlusAuth, self).extra_data(user, uid, response, details)
+        if 'refresh_token' in data and (data['refresh_token'] is None or len(data['refresh_token']) == 0):
+            data.pop('refresh_token')
+        return data
+
+    def auth_complete_params(self, state=None):
+        client_id, client_secret = self.get_key_and_secret()
+        return {
+            'grant_type': 'authorization_code',  # request auth code
+            'code': self.data.get('code', ''),  # server response code
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'redirect_uri': 'postmessage'
+        }
 
     def auth_complete(self, *args, **kwargs):
         token = self.data.get('access_token')
@@ -94,9 +114,26 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
             params={'access_token': token}
         )
         self.process_error(verification)
-        verification.update({'access_token': token,
-                             'code': self.data.get('code')})
-        return self.do_auth(token, response=verification, *args, **kwargs)
+        verification.update({'access_token': token})
+
+        try:
+            response = self.request_access_token(
+                self.ACCESS_TOKEN_URL,
+                data=self.auth_complete_params(),
+                headers=self.auth_headers(),
+                method=self.ACCESS_TOKEN_METHOD
+            )
+        except HTTPError as err:
+            if err.response.status_code == 400:
+                raise AuthCanceled(self)
+            else:
+                raise
+        except KeyError:
+            raise AuthUnknownError(self)
+        self.process_error(response)
+
+        return self.do_auth(response['access_token'], response=response,
+                            *args, **kwargs)
 
 
 class GoogleOAuth(BaseGoogleAuth, BaseOAuth1):
