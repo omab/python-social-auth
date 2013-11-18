@@ -17,7 +17,7 @@ from requests import HTTPError
 
 from social.backends.open_id import OpenIdAuth
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
-from social.exceptions import AuthMissingParameter, AuthUnknownError, AuthCanceled
+from social.exceptions import AuthMissingParameter, AuthCanceled
 
 
 class BaseGoogleAuth(object):
@@ -90,8 +90,9 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
     ]
 
     def extra_data(self, user, uid, response, details):
-        data = super(GooglePlusAuth, self).extra_data(user, uid, response, details)
-        if 'refresh_token' in data and (data['refresh_token'] is None or len(data['refresh_token']) == 0):
+        data = super(GooglePlusAuth, self).extra_data(user, uid, response,
+                                                      details)
+        if 'refresh_token' in data and not data['refresh_token']:
             data.pop('refresh_token')
         return data
 
@@ -99,7 +100,7 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
         client_id, client_secret = self.get_key_and_secret()
         return {
             'grant_type': 'authorization_code',  # request auth code
-            'code': self.data.get('code', ''),  # server response code
+            'code': self.data.get('code', ''),   # server response code
             'client_id': client_id,
             'client_secret': client_secret,
             'redirect_uri': 'postmessage'
@@ -109,12 +110,11 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
         token = self.data.get('access_token')
         if not token:
             raise AuthMissingParameter(self, 'access_token')
-        verification = self.get_json(
+
+        self.process_error(self.get_json(
             'https://www.googleapis.com/oauth2/v1/tokeninfo',
             params={'access_token': token}
-        )
-        self.process_error(verification)
-        verification.update({'access_token': token})
+        ))
 
         try:
             response = self.request_access_token(
@@ -128,10 +128,7 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
                 raise AuthCanceled(self)
             else:
                 raise
-        except KeyError:
-            raise AuthUnknownError(self)
         self.process_error(response)
-
         return self.do_auth(response['access_token'], response=response,
                             *args, **kwargs)
 
