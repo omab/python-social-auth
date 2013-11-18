@@ -146,7 +146,7 @@ Documents
 =========
 
 Project homepage is available at http://psa.matiasaguirre.net/ and documents at
-http://psa.matiasaguirre.net/docs/.
+python-social-auth.readthedocs.org/.
 
 
 Installation
