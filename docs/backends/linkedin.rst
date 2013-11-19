@@ -58,6 +58,10 @@ OAuth2 works exacly the same than OAuth1, but the settings must be named as::
 
     SOCIAL_AUTH_LINKEDIN_OAUTH2_*
 
+Looks like LinkedIn is forcing the definition of the callback URL in the
+application when OAuth2 is used. Be sure to set the proper values, otherwise
+a ``(400) Client Error: Bad Reques`` might be returned by their service.
+
 .. _LinkedIn fields selectors: http://developer.linkedin.com/docs/DOC-1014
 .. _LinkedIn Scopes: https://developer.linkedin.com/documents/authentication#granting
 .. _LinkedIn Developer Network: https://www.linkedin.com/secure/developer
