@@ -11,7 +11,7 @@ enabled.
 """
 from requests import request
 
-from social.utils import setting_name, module_member, parse_qs
+from social.utils import module_member, parse_qs
 
 
 class BaseAuth(object):
@@ -34,12 +34,7 @@ class BaseAuth(object):
 
     def setting(self, name, default=None):
         """Return setting value from strategy"""
-        _default = object()
-        for name in (setting_name(self.name, name), name):
-            value = self.strategy.setting(name, _default)
-            if value != _default:
-                return value
-        return default
+        return self.strategy.setting(name, default=default, backend=self)
 
     def auth_url(self):
         """Must return redirect URL to auth provider"""

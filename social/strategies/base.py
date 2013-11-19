@@ -42,8 +42,12 @@ class BaseStrategy(object):
         self.backend = backend(strategy=self, *args, **kwargs) \
                             if backend else None
 
-    def setting(self, name, default=None):
-        for name in (setting_name(name), name):
+    def setting(self, name, default=None, backend=None):
+        names = [setting_name(name), name]
+        backend = backend or getattr(self, 'backend', None)
+        if backend:
+            names.insert(0, setting_name(backend.name, name))
+        for name in names:
             try:
                 return self.get_setting(name)
             except (AttributeError, KeyError):
