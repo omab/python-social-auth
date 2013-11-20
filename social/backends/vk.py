@@ -123,7 +123,10 @@ class VKAppOAuth2(VKOAuth2):
     name = 'vk-app'
 
     def user_profile(self, user_id, access_token=None):
-        data = {'uids': user_id, 'fields': 'photo'}
+        request_data = ['first_name', 'last_name', 'screen_name', 'nickname',
+                        'photo'] + self.setting('EXTRA_DATA', [])
+        fields = ','.join(set(request_data))
+        data = {'uids': user_id, 'fields': fields}
         if access_token:
             data['access_token'] = access_token
         profiles = vk_api(self, 'getProfiles', data).get('response')
