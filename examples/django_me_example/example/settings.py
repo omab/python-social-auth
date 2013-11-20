@@ -160,6 +160,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.stocktwits.StocktwitsOAuth2',
     'social.backends.tripit.TripItOAuth',
     'social.backends.twilio.TwilioAuth',
+    'social.backends.clef.ClefOAuth2',
     'social.backends.xing.XingOAuth',
     'social.backends.yandex.YandexOAuth2',
     'social.backends.douban.DoubanOAuth2',
