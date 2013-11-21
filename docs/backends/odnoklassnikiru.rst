@@ -16,7 +16,7 @@ If you use OAuth2 workflow, you need to:
 
     SOCIAL_AUTH_ODNOKLASSNIKI_OAUTH2_KEY = ''
     SOCIAL_AUTH_ODNOKLASSNIKI_OAUTH2_SECRET = ''
-    SOCIAL_AUTH_ODNOKLASSNIKI_PUBLIC_NAME = ''
+    SOCIAL_AUTH_ODNOKLASSNIKI_OAUTH2_PUBLIC_NAME = ''
 
 - add ``'social.backends.odnoklassniki.OdnoklassnikiOAuth2'`` into your
   ``SOCIAL_AUTH_AUTHENTICATION_BACKENDS``.
