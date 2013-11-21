@@ -22,6 +22,7 @@ class WeiboOAuth2(BaseOAuth2):
     AUTHORIZATION_URL = 'https://api.weibo.com/oauth2/authorize'
     REQUEST_TOKEN_URL = 'https://api.weibo.com/oauth2/request_token'
     ACCESS_TOKEN_URL = 'https://api.weibo.com/oauth2/access_token'
+    ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
     EXTRA_DATA = [
         ('id', 'id'),
@@ -40,4 +41,4 @@ class WeiboOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         return self.get_json('https://api.weibo.com/2/users/show.json',
                              params={'access_token': access_token,
-                                     'uid': args[0]['uid']})
+                                     'uid': kwargs['response']['uid']})
