@@ -1,7 +1,7 @@
 """
 Mail.ru OAuth2 support
 
-Take a look to http://api.mail.ru/docs/guides/oauth/
+Take a look at http://api.mail.ru/docs/guides/oauth/
 
 You need to register OAuth site here:
 http://api.mail.ru/sites/my/add
