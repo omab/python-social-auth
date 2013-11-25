@@ -52,6 +52,7 @@ Social backends
    behance
    bitbucket
    box
+   coinbase
    disqus
    douban
    dropbox
@@ -70,6 +71,7 @@ Social backends
    rdio
    readability
    reddit
+   runkeeper
    shopify
    skyrock
    soundcloud

@@ -1,7 +1,7 @@
 """
 Box.net OAuth support.
 
-This contribution adds support for GitHub OAuth service. The settings
+This contribution adds support for Box.net OAuth service. The settings
 SOCIAL_AUTH_BOX_KEY and SOCIAL_AUTH_BOX_SECRET must be defined with the values
 given by Box.net application registration process.
 
