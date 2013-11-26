@@ -54,8 +54,8 @@ class DjangoUserMixin(UserMixin):
 
     @classmethod
     def create_user(cls, *args, **kwargs):
-        if 'username' in kwargs:
-            kwargs[cls.username_field()] = kwargs.pop('username')
+        if cls.username_field() in kwargs:
+            kwargs['username'] = kwargs[cls.username_field()]
         return cls.user_model().objects.create_user(*args, **kwargs)
 
     @classmethod
