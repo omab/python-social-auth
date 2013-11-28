@@ -64,6 +64,7 @@ Social backends
    fedora
    fitbit
    flickr
+   foursquare
    github
    google
    instagram
