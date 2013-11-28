@@ -98,4 +98,5 @@ Social backends
    twitter
    vk
    weibo
+   xing
    yahoo
