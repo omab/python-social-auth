@@ -1,5 +1,24 @@
-Yahoo OAuth
-===========
+Yahoo
+=====
+
+Yahoo supports OpenId and OAuth1 for their auth flow.
+
+
+Yahoo OpenId
+------------
+
+OpenId doesn't require any particular configuration beside enabling the backend
+in the ``AUTHENTICATION_BACKENDS`` setting::
+
+    AUTHENTICATION_BACKENDS = (
+        ...
+        'social.backends.yahoo.YahooOpenId',
+        ...
+    )
+
+
+Yahoo OAuth1
+------------
 
 OAuth 1.0 workflow, useful if you are planning to use Yahoo's API.
 
