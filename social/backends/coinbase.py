@@ -10,6 +10,9 @@ class CoinbaseOAuth2(BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
 
+    def get_user_id(self, details, response):
+        return response['users'][0]['user']['id']
+
     def get_user_details(self, response):
         """Return user details from Coinbase account"""
         user_data = response['users'][0]['user']
