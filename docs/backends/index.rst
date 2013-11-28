@@ -62,6 +62,7 @@ Social backends
    evernote
    facebook
    fedora
+   fitbit
    flickr
    github
    google
