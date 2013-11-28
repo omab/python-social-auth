@@ -86,11 +86,12 @@ Social backends
    skyrock
    soundcloud
    suse
-   thisismyjam
    stackoverflow
    steam
    stocktwits
    stripe
+   thisismyjam
+   trello
    tripit
    tumblr
    twilio
