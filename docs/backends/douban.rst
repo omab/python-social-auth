@@ -3,8 +3,8 @@ Douban
 
 Douban supports OAuth 1 and 2.
 
-Douban OAuth 1
---------------
+Douban OAuth1
+-------------
 
 Douban OAuth 1 works similar to Twitter OAuth.
 
