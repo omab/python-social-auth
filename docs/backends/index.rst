@@ -70,8 +70,8 @@ Social backends
    instagram
    jawbone
    linkedin
-   live
    livejournal
+   live
    mailru
    mixcloud
    odnoklassnikiru
