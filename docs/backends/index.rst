@@ -100,3 +100,4 @@ Social backends
    weibo
    xing
    yahoo
+   yammer
