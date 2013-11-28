@@ -1,13 +1,6 @@
 """
-Mail.ru OAuth2 support
-
-Take a look at http://api.mail.ru/docs/guides/oauth/
-
-You need to register OAuth site here:
-http://api.mail.ru/sites/my/add
-
-Then update your settings values using registration information
-
+Mail.ru OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/mailru.html
 """
 from hashlib import md5
 

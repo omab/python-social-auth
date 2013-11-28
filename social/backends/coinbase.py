@@ -1,3 +1,7 @@
+"""
+Coinbase OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/coinbase.html
+"""
 from social.backends.oauth import BaseOAuth2
 
 

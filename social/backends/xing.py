@@ -1,7 +1,6 @@
 """
-XING OAuth support
-
-No extra configurations are needed to make this work.
+XING OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/xing.html
 """
 from social.backends.oauth import BaseOAuth1
 

@@ -1,16 +1,6 @@
 """
-ThisIsMyJam OAuth support.
-
-This contribution adds support for ThisIsMyJam service.
-
-The settings SOCIAL_AUTH_THISISMYJAM_KEY & SOCIAL_AUTH_THISISMYJAM_SECRET must
-be defined with the values given by SoundCloud application registration
-process.
-
-http://www.thisismyjam.com/developers
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
+ThisIsMyJam OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/thisismyjam.html
 """
 from social.backends.oauth import BaseOAuth1
 

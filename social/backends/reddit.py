@@ -1,6 +1,6 @@
 """
-Reddit OAuth2 support as detailed at:
-    https://github.com/reddit/reddit/wiki/OAuth2
+Reddit OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/reddit.html
 """
 import base64
 

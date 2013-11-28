@@ -1,11 +1,6 @@
 """
-This module is originally written: django-social-auth-appsfuel==1.0.0
-You could refer to https://github.com/AppsFuel/django-social-auth-appsfuel for
-issues.
-
-Needed keys are:
-    SOCIAL_AUTH_APPSFUEL_KEY = ''
-    SOCIAL_AUTH_APPSFUEL_SECRET = ''
+Appsfueld OAuth2 backend (with sandbox mode support), docs at:
+    http://psa.matiasaguirre.net/docs/backends/appsfuel.html
 """
 from social.backends.oauth import BaseOAuth2
 

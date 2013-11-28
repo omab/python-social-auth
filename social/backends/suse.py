@@ -1,7 +1,6 @@
 """
-OpenSUSE OpenID support
-
-OpenID also works straightforward, it doesn't need further configurations.
+Open Suse OpenId backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/suse.html
 """
 from social.backends.open_id import OpenIdAuth
 

@@ -1,7 +1,6 @@
 """
-Linkedin OAuth support
-
-No extra configurations are needed to make this work.
+LinkedIn OAuth1 and OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/linkedin.html
 """
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
 

@@ -1,14 +1,6 @@
 """
-Tumblr OAuth 1.0a support.
-
-Take a look to http://www.tumblr.com/docs/en/api/v2
-
-You need to register OAuth site here: http://www.tumblr.com/oauth/apps
-
-Then update your settings values using registration information
-
-ref:
-    https://github.com/gkmngrgn/django-tumblr-auth
+Tumblr OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/tumblr.html
 """
 from social.utils import first
 from social.backends.oauth import BaseOAuth1

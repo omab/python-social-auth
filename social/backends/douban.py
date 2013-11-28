@@ -1,13 +1,6 @@
 """
-Douban OAuth support.
-
-This adds support for Douban OAuth service. An application must
-be registered first on douban.com and the settings DOUBAN_CONSUMER_KEY
-and DOUBAN_CONSUMER_SECRET must be defined with they corresponding
-values.
-
-By default account id is stored in extra_data field, check OAuthBackend
-class for details on how to extend it.
+Douban OAuth1 and OAuth2 backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/douban.html
 """
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
 

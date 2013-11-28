@@ -1,5 +1,6 @@
 """
-Mixcloud OAuth2 support
+Mixcloud OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/mixcloud.html
 """
 from social.backends.oauth import BaseOAuth2
 

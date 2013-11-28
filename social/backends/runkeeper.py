@@ -1,9 +1,6 @@
 """
-RunKeeper OAuth support.
-
-This contribution adds support for RunKeeper Oauth service. The settings
-SOCIAL_AUTH_RUNKEEPER_KEY and SOCIAL_AUTH_RUNKEEPER_SECRET must be defined with
-the values given by RunKeeper application registration process.
+RunKeeper OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/runkeeper.html
 """
 from social.backends.oauth import BaseOAuth2
 

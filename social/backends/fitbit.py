@@ -1,12 +1,6 @@
 """
-Fitbit OAuth support.
-
-This contribution adds support for Fitbit OAuth service. The settings
-FITBIT_CONSUMER_KEY and FITBIT_CONSUMER_SECRET must be defined with the values
-given by Fitbit application registration process.
-
-By default account id, username and token expiration time are stored in
-extra_data field, check OAuthBackend class for details on how to extend it.
+Fitbit OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/fitbit.html
 """
 from social.backends.oauth import BaseOAuth1
 

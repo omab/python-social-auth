@@ -1,3 +1,7 @@
+"""
+Rdio OAuth1 and OAuth2 backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/rdio.html
+"""
 from social.backends.oauth import BaseOAuth1, BaseOAuth2, OAuthAuth
 
 

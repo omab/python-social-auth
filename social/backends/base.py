@@ -1,14 +1,3 @@
-"""
-Base backends classes.
-
-This module defines base classes needed to define custom OpenID or OAuth1/2
-auth services from third parties. This customs must subclass an Auth and a
-Backend class, check current implementation for examples.
-
-Also the modules *must* define a BACKENDS dictionary with the backend name
-(which is used for URLs matching) and Auth class, otherwise it won't be
-enabled.
-"""
 from requests import request
 
 from social.utils import module_member, parse_qs

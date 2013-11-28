@@ -1,6 +1,6 @@
 """
-Mendeley OAuth support
-No extra configurations are needed to make this work.
+Mendeley OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/mendeley.html
 """
 from social.backends.oauth import BaseOAuth1
 

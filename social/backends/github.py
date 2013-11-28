@@ -1,15 +1,6 @@
 """
-GitHub OAuth support.
-
-This contribution adds support for GitHub OAuth service. The settings
-GITHUB_APP_ID and GITHUB_API_SECRET must be defined with the values
-given by GitHub application registration process.
-
-Extended permissions are supported by defining GITHUB_EXTENDED_PERMISSIONS
-setting, it must be a list of values to request.
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
+Github OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/github.html
 """
 from requests import HTTPError
 

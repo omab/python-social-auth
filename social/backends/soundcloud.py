@@ -1,16 +1,6 @@
 """
-SoundCloud OAuth2 support.
-
-This contribution adds support for SoundCloud OAuth2 service.
-
-The settings SOUNDCLOUD_CLIENT_ID & SOUNDCLOUD_CLIENT_SECRET must be defined
-with the values given by SoundCloud application registration process.
-
-http://developers.soundcloud.com/
-http://developers.soundcloud.com/docs
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
+Soundcloud OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/soundcloud.html
 """
 from social.p3 import urlencode
 from social.backends.oauth import BaseOAuth2

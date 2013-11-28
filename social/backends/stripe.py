@@ -1,9 +1,6 @@
 """
-Stripe OAuth2 support.
-
-This backend adds support for Stripe OAuth2 service. The settings
-STRIPE_APP_ID and STRIPE_API_SECRET must be defined with the values
-given by Stripe application registration process.
+Stripe OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/stripe.html
 """
 from social.backends.oauth import BaseOAuth2
 
@@ -45,7 +42,7 @@ class StripeOAuth2(BaseOAuth2):
             'client_id': client_id,
             'scope': self.SCOPE_SEPARATOR.join(self.get_scope()),
             'code': self.data['code']
-       }
+        }
 
     def auth_headers(self):
         client_id, client_secret = self.get_key_and_secret()

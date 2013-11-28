@@ -1,12 +1,6 @@
 """
-Dropbox OAuth support.
-
-This contribution adds support for Dropbox OAuth service. The settings
-DROPBOX_APP_ID and DROPBOX_API_SECRET must be defined with the values
-given by Dropbox application registration process.
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
+Dropbox OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/dropbox.html
 """
 from social.backends.oauth import BaseOAuth1
 

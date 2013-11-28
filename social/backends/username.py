@@ -1,3 +1,7 @@
+"""
+Legacy Username backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/username.html
+"""
 from social.backends.legacy import LegacyAuth
 
 

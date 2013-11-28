@@ -1,14 +1,6 @@
 """
-Bitbucket OAuth support.
-
-This adds support for Bitbucket OAuth service. An application must
-be registered first on Bitbucket and the settings BITBUCKET_CONSUMER_KEY
-and BITBUCKET_CONSUMER_SECRET must be defined with the corresponding
-values.
-
-By default username, email, token expiration time, first name and last name are
-stored in extra_data field, check OAuthBackend class for details on how to
-extend it.
+Bitbucket OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/bitbucket.html
 """
 from social.backends.oauth import BaseOAuth1
 

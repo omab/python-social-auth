@@ -1,14 +1,6 @@
 """
-settings.py should include the following:
-
-    ANGEL_CLIENT_ID = '...'
-    ANGEL_CLIENT_SECRET = '...'
-
-Optional scope to include 'email' and/or 'messages' separated by space:
-
-    ANGEL_AUTH_EXTRA_ARGUMENTS = {'scope': 'email messages'}
-
-More information on scope can be found at https://angel.co/api/oauth/faq
+Angel OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/angel.html
 """
 from social.backends.oauth import BaseOAuth2
 

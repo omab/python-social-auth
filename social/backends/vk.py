@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-VK.com (former Vkontakte) OpenAPI and OAuth 2.0 support.
-
-This backend adds support for VK.com OpenAPI, OAuth2 and OAuth2 for IFrame
-applications.
+VK.com OpenAPI, OAuth2 and Iframe application OAuth2 backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/vk.html
 """
 from time import time
 from hashlib import md5

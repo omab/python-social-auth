@@ -1,7 +1,6 @@
 """
-AOL OpenID support
-
-No extra configurations are needed to make this work.
+AOL OpenId backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/aol.html
 """
 from social.backends.open_id import OpenIdAuth
 

@@ -1,20 +1,6 @@
 """
-Odnoklassniki.ru OAuth2 and IFRAME application support
-If you are using OAuth2 authentication,
-    * Take a look to:
-        http://dev.odnoklassniki.ru/wiki/display/ok/The+OAuth+2.0+Protocol
-    * You need to register OAuth application here:
-        http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188
-elif you're building iframe application,
-    * Take a look to:
-        http://dev.odnoklassniki.ru/wiki/display/ok/
-                Odnoklassniki.ru+Third+Party+Platform
-    * You need to register your iframe application here:
-        http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=5668937
-    * You need to sign a public offer and do some bureaucracy if you want to be
-      listed in application registry
-Then setup your application according manual and use information from
-registration mail to set settings values.
+Odnoklassniki OAuth2 and Iframe Application backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/odnoklassnikiru.html
 """
 from hashlib import md5
 

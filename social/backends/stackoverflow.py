@@ -1,16 +1,6 @@
 """
-Stackoverflow OAuth support.
-
-This contribution adds support for Stackoverflow OAuth service. The settings
-SOCIAL_AUTH_STACKOVERFLOW_KEY, SOCIAL_AUTH_STACKOVERFLOW_SECRET and
-SOCIAL_AUTH_STACKOVERFLOW_API_KEY must be defined with the values given by
-Stackoverflow application registration process.
-
-Extended permissions are supported by defining SOCIAL_AUTH_STACKOVERFLOW_SCOPE
-setting, it must be a list of values to request.
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
+Stackoverflow OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/stackoverflow.html
 """
 from social.backends.oauth import BaseOAuth2
 

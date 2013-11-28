@@ -1,16 +1,6 @@
 """
-Facebook OAuth support.
-
-This contribution adds support for Facebook OAuth service. The settings
-SOCIAL_AUTH_FACEBOOK_KEY and SOCIAL_AUTH_FACEBOOK_SECRET must be defined with
-the values given by Facebook application registration process.
-
-Extended permissions are supported by defining
-SOCIAL_AUTH_FACEBOOK_EXTENDED_PERMISSIONS setting, it must be a list of values
-to request.
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
+Facebook OAuth2 and Canvas Application backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/facebook.html
 """
 import hmac
 import time

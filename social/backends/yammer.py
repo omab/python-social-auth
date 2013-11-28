@@ -1,5 +1,6 @@
 """
-Yammer OAuth2 support
+Yammer OAuth2 production and staging backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/yammer.html
 """
 from social.backends.oauth import BaseOAuth2
 
