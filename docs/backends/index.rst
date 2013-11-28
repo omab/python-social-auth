@@ -68,6 +68,7 @@ Social backends
    github
    google
    instagram
+   jawbone
    linkedin
    live
    mailru
