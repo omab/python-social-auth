@@ -71,6 +71,7 @@ Social backends
    jawbone
    linkedin
    live
+   livejournal
    mailru
    mixcloud
    odnoklassnikiru
