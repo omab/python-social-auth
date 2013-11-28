@@ -55,6 +55,7 @@ Social backends
    bitbucket
    box
    coinbase
+   dailymotion
    disqus
    douban
    dropbox
