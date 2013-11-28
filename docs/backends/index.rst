@@ -51,8 +51,8 @@ Social backends
    aol
    appsfuel
    behance
-   bitbucket
    belgium_eid
+   bitbucket
    box
    coinbase
    disqus
