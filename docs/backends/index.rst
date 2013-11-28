@@ -73,6 +73,7 @@ Social backends
    livejournal
    live
    mailru
+   mendeley
    mixcloud
    odnoklassnikiru
    persona
