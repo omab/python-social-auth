@@ -61,6 +61,7 @@ Social backends
    dropbox
    evernote
    facebook
+   fedora
    flickr
    github
    google
