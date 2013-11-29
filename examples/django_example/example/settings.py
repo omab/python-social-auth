@@ -162,7 +162,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.rdio.RdioOAuth2',
     'social.backends.readability.ReadabilityOAuth',
     'social.backends.reddit.RedditOAuth2',
-    'social.backends.runkeeper.RunKeeperOAuth2',    
+    'social.backends.runkeeper.RunKeeperOAuth2',
     'social.backends.skyrock.SkyrockOAuth',
     'social.backends.soundcloud.SoundcloudOAuth2',
     'social.backends.stackoverflow.StackoverflowOAuth2',
@@ -183,7 +183,6 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.yahoo.YahooOpenId',
     'social.backends.yammer.YammerOAuth2',
     'social.backends.yandex.YandexOAuth2',
-    
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
     'django.contrib.auth.backends.ModelBackend',
