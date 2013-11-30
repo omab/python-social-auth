@@ -1,5 +1,6 @@
 from functools import wraps
 
+from pyramid.threadlocal import get_current_registry
 from pyramid.httpexceptions import HTTPNotFound, HTTPForbidden
 
 from social.utils import setting_name, module_member
@@ -13,17 +14,16 @@ DEFAULTS = {
 }
 
 
-def get_helper(request, name):
-    return request.registry.settings.get(setting_name(name),
-                                         DEFAULTS.get(name, None))
+def get_helper(name):
+    settings = get_current_registry().settings
+    return settings.get(setting_name(name), DEFAULTS.get(name, None))
 
 
-def load_strategy(request, *args, **kwargs):
-    backends = get_helper(request, 'AUTHENTICATION_BACKENDS')
-    strategy = get_helper(request, 'STRATEGY')
-    storage = get_helper(request, 'STORAGE')
-    return get_strategy(backends, strategy, storage, request=request,
-                        *args, **kwargs)
+def load_strategy(*args, **kwargs):
+    backends = get_helper('AUTHENTICATION_BACKENDS')
+    strategy = get_helper('STRATEGY')
+    storage = get_helper('STORAGE')
+    return get_strategy(backends, strategy, storage, *args, **kwargs)
 
 
 def strategy(redirect_uri=None):
@@ -37,8 +37,10 @@ def strategy(redirect_uri=None):
             uri = redirect_uri
             if uri and not uri.startswith('/'):
                 uri = request.route_url(uri, backend=backend)
-            request.strategy = load_strategy(request, backend=backend,
-                                             redirect_uri=uri, *args, **kwargs)
+            request.strategy = load_strategy(
+                backend=backend, redirect_uri=uri, request=request,
+                *args, **kwargs
+            )
             return func(request, *args, **kwargs)
         return wrapper
     return decorator
@@ -59,9 +61,9 @@ def login_required(func):
 def backends(request, user):
     """Load Social Auth current user data to context under the key 'backends'.
     Will return the output of social.backends.utils.user_backends_data."""
-    storage = module_member(get_helper(request, 'STORAGE'))
+    storage = module_member(get_helper('STORAGE'))
     return {
         'backends': user_backends_data(
-            user, get_helper(request, 'AUTHENTICATION_BACKENDS'), storage
+            user, get_helper('AUTHENTICATION_BACKENDS'), storage
         )
     }
