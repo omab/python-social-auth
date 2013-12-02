@@ -10,6 +10,7 @@ import six
 from openid.association import Association as OpenIdAssociation
 
 from social.backends.utils import get_backend
+from social.strategies.utils import get_current_strategy
 
 
 CLEAN_USERNAME_REGEX = re.compile(r'[^\w.@+-_]+', re.UNICODE)
@@ -21,8 +22,16 @@ class UserMixin(object):
     uid = None
     extra_data = None
 
-    def get_backend(self, strategy):
-        return get_backend(strategy.backends, self.provider)
+    def get_backend(self, strategy=None):
+        strategy = strategy or get_current_strategy()
+        if strategy:
+            return get_backend(strategy.backends, self.provider)
+
+    def get_backend_instance(self, strategy=None):
+        strategy = strategy or get_current_strategy()
+        Backend = self.get_backend(strategy)
+        if Backend:
+            return Backend(strategy=strategy)
 
     @property
     def tokens(self):
