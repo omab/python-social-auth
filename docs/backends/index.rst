@@ -77,6 +77,7 @@ Social backends
    mixcloud
    odnoklassnikiru
    persona
+   pocket
    podio
    rdio
    readability

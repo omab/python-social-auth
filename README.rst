@@ -83,6 +83,7 @@ or current ones extended):
     * OpenId_
     * OpenSuse_ OpenId http://en.opensuse.org/openSUSE:Connect
     * Orkut_ OAuth1
+    * Pocket_ OAuth2
     * Podio_ OAuth2
     * Rdio_ OAuth1 and OAuth2
     * Readability_ OAuth1
@@ -223,6 +224,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
 .. _Orkut: http://www.orkut.com
+.. _Pocket: http://getpocket.com
 .. _Podio: https://podio.com
 .. _Shopify: http://shopify.com
 .. _Skyrock: https://skyrock.com
