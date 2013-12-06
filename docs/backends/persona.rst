@@ -12,7 +12,7 @@ POST to `python-social-auth`_::
     <script src="https://login.persona.org/include.js" type="text/javascript"></script>
 
     <!-- Define a form to send the POST data -->
-    <form method="post" action="/complete/persona">
+    <form method="post" action="/complete/persona/">
         <input type="hidden" name="assertion" value="" />
         <a rel="nofollow" id="persona" href="#">Mozilla Persona</a>
     </form>
