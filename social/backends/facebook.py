@@ -8,7 +8,7 @@ import json
 import base64
 import hashlib
 
-from social.utils import parse_qs
+from social.utils import parse_qs, constant_time_compare
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthException, AuthCanceled, AuthUnknownError
 
@@ -166,6 +166,6 @@ class FacebookAppOAuth2(FacebookOAuth2):
             expected_sig = hmac.new(secret, msg=payload,
                                     digestmod=hashlib.sha256).digest()
             # allow the signed_request to function for upto 1 day
-            if sig == expected_sig and \
+            if constant_time_compare(sig, expected_sig) and \
                data['issued_at'] > (time.time() - 86400):
                 return data
