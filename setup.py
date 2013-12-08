@@ -37,7 +37,7 @@ else:
 
 setup(name='python-social-auth',
       version=version,
-      author='Matías Aguirre',
+      author='Matias Aguirre',
       author_email='matiasaguirre@gmail.com',
       description='Python social authentication made simple.',
       license='BSD',
