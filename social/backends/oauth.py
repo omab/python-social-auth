@@ -87,13 +87,11 @@ class BaseOAuth1(OAuthAuth):
     OAUTH_TOKEN_PARAMETER_NAME = 'oauth_token'
     REDIRECT_URI_PARAMETER_NAME = 'redirect_uri'
     ACCESS_TOKEN_URL = ''
+    UNATHORIZED_TOKEN_SUFIX = 'unauthorized_token_name'
 
     def auth_url(self):
         """Return redirect url"""
-        token = self.unauthorized_token()
-        name = self.name + 'unauthorized_token_name'
-        tokens = self.strategy.session_get(name, []) + [token]
-        self.strategy.session_set(name, tokens)
+        token = self.set_unauthorized_token()
         return self.oauth_authorization_request(token)
 
     def process_error(self, data):
@@ -106,27 +104,7 @@ class BaseOAuth1(OAuthAuth):
         """Return user, might be logged in"""
         # Multiple unauthorized tokens are supported (see #521)
         self.process_error(self.data)
-        name = self.name + 'unauthorized_token_name'
-        token = None
-        unauthed_tokens = self.strategy.session_get(name, [])
-        if not unauthed_tokens:
-            raise AuthTokenError(self, 'Missing unauthorized token')
-        token_param_name = self.OAUTH_TOKEN_PARAMETER_NAME
-        data_token = self.data.get(token_param_name, 'no-token')
-        for unauthed_token in unauthed_tokens:
-            orig_unauthed_token = unauthed_token
-            if not isinstance(unauthed_token, dict):
-                unauthed_token = parse_qs(unauthed_token)
-            if unauthed_token.get(token_param_name) == data_token:
-                self.strategy.session_set(name, list(
-                    set(unauthed_tokens) -
-                    set([orig_unauthed_token]))
-                )
-                token = unauthed_token
-                break
-        else:
-            raise AuthTokenError(self, 'Incorrect tokens')
-
+        token = self.get_unauthorized_token()
         try:
             access_token = self.access_token(token)
         except HTTPError as err:
@@ -143,6 +121,38 @@ class BaseOAuth1(OAuthAuth):
             data['access_token'] = access_token
         kwargs.update({'response': data, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
+
+    def get_unauthorized_token(self):
+        name = self.name + self.UNATHORIZED_TOKEN_SUFIX
+        unauthed_tokens = self.strategy.session_get(name, [])
+        if not unauthed_tokens:
+            raise AuthTokenError(self, 'Missing unauthorized token')
+
+        data_token = self.data.get(self.OAUTH_TOKEN_PARAMETER_NAME)
+
+        if data_token is None:
+            raise AuthTokenError(self, 'Missing unauthorized token')
+
+        token = None
+        for utoken in unauthed_tokens:
+            orig_utoken = utoken
+            if not isinstance(utoken, dict):
+                utoken = parse_qs(utoken)
+            if utoken.get(self.OAUTH_TOKEN_PARAMETER_NAME) == data_token:
+                self.strategy.session_set(name, list(set(unauthed_tokens) -
+                                                     set([orig_utoken])))
+                token = utoken
+                break
+        else:
+            raise AuthTokenError(self, 'Incorrect tokens')
+        return token
+
+    def set_unauthorized_token(self):
+        token = self.unauthorized_token()
+        name = self.name + self.UNATHORIZED_TOKEN_SUFIX
+        tokens = self.strategy.session_get(name, []) + [token]
+        self.strategy.session_set(name, tokens)
+        return token
 
     def unauthorized_token(self):
         """Return request for unauthorized token (first stage)"""
