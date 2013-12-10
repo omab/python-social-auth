@@ -30,12 +30,11 @@ class YahooOAuth(BaseOAuth1):
         """Return user details from Yahoo Profile"""
         fname = response.get('givenName')
         lname = response.get('familyName')
-        if 'emails' in response:
-            email = response.get('emails')[0]['handle']
-        else:
-            email = ''
+        emails = [email for email in response.get('emails', [])
+                        if email.get('handle')]
+        emails.sort(key=lambda e: e.get('primary', False))
         return {'username': response.get('nickname'),
-                'email': email,
+                'email': emails[0]['handle'] if emails else '',
                 'fullname': '{0} {1}'.format(fname, lname),
                 'first_name': fname,
                 'last_name': lname}
