@@ -52,6 +52,19 @@ ones would look like this::
         'social.pipeline.user.user_details'
     )
 
+Note that this assumes the user is already authenticated, and thus the ``user`` key 
+in the dict is populated. In cases where the authentication is purely external, a
+pipeline method must be provided that populates the ``user`` key. Example::
+
+
+    SOCIAL_AUTH_PIPELINE = (
+        'myapp.pipeline.load_user',
+        'social.pipeline.social_auth.social_user',
+        'social.pipeline.social_auth.associate_user',
+        'social.pipeline.social_auth.load_extra_data',
+        'social.pipeline.user.user_details',
+    )
+
 Each pipeline function will receive the following parameters:
     * Current strategy (which gives access to current store, backend and request)
     * User ID given by authentication provider
