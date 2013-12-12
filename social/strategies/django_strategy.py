@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.db.models import Model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
+from django.shortcuts import redirect
 from django.template import TemplateDoesNotExist, RequestContext, loader
 from django.utils.datastructures import MergeDict
 from django.utils.translation import get_language
@@ -48,7 +49,7 @@ class DjangoStrategy(BaseStrategy):
             return self.request.get_host()
 
     def redirect(self, url):
-        return HttpResponseRedirect(url)
+        return redirect(url)
 
     def html(self, content):
         return HttpResponse(content, content_type='text/html;charset=UTF-8')
