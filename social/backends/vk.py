@@ -80,7 +80,7 @@ class VKOAuth2(BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     EXTRA_DATA = [
         ('id', 'id'),
-        ('expires', 'expires')
+        ('expires_in', 'expires')
     ]
 
     def get_user_details(self, response):
