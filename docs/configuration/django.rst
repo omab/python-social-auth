@@ -41,7 +41,7 @@ Sync database to create needed models::
     ./manage.py syncdb
 
 
-Autentication backends
+Authentication backends
 ----------------------
 
 Add desired authentication backends to Django's AUTHENTICATION_BACKENDS_
