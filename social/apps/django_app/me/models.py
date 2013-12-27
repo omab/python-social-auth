@@ -22,11 +22,26 @@ from social.storage.django_orm import DjangoUserMixin, \
 UNUSABLE_PASSWORD = '!'  # Borrowed from django 1.4
 
 
-USER_MODEL = module_member(
-    getattr(settings, setting_name('USER_MODEL'), None) or
-    getattr(settings, 'AUTH_USER_MODEL', None) or
-    'mongoengine.django.auth.User'
-)
+def _get_user_model():
+    """Get the User Document class user for MongoEngine authentication.
+
+    Use the model defined in SOCIAL_AUTH_USER_MODEL if defined, or
+    defaults to MongoEngine's configured user document class.
+
+    """
+
+    custom_model = getattr(settings, setting_name('USER_MODEL'), None)
+    if custom_model:
+        return module_member(custom_model)
+    try:
+        # Custom user model support with MongoEngine 0.8
+        from mongoengine.django.mongo_auth.models import get_user_document
+        return get_user_document()
+    except ImportError:
+        return module_member('mongoengine.django.auth.User')
+
+
+USER_MODEL = _get_user_model()
 
 
 class UserSocialAuth(Document, DjangoUserMixin):
