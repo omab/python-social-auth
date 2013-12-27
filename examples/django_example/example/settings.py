@@ -155,6 +155,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.mixcloud.MixcloudOAuth2',
     'social.backends.odnoklassniki.OdnoklassnikiOAuth2',
     'social.backends.open_id.OpenIdAuth',
+    'social.backends.openstreetmap.OpenStreetMapOAuth',
     'social.backends.orkut.OrkutOAuth',
     'social.backends.persona.PersonaAuth',
     'social.backends.podio.PodioOAuth2',
