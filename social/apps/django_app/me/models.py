@@ -23,16 +23,16 @@ UNUSABLE_PASSWORD = '!'  # Borrowed from django 1.4
 
 
 def _get_user_model():
-    """Get the User Document class user for MongoEngine authentication.
+    """
+    Get the User Document class user for MongoEngine authentication.
 
     Use the model defined in SOCIAL_AUTH_USER_MODEL if defined, or
     defaults to MongoEngine's configured user document class.
-
     """
-
     custom_model = getattr(settings, setting_name('USER_MODEL'), None)
     if custom_model:
         return module_member(custom_model)
+
     try:
         # Custom user model support with MongoEngine 0.8
         from mongoengine.django.mongo_auth.models import get_user_document
