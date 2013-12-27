@@ -76,6 +76,7 @@ Social backends
    mendeley
    mixcloud
    odnoklassnikiru
+   openstreetmap
    persona
    pocket
    podio

@@ -81,6 +81,7 @@ or current ones extended):
     * `Mozilla Persona`_
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
+    * OpenStreetMap_ OAuth1 http://wiki.openstreetmap.org/wiki/OAuth
     * OpenSuse_ OpenId http://en.opensuse.org/openSUSE:Connect
     * Orkut_ OAuth1
     * Pocket_ OAuth2
@@ -264,3 +265,4 @@ check `django-social-auth LICENSE`_ for details:
 .. _python-oauth2: https://github.com/simplegeo/python-oauth2
 .. _sqlalchemy: http://www.sqlalchemy.org/
 .. _pypi: http://pypi.python.org/pypi/python-social-auth/
+.. _OpenStreetMap: http://www.openstreetmap.org
