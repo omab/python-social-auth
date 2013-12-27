@@ -103,6 +103,14 @@ changes. Examples of the new import paths::
     )
 
 
+Session
+-------
+
+Django stores the last authentication backend used in the user session, this
+can cause import troubles when porting since the old import paths aren't valid
+anymore. Sadly so far the only solution is to clean the sessions content, that
+means to force the user to login again.
+
 .. _django-social-auth: https://github.com/omab/django-social-auth
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _example app: https://github.com/omab/python-social-auth/blob/master/examples/django_example/dj/urls.py#L7
