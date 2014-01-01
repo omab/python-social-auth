@@ -117,7 +117,8 @@ class BaseAuth(object):
         return allowed
 
     def get_user_id(self, details, response):
-        """Must return a unique ID from values returned on details"""
+        """Return a unique ID for the current user, by default from server
+        response."""
         return response.get(self.ID_KEY)
 
     def get_user_details(self, response):
