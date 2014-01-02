@@ -8,7 +8,7 @@ from social.backends.oauth import BaseOAuth1
 
 class TumblrOAuth(BaseOAuth1):
     name = 'tumblr'
-    ID_KEY = 'username'
+    ID_KEY = 'name'
     AUTHORIZATION_URL = 'http://www.tumblr.com/oauth/authorize'
     REQUEST_TOKEN_URL = 'http://www.tumblr.com/oauth/request_token'
     REQUEST_TOKEN_METHOD = 'POST'
