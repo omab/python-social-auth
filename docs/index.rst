@@ -27,6 +27,7 @@ Contents:
    exceptions
    backends/index
    tests
+   use_cases
    thanks
    copyright
 
