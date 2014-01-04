@@ -6,6 +6,38 @@ settings and methods overrides to retrieve user data from services API. Follow
 the details below.
 
 
+Common attributes
+-----------------
+
+First, lets check the common attributes for all backend types.
+
+``name = ''``
+    Any backend needs a name, usually the popular name of the service is used,
+    like ``facebook``, ``twitter``, etc. It must be unique, otherwise another
+    backend can take precedence if it's listed before in
+    ``AUTHENTICATION_BACKENDS`` setting.
+
+``ID_KEY = None``
+    Defines the attribute in the service response that identifies the user as
+    unique in the service, the value is later stored in the ``uid`` attribute
+    in the ``UserSocialAuth`` instance.
+
+``REQUIRES_EMAIL_VALIDATION = False``
+    Flags the backend to enforce email validation during the pipeline (if the
+    corresponding pipeline ``social.pipeline.mail.mail_validation`` was
+    enabled).
+
+``EXTRA_DATA = None``
+    During the auth process some basic user data is returned by the provider or
+    retrieved by ``user_data()`` method which usually is used to call some API
+    on the provider to retrieve it. This data will be stored under
+    ``UserSocialAuth.extra_data`` attribute, but to make it accessible under
+    some common names on different providers, this attribute defines a list of
+    tuples in the form ``(name, alias)`` where ``name`` is the key in the user
+    data (which should be a ``dict`` instance) and ``alias`` is the name to
+    store it on ``extra_data``.
+
+
 OAuth
 -----
 
@@ -45,16 +77,6 @@ Shared attributes
     list is joined used a separator, usually just a blank space, but differ
     from provider to provider, override the default value with this attribute
     if it differs.
-
-``EXTRA_DATA = None``
-    During the auth process some basic user data is returned by the provider or
-    retrieved by the ``user_data()`` method which calls some API on the
-    provider to retrieve it. This data will be stored under
-    ``UserSocialAuth.extra_data`` attribute, but to make it accessible under
-    some common names on different providers, this attribute defines a list of
-    tuples in the form ``(name, alias)`` where ``name`` is the key in the user
-    data (which should be a ``dict`` instance) and ``alias`` is the name to
-    store it on ``extra_data``.
 
 
 OAuth2

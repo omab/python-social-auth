@@ -15,10 +15,6 @@ from social.backends.base import BaseAuth
 class OAuthAuth(BaseAuth):
     """OAuth authentication backend base class.
 
-    EXTRA_DATA defines a set of name that will be stored in
-               extra_data field. It must be a list of tuples with
-               name and alias.
-
     Also settings will be inspected to get more values names that should be
     stored on extra_data field. Setting name is created from current backend
     name (all uppercase) plus _EXTRA_DATA.
@@ -28,32 +24,14 @@ class OAuthAuth(BaseAuth):
     SCOPE_PARAMETER_NAME = 'scope'
     DEFAULT_SCOPE = None
     SCOPE_SEPARATOR = ' '
-    EXTRA_DATA = None
     ID_KEY = 'id'
     ACCESS_TOKEN_METHOD = 'GET'
 
     def extra_data(self, user, uid, response, details=None):
         """Return access_token and extra defined names to store in
         extra_data field"""
-        data = {'access_token': response.get('access_token', '')}
-        names = (self.EXTRA_DATA or []) + \
-                self.setting('EXTRA_DATA', [])
-        for entry in names:
-            if not isinstance(entry, (list, tuple)):
-                entry = (entry,)
-            size = len(entry)
-            if size >= 1 and size <= 3:
-                if size == 3:
-                    name, alias, discard = entry
-                elif size == 2:
-                    (name, alias), discard = entry, False
-                elif size == 1:
-                    name = alias = entry[0]
-                    discard = False
-                value = response.get(name)
-                if discard and not value:
-                    continue
-                data[alias] = value
+        data = super(OAuthAuth, self).extra_data(user, uid, response, details)
+        data['access_token'] = response.get('access_token', '')
         return data
 
     def get_scope(self):

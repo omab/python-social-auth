@@ -9,6 +9,7 @@ class BaseAuth(object):
     name = ''  # provider name, it's stored in database
     supports_inactive_user = False  # Django auth
     ID_KEY = None
+    EXTRA_DATA = None
     REQUIRES_EMAIL_VALIDATION = False
 
     def __init__(self, strategy=None, redirect_uri=None, *args, **kwargs):
@@ -101,8 +102,25 @@ class BaseAuth(object):
         return out
 
     def extra_data(self, user, uid, response, details):
-        """Return default blank user extra data"""
-        return {}
+        """Return deafault extra data to store in extra_data field"""
+        data = {}
+        for entry in (self.EXTRA_DATA or []) + self.setting('EXTRA_DATA', []):
+            if not isinstance(entry, (list, tuple)):
+                entry = (entry,)
+            size = len(entry)
+            if size >= 1 and size <= 3:
+                if size == 3:
+                    name, alias, discard = entry
+                elif size == 2:
+                    (name, alias), discard = entry, False
+                elif size == 1:
+                    name = alias = entry[0]
+                    discard = False
+                value = response.get(name) or details.get(name)
+                if discard and not value:
+                    continue
+                data[alias] = value
+        return data
 
     def auth_allowed(self, response, details):
         """Return True if the user should be allowed to authenticate, by
