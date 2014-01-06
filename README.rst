@@ -143,6 +143,10 @@ Dependencies that **must** be met to use the application:
 - Several backends demand application registration on their corresponding
   sites and other dependencies like sqlalchemy_ on Flask and Webpy.
 
+- Other dependencies:
+    * six_
+    * requests_
+
 
 Documents
 =========
@@ -266,3 +270,5 @@ check `django-social-auth LICENSE`_ for details:
 .. _sqlalchemy: http://www.sqlalchemy.org/
 .. _pypi: http://pypi.python.org/pypi/python-social-auth/
 .. _OpenStreetMap: http://www.openstreetmap.org
+.. _six: http://pythonhosted.org/six/
+.. _requests: http://docs.python-requests.org/en/latest/
