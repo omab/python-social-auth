@@ -40,15 +40,9 @@ def do_complete(strategy, login, user=None, redirect_name='next',
                       strategy.setting('LOGIN_URL')
 
     partial = partial_pipeline_data(strategy, user, *args, **kwargs)
-    if partial is not None:
-        idx, backend, xargs, xkwargs = partial
-        if backend == strategy.backend.name:
-            user = strategy.continue_pipeline(pipeline_index=idx,
-                                              *xargs, **xkwargs)
-        else:
-            strategy.clean_partial_pipeline()
-            user = strategy.complete(user=user, request=strategy.request,
-                                     *args, **kwargs)
+    if partial:
+        xargs, xkwargs = partial
+        user = strategy.continue_pipeline(*xargs, **xkwargs)
     else:
         user = strategy.complete(user=user, request=strategy.request,
                                  *args, **kwargs)
@@ -98,21 +92,19 @@ def do_complete(strategy, login, user=None, redirect_name='next',
 def do_disconnect(strategy, user, association_id=None, redirect_name='next',
                   *args, **kwargs):
     partial = partial_pipeline_data(strategy, user, *args, **kwargs)
-    out = None
-    if partial is not None:
-        idx, backend, xargs, xkwargs = partial
-        if backend == strategy.backend.name:
-            out = strategy.disconnect(pipeline_index=idx, user=user,
-                                      association_id=association_id,
-                                      *args, **kwargs)
-    if out is None:
-        strategy.clean_partial_pipeline()
-        out = strategy.disconnect(user=user, association_id=association_id,
-                                  *args, **kwargs)
-    if not isinstance(out, dict):
-        return out
+    if partial:
+        xargs, xkwargs = partial
+        response = strategy.disconnect(association_id=association_id,
+                                       *xargs, **xkwargs)
     else:
-        data = strategy.request_data()
-        return strategy.redirect(data.get(redirect_name, '') or
-                                 strategy.setting('DISCONNECT_REDIRECT_URL') or
-                                 strategy.setting('LOGIN_REDIRECT_URL'))
+        response = strategy.disconnect(user=user,
+                                       association_id=association_id,
+                                       *args, **kwargs)
+
+    if isinstance(response, dict):
+        response = strategy.redirect(
+            strategy.request_data().get(redirect_name, '') or
+            strategy.setting('DISCONNECT_REDIRECT_URL') or
+            strategy.setting('LOGIN_REDIRECT_URL')
+        )
+    return response
