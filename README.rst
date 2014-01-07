@@ -59,7 +59,7 @@ or current ones extended):
     * Dailymotion_ OAuth2
     * Disqus_ OAuth2
     * Douban_ OAuth1 and OAuth2
-    * Dropbox_ OAuth1
+    * Dropbox_ OAuth1 and OAuth2
     * Evernote_ OAuth1
     * Exacttarget OAuth2
     * Facebook_ OAuth2 and OAuth2 for Applications
