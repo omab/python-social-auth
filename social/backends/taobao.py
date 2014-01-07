@@ -1,7 +1,3 @@
-import urllib2,urllib
-from urllib2 import Request, urlopen, HTTPError
-from urllib import urlencode
-from urlparse import urlsplit
 import json
 from social.exceptions import AuthFailed
 from social.backends.oauth import BaseOAuth2
