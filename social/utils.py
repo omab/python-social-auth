@@ -165,3 +165,20 @@ def constant_time_compare(val1, val2):
         for x, y in zip(val1, val2):
             result |= ord(x) ^ ord(y)
     return result == 0
+
+
+def is_url(value):
+    return value and \
+           (value.startswith('http://') or
+            value.startswith('https://') or
+            value.startswith('/'))
+
+
+def setting_url(strategy, *names):
+    for name in names:
+        if is_url(name):
+            return name
+        else:
+            value = strategy.setting(name)
+            if is_url(value):
+                return value

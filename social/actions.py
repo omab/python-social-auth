@@ -1,6 +1,6 @@
 from social.p3 import quote
 from social.utils import sanitize_redirect, user_is_authenticated, \
-                         user_is_active, partial_pipeline_data
+                         user_is_active, partial_pipeline_data, setting_url
 
 
 def do_auth(strategy, redirect_name='next'):
@@ -34,10 +34,6 @@ def do_complete(strategy, login, user=None, redirect_name='next',
 
     is_authenticated = user_is_authenticated(user)
     user = is_authenticated and user or None
-    default_redirect = strategy.setting('LOGIN_REDIRECT_URL')
-    url = default_redirect
-    login_error_url = strategy.setting('LOGIN_ERROR_URL') or \
-                      strategy.setting('LOGIN_URL')
 
     partial = partial_pipeline_data(strategy, user, *args, **kwargs)
     if partial:
@@ -52,11 +48,11 @@ def do_complete(strategy, login, user=None, redirect_name='next',
 
     if is_authenticated:
         if not user:
-            url = redirect_value or default_redirect
+            url = setting_url(strategy, redirect_value, 'LOGIN_REDIRECT_URL')
         else:
-            url = redirect_value or \
-                  strategy.setting('NEW_ASSOCIATION_REDIRECT_URL') or \
-                  default_redirect
+            url = setting_url(strategy, redirect_value,
+                              'NEW_ASSOCIATION_REDIRECT_URL',
+                              'LOGIN_REDIRECT_URL')
     elif user:
         if user_is_active(user):
             # catch is_new/social_user in case login() resets the instance
@@ -67,22 +63,24 @@ def do_complete(strategy, login, user=None, redirect_name='next',
             strategy.session_set('social_auth_last_login_backend',
                                  social_user.provider)
 
-            # Remove possible redirect URL from session, if this is a new
-            # account, send him to the new-users-page if defined.
-            new_user_redirect = strategy.setting('NEW_USER_REDIRECT_URL')
-            if new_user_redirect and is_new:
-                url = new_user_redirect
+            if is_new:
+                url = setting_url(strategy, redirect_value,
+                                  'NEW_USER_REDIRECT_URL',
+                                  'LOGIN_REDIRECT_URL')
             else:
-                url = redirect_value or default_redirect
+                url = setting_url(strategy, redirect_value,
+                                  'LOGIN_REDIRECT_URL')
         else:
-            url = strategy.setting('INACTIVE_USER_URL', login_error_url)
+            url = setting_url(strategy, 'INACTIVE_USER_URL', 'LOGIN_ERROR_URL',
+                              'LOGIN_URL')
     else:
-        url = login_error_url
+        url = setting_url(strategy, 'LOGIN_ERROR_URL', 'LOGIN_URL')
 
     if redirect_value and redirect_value != url:
         redirect_value = quote(redirect_value)
         url += ('?' in url and '&' or '?') + \
                '{0}={1}'.format(redirect_name, redirect_value)
+
     if strategy.setting('SANITIZE_REDIRECTS', True):
         url = sanitize_redirect(strategy.request_host(), url) or \
               strategy.setting('LOGIN_REDIRECT_URL')
