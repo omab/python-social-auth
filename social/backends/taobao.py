@@ -3,8 +3,10 @@ from social.backends.oauth import BaseOAuth2
 
 class TAOBAOAuth(BaseOAuth2):
     """Taobao OAuth authentication mechanism"""
+
     name = 'taobao'
     ID_KEY = 'taobao_user_id'
+    ACCESS_TOKEN_METHOD="POST"
     AUTHORIZATION_URL = 'https://oauth.taobao.com/authorize'
     ACCESS_TOKEN_URL = 'https://oauth.taobao.com/token'
 
