@@ -92,6 +92,7 @@ Social backends
    steam
    stocktwits
    stripe
+   taobao
    thisismyjam
    trello
    tripit
