@@ -14,9 +14,10 @@ class TAOBAOAuth(BaseOAuth2):
     """Taobao OAuth authentication mechanism"""
     name="taobao"
     ID_KEY='taobao_user_id'
+    ACCESS_TOKEN_METHOD="POST"
     AUTHORIZATION_URL = TAOBAO_OAUTH_AUTHORIZATION_URL
     ACCESS_TOKEN_URL = TAOBAO_OAUTH_ACCESS_TOKEN_URL
-   
+
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
         params = {'method':'taobao.user.get',
