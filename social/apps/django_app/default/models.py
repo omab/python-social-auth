@@ -65,7 +65,7 @@ class Nonce(models.Model, DjangoNonceMixin):
     """One use numbers"""
     server_url = models.CharField(max_length=NONCE_SERVER_URL_LENGTH)
     timestamp = models.IntegerField()
-    salt = models.CharField(max_length=40)
+    salt = models.CharField(max_length=65)
 
     class Meta:
         db_table = 'social_auth_nonce'

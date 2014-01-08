@@ -125,14 +125,21 @@ class PartialPipelineData(unittest.TestCase):
     class MockStrategy(object):
         request = None
 
+        def __init__(self, *args, **kwargs):
+            class MockBackend(object):
+                name = 'mock-backend'
+            self.backend = MockBackend()
+
         def session_get(self, name, default=None):
-            return object()
+            return {
+                'partial_pipeline': (0, 'mock-backend', [], {})
+            }.get(name)
 
         def partial_from_session(self, session):
-            return object(), object(), [], {}
+            return session
 
     def test_kwargs_included_in_result(self):
         kwargitem = ('foo', 'bar')
-        _, _, _, xkwargs = partial_pipeline_data(self.MockStrategy(), None,
-                                                 **dict([kwargitem]))
+        _, xkwargs = partial_pipeline_data(self.MockStrategy(), None,
+                                           *(), **dict([kwargitem]))
         xkwargs.should.have.key(kwargitem[0]).being.equal(kwargitem[1])

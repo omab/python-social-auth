@@ -128,11 +128,15 @@ def partial_pipeline_data(strategy, user, *args, **kwargs):
     partial = strategy.session_get('partial_pipeline', None)
     if partial:
         idx, backend, xargs, xkwargs = strategy.partial_from_session(partial)
-        kwargs = kwargs.copy()
-        kwargs.setdefault('user', user)
-        kwargs.setdefault('request', strategy.request)
-        kwargs.update(xkwargs)
-        return idx, backend, xargs, kwargs
+        if backend == strategy.backend.name:
+            kwargs = kwargs.copy()
+            kwargs.setdefault('pipeline_index', idx)
+            kwargs.setdefault('user', user)
+            kwargs.setdefault('request', strategy.request)
+            kwargs.update(xkwargs)
+            return xargs, kwargs
+        else:
+            strategy.clean_partial_pipeline()
 
 
 def build_absolute_uri(host_url, path=None):
@@ -161,3 +165,20 @@ def constant_time_compare(val1, val2):
         for x, y in zip(val1, val2):
             result |= ord(x) ^ ord(y)
     return result == 0
+
+
+def is_url(value):
+    return value and \
+           (value.startswith('http://') or
+            value.startswith('https://') or
+            value.startswith('/'))
+
+
+def setting_url(strategy, *names):
+    for name in names:
+        if is_url(name):
+            return name
+        else:
+            value = strategy.setting(name)
+            if is_url(value):
+                return value

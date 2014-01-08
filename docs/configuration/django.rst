@@ -42,7 +42,7 @@ Sync database to create needed models::
 
 
 Authentication backends
-----------------------
+-----------------------
 
 Add desired authentication backends to Django's AUTHENTICATION_BACKENDS_
 setting::
