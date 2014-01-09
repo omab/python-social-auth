@@ -186,7 +186,7 @@ class BaseStrategy(object):
 
     def absolute_uri(self, path=None):
         uri = self.build_absolute_uri(path)
-        if self.setting('ON_HTTPS'):
+        if uri and self.setting('REDIRECT_IS_HTTPS'):
             uri = uri.replace('http://', 'https://')
         return uri
 
