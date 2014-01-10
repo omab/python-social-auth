@@ -5,15 +5,14 @@ from flask.ext.script import Server, Manager, Shell
 
 sys.path.append('..')
 
-from flask_example import app, db, models, Base, engine
+from flask_example import app, db
 
 
 manager = Manager(app)
 manager.add_command('runserver', Server())
 manager.add_command('shell', Shell(make_context=lambda: {
     'app': app,
-    'db': db,
-    'models': models
+    'db': db
 }))
 
 
@@ -21,7 +20,8 @@ manager.add_command('shell', Shell(make_context=lambda: {
 def syncdb():
     from flask_example.models import user
     from social.apps.flask_app import models
-    Base.metadata.create_all(bind=engine)
+    db.drop_all()
+    db.create_all()
 
 if __name__ == '__main__':
     manager.run()
