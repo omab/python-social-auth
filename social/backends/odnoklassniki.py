@@ -88,8 +88,8 @@ class OdnoklassnikiApp(BaseAuth):
         return self.strategy.authenticate(*args, **kwargs)
 
     def get_auth_sig(self):
-        secret_key = self.setting('APP_SECRET')
-        hash_source = '{0:d}{1:s}{2:s}'.format(self.data['logged_user_id'],
+        secret_key = self.setting('SECRET')
+        hash_source = '{0:s}{1:s}{2:s}'.format(self.data['logged_user_id'],
                                                self.data['session_key'],
                                                secret_key)
         return md5(hash_source).hexdigest()
