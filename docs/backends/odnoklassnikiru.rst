@@ -35,9 +35,9 @@ If you want to authenticate users in your IFrame application,
 
 - fill out some settings::
 
-    SOCIAL_AUTH_ODNOKLASSNIKIAPP_KEY = ''
-    SOCIAL_AUTH_ODNOKLASSNIKIAPP_SECRET = ''
-    SOCIAL_AUTH_ODNOKLASSNIKIAPP_PUBLIC_NAME = ''
+    SOCIAL_AUTH_ODNOKLASSNIKI_APP_KEY = ''
+    SOCIAL_AUTH_ODNOKLASSNIKI_APP_SECRET = ''
+    SOCIAL_AUTH_ODNOKLASSNIKI_APP_PUBLIC_NAME = ''
 
 - add ``'social.backends.odnoklassniki.OdnoklassnikiApp'`` into your
   ``SOCIAL_AUTH_AUTHENTICATION_BACKENDS``
@@ -46,7 +46,7 @@ If you want to authenticate users in your IFrame application,
 
 You may also use::
 
-    SOCIAL_AUTH_ODNOKLASSNIKIAPP_EXTRA_USER_DATA_LIST
+    SOCIAL_AUTH_ODNOKLASSNIKI_APP_EXTRA_USER_DATA_LIST
 
 Defaults to empty tuple, for the list of available fields see `Documentation on user.getInfo`_
 
