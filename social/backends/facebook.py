@@ -102,7 +102,8 @@ class FacebookOAuth2(BaseOAuth2):
         return {'access_token': token}
 
     def process_revoke_token_response(self, response):
-        return response.code == 200 and response.content == 'true'
+        return super(FacebookOAuth2, self).process_revoke_token_response(response) \
+            and response.content == 'true'
 
 
 class FacebookAppOAuth2(FacebookOAuth2):

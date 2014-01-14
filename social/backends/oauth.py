@@ -26,6 +26,8 @@ class OAuthAuth(BaseAuth):
     SCOPE_SEPARATOR = ' '
     ID_KEY = 'id'
     ACCESS_TOKEN_METHOD = 'GET'
+    REVOKE_TOKEN_URL = None
+    REVOKE_TOKEN_METHOD = 'POST'
 
     def extra_data(self, user, uid, response, details=None):
         """Return access_token and extra defined names to store in
@@ -49,6 +51,29 @@ class OAuthAuth(BaseAuth):
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service. Implement in subclass"""
         return {}
+
+    def revoke_token_url(self, token, uid):
+        return self.REVOKE_TOKEN_URL
+
+    def revoke_token_params(self, token, uid):
+        return {}
+
+    def revoke_token_headers(self, token, uid):
+        return {}
+
+    def process_revoke_token_response(self, response):
+        return response.status_code == 200
+
+    def revoke_token(self, token, uid):
+        if self.REVOKE_TOKEN_URL:
+            url = self.revoke_token_url(token, uid)
+            params = self.revoke_token_params(token, uid)
+            headers = self.revoke_token_headers(token, uid)
+            data = urlencode(params) if self.REVOKE_TOKEN_METHOD != 'GET' \
+                                     else None
+            response = self.request(url, params=params, headers=headers,
+                                    data=data, method=self.REVOKE_TOKEN_METHOD)
+            return self.process_revoke_token_response(response)
 
 
 class BaseOAuth1(OAuthAuth):
@@ -202,8 +227,6 @@ class BaseOAuth2(OAuthAuth):
     ACCESS_TOKEN_URL = None
     REFRESH_TOKEN_URL = None
     REFRESH_TOKEN_METHOD = 'POST'
-    REVOKE_TOKEN_URL = None
-    REVOKE_TOKEN_METHOD = 'POST'
     RESPONSE_TYPE = 'code'
     REDIRECT_STATE = True
     STATE_PARAMETER = True
@@ -355,25 +378,3 @@ class BaseOAuth2(OAuthAuth):
         request = self.request(url, **request_args)
         return self.process_refresh_token_response(request, *args, **kwargs)
 
-    def revoke_token_url(self, token, uid):
-        return self.REVOKE_TOKEN_URL
-
-    def revoke_token_params(self, token, uid):
-        return {}
-
-    def revoke_token_headers(self, token, uid):
-        return {}
-
-    def process_revoke_token_response(self, response):
-        return response.status_code == 200
-
-    def revoke_token(self, token, uid):
-        if self.REVOKE_TOKEN_URL:
-            url = self.revoke_token_url(token, uid)
-            params = self.revoke_token_params(token, uid)
-            headers = self.revoke_token_headers(token, uid)
-            data = urlencode(params) if self.REVOKE_TOKEN_METHOD != 'GET' \
-                                     else None
-            response = self.request(url, params=params, headers=headers,
-                                    data=data, method=self.REVOKE_TOKEN_METHOD)
-            return self.process_revoke_token_response(response)
