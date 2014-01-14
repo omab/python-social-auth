@@ -75,25 +75,14 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
         ('id', 'user_id'),
         ('refresh_token', 'refresh_token', True),
         ('expires_in', 'expires'),
-        ('access_type', 'access_type', True)
+        ('access_type', 'access_type', True),
+        ('code', 'code')
     ]
 
-    def extra_data(self, user, uid, response, details):
-        data = super(GooglePlusAuth, self).extra_data(user, uid, response,
-                                                      details)
-        if 'refresh_token' in data and not data['refresh_token']:
-            data.pop('refresh_token')
-        return data
-
     def auth_complete_params(self, state=None):
-        client_id, client_secret = self.get_key_and_secret()
-        return {
-            'grant_type': 'authorization_code',  # request auth code
-            'code': self.data.get('code', ''),   # server response code
-            'client_id': client_id,
-            'client_secret': client_secret,
-            'redirect_uri': 'postmessage'
-        }
+        params = super(GooglePlusAuth, self).auth_complete_params(state)
+        params['redirect_uri'] = 'postmessage'
+        return params
 
     def auth_complete(self, *args, **kwargs):
         token = self.data.get('access_token')
