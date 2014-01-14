@@ -79,11 +79,9 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
         ('user_id', 'user_id'),
         ('refresh_token', 'refresh_token', True),
         ('expires_in', 'expires'),
-        ('access_type', 'access_type', True)
+        ('access_type', 'access_type', True),
+        ('code', 'code')
     ]
-
-    def extra_data(self, user, uid, response, details):
-        return {'code': response.get('code')}
 
     def auth_complete(self, *args, **kwargs):
         token = self.data.get('access_token')
