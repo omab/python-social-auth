@@ -9,7 +9,7 @@ class TwitterOAuth(BaseOAuth1):
     """Twitter OAuth authentication backend"""
     name = 'twitter'
     EXTRA_DATA = [('id', 'id')]
-    AUTHORIZATION_URL = 'http://api.twitter.com/oauth/authenticate'
+    AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authenticate'
     REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
     ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
 
