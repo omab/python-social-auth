@@ -10,7 +10,8 @@ import hashlib
 
 from social.utils import parse_qs, constant_time_compare
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthException, AuthCanceled, AuthUnknownError
+from social.exceptions import AuthException, AuthCanceled, AuthUnknownError, \
+                              AuthMissingParameter
 
 
 class FacebookOAuth2(BaseOAuth2):
@@ -51,6 +52,8 @@ class FacebookOAuth2(BaseOAuth2):
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         self.process_error(self.data)
+        if not self.data.get('code'):
+            raise AuthMissingParameter(self, 'code')
         state = self.validate_state()
         key, secret = self.get_key_and_secret()
         url = self.ACCESS_TOKEN_URL
