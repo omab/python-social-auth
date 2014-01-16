@@ -7,8 +7,10 @@ from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 class BaseLinkedinAuth(object):
     EXTRA_DATA = [('id', 'id'),
-                  ('first-name', 'first_name'),
-                  ('last-name', 'last_name')]
+                  ('first-name', 'first_name', True),
+                  ('last-name', 'last_name', True),
+                  ('firstName', 'first_name', True),
+                  ('lastName', 'last_name', True)]
     USER_DETAILS = 'https://api.linkedin.com/v1/people/~:({0})'
 
     def get_user_details(self, response):
