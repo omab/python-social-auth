@@ -1,5 +1,15 @@
-2014-01-15 v0.1.18
+2014-01-16 v0.1.19
 ==================
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Generate packages names dynamically
+
+
+2014-01-16 v0.1.18
+==================
+
+  * 2014-01-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Raise missing parameter error in facebook. Refs #153
 
   * 2014-01-15 harshiljain <jainharsh79@yahoo.com>
     AUTHORIZATION_URL changed to https
