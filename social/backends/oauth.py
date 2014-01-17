@@ -171,7 +171,7 @@ class BaseOAuth1(OAuthAuth):
                                             callback_uri=self.redirect_uri,
                                             decoding=decoding),
                                 method=self.REQUEST_TOKEN_METHOD)
-        return response.content
+        return response.content.decode(response.encoding)
 
     def oauth_authorization_request(self, token):
         """Generate OAuth request to authorize token."""
