@@ -129,12 +129,11 @@ def partial_pipeline_data(strategy, user, *args, **kwargs):
     if partial:
         idx, backend, xargs, xkwargs = strategy.partial_from_session(partial)
         if backend == strategy.backend.name:
-            kwargs = kwargs.copy()
             kwargs.setdefault('pipeline_index', idx)
             kwargs.setdefault('user', user)
             kwargs.setdefault('request', strategy.request)
-            kwargs.update(xkwargs)
-            return xargs, kwargs
+            xkwargs.update(kwargs)
+            return xargs, xkwargs
         else:
             strategy.clean_partial_pipeline()
 
