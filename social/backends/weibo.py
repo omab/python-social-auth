@@ -27,7 +27,11 @@ class WeiboOAuth2(BaseOAuth2):
         """Return user details from Weibo. API URL is:
         https://api.weibo.com/2/users/show.json/?uid=<UID>&access_token=<TOKEN>
         """
-        return {'username': response.get("name", ""),
+        if self.setting('DOMAIN_AS_USERNAME'):
+            username = response.get('domain', '')
+        else:
+            username = response.get('name', '')
+        return {'username': username,
                 'first_name': response.get('screen_name', '')}
 
     def user_data(self, access_token, *args, **kwargs):
