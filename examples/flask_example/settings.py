@@ -7,7 +7,7 @@ SECRET_KEY = 'random-secret-key'
 SESSION_COOKIE_NAME = 'psa_session'
 DEBUG = False
 from os.path import dirname, abspath
-SQLALCHEMY_DATABASE_URI = 'sqlite:////%s/test.sqlite' % dirname(abspath(__file__))
+SQLALCHEMY_DATABASE_URI = 'sqlite:////%s/test.db' % dirname(abspath(__file__))
 
 DEBUG_TB_INTERCEPT_REDIRECTS = False
 SESSION_PROTECTION = 'strong'
