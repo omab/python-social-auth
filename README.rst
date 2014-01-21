@@ -84,6 +84,7 @@ or current ones extended):
     * OpenStreetMap_ OAuth1 http://wiki.openstreetmap.org/wiki/OAuth
     * OpenSuse_ OpenId http://en.opensuse.org/openSUSE:Connect
     * Orkut_ OAuth1
+    * PixelPin_ OAuth2
     * Pocket_ OAuth2
     * Podio_ OAuth2
     * Rdio_ OAuth1 and OAuth2
@@ -274,3 +275,4 @@ check `django-social-auth LICENSE`_ for details:
 .. _OpenStreetMap: http://www.openstreetmap.org
 .. _six: http://pythonhosted.org/six/
 .. _requests: http://docs.python-requests.org/en/latest/
+.. _PixelPin: http://pixelpin.co.uk
