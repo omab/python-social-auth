@@ -78,6 +78,7 @@ Social backends
    odnoklassnikiru
    openstreetmap
    persona
+   pixelpin
    pocket
    podio
    rdio
