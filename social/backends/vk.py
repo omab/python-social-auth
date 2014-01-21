@@ -55,7 +55,7 @@ class VKontakteOpenAPI(BaseAuth):
         check_str = ''.join(item + '=' + cookie_dict[item]
                                 for item in ['expire', 'mid', 'secret', 'sid'])
 
-        hash = md5(check_str + secret).hexdigest()
+        hash = md5((check_str + secret).encode('utf-8')).hexdigest()
 
         if hash != cookie_dict['sig'] or int(cookie_dict['expire']) < time():
             raise ValueError('VK.com authentication failed: invalid hash')
@@ -144,7 +144,7 @@ class VKAppOAuth2(VKOAuth2):
         if auth_key:
             check_key = md5('_'.join([key,
                                       self.data.get('viewer_id'),
-                                      secret])).hexdigest()
+                                      secret]).encode('utf-8')).hexdigest()
             if check_key != auth_key:
                 raise ValueError('VK.com authentication failed: invalid '
                                  'auth key')
@@ -192,7 +192,9 @@ def vk_api(backend, method, data):
         data['format'] = 'json'
         url = 'http://api.vk.com/api.php'
         param_list = sorted(list(item + '=' + data[item] for item in data))
-        data['sig'] = md5(''.join(param_list) + secret).hexdigest()
+        data['sig'] = md5(
+            (''.join(param_list) + secret).encode('utf-8')
+        ).hexdigest()
     else:
         url = 'https://api.vk.com/method/' + method
 

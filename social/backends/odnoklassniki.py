@@ -92,7 +92,7 @@ class OdnoklassnikiApp(BaseAuth):
         hash_source = '{0:s}{1:s}{2:s}'.format(self.data['logged_user_id'],
                                                self.data['session_key'],
                                                secret_key)
-        return md5(hash_source).hexdigest()
+        return md5(hash_source.encode('utf-8')).hexdigest()
 
     def get_response(self):
         fields = ('logged_user_id', 'api_server', 'application_key',
@@ -115,12 +115,14 @@ def odnoklassniki_oauth_sig(data, client_secret):
         http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=12878032,
     search for "little bit different way"
     """
-    suffix = md5('{0:s}{1:s}'.format(data['access_token'],
-                                     client_secret)).hexdigest()
+    suffix = md5(
+        '{0:s}{1:s}'.format(data['access_token'],
+                            client_secret).encode('utf-8')
+    ).hexdigest()
     check_list = sorted(['{0:s}={1:s}'.format(key, value)
                             for key, value in data.items()
                                 if key != 'access_token'])
-    return md5(''.join(check_list) + suffix).hexdigest()
+    return md5((''.join(check_list) + suffix).encode('utf-8')).hexdigest()
 
 
 def odnoklassniki_iframe_sig(data, client_secret_or_session_secret):
@@ -133,8 +135,9 @@ def odnoklassniki_iframe_sig(data, client_secret_or_session_secret):
     """
     param_list = sorted(['{0:s}={1:s}'.format(key, value)
                             for key, value in data.items()])
-    return md5(''.join(param_list) +
-               client_secret_or_session_secret).hexdigest()
+    return md5(
+        (''.join(param_list) + client_secret_or_session_secret).encode('utf-8')
+    ).hexdigest()
 
 
 def odnoklassniki_api(backend, data, api_url, public_key, client_secret,
