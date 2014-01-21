@@ -1,14 +1,13 @@
 from social.backends.oauth import BaseOAuth2
-import urllib
-import json
+
 
 class PixelPinOAuth2(BaseOAuth2):
     """PixelPin OAuth authentication backend"""
     name = 'pixelpin-oauth2'
+    ID_KEY = 'id'
     AUTHORIZATION_URL = 'https://login.pixelpin.co.uk/OAuth2/Flogin.aspx'
     ACCESS_TOKEN_URL = 'https://ws3.pixelpin.co.uk/index.php/api/token'
     ACCESS_TOKEN_METHOD = 'POST'
-    ID_KEY = 'id'
     REQUIRES_EMAIL_VALIDATION = False
     EXTRA_DATA = [
         ('id', 'id'),
