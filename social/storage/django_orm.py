@@ -67,7 +67,7 @@ class DjangoUserMixin(UserMixin):
 
     @classmethod
     def get_users_by_email(cls, email):
-        return cls.user_model().objects.filter(email_iexact=email)
+        return cls.user_model().objects.filter(email__iexact=email)
 
     @classmethod
     def get_social_auth(cls, provider, uid):
