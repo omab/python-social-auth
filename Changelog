@@ -1,5 +1,63 @@
+2014-02-05 v0.1.21
+==================
+
+  * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix iexact field lookup. Refs #179
+
+  * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Restore BackendWrapper to avoid session issues (this backend is
+    deprecated). Refs #128
+
+  * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Case insensitive query on django. Closes #179
+
+  * 2014-02-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Exclude sure broken version 1.2.4
+
+  * 2014-02-01 Michisu, Toshikazu <michisu@marici.co.jp>
+    Add version parameter to foursquare backend
+
+  * 2014-01-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Use response encoding only when available. Refs #173
+
+  * 2014-01-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Add pixelpin to backends index
+
+  * 2014-01-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Ensure encode() before md5 call for python3. Closes #168
+
+  * 2014-01-21 lukos <lukiebriner@gmail.com>
+    Added PixelPin to list of providers
+
+  * 2014-01-21 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8, file formats and line lengths fixes
+
+  * 2014-01-21 luke <luke@pixelpin.co.uk>
+    Add documentation for PixelPin
+
+  * 2014-01-21 luke <luke@pixelpin.co.uk>
+    Added new PixelPin provider.
+
+  * 2014-01-20 Matías Aguirre <matiasaguirre@gmail.com>
+    Use same DB name as other examples
+
+  * 2014-01-20 Yasin Aktimur <chardone@windowslive.com>
+    Serializer changed.
+
+  * 2014-01-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Support Weibo domain as username by setting. Closes #164
+
+  * 2014-01-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Snippet to get people from circles on Google+
+
+  * 2014-01-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Override get_user_id on tumblr backend. Refs #136
+
 2014-01-17 v0.1.20
 ==================
+
+  * 2014-01-17 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.20
 
   * 2014-01-17 Matías Aguirre <matiasaguirre@gmail.com>
     Decode bytes on Python3 otherwise it breaks session saving on Django. Refs
@@ -397,6 +455,12 @@
 
   * 2013-11-06 Matías Aguirre <matiasaguirre@gmail.com>
     Ensure IDs to openid association removal. Closes #76
+
+  * 2013-11-05 Branden Rolston <branden@disqus.com>
+    Update partial from session with newer kwargs.
+
+  * 2013-11-05 Branden Rolston <branden@disqus.com>
+    Use mock.
 
   * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
     Link to tornado docs
