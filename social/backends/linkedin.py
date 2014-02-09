@@ -83,3 +83,11 @@ class LinkedinOAuth2(BaseLinkedinAuth, BaseOAuth2):
                     'format': 'json'},
             headers=self.user_data_headers()
         )
+
+    def request_access_token(self, *args, **kwargs):
+        # LinkedIn expects a POST request with querystring parameters, despite
+        # the spec http://tools.ietf.org/html/rfc6749#section-4.1.3
+        kwargs['params'] = kwargs.pop('data')
+        return super(LinkedinOAuth2, self).request_access_token(
+            *args, **kwargs
+        )
