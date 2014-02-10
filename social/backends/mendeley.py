@@ -48,7 +48,7 @@ class MendeleyOAuth(MendeleyMixin, BaseOAuth1):
 
 class MendeleyOAuth2(MendeleyMixin, BaseOAuth2):
     name = 'mendeley-oauth2'
-    AUTHORIZATION_URL = 'http://api-oauth2.mendeley.com/oauth/authorize'
+    AUTHORIZATION_URL = 'https://api-oauth2.mendeley.com/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://api-oauth2.mendeley.com/oauth/token'
     ACCESS_TOKEN_METHOD = 'POST'
     DEFAULT_SCOPE = ['all']
@@ -59,6 +59,6 @@ class MendeleyOAuth2(MendeleyMixin, BaseOAuth2):
     def get_user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         return self.get_json(
-            'http://api-oauth2.mendeley.com/oapi/profiles/info/me/',
+            'https://api-oauth2.mendeley.com/oapi/profiles/info/me/',
             headers={'Authorization': 'Bearer {0}'.format(access_token)}
         )
