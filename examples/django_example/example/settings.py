@@ -152,6 +152,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.livejournal.LiveJournalOpenId',
     'social.backends.mailru.MailruOAuth2',
     'social.backends.mendeley.MendeleyOAuth',
+    'social.backends.mendeley.MendeleyOAuth2',
     'social.backends.mixcloud.MixcloudOAuth2',
     'social.backends.odnoklassniki.OdnoklassnikiOAuth2',
     'social.backends.open_id.OpenIdAuth',
