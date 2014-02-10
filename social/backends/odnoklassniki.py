@@ -84,7 +84,7 @@ class OdnoklassnikiApp(BaseAuth):
             details['extra_data_list'] = fields + auth_data_fields
             kwargs.update({'backend': self, 'response': details})
         else:
-            raise AuthFailed('Cannot get user details: API error')
+            raise AuthFailed(self, 'Cannot get user details: API error')
         return self.strategy.authenticate(*args, **kwargs)
 
     def get_auth_sig(self):
