@@ -108,6 +108,7 @@ let me know and I'll update the list):
   * spstpl_
   * bluszcz_
   * vbsteven_
+  * sbassi_
 
 
 .. _python-social-auth: https:https://github.com/https://github.com/github.comhttps://github.com/omabhttps://github.com/python-social-auth
@@ -211,3 +212,4 @@ let me know and I'll update the list):
 .. _spstpl: https://github.com/spstpl
 .. _bluszcz: https://github.com/bluszcz
 .. _vbsteven: https://github.com/vbsteven
+.. _sbassi: https://github.com/sbassi
