@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<a href="/login/google-oauth2">Google OAuth2</a> <br />
+<a href="/login/google-oauth">Google OAuth</a> <br />
+<a href="/login/google">Google OpenId</a> <br />
+<a href="/login/twitter">Twitter OAuth</a> <br />
+<a href="/login/yahoo">Yahoo OpenId</a> <br />
+<a href="/login/yahoo-oauth">Yahoo OAuth</a> <br />
+<a href="/login/stripe">Stripe OAuth2</a> <br />
+<a href="/login/facebook">Facebook OAuth2</a> <br />
+<a href="/login/facebook-app">Facebook App</a> <br />
+<a href="/login/angel">Angel OAuth2</a> <br />
+<a href="/login/behance">Behance OAuth2</a> <br />
+<a href="/login/bitbucket">Bitbucket OAuth</a> <br />
+<a href="/login/box">Box OAuth2</a> <br />
+<a href="/login/linkedin">LinkedIn OAuth</a> <br />
+<a href="/login/github">Github OAuth2</a> <br />
+<a href="/login/foursquare">Foursquare OAuth2</a> <br />
+<a href="/login/instagram">Instagram OAuth2</a> <br />
+<a href="/login/live">Live OAuth2</a> <br />
+<a href="/login/vk-oauth2">VK.com OAuth2</a> <br />
+<a href="/login/dailymotion">Dailymotion OAuth2</a> <br />
+<a href="/login/disqus">Disqus OAuth2</a> <br />
+<a href="/login/dropbox">Dropbox OAuth</a> <br />
+<a href="/login/evernote-sandbox">Evernote OAuth (sandbox mode)</a> <br />
+<a href="/login/fitbit">Fitbit OAuth</a> <br />
+<a href="/login/flickr">Flickr OAuth</a> <br />
+<a href="/login/soundcloud">Soundcloud OAuth2</a> <br />
+<a href="/login/thisismyjam">ThisIsMyJam OAuth1</a> <br />
+<a href="/login/stocktwits">Stocktwits OAuth2</a> <br />
+<a href="/login/tripit">Tripit OAuth</a> <br />
+<a href="/login/twilio">Twilio</a> <br />
+<a href="/login/xing">Xing OAuth</a> <br />
+<a href="/login/yandex-oauth2">Yandex OAuth2</a> <br />
+<a href="/login/podio">Podio OAuth2</a> <br />
+
+<form action="/login/openid" method="post">
+  <div>
+    <label for="openid_identifier">OpenId provider</label>
+    <input id="openid_identifier" type="text" value="" name="openid_identifier" />
+    <input type="submit" value="Login" />
+  </div>
+</form>
+
+<form action="/login/livejournal" method="post">
+  <div>
+    <label for="openid_lj_identifier">LiveJournal ID</label>
+    <input id="openid_lj_identifier" type="text" value="" name="openid_lj_user" />
+    <input type="submit" value="Login" />
+  </div>
+</form>
+
+<form method="post" action="/complete/persona">
+  <input type="hidden" name="assertion" value="" />
+  <a rel="nofollow" id="persona" href="#">Persona</a>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
+<script src="https://login.persona.org/include.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function () {
+    $('#persona').on('click', function (e) {
+        e.preventDefault();
+        var self = $(this);
+
+        navigator.id.get(function (assertion) {
+            if (assertion) {
+                self.parent('form')
+                        .find('input[type=hidden]')
+                        .attr('value', assertion)
+                        .end()
+                    .submit();
+            } else {
+                alert('Some error occurred');
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

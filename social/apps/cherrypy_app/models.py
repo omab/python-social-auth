@@ -16,17 +16,18 @@ from social.apps.flask_app.fields import JSONType
 
 SocialBase = declarative_base()
 
+DB_SESSION_ATTR = cherrypy.config.get(setting_name('DB_SESSION_ATTR'), 'db')
 UID_LENGTH = cherrypy.config.get(setting_name('UID_LENGTH'), 255)
 User = module_member(cherrypy.config[setting_name('USER_MODEL')])
 
 
-class CherryPySocialBase(SocialBase):
+class CherryPySocialBase(object):
     @classmethod
     def _session(cls):
-        return cherrypy.request.app.config['db_session']
+        return getattr(cherrypy.request, DB_SESSION_ATTR)
 
 
-class UserSocialAuth(SQLAlchemyUserMixin, CherryPySocialBase):
+class UserSocialAuth(CherryPySocialBase, SQLAlchemyUserMixin, SocialBase):
     """Social Auth association model"""
     __tablename__ = 'social_auth_usersocialauth'
     __table_args__ = (UniqueConstraint('provider', 'uid'),)
@@ -47,7 +48,7 @@ class UserSocialAuth(SQLAlchemyUserMixin, CherryPySocialBase):
         return User
 
 
-class Nonce(SQLAlchemyNonceMixin, CherryPySocialBase):
+class Nonce(CherryPySocialBase, SQLAlchemyNonceMixin, SocialBase):
     """One use numbers"""
     __tablename__ = 'social_auth_nonce'
     __table_args__ = (UniqueConstraint('server_url', 'timestamp', 'salt'),)
@@ -57,7 +58,7 @@ class Nonce(SQLAlchemyNonceMixin, CherryPySocialBase):
     salt = Column(String(40))
 
 
-class Association(SQLAlchemyAssociationMixin, CherryPySocialBase):
+class Association(CherryPySocialBase, SQLAlchemyAssociationMixin, SocialBase):
     """OpenId account association"""
     __tablename__ = 'social_auth_association'
     __table_args__ = (UniqueConstraint('server_url', 'handle'),)

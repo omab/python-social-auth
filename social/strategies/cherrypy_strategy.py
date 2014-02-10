@@ -7,7 +7,7 @@ from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 class CherryPyJinja2TemplateStrategy(BaseTemplateStrategy):
     def __init__(self, strategy):
         self.strategy = strategy
-        self.env = self.strategy.get_setting('jinja2env')
+        self.env = cherrypy.tools.jinja2env
 
     def render_template(self, tpl, context):
         return self.env.get_template(tpl).render(context)
@@ -16,13 +16,13 @@ class CherryPyJinja2TemplateStrategy(BaseTemplateStrategy):
         return self.env.from_string(html).render(context)
 
 
-class CherryPyStratety(BaseStrategy):
+class CherryPyStrategy(BaseStrategy):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('tpl', CherryPyJinja2TemplateStrategy)
-        return super(CherryPyStratety, self).__init__(*args, **kwargs)
+        return super(CherryPyStrategy, self).__init__(*args, **kwargs)
 
     def get_setting(self, name):
-        return cherrypy.request.app.config[name]
+        return cherrypy.config[name]
 
     def request_data(self, merge=True):
         if merge:
@@ -37,7 +37,7 @@ class CherryPyStratety(BaseStrategy):
         return cherrypy.request.base
 
     def redirect(self, url):
-        return cherrypy.HTTPRedirect(url)
+        raise cherrypy.HTTPRedirect(url)
 
     def html(self, content):
         return content

@@ -4,6 +4,7 @@ from functools import wraps
 
 from social.utils import setting_name, module_member
 from social.strategies.utils import get_strategy
+from social.backends.utils import user_backends_data
 
 
 DEFAULTS = {
@@ -13,8 +14,7 @@ DEFAULTS = {
 
 
 def get_helper(name, do_import=False):
-    config = cherrypy.request.app.config.get(setting_name(name),
-                                             DEFAULTS.get(name, None))
+    config = cherrypy.config.get(setting_name(name), DEFAULTS.get(name, None))
     return do_import and module_member(config) or config
 
 
@@ -39,3 +39,10 @@ def strategy(redirect_uri=None):
                 return func(self, *args, **kwargs)
         return wrapper
     return decorator
+
+
+def backends(user):
+    """Load Social Auth current user data to context under the key 'backends'.
+    Will return the output of social.backends.utils.user_backends_data."""
+    return user_backends_data(user, get_helper('AUTHENTICATION_BACKENDS'),
+                              get_helper('STORAGE', do_import=True))
