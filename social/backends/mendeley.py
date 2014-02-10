@@ -2,14 +2,10 @@
 Mendeley OAuth1 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/mendeley.html
 """
-from social.backends.oauth import BaseOAuth1
+from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
-class MendeleyOAuth(BaseOAuth1):
-    name = 'mendeley'
-    AUTHORIZATION_URL = 'http://api.mendeley.com/oauth/authorize/'
-    REQUEST_TOKEN_URL = 'http://api.mendeley.com/oauth/request_token/'
-    ACCESS_TOKEN_URL = 'http://api.mendeley.com/oauth/access_token/'
+class MendeleyMixin(object):
     SCOPE_SEPARATOR = '+'
     EXTRA_DATA = [('profile_id', 'profile_id'),
                   ('name', 'name'),
@@ -29,9 +25,40 @@ class MendeleyOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        values = self.get_json(
+        values = self.get_user_data(access_token)
+        values.update(values['main'])
+        return values
+
+    def get_user_data(self, access_token):
+        raise NotImplementedError('Implement in subclass')
+
+
+class MendeleyOAuth(BaseOAuth1, MendeleyMixin):
+    name = 'mendeley'
+    AUTHORIZATION_URL = 'http://api.mendeley.com/oauth/authorize/'
+    REQUEST_TOKEN_URL = 'http://api.mendeley.com/oauth/request_token/'
+    ACCESS_TOKEN_URL = 'http://api.mendeley.com/oauth/access_token/'
+
+    def get_user_data(self, access_token):
+        return self.get_json(
             'http://api.mendeley.com/oapi/profiles/info/me/',
             auth=self.oauth_auth(access_token)
         )
-        values.update(values['main'])
-        return values
+
+
+class MendeleyOAuth2(BaseOAuth2, MendeleyMixin):
+    name = 'mendeley-oauth2'
+    AUTHORIZATION_URL = 'http://api-oauth2.mendeley.com/oauth/authorize'
+    ACCESS_TOKEN_URL = 'https://api-oauth2.mendeley.com/oauth/token'
+    ACCESS_TOKEN_METHOD = 'POST'
+    DEFAULT_SCOPE = ['all']
+    EXTRA_DATA = MendeleyMixin.EXTRA_DATA + [
+        ('refresh_token', 'refresh_token')
+    ]
+
+    def get_user_data(self, access_token, *args, **kwargs):
+        """Loads user data from service"""
+        return self.get_json(
+            'http://api-oauth2.mendeley.com/oapi/profiles/info/me/',
+            headers={'Authorization': 'Bearer {0}'.format(access_token)}
+        )
