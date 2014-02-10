@@ -1,6 +1,7 @@
-from requests import request
+from requests import request, ConnectionError
 
 from social.utils import module_member, parse_qs
+from social.exceptions import AuthFailed
 
 
 class BaseAuth(object):
@@ -183,7 +184,10 @@ class BaseAuth(object):
     def request(self, url, method='GET', *args, **kwargs):
         kwargs.setdefault('timeout', self.setting('REQUESTS_TIMEOUT') or
                                      self.setting('URLOPEN_TIMEOUT'))
-        response = request(method, url, *args, **kwargs)
+        try:
+            response = request(method, url, *args, **kwargs)
+        except ConnectionError as err:
+            raise AuthFailed(self, str(err))
         response.raise_for_status()
         return response
 
