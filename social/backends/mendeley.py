@@ -33,7 +33,7 @@ class MendeleyMixin(object):
         raise NotImplementedError('Implement in subclass')
 
 
-class MendeleyOAuth(BaseOAuth1, MendeleyMixin):
+class MendeleyOAuth(MendeleyMixin, BaseOAuth1):
     name = 'mendeley'
     AUTHORIZATION_URL = 'http://api.mendeley.com/oauth/authorize/'
     REQUEST_TOKEN_URL = 'http://api.mendeley.com/oauth/request_token/'
@@ -46,7 +46,7 @@ class MendeleyOAuth(BaseOAuth1, MendeleyMixin):
         )
 
 
-class MendeleyOAuth2(BaseOAuth2, MendeleyMixin):
+class MendeleyOAuth2(MendeleyMixin, BaseOAuth2):
     name = 'mendeley-oauth2'
     AUTHORIZATION_URL = 'http://api-oauth2.mendeley.com/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://api-oauth2.mendeley.com/oauth/token'
