@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+<p>You are logged in as {{ user.username }}!</p>
+
+<p>Associated:</p>
+<ul>
+  {% for assoc in backends.associated %}
+    <li>
+      {{ assoc.provider }} (<a href="{% url 'social:disconnect_individual' assoc.provider assoc.str_id %}" class="disconnect">Disconnect</a>)
+    </li>
+  {% endfor %}
+</ul>
+
+<p>Associate:</p>
+<ul>
+  {% for name in backends.not_associated %}
+    <li>
+      <a href="{% url 'social:begin' name %}">{{ name }}</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

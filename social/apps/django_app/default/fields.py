@@ -11,13 +11,14 @@ except ImportError:
     from django.utils.encoding import smart_text
 
 
-class BaseJSONField(models.TextField):
+class JSONField(six.with_metaclass(models.SubfieldBase, models.TextField)):
     """Simple JSON field that stores python structures as JSON strings
     on database.
     """
+
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('default', '{}')
-        super(BaseJSONField, self).__init__(*args, **kwargs)
+        super(JSONField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
         """
@@ -31,6 +32,10 @@ class BaseJSONField(models.TextField):
             value = six.text_type(value, 'utf-8')
         if isinstance(value, six.string_types):
             try:
+                # with django 1.6 i have '"{}"' as default value here
+                if value[0] == value[-1] == '"':
+                    value = value[1:-1]
+
                 return json.loads(value)
             except Exception as err:
                 raise ValidationError(str(err))
@@ -61,9 +66,6 @@ class BaseJSONField(models.TextField):
     def value_from_object(self, obj):
         """Return value dumped to string."""
         return self.get_prep_value(self._get_val_from_obj(obj))
-
-
-JSONField = models.SubfieldBase('JSONField', (BaseJSONField,), {})
 
 
 try:

@@ -2,15 +2,15 @@
 import base64
 import six
 
-# from sqlalchemy.orm import Query
 from sqlalchemy.exc import IntegrityError
 
-from social.exceptions import NotAllowedToDisconnect
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
-                                BaseStorage
+                                CodeMixin, BaseStorage
 
 
 class SQLAlchemyMixin(object):
+    COMMIT_SESSION = True
+
     @classmethod
     def _session(cls):
         raise NotImplementedError('Implement in subclass')
@@ -26,7 +26,8 @@ class SQLAlchemyMixin(object):
     @classmethod
     def _save_instance(cls, instance):
         cls._session().add(instance)
-        cls._session().commit()
+        if cls.COMMIT_SESSION:
+            cls._session().commit()
         return instance
 
 
@@ -48,49 +49,44 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
             qs = cls._query().filter(cls.provider != backend_name)
         qs = qs.filter(cls.user == user)
 
-        if hasattr(user, 'has_usable_password'):
-            # TODO
+        if hasattr(user, 'has_usable_password'):  # TODO
             valid_password = user.has_usable_password()
         else:
             valid_password = True
         return valid_password or qs.count() > 0
 
     @classmethod
-    def disconnect(cls, name, user, association_id=None):
-        if cls.allowed_to_disconnect(user, name, association_id):
-            qs = cls.get_social_auth_for_user(user)
-            if association_id:
-                qs = qs.filter_by(id=association_id)
-            else:
-                qs = qs.filter_by(provider=name)
-            qs.delete()
-        else:
-            raise NotAllowedToDisconnect()
+    def disconnect(cls, entry):
+        cls._session().delete(entry)
+        cls._session().commit()
 
     @classmethod
     def user_query(cls):
         return cls._session().query(cls.user_model())
 
     @classmethod
-    def user_exists(cls, username):
+    def user_exists(cls, *args, **kwargs):
         """
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.
         """
-        return cls.user_query().filter_by(username=username).count() > 0
+        return cls.user_query().filter_by(*args, **kwargs).count() > 0
 
     @classmethod
     def get_username(cls, user):
         return getattr(user, 'username', None)
 
     @classmethod
-    def create_user(cls, username, email=None):
-        return cls._new_instance(cls.user_model(), username=username,
-                                email=email)
+    def create_user(cls, *args, **kwargs):
+        return cls._new_instance(cls.user_model(), *args, **kwargs)
 
     @classmethod
     def get_user(cls, pk):
         return cls.user_query().get(pk)
+
+    @classmethod
+    def get_users_by_email(cls, email):
+        return cls.user_query().filter_by(email=email)
 
     @classmethod
     def get_social_auth(cls, provider, uid):
@@ -103,8 +99,13 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
             return None
 
     @classmethod
-    def get_social_auth_for_user(cls, user):
-        return cls._query().filter_by(user_id=user.id)
+    def get_social_auth_for_user(cls, user, provider=None, id=None):
+        qs = cls._query().filter_by(user_id=user.id)
+        if provider:
+            qs = qs.filter_by(provider=provider)
+        if id:
+            qs = qs.filter_by(id=id)
+        return qs
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):
@@ -146,13 +147,22 @@ class SQLAlchemyAssociationMixin(SQLAlchemyMixin, AssociationMixin):
 
     @classmethod
     def remove(cls, ids_to_delete):
-        cls._query().filter(cls.id.in_(ids_to_delete)).delete()
+        cls._query().filter(cls.id.in_(ids_to_delete)).delete(
+            synchronize_session='fetch'
+        )
+
+
+class SQLAlchemyCodeMixin(SQLAlchemyMixin, CodeMixin):
+    @classmethod
+    def get_code(cls, code):
+        return cls._query().filter(cls.code == code).first()
 
 
 class BaseSQLAlchemyStorage(BaseStorage):
     user = SQLAlchemyUserMixin
     nonce = SQLAlchemyNonceMixin
     association = SQLAlchemyAssociationMixin
+    code = SQLAlchemyCodeMixin
 
     @classmethod
     def is_integrity_error(cls, exception):

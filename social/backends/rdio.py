@@ -1,4 +1,7 @@
-from social.utils import parse_qs
+"""
+Rdio OAuth1 and OAuth2 backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/rdio.html
+"""
 from social.backends.oauth import BaseOAuth1, BaseOAuth2, OAuthAuth
 
 
@@ -31,25 +34,14 @@ class RdioOAuth1(BaseRdio, BaseOAuth1):
         ('streamRegion', 'rdio_stream_region'),
     ]
 
-    @classmethod
-    def tokens(cls, instance):
-        token = super(RdioOAuth1, cls).tokens(instance)
-        if token and 'access_token' in token:
-            token = parse_qs(token['access_token'])
-        return token
-
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
         params = {'method': 'currentUser',
                   'extras': 'username,displayName,streamRegion'}
         request = self.oauth_request(access_token, RDIO_API,
                                      params, method='POST')
-        try:
-            return self.get_json(request.url,
-                                 method='POST',
-                                 data=request.to_postdata())['result']
-        except ValueError:
-            return None
+        return self.get_json(request.url, method='POST',
+                             data=request.to_postdata())['result']
 
 
 class RdioOAuth2(BaseRdio, BaseOAuth2):
@@ -68,11 +60,8 @@ class RdioOAuth2(BaseRdio, BaseOAuth2):
     ]
 
     def user_data(self, access_token, *args, **kwargs):
-        try:
-            return self.get_json(RDIO_API, data={
-                'method': 'currentUser',
-                'extras': 'username,displayName,streamRegion',
-                'access_token': access_token
-            })['result']
-        except ValueError:
-            return None
+        return self.get_json(RDIO_API, data={
+            'method': 'currentUser',
+            'extras': 'username,displayName,streamRegion',
+            'access_token': access_token
+        })['result']

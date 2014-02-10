@@ -3,7 +3,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.db.models import Model
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
+from django.shortcuts import redirect
 from django.template import TemplateDoesNotExist, RequestContext, loader
+from django.utils.datastructures import MergeDict
+from django.utils.translation import get_language
 
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 
@@ -21,7 +24,11 @@ class DjangoTemplateStrategy(BaseTemplateStrategy):
 class DjangoStrategy(BaseStrategy):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('tpl', DjangoTemplateStrategy)
-        return super(DjangoStrategy, self).__init__(*args, **kwargs)
+        super(DjangoStrategy, self).__init__(*args, **kwargs)
+        if self.request:
+            self.session = self.request.session
+        else:
+            self.session = {}
 
     def get_setting(self, name):
         return getattr(settings, name)
@@ -42,7 +49,7 @@ class DjangoStrategy(BaseStrategy):
             return self.request.get_host()
 
     def redirect(self, url):
-        return HttpResponseRedirect(url)
+        return redirect(url)
 
     def html(self, content):
         return HttpResponse(content, content_type='text/html;charset=UTF-8')
@@ -64,41 +71,18 @@ class DjangoStrategy(BaseStrategy):
         return authenticate(*args, **kwargs)
 
     def session_get(self, name, default=None):
-        if self.request:
-            return self.request.session.get(name, default)
+        return self.session.get(name, default)
 
     def session_set(self, name, value):
-        if self.request:
-            self.request.session[name] = value
-            self.request.session.modified = True
+        self.session[name] = value
+        if hasattr(self.session, 'modified'):
+            self.session.modified = True
 
     def session_pop(self, name):
-        if self.request:
-            self.request.session.pop(name, None)
+        return self.session.pop(name, None)
 
     def session_setdefault(self, name, value):
-        if self.request:
-            return self.request.session.setdefault(name, value)
-
-    def to_session(self, next, backend, *args, **kwargs):
-        """Returns dict to store on session for partial pipeline."""
-        return {
-            'next': next,
-            'backend': backend.name,
-            'args': tuple(map(self._ctype, args)),
-            'kwargs': dict((key, self._ctype(val))
-                                for key, val in kwargs.items())
-        }
-
-    def from_session(self, session):
-        """Takes session saved data to continue pipeline and merges with any
-        new extra argument needed. Returns tuple with next pipeline index
-        entry, arguments and keyword arguments to continue the process."""
-        next, backend, args, kwargs = super(DjangoStrategy, self).\
-                                            from_session(session)
-        return next, backend, \
-               list(map(self._model, args)), \
-               dict((key, self._model(val)) for key, val in kwargs.items())
+        return self.session.setdefault(name, value)
 
     def build_absolute_uri(self, path=None):
         if self.request:
@@ -114,7 +98,7 @@ class DjangoStrategy(BaseStrategy):
         else:
             return get_random_string(length, chars)
 
-    def _ctype(self, val):
+    def to_session_value(self, val):
         """Converts values that are instance of Model to a dictionary
         with enough information to retrieve the instance back later."""
         if isinstance(val, Model):
@@ -122,9 +106,11 @@ class DjangoStrategy(BaseStrategy):
                 'pk': val.pk,
                 'ctype': ContentType.objects.get_for_model(val).pk
             }
+        if isinstance(val, MergeDict):
+            val = dict(val)
         return val
 
-    def _model(self, val):
+    def from_session_value(self, val):
         """Converts back the instance saved by self._ctype function."""
         if isinstance(val, dict) and 'pk' in val and 'ctype' in val:
             ctype = ContentType.objects.get_for_id(val['ctype'])
@@ -132,5 +118,6 @@ class DjangoStrategy(BaseStrategy):
             val = ModelClass.objects.get(pk=val['pk'])
         return val
 
-    def is_response(self, value):
-        return isinstance(value, HttpResponse)
+    def get_language(self):
+        """Return current language"""
+        return get_language()

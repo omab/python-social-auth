@@ -1,5 +1,6 @@
 """
-Mixcloud OAuth2 support
+Mixcloud OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/mixcloud.html
 """
 from social.backends.oauth import BaseOAuth2
 
@@ -19,10 +20,6 @@ class MixcloudOAuth2(BaseOAuth2):
                 'last_name': None}
 
     def user_data(self, access_token, *args, **kwargs):
-        try:
-            return self.get_json('https://api.mixcloud.com/me/', params={
-                'access_token': access_token,
-                'alt': 'json'
-            })
-        except (ValueError, KeyError, IOError):
-            return None
+        return self.get_json('https://api.mixcloud.com/me/',
+                             params={'access_token': access_token,
+                                     'alt': 'json'})

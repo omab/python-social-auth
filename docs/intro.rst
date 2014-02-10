@@ -7,27 +7,29 @@ and 2), OpenId_ and others.
 
 
 Features
-========
+--------
 
 This application provides user registration and login using social sites
 credentials, here are some features, probably not a full list yet.
 
 
 Supported frameworks
---------------------
+********************
 
 Multiple frameworks support:
 
     * Django_
     * Flask_
+    * Pyramid_
     * Webpy_
+    * Tornado_
 
 More frameworks can be added easily (and should be even easier in the future
 once the code matures).
 
 
 Auth providers
---------------
+**************
 
 Several supported service by simple backends definition (easy to add new ones
 or extend current one):
@@ -35,6 +37,7 @@ or extend current one):
     * Angel_ OAuth2
     * Behance_ OAuth2
     * Bitbucket_ OAuth1
+    * Box_ OAuth2
     * Dailymotion_ OAuth2
     * Disqus_ OAuth2
     * Douban_ OAuth1 and OAuth2
@@ -57,11 +60,13 @@ or extend current one):
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
     * Orkut_ OAuth1
+    * Podio_ OAuth2
     * Rdio_ OAuth1 and OAuth2
     * Readability_ OAuth1
     * Shopify_ OAuth2
     * Skyrock_ OAuth1
     * Soundcloud_ OAuth2
+    * ThisIsMyJam_ OAuth1
     * Stackoverflow_ OAuth2
     * Steam_ OpenId
     * Stocktwits_ OAuth2
@@ -70,7 +75,7 @@ or extend current one):
     * Tumblr_ OAuth1
     * Twilio_ Auth
     * Twitter_ OAuth1
-    * Vkontakte_ OpenAPI, OAuth2 and OAuth2 for Applications
+    * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
     * Xing_ OAuth1
     * Yahoo_ OpenId and OAuth1
@@ -79,23 +84,24 @@ or extend current one):
 
 
 User data
----------
+*********
 
 Basic user data population, to allows custom fields values from providers
 response.
 
 
 Social accounts association
----------------------------
+***************************
 
 Multiple social accounts can be associated to a single user.
 
 
-Authentication processing
--------------------------
+Authentication and disconnection processing
+*******************************************
 
-Extensible pipeline to handle authentication/association mechanism in ways that
-suits your project. Check `Authentication Pipeline`_ section.
+Extensible pipeline to handle authentication, association and disconnection
+mechanism in ways that suits your project. Check `Authentication Pipeline`_
+section.
 
 
 .. _OpenId: http://openid.net/
@@ -104,6 +110,7 @@ suits your project. Check `Authentication Pipeline`_ section.
 .. _Angel: https://angel.co
 .. _Behance: https://www.behance.net
 .. _Bitbucket: https://bitbucket.org
+.. _Box: https://www.box.com
 .. _Dailymotion: https://dailymotion.com
 .. _Disqus: https://disqus.com
 .. _Douban: http://www.douban.com
@@ -125,15 +132,17 @@ suits your project. Check `Authentication Pipeline`_ section.
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
 .. _Orkut: http://www.orkut.com
+.. _Podio: https://podio.com
 .. _Shopify: http://shopify.com
 .. _Skyrock: https://skyrock.com
 .. _Soundcloud: https://soundcloud.com
+.. _ThisIsMyJam: https://thisismyjam.com
 .. _Stocktwits: https://stocktwits.com
 .. _Stripe: https://stripe.com
 .. _Tripit: https://www.tripit.com
 .. _Twilio: https://www.twilio.com
 .. _Twitter: http://twitter.com
-.. _Vkontakte: http://vk.com
+.. _VK.com: http://vk.com
 .. _Weibo: http://weibo.com
 .. _Xing: https://www.xing.com
 .. _Yahoo: http://yahoo.com
@@ -146,5 +155,7 @@ suits your project. Check `Authentication Pipeline`_ section.
 .. _Tumblr: http://www.tumblr.com/
 .. _Django: https://github.com/omab/python-social-auth/tree/master/social/apps/django_app
 .. _Flask: https://github.com/omab/python-social-auth/tree/master/social/apps/flask_app
+.. _Pyramid: http://www.pylonsproject.org/projects/pyramid/about
 .. _Webpy: https://github.com/omab/python-social-auth/tree/master/social/apps/webpy_app
+.. _Tornado: http://www.tornadoweb.org/
 .. _Authentication Pipeline: pipeline.html

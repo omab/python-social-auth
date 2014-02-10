@@ -13,7 +13,7 @@ Behance uses OAuth2 for its auth mechanism.
 
 - Also it's possible to define extra permissions with::
 
-     SOCIAL_AUTH_BEHANCE_EXTENDED_PERMISSIONS = [...]
+     SOCIAL_AUTH_BEHANCE_SCOPE = [...]
 
 Check available permissions at `Possible Scopes`_. Also check the rest of their
 doc at `Behance Developer Documentation`_.

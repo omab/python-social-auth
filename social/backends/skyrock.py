@@ -1,15 +1,7 @@
 """
-Skyrock OAuth support.
-
-This adds support for Skyrock OAuth service. An application must
-be registered first on skyrock and the settings SKYROCK_CONSUMER_KEY
-and SKYROCK_CONSUMER_SECRET must be defined with they corresponding
-values.
-
-By default account id is stored in extra_data field, check OAuthBackend
-class for details on how to extend it.
+Skyrock OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/skyrock.html
 """
-from social.exceptions import AuthCanceled
 from social.backends.oauth import BaseOAuth1
 
 
@@ -32,17 +24,5 @@ class SkyrockOAuth(BaseOAuth1):
 
     def user_data(self, access_token):
         """Return user data provided"""
-        try:
-            return self.get_json(
-                'https://api.skyrock.com/v2/user/get.json',
-                auth=self.oauth_auth(access_token)
-            )
-        except ValueError:
-            return None
-
-    def auth_complete(self, *args, **kwargs):
-        """Completes loging process, must return user instance"""
-        if 'denied' in self.data:
-            raise AuthCanceled('Authentication denied')
-        else:
-            return super(SkyrockOAuth, self).auth_complete(*args, **kwargs)
+        return self.get_json('https://api.skyrock.com/v2/user/get.json',
+                             auth=self.oauth_auth(access_token))

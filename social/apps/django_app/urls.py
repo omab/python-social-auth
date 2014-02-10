@@ -1,5 +1,9 @@
 """URLs module"""
-from django.conf.urls.defaults import patterns, url
+try:
+    from django.conf.urls import patterns, url
+except ImportError:
+    # Django < 1.4
+    from django.conf.urls.defaults import patterns, url
 
 
 urlpatterns = patterns('social.apps.django_app.views',
@@ -11,6 +15,6 @@ urlpatterns = patterns('social.apps.django_app.views',
     # disconnection
     url(r'^disconnect/(?P<backend>[^/]+)/$', 'disconnect',
         name='disconnect'),
-    url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>\d+)/$',
+    url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/$',
         'disconnect', name='disconnect_individual'),
 )

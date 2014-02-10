@@ -1,13 +1,6 @@
 """
-Shopify OAuth support.
-
-You must:
-
-- Register an App in the shopify partner control panel
-- Add the API Key and shared secret in your django settings
-- Set the Application URL in shopify app settings
-- Install the shopify package
-
+Shopify OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/shopify.html
 """
 import imp
 import six
@@ -28,6 +21,14 @@ class ShopifyOAuth2(BaseOAuth2):
         ('expires', 'expires')
     ]
 
+    @property
+    def shopifyAPI(self):
+        if not hasattr(self, '_shopify_api'):
+            fp, pathname, description = imp.find_module('shopify')
+            self._shopify_api = imp.load_module('shopify', fp, pathname,
+                                                description)
+        return self._shopify_api
+
     def get_user_details(self, response):
         """Use the shopify store name as the username"""
         return {
@@ -35,17 +36,12 @@ class ShopifyOAuth2(BaseOAuth2):
                                 .replace('.myshopify.com', '')
         }
 
-    def __init__(self, request, redirect):
-        super(ShopifyOAuth2, self).__init__(request, redirect)
-        fp, pathname, description = imp.find_module('shopify')
-        self.shopifyAPI = imp.load_module('shopify', fp, pathname, description)
-
     def auth_url(self):
         key, secret = self.get_key_and_secret()
         self.shopifyAPI.Session.setup(api_key=key, secret=secret)
         scope = self.get_scope()
         state = self.state_token()
-        self.request.session[self.name + '_state'] = state
+        self.strategy.session_set(self.name + '_state', state)
         redirect_uri = self.get_redirect_uri(state)
         return self.shopifyAPI.Session.create_permission_url(
             self.data.get('shop').strip(),
@@ -81,7 +77,7 @@ class ShopifyOAuth2(BaseOAuth2):
             'backend': self,
             'response': {
                 'shop': shop_url,
-                'website': 'http://%s' % website,
+                'website': 'http://{0}'.format(website),
                 'access_token': access_token
             }
         })

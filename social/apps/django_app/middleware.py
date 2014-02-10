@@ -4,6 +4,7 @@ import six
 from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.utils.http import urlquote
 
 from social.exceptions import SocialAuthBaseException
 
@@ -20,7 +21,7 @@ class SocialAuthExceptionMiddleware(object):
     get_redirect_uri methods, which each accept request and exception.
     """
     def process_exception(self, request, exception):
-        self.strategy = getattr(request, 'strategy', None)
+        self.strategy = getattr(request, 'social_strategy', None)
         if self.strategy is None or self.raise_exception(request, exception):
             return
 
@@ -36,11 +37,12 @@ class SocialAuthExceptionMiddleware(object):
                                extra_tags='social-auth ' + backend_name)
             else:
                 url += ('?' in url and '&' or '?') + \
-                       'message=%s&backend=%s' % (message, backend_name)
+                       'message={0}&backend={1}'.format(urlquote(message),
+                                                        backend_name)
             return redirect(url)
 
     def raise_exception(self, request, exception):
-        return self.strategy.setting('RAISE_EXCEPTIONS') or settings.DEBUG
+        return self.strategy.setting('RAISE_EXCEPTIONS', settings.DEBUG)
 
     def get_message(self, request, exception):
         return six.text_type(exception)

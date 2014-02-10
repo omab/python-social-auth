@@ -1,18 +1,7 @@
-"""
-Base backends classes.
-
-This module defines base classes needed to define custom OpenID or OAuth1/2
-auth services from third parties. This customs must subclass an Auth and a
-Backend class, check current implementation for examples.
-
-Also the modules *must* define a BACKENDS dictionary with the backend name
-(which is used for URLs matching) and Auth class, otherwise it won't be
-enabled.
-"""
-from requests import request
+from requests import request, ConnectionError
 
 from social.utils import module_member, parse_qs
-from social.exceptions import StopPipeline
+from social.exceptions import AuthFailed
 
 
 class BaseAuth(object):
@@ -21,22 +10,22 @@ class BaseAuth(object):
     name = ''  # provider name, it's stored in database
     supports_inactive_user = False  # Django auth
     ID_KEY = None
+    EXTRA_DATA = None
+    REQUIRES_EMAIL_VALIDATION = False
 
     def __init__(self, strategy=None, redirect_uri=None, *args, **kwargs):
-        self.titled_name = self.name.upper().replace('-', '_')
         self.strategy = strategy
         self.redirect_uri = redirect_uri
+        self.data = {}
         if strategy:
             self.data = self.strategy.request_data()
-            self.redirect_uri = self.strategy.build_absolute_uri(
+            self.redirect_uri = self.strategy.absolute_uri(
                 self.redirect_uri
             )
-        else:
-            self.data = {}
 
     def setting(self, name, default=None):
         """Return setting value from strategy"""
-        return self.strategy.setting(name, default)
+        return self.strategy.setting(name, default=default, backend=self)
 
     def auth_url(self):
         """Must return redirect URL to auth provider"""
@@ -49,6 +38,11 @@ class BaseAuth(object):
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         raise NotImplementedError('Implement in subclass')
+
+    def process_error(self, data):
+        """Process data for errors, raise exception if needed.
+        Call this method on any override of auth_complete."""
+        pass
 
     def authenticate(self, *args, **kwargs):
         """Authenticate user using social credentials
@@ -69,45 +63,81 @@ class BaseAuth(object):
         self.redirect_uri = self.redirect_uri or kwargs.get('redirect_uri')
         self.data = self.strategy.request_data()
         pipeline = self.strategy.get_pipeline()
-
+        kwargs.setdefault('is_new', False)
         if 'pipeline_index' in kwargs:
-            return self.pipeline(pipeline[kwargs['pipeline_index']:],
-                                 *args, **kwargs)
-        else:
-            details = self.get_user_details(kwargs['response'])
-            uid = self.get_user_id(details, kwargs['response'])
-            return self.pipeline(pipeline, details=details, uid=uid,
-                                 is_new=False, *args, **kwargs)
+            pipeline = pipeline[kwargs['pipeline_index']:]
+        return self.pipeline(pipeline, *args, **kwargs)
 
     def pipeline(self, pipeline, pipeline_index=0, *args, **kwargs):
-        kwargs['strategy'] = self.strategy
+        out = self.run_pipeline(pipeline, pipeline_index, *args, **kwargs)
+        if not isinstance(out, dict):
+            return out
+        user = out.get('user')
+        if user:
+            user.social_user = out.get('social')
+            user.is_new = out.get('is_new')
+        return user
 
+    def disconnect(self, *args, **kwargs):
+        pipeline = self.strategy.get_disconnect_pipeline()
+        if 'pipeline_index' in kwargs:
+            pipeline = pipeline[kwargs['pipeline_index']:]
+        kwargs['name'] = self.strategy.backend.name
+        kwargs['user_storage'] = self.strategy.storage.user
+        return self.run_pipeline(pipeline, *args, **kwargs)
+
+    def run_pipeline(self, pipeline, pipeline_index=0, *args, **kwargs):
         out = kwargs.copy()
-        out.pop(self.name, None)
+        out.setdefault('strategy', self.strategy)
+        out.setdefault('backend', out.pop(self.name, None) or self)
+        out.setdefault('request', self.strategy.request)
 
         for idx, name in enumerate(pipeline):
             out['pipeline_index'] = pipeline_index + idx
             func = module_member(name)
-
-            try:
-                result = func(*args, **out) or {}
-            except StopPipeline:
-                self.strategy.clean_partial_pipeline()
-                break
+            result = func(*args, **out) or {}
             if not isinstance(result, dict):
                 return result
             out.update(result)
-        user = out['user']
-        user.social_user = out['social_user']
-        user.is_new = out['is_new']
-        return user
+        self.strategy.clean_partial_pipeline()
+        return out
 
     def extra_data(self, user, uid, response, details):
-        """Return default blank user extra data"""
-        return {}
+        """Return deafault extra data to store in extra_data field"""
+        data = {}
+        for entry in (self.EXTRA_DATA or []) + self.setting('EXTRA_DATA', []):
+            if not isinstance(entry, (list, tuple)):
+                entry = (entry,)
+            size = len(entry)
+            if size >= 1 and size <= 3:
+                if size == 3:
+                    name, alias, discard = entry
+                elif size == 2:
+                    (name, alias), discard = entry, False
+                elif size == 1:
+                    name = alias = entry[0]
+                    discard = False
+                value = response.get(name) or details.get(name)
+                if discard and not value:
+                    continue
+                data[alias] = value
+        return data
+
+    def auth_allowed(self, response, details):
+        """Return True if the user should be allowed to authenticate, by
+        default check if email is whitelisted (if there's a whitelist)"""
+        emails = self.setting('WHITELISTED_EMAILS', [])
+        domains = self.setting('WHITELISTED_DOMAINS', [])
+        email = details.get('email')
+        allowed = True
+        if email and (emails or domains):
+            domain = email.split('@', 1)[1]
+            allowed = email in emails or domain in domains
+        return allowed
 
     def get_user_id(self, details, response):
-        """Must return a unique ID from values returned on details"""
+        """Return a unique ID for the current user, by default from server
+        response."""
         return response.get(self.ID_KEY)
 
     def get_user_details(self, response):
@@ -125,7 +155,9 @@ class BaseAuth(object):
         Return user with given ID from the User model used by this backend.
         This is called by django.contrib.auth.middleware.
         """
-        return self.strategy.get_user(user_id)
+        from social.strategies.utils import get_current_strategy
+        strategy = self.strategy or get_current_strategy()
+        return strategy.get_user(user_id)
 
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""
@@ -149,16 +181,13 @@ class BaseAuth(object):
         otherwise return false."""
         return True
 
-    def disconnect(self, user, association_id=None):
-        """Deletes current backend from user if associated.
-        Override if extra operations are needed.
-        """
-        self.strategy.disconnect(user=user, association_id=association_id)
-
     def request(self, url, method='GET', *args, **kwargs):
         kwargs.setdefault('timeout', self.setting('REQUESTS_TIMEOUT') or
                                      self.setting('URLOPEN_TIMEOUT'))
-        response = request(method, url, *args, **kwargs)
+        try:
+            response = request(method, url, *args, **kwargs)
+        except ConnectionError as err:
+            raise AuthFailed(self, str(err))
         response.raise_for_status()
         return response
 
@@ -173,14 +202,3 @@ class BaseAuth(object):
         service provider. Must return (key, secret), order *must* be respected.
         """
         return self.setting('KEY'), self.setting('SECRET')
-
-    @classmethod
-    def tokens(cls, instance):
-        """Return the tokens needed to authenticate the access to any API the
-        service might provide. The return value will be a dictionary with the
-        token type name as key and the token value.
-        """
-        if instance.extra_data and 'access_token' in instance.extra_data:
-            return {'access_token': instance.extra_data['access_token']}
-        else:
-            return {}

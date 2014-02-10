@@ -19,10 +19,10 @@ project`_.
 
 - fill the scope permissions that you require into the settings `Shopify API`_::
 
-      SOCIAL_AUTH_SHOPIFY_SCOPE = ["write_script_tags",
-                                   "read_orders",
-                                   "write_customers",
-                                   "read_products"]
+      SOCIAL_AUTH_SHOPIFY_SCOPE = ['write_script_tags',
+                                   'read_orders',
+                                   'write_customers',
+                                   'read_products']
 
 .. _Shopify Partners: http://www.shopify.com/partners
 .. _Shopify API: http://api.shopify.com/authentication.html#scopes

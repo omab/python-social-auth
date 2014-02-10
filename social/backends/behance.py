@@ -1,14 +1,6 @@
 """
-Behance OAuth2 support.
-
-This contribution adds support for the Behance OAuth service. The settings
-BEHANCE_CLIENT_ID and BEHANCE_CLIENT_SECRET must be defined with the values
-given by Behance application registration process.
-
-Extended permissions are supported by defining BEHANCE_EXTENDED_PERMISSIONS
-setting, it must be a list of values to request.
-
-By default username and access_token are stored in extra_data field.
+Behance OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/behance.html
 """
 from social.backends.oauth import BaseOAuth2
 

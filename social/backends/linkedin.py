@@ -1,25 +1,23 @@
 """
-Linkedin OAuth support
-
-No extra configurations are needed to make this work.
+LinkedIn OAuth1 and OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/linkedin.html
 """
-from xml.etree import ElementTree
-from xml.parsers.expat import ExpatError
-
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
-from social.exceptions import AuthCanceled, AuthUnknownError
 
 
 class BaseLinkedinAuth(object):
     EXTRA_DATA = [('id', 'id'),
-                  ('first-name', 'first_name'),
-                  ('last-name', 'last_name')]
-    USER_DETAILS = 'https://api.linkedin.com/v1/people/~:(%s)'
+                  ('first-name', 'first_name', True),
+                  ('last-name', 'last_name', True),
+                  ('firstName', 'first_name', True),
+                  ('lastName', 'last_name', True)]
+    USER_DETAILS = 'https://api.linkedin.com/v1/people/~:({0})'
 
     def get_user_details(self, response):
         """Return user details from Linkedin account"""
-        first_name, last_name = response['first-name'], response['last-name']
-        email = response.get('email-address', '')
+        first_name = response['firstName']
+        last_name = response['lastName']
+        email = response.get('emailAddress', '')
         return {'username': first_name + last_name,
                 'fullname': first_name + ' ' + last_name,
                 'first_name': first_name,
@@ -33,31 +31,15 @@ class BaseLinkedinAuth(object):
         # user sort to ease the tests URL mocking
         fields_selectors.sort()
         fields_selectors = ','.join(fields_selectors)
-        return self.USER_DETAILS % fields_selectors
+        return self.USER_DETAILS.format(fields_selectors)
 
-    def user_data(self, access_token, *args, **kwargs):
-        try:
-            raw_xml = self.profile_data(access_token, *args, **kwargs)
-            return self.to_dict(ElementTree.fromstring(raw_xml))
-        except (ValueError, KeyError, IOError, ExpatError):
-            return None
-
-    def to_dict(self, xml):
-        """Convert XML structure to dict recursively, repeated keys entries
-        are returned as in list containers."""
-        children = xml.getchildren()
-        if not children:
-            return xml.text
-        else:
-            out = {}
-            for node in xml.getchildren():
-                if node.tag in out:
-                    if not isinstance(out[node.tag], list):
-                        out[node.tag] = [out[node.tag]]
-                    out[node.tag].append(self.to_dict(node))
-                else:
-                    out[node.tag] = self.to_dict(node)
-            return out
+    def user_data_headers(self):
+        lang = self.setting('FORCE_PROFILE_LANGUAGE')
+        if lang:
+            return {
+                'Accept-Language': lang if lang is not True
+                                        else self.strategy.get_language()
+            }
 
 
 class LinkedinOAuth(BaseLinkedinAuth, BaseOAuth1):
@@ -68,21 +50,14 @@ class LinkedinOAuth(BaseLinkedinAuth, BaseOAuth1):
     REQUEST_TOKEN_URL = 'https://api.linkedin.com/uas/oauth/requestToken'
     ACCESS_TOKEN_URL = 'https://api.linkedin.com/uas/oauth/accessToken'
 
-    def profile_data(self, access_token, *args, **kwargs):
+    def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        return self.oauth_request(access_token,
-                                  self.user_details_url()).content
-
-    def auth_complete(self, *args, **kwargs):
-        """Complete auth process. Check LinkedIn error response."""
-        oauth_problem = self.data.get('oauth_problem')
-        if oauth_problem:
-            if oauth_problem == 'user_refused':
-                raise AuthCanceled(self, '')
-            else:
-                raise AuthUnknownError(self, 'LinkedIn error was %s' %
-                                                    oauth_problem)
-        return super(LinkedinOAuth, self).auth_complete(*args, **kwargs)
+        return self.get_json(
+            self.user_details_url(),
+            params={'format': 'json'},
+            auth=self.oauth_auth(access_token),
+            headers=self.user_data_headers()
+        )
 
     def unauthorized_token(self):
         """Makes first request to oauth. Returns an unauthorized Token."""
@@ -101,7 +76,18 @@ class LinkedinOAuth2(BaseLinkedinAuth, BaseOAuth2):
     ACCESS_TOKEN_URL = 'https://www.linkedin.com/uas/oauth2/accessToken'
     ACCESS_TOKEN_METHOD = 'POST'
 
-    def profile_data(self, access_token, *args, **kwargs):
-        return self.request(self.user_details_url(), params={
-            'oauth2_access_token': access_token
-        }).content
+    def user_data(self, access_token, *args, **kwargs):
+        return self.get_json(
+            self.user_details_url(),
+            params={'oauth2_access_token': access_token,
+                    'format': 'json'},
+            headers=self.user_data_headers()
+        )
+
+    def request_access_token(self, *args, **kwargs):
+        # LinkedIn expects a POST request with querystring parameters, despite
+        # the spec http://tools.ietf.org/html/rfc6749#section-4.1.3
+        kwargs['params'] = kwargs.pop('data')
+        return super(LinkedinOAuth2, self).request_access_token(
+            *args, **kwargs
+        )

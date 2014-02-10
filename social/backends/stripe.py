@@ -1,12 +1,8 @@
 """
-Stripe OAuth2 support.
-
-This backend adds support for Stripe OAuth2 service. The settings
-STRIPE_APP_ID and STRIPE_API_SECRET must be defined with the values
-given by Stripe application registration process.
+Stripe OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/stripe.html
 """
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthFailed, AuthCanceled
 
 
 class StripeOAuth2(BaseOAuth2):
@@ -31,14 +27,6 @@ class StripeOAuth2(BaseOAuth2):
         return {'username': response.get('stripe_user_id'),
                 'email': ''}
 
-    def process_error(self, data):
-        if self.data.get('error'):
-            error = self.data.get('error_description') or self.data['error']
-            if self.data['error'] == 'access_denied':
-                raise AuthCanceled(self, error)
-            else:
-                raise AuthFailed(self, error)
-
     def auth_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
         params = {'response_type': 'code',
@@ -54,14 +42,13 @@ class StripeOAuth2(BaseOAuth2):
             'client_id': client_id,
             'scope': self.SCOPE_SEPARATOR.join(self.get_scope()),
             'code': self.data['code']
-       }
+        }
 
     def auth_headers(self):
         client_id, client_secret = self.get_key_and_secret()
         return {'Accept': 'application/json',
-                'Authorization': 'Bearer %s' % client_secret}
+                'Authorization': 'Bearer {0}'.format(client_secret)}
 
-    @classmethod
-    def refresh_token_params(cls, refresh_token, *args, **kwargs):
+    def refresh_token_params(self, refresh_token, *args, **kwargs):
         return {'refresh_token': refresh_token,
                 'grant_type': 'refresh_token'}

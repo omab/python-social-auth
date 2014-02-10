@@ -1,0 +1,97 @@
+from social.strategies.base import BaseStrategy, BaseTemplateStrategy
+
+
+TEST_URI = 'http://myapp.com'
+TEST_HOST = 'myapp.com'
+
+
+class Redirect(object):
+    def __init__(self, url):
+        self.url = url
+
+
+class TestTemplateStrategy(BaseTemplateStrategy):
+    def render_template(self, tpl, context):
+        return tpl
+
+    def render_string(self, html, context):
+        return html
+
+
+class TestStrategy(BaseStrategy):
+    def __init__(self, *args, **kwargs):
+        self._request_data = {}
+        self._settings = {}
+        self._session = {}
+        kwargs.setdefault('tpl', TestTemplateStrategy)
+        super(TestStrategy, self).__init__(*args, **kwargs)
+
+    def redirect(self, url):
+        return Redirect(url)
+
+    def get_setting(self, name):
+        """Return value for given setting name"""
+        return self._settings[name]
+
+    def html(self, content):
+        """Return HTTP response with given content"""
+        return content
+
+    def render_html(self, tpl=None, html=None, context=None):
+        """Render given template or raw html with given context"""
+        return tpl or html
+
+    def request_data(self, merge=True):
+        """Return current request data (POST or GET)"""
+        return self._request_data
+
+    def request_host(self):
+        """Return current host value"""
+        return TEST_HOST
+
+    def session_get(self, name, default=None):
+        """Return session value for given key"""
+        return self._session.get(name, default)
+
+    def session_set(self, name, value):
+        """Set session value for given key"""
+        self._session[name] = value
+
+    def session_pop(self, name):
+        """Pop session value for given key"""
+        return self._session.pop(name, None)
+
+    def build_absolute_uri(self, path=None):
+        """Build absolute URI with given (optional) path"""
+        path = path or ''
+        if path.startswith('http://') or path.startswith('https://'):
+            return path
+        return TEST_URI + path
+
+    def set_settings(self, values):
+        self._settings.update(values)
+
+    def set_request_data(self, values):
+        self._request_data.update(values)
+
+    def remove_from_request_data(self, name):
+        self._request_data.pop(name, None)
+
+    def authenticate(self, *args, **kwargs):
+        user = super(TestStrategy, self).authenticate(*args, **kwargs)
+        if isinstance(user, self.storage.user.user_model()):
+            self.session_set('username', user.username)
+        return user
+
+    def get_pipeline(self):
+        return self.setting('PIPELINE', (
+            'social.pipeline.social_auth.social_details',
+            'social.pipeline.social_auth.social_uid',
+            'social.pipeline.social_auth.auth_allowed',
+            'social.pipeline.social_auth.social_user',
+            'social.pipeline.user.get_username',
+            'social.pipeline.social_auth.associate_by_email',
+            'social.pipeline.user.create_user',
+            'social.pipeline.social_auth.associate_user',
+            'social.pipeline.social_auth.load_extra_data',
+            'social.pipeline.user.user_details'))

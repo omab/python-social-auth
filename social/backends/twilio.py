@@ -1,5 +1,6 @@
 """
-Twilio support
+Amazon auth backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/twilio.html
 """
 from re import sub
 
@@ -24,10 +25,10 @@ class TwilioAuth(BaseAuth):
     def auth_url(self):
         """Return authorization redirect url."""
         key, secret = self.get_key_and_secret()
-        callback = self.strategy.build_absolute_uri(self.redirect_uri)
+        callback = self.strategy.absolute_uri(self.redirect_uri)
         callback = sub(r'^https', 'http', callback)
         query = urlencode({'cb': callback})
-        return 'https://www.twilio.com/authorize/%s?%s' % (key, query)
+        return 'https://www.twilio.com/authorize/{0}?{1}'.format(key, query)
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""

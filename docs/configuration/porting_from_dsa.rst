@@ -60,7 +60,7 @@ Porting settings
 ----------------
 
 All python-social-auth_ settings are prefixed with ``SOCIAL_AUTH_``, except for
-some exception on Django framework, ``AUTHENTICATION_BACKENDS`` reminds the
+some exception on Django framework, ``AUTHENTICATION_BACKENDS`` remains the
 same for obvious reasons.
 
 All backends settings have the backend name into it, all uppercase and with
@@ -102,6 +102,14 @@ changes. Examples of the new import paths::
         'social.backends.facebook.FacebookOAuth2',
     )
 
+
+Session
+-------
+
+Django stores the last authentication backend used in the user session, this
+can cause import troubles when porting since the old import paths aren't valid
+anymore. Sadly so far the only solution is to clean the sessions content, that
+means to force the user to login again.
 
 .. _django-social-auth: https://github.com/omab/django-social-auth
 .. _python-social-auth: https://github.com/omab/python-social-auth

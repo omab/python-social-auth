@@ -1,16 +1,6 @@
 """
-Facebook OAuth support.
-
-This contribution adds support for Facebook OAuth service. The settings
-SOCIAL_AUHT_FACEBOOK_KEY and SOCIAL_AUTH_FACEBOOK_SECRET must be defined with
-the values given by Facebook application registration process.
-
-Extended permissions are supported by defining
-SOCIAL_AUTH_FACEBOOK_EXTENDED_PERMISSIONS setting, it must be a list of values
-to request.
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
+Facebook OAuth2 and Canvas Application backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/facebook.html
 """
 import hmac
 import time
@@ -18,12 +8,10 @@ import json
 import base64
 import hashlib
 
-from requests import HTTPError
-
-from social.utils import parse_qs
+from social.utils import parse_qs, constant_time_compare
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthException, AuthCanceled, AuthFailed, \
-                              AuthTokenError, AuthUnknownError
+from social.exceptions import AuthException, AuthCanceled, AuthUnknownError, \
+                              AuthMissingParameter
 
 
 class FacebookOAuth2(BaseOAuth2):
@@ -33,6 +21,8 @@ class FacebookOAuth2(BaseOAuth2):
     SCOPE_SEPARATOR = ','
     AUTHORIZATION_URL = 'https://www.facebook.com/dialog/oauth'
     ACCESS_TOKEN_URL = 'https://graph.facebook.com/oauth/access_token'
+    REVOKE_TOKEN_URL = 'https://graph.facebook.com/{uid}/permissions'
+    REVOKE_TOKEN_METHOD = 'DELETE'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires')
@@ -50,48 +40,37 @@ class FacebookOAuth2(BaseOAuth2):
         """Loads user data from service"""
         params = self.setting('PROFILE_EXTRA_PARAMS', {})
         params['access_token'] = access_token
-        try:
-            return self.get_json('https://graph.facebook.com/me',
-                                 params=params)
-        except ValueError:
-            return None
-        except HTTPError:
-            raise AuthTokenError(self)
+        return self.get_json('https://graph.facebook.com/me',
+                             params=params)
+
+    def process_error(self, data):
+        super(FacebookOAuth2, self).process_error(data)
+        if data.get('error_code'):
+            raise AuthCanceled(self, data.get('error_message') or
+                                     data.get('error_code'))
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
-        if 'code' in self.data:
-            state = self.validate_state()
-            key, secret = self.get_key_and_secret()
-            url = self.ACCESS_TOKEN_URL
-            params = {
-                'client_id': key,
-                'redirect_uri': self.get_redirect_uri(state),
-                'client_secret': secret,
-                'code': self.data['code']
-            }
-            try:
-                response = self.get_querystring(url, params=params)
-            except HTTPError:
-                raise AuthFailed(self, 'There was an error authenticating the'
-                                       'the app')
+        self.process_error(self.data)
+        if not self.data.get('code'):
+            raise AuthMissingParameter(self, 'code')
+        state = self.validate_state()
+        key, secret = self.get_key_and_secret()
+        url = self.ACCESS_TOKEN_URL
+        response = self.get_querystring(url, params={
+            'client_id': key,
+            'redirect_uri': self.get_redirect_uri(state),
+            'client_secret': secret,
+            'code': self.data['code']
+        })
+        access_token = response['access_token']
+        return self.do_auth(access_token, response, *args, **kwargs)
 
-            access_token = response['access_token']
-            expires = 'expires' in response and response['expires'] or None
-            return self.do_auth(access_token, expires=expires, *args, **kwargs)
-        else:
-            if self.data.get('error') == 'access_denied':
-                raise AuthCanceled(self)
-            else:
-                raise AuthException(self)
-
-    @classmethod
-    def process_refresh_token_response(cls, response, *args, **kwargs):
+    def process_refresh_token_response(self, response, *args, **kwargs):
         return parse_qs(response.content)
 
-    @classmethod
-    def refresh_token_params(cls, token, *args, **kwargs):
-        client_id, client_secret = cls.get_key_and_secret()
+    def refresh_token_params(self, token, *args, **kwargs):
+        client_id, client_secret = self.get_key_and_secret()
         return {
             'fb_exchange_token': token,
             'grant_type': 'fb_exchange_token',
@@ -99,7 +78,9 @@ class FacebookOAuth2(BaseOAuth2):
             'client_secret': client_secret
         }
 
-    def do_auth(self, access_token, expires=None, *args, **kwargs):
+    def do_auth(self, access_token, response=None, *args, **kwargs):
+        response = response or {}
+
         data = self.user_data(access_token)
 
         if not isinstance(data, dict):
@@ -112,11 +93,66 @@ class FacebookOAuth2(BaseOAuth2):
                                          'users Facebook data')
 
         data['access_token'] = access_token
-        if expires:  # expires is None on offline access
-            data['expires'] = expires
-
+        if 'expires' in response:
+            data['expires'] = response['expires']
         kwargs.update({'backend': self, 'response': data})
         return self.strategy.authenticate(*args, **kwargs)
+
+    def revoke_token_url(self, token, uid):
+        return self.REVOKE_TOKEN_URL.format(uid=uid)
+
+    def revoke_token_params(self, token, uid):
+        return {'access_token': token}
+
+    def process_revoke_token_response(self, response):
+        return super(FacebookOAuth2, self).process_revoke_token_response(
+            response
+        ) and response.content == 'true'
+
+
+class FacebookAppOAuth2(FacebookOAuth2):
+    """Facebook Application Authentication support"""
+    name = 'facebook-app'
+
+    def uses_redirect(self):
+        return False
+
+    def auth_complete(self, *args, **kwargs):
+        access_token = None
+        response = {}
+
+        if 'signed_request' in self.data:
+            key, secret = self.get_key_and_secret()
+            response = self.load_signed_request(self.data['signed_request'])
+            if not 'user_id' in response and not 'oauth_token' in response:
+                raise AuthException(self)
+
+            if response is not None:
+                access_token = response.get('access_token') or \
+                               response['oauth_token'] or \
+                               self.data.get('access_token')
+
+        if access_token is None:
+            if self.data.get('error') == 'access_denied':
+                raise AuthCanceled(self)
+            else:
+                raise AuthException(self)
+        return self.do_auth(access_token, response, *args, **kwargs)
+
+    def auth_html(self):
+        key, secret = self.get_key_and_secret()
+        namespace = self.setting('NAMESPACE', None)
+        scope = self.setting('SCOPE', '')
+        if scope:
+            scope = self.SCOPE_SEPARATOR.join(scope)
+        ctx = {
+            'FACEBOOK_APP_NAMESPACE': namespace or key,
+            'FACEBOOK_KEY': key,
+            'FACEBOOK_EXTENDED_PERMISSIONS': scope,
+            'FACEBOOK_COMPLETE_URI': self.redirect_uri,
+        }
+        tpl = self.setting('LOCAL_HTML', 'facebook.html')
+        return self.strategy.render_html(tpl=tpl, context=ctx)
 
     def load_signed_request(self, signed_request):
         def base64_url_decode(data):
@@ -135,53 +171,6 @@ class FacebookOAuth2(BaseOAuth2):
             expected_sig = hmac.new(secret, msg=payload,
                                     digestmod=hashlib.sha256).digest()
             # allow the signed_request to function for upto 1 day
-            if sig == expected_sig and \
+            if constant_time_compare(sig, expected_sig) and \
                data['issued_at'] > (time.time() - 86400):
                 return data
-
-
-class FacebookAppOAuth2(FacebookOAuth2):
-    """Facebook Application Authentication support"""
-    name = 'facebook-app'
-
-    def uses_redirect(self):
-        return False
-
-    def auth_complete(self, *args, **kwargs):
-        access_token = None
-        expires = None
-
-        if 'signed_request' in self.data:
-            key, secret = self.get_key_and_secret()
-            response = self.load_signed_request(self.data['signed_request'])
-            if not 'user_id' in response and not 'oauth_token' in response:
-                raise AuthException(self)
-
-            if response is not None:
-                access_token = response.get('access_token') or \
-                               response['oauth_token'] or \
-                               self.data.get('access_token')
-                if 'expires' in response:
-                    expires = response['expires']
-
-        if access_token is None:
-            if self.data.get('error') == 'access_denied':
-                raise AuthCanceled(self)
-            else:
-                raise AuthException(self)
-        return self.do_auth(access_token, expires=expires, *args, **kwargs)
-
-    def auth_html(self):
-        key, secret = self.get_key_and_secret()
-        namespace = self.setting('NAMESPACE', None)
-        scope = self.setting('SCOPE', '')
-        if scope:
-            scope = self.SCOPE_SEPARATOR.join(scope)
-        ctx = {
-            'FACEBOOK_APP_NAMESPACE': namespace or key,
-            'FACEBOOK_KEY': key,
-            'FACEBOOK_EXTENDED_PERMISSIONS': scope,
-            'FACEBOOK_COMPLETE_URI': self.redirect_uri,
-        }
-        html = self.setting('LOCAL_HTML', 'facebook.html')
-        return self.strategy.render_html(html, ctx)

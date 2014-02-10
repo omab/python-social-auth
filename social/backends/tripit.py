@@ -1,12 +1,6 @@
 """
-TripIt OAuth support.
-
-This adds support for TripIt OAuth service. An application must
-be registered first on TripIt and the settings TRIPIT_API_KEY
-and TRIPIT_API_SECRET must be defined with the corresponding
-values.
-
-User screen name is used to generate username.
+Tripit OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/tripit.html
 """
 from xml.dom import minidom
 
@@ -36,13 +30,10 @@ class TripItOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        url = 'https://api.tripit.com/v1/get/profile'
-        content = self.oauth_request(access_token, url).content
-        try:
-            dom = minidom.parseString(content)
-        except ValueError:
-            return None
-
+        dom = minidom.parseString(self.oauth_request(
+            access_token,
+            'https://api.tripit.com/v1/get/profile'
+        ).content)
         return {
             'id': dom.getElementsByTagName('Profile')[0].getAttribute('ref'),
             'name': dom.getElementsByTagName('public_display_name')[0]

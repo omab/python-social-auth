@@ -1,3 +1,7 @@
+"""
+Stocktwits OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/stocktwits.html
+"""
 from social.backends.oauth import BaseOAuth2
 
 
@@ -29,10 +33,7 @@ class StocktwitsOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json(
-                'https://api.stocktwits.com/api/2/account/verify.json',
-                params={'access_token': access_token}
-            )
-        except ValueError:
-            return None
+        return self.get_json(
+            'https://api.stocktwits.com/api/2/account/verify.json',
+            params={'access_token': access_token}
+        )

@@ -31,12 +31,13 @@ web.config[setting_name('AUTHENTICATION_BACKENDS')] = (
     'social.backends.angel.AngelOAuth2',
     'social.backends.behance.BehanceOAuth2',
     'social.backends.bitbucket.BitbucketOAuth',
+    'social.backends.box.BoxOAuth2',
     'social.backends.linkedin.LinkedinOAuth',
     'social.backends.github.GithubOAuth2',
     'social.backends.foursquare.FoursquareOAuth2',
     'social.backends.instagram.InstagramOAuth2',
     'social.backends.live.LiveOAuth2',
-    'social.backends.vkontakte.VKontakteOAuth2',
+    'social.backends.vk.VKOAuth2',
     'social.backends.dailymotion.DailymotionOAuth2',
     'social.backends.disqus.DisqusOAuth2',
     'social.backends.dropbox.DropboxOAuth',
@@ -45,11 +46,13 @@ web.config[setting_name('AUTHENTICATION_BACKENDS')] = (
     'social.backends.flickr.FlickrOAuth',
     'social.backends.livejournal.LiveJournalOpenId',
     'social.backends.soundcloud.SoundcloudOAuth2',
+    'social.backends.thisismyjam.ThisIsMyJamOAuth1',
     'social.backends.stocktwits.StocktwitsOAuth2',
     'social.backends.tripit.TripItOAuth',
     'social.backends.twilio.TwilioAuth',
     'social.backends.xing.XingOAuth',
     'social.backends.yandex.YandexOAuth2',
+    'social.backends.podio.PodioOAuth2',
 )
 web.config[setting_name('LOGIN_REDIRECT_URL')] = '/done/'
 

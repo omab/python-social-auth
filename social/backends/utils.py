@@ -24,7 +24,10 @@ def load_backends(backends, force_load=False):
     A force_load boolean argument is also provided so that get_backend
     below can retry a requested backend that may not yet be discovered.
     """
-    if not BACKENDSCACHE or force_load:
+    global BACKENDSCACHE
+    if force_load:
+        BACKENDSCACHE = {}
+    if not BACKENDSCACHE:
         for auth_backend in backends:
             backend = module_member(auth_backend)
             if issubclass(backend, BaseAuth):
@@ -32,7 +35,7 @@ def load_backends(backends, force_load=False):
     return BACKENDSCACHE
 
 
-def get_backend(backends, name, *args, **kwargs):
+def get_backend(backends, name):
     """Returns a backend by name. Backends are stored in the BACKENDSCACHE
     cache dict. If not found, each of the modules referenced in
     AUTHENTICATION_BACKENDS is imported and checked for a BACKENDS

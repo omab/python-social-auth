@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Social Auth Pyramid Example</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+  </head>
+  <body>
+    <p>You are logged in as ${request.user.username}!</p>
+    <p>Associated:</p>
+    <div tal:repeat="assoc social.backends.associated">
+      <form action="${request.route_url('social.disconnect_association', backend=assoc.provider, association_id=assoc.id)}" method="post">
+        <input id="_csrf" type="hidden" value="${request.session.get_csrf_token()}"/>
+        <button>Disconnect ${assoc.provider.title()} (${assoc.id})</button>
+      </form>
+    </div>
+
+    <p>Associate:</p>
+    <ul>
+      <li tal:repeat="name social.backends.not_associated">
+        <a href="${request.route_url('social.auth', backend=name)}">${name}</a>
+      </li>
+    </ul>
+  </body>
+</html>

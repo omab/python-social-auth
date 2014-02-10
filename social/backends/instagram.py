@@ -1,3 +1,7 @@
+"""
+Instagram OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/instagram.html
+"""
 from social.backends.oauth import BaseOAuth2
 
 
@@ -21,8 +25,5 @@ class InstagramOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json('https://api.instagram.com/v1/users/self',
-                                 params={'access_token': access_token})
-        except ValueError:
-            return None
+        return self.get_json('https://api.instagram.com/v1/users/self',
+                             params={'access_token': access_token})

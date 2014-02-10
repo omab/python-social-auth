@@ -1,15 +1,7 @@
 """
-Douban OAuth support.
-
-This adds support for Douban OAuth service. An application must
-be registered first on douban.com and the settings DOUBAN_CONSUMER_KEY
-and DOUBAN_CONSUMER_SECRET must be defined with they corresponding
-values.
-
-By default account id is stored in extra_data field, check OAuthBackend
-class for details on how to extend it.
+Douban OAuth1 and OAuth2 backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/douban.html
 """
-from social.exceptions import AuthCanceled
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
 
 
@@ -31,20 +23,8 @@ class DoubanOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        try:
-            return self.get_json(
-                'http://api.douban.com/people/%40me?&alt=json',
-                auth=self.oauth_auth(access_token)
-            )
-        except ValueError:
-            return None
-
-    def auth_complete(self, *args, **kwargs):
-        """Completes login process, must return user instance"""
-        if 'denied' in self.data:
-            raise AuthCanceled(self)
-        else:
-            return super(DoubanOAuth, self).auth_complete(*args, **kwargs)
+        return self.get_json('http://api.douban.com/people/%40me?&alt=json',
+                             auth=self.oauth_auth(access_token))
 
 
 class DoubanOAuth2(BaseOAuth2):
@@ -52,6 +32,7 @@ class DoubanOAuth2(BaseOAuth2):
     name = 'douban-oauth2'
     AUTHORIZATION_URL = 'https://www.douban.com/service/auth2/auth'
     ACCESS_TOKEN_URL = 'https://www.douban.com/service/auth2/token'
+    ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
     EXTRA_DATA = [
         ('id', 'id'),
@@ -67,17 +48,7 @@ class DoubanOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        try:
-            return self.get_json(
-                'https://api.douban.com/v2/user/~me',
-                headers={'Authorization': 'Bearer %s' % access_token}
-            )
-        except (ValueError, KeyError, IOError):
-            return None
-
-    def auth_complete(self, *args, **kwargs):
-        """Completes login process, must return user instance"""
-        if 'denied' in self.data:
-            raise AuthCanceled(self)
-        else:
-            return super(DoubanOAuth2, self).auth_complete(*args, **kwargs)
+        return self.get_json(
+            'https://api.douban.com/v2/user/~me',
+            headers={'Authorization': 'Bearer {0}'.format(access_token)}
+        )

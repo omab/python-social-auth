@@ -2,12 +2,15 @@
 import re
 import time
 import base64
+import uuid
 from datetime import datetime, timedelta
+
+import six
 
 from openid.association import Association as OpenIdAssociation
 
-from social.utils import utc
 from social.backends.utils import get_backend
+from social.strategies.utils import get_current_strategy
 
 
 CLEAN_USERNAME_REGEX = re.compile(r'[^\w.@+-_]+', re.UNICODE)
@@ -19,29 +22,38 @@ class UserMixin(object):
     uid = None
     extra_data = None
 
-    def get_backend(self, strategy):
-        return get_backend(strategy.backends, self.provider)
+    def get_backend(self, strategy=None):
+        strategy = strategy or get_current_strategy()
+        if strategy:
+            return get_backend(strategy.backends, self.provider)
+
+    def get_backend_instance(self, strategy=None):
+        strategy = strategy or get_current_strategy()
+        Backend = self.get_backend(strategy)
+        if Backend:
+            return Backend(strategy=strategy)
 
     @property
-    def tokens(self, strategy):
+    def tokens(self):
         """Return access_token stored in extra_data or None"""
-        backend = self.get_backend(strategy)
-        if backend:
-            return backend.tokens(self)
-        else:
-            return {}
+        return self.extra_data.get('access_token')
 
     def refresh_token(self, strategy, *args, **kwargs):
         token = self.extra_data.get('refresh_token') or \
-               self.extra_data.get('access_token')
+                self.extra_data.get('access_token')
         backend = self.get_backend(strategy)
         if token and backend and hasattr(backend, 'refresh_token'):
             backend = backend(strategy=strategy)
             response = backend.refresh_token(token, *args, **kwargs)
-            self.extra_data.update(
-                backend.extra_data(self.user, self.uid, response)
-            )
-            self.save()
+            access_token = response.get('access_token')
+            refresh_token = response.get('refresh_token')
+
+            if access_token or refresh_token:
+                if access_token:
+                    self.extra_data['access_token'] = access_token
+                if refresh_token:
+                    self.extra_data['refresh_token'] = refresh_token
+                self.save()
 
     def expiration_datetime(self):
         """Return provider session live seconds. Returns a timedelta ready to
@@ -57,15 +69,14 @@ class UserMixin(object):
             except (ValueError, TypeError):
                 return None
 
-            now = datetime.now()
-            now_timestamp = time.mktime(now.timetuple())
+            now = datetime.utcnow()
 
             # Detect if expires is a timestamp
-            if expires > now_timestamp:  # expires is a datetime
-                return datetime.utcfromtimestamp(expires) \
-                               .replace(tzinfo=utc) - \
-                       now.replace(tzinfo=utc)
-            else:  # expires is a timedelta
+            if expires > time.mktime(now.timetuple()):
+                # expires is a datetime
+                return datetime.fromtimestamp(expires) - now
+            else:
+                # expires is a timedelta
                 return timedelta(seconds=expires)
 
     def set_extra_data(self, extra_data=None):
@@ -107,12 +118,12 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def disconnect(cls, name, user, association_id=None):
+    def disconnect(cls, entry):
         """Disconnect the social account for the given user"""
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def user_exists(cls, username):
+    def user_exists(cls, *args, **kwargs):
         """
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.
@@ -120,8 +131,8 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def create_user(cls, username, email=None):
-        """Create a user with given username and (optional) email"""
+    def create_user(cls, *args, **kwargs):
+        """Create a user instance"""
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
@@ -130,12 +141,17 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
+    def get_users_by_email(cls, email):
+        """Return users instances for given email address"""
+        raise NotImplementedError('Implement in subclass')
+
+    @classmethod
     def get_social_auth(cls, provider, uid):
         """Return UserSocialAuth for given provider and uid"""
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def get_social_auth_for_user(cls, user):
+    def get_social_auth_for_user(cls, user, provider=None, id=None):
         """Return all the UserSocialAuth instances for given user"""
         raise NotImplementedError('Implement in subclass')
 
@@ -172,14 +188,18 @@ class AssociationMixin(object):
         if handle is not None:
             kwargs['handle'] = handle
         return sorted([
-                (assoc.id,
-                 OpenIdAssociation(assoc.handle,
-                                   base64.decodestring(assoc.secret),
-                                   assoc.issued,
-                                   assoc.lifetime,
-                                   assoc.assoc_type))
+            (assoc.id, cls.openid_association(assoc))
                 for assoc in cls.get(**kwargs)
         ], key=lambda x: x[1].issued, reverse=True)
+
+    @classmethod
+    def openid_association(cls, assoc):
+        secret = assoc.secret
+        if not isinstance(secret, six.binary_type):
+            secret = secret.encode()
+        return OpenIdAssociation(assoc.handle, base64.decodestring(secret),
+                                 assoc.issued, assoc.lifetime,
+                                 assoc.assoc_type)
 
     @classmethod
     def store(cls, server_url, association):
@@ -197,10 +217,38 @@ class AssociationMixin(object):
         raise NotImplementedError('Implement in subclass')
 
 
+class CodeMixin(object):
+    email = ''
+    code = ''
+    verified = False
+
+    def verify(self):
+        self.verified = True
+        self.save()
+
+    @classmethod
+    def generate_code(cls):
+        return uuid.uuid4().hex
+
+    @classmethod
+    def make_code(cls, email):
+        code = cls()
+        code.email = email
+        code.code = cls.generate_code()
+        code.verified = False
+        code.save()
+        return code
+
+    @classmethod
+    def get_code(cls, code):
+        raise NotImplementedError('Implement in subclass')
+
+
 class BaseStorage(object):
     user = UserMixin
     nonce = NonceMixin
     association = AssociationMixin
+    code = CodeMixin
 
     @classmethod
     def is_integrity_error(cls, exception):

@@ -114,13 +114,13 @@ class OpenIdAuth(BaseAuth):
         """Return auth URL returned by service"""
         openid_request = self.setup_request(self.auth_extra_arguments())
         # Construct completion URL, including page we should redirect to
-        return_to = self.strategy.build_absolute_uri(self.redirect_uri)
+        return_to = self.strategy.absolute_uri(self.redirect_uri)
         return openid_request.redirectURL(self.trust_root(), return_to)
 
     def auth_html(self):
         """Return auth HTML returned by service"""
         openid_request = self.setup_request(self.auth_extra_arguments())
-        return_to = self.strategy.build_absolute_uri(self.redirect_uri)
+        return_to = self.strategy.absolute_uri(self.redirect_uri)
         form_tag = {'id': 'openid_message'}
         return openid_request.htmlMarkup(self.trust_root(), return_to,
                                          form_tag_attrs=form_tag)
@@ -128,12 +128,12 @@ class OpenIdAuth(BaseAuth):
     def trust_root(self):
         """Return trust-root option"""
         return self.setting('OPENID_TRUST_ROOT') or \
-               self.strategy.build_absolute_uri('/')
+               self.strategy.absolute_uri('/')
 
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""
         response = self.consumer().complete(dict(self.data.items()),
-                                            self.strategy.build_absolute_uri(
+                                            self.strategy.absolute_uri(
                                                 self.redirect_uri
                                             ))
         kwargs.update({'response': response, 'backend': self})
@@ -142,24 +142,26 @@ class OpenIdAuth(BaseAuth):
     def auth_complete(self, *args, **kwargs):
         """Complete auth process"""
         response = self.consumer().complete(dict(self.data.items()),
-                                            self.strategy.build_absolute_uri(
+                                            self.strategy.absolute_uri(
                                                 self.redirect_uri
                                             ))
-        if not response:
-            raise AuthException(self, 'OpenID relying party endpoint')
-        elif response.status == SUCCESS:
-            kwargs.update({'response': response, 'backend': self})
-            return self.strategy.authenticate(*args, **kwargs)
-        elif response.status == FAILURE:
-            raise AuthFailed(self, response.message)
-        elif response.status == CANCEL:
-            raise AuthCanceled(self)
-        else:
-            raise AuthUnknownError(self, response.status)
+        self.process_error(response)
+        kwargs.update({'response': response, 'backend': self})
+        return self.strategy.authenticate(*args, **kwargs)
 
-    def setup_request(self, extra_params=None):
+    def process_error(self, data):
+        if not data:
+            raise AuthException(self, 'OpenID relying party endpoint')
+        elif data.status == FAILURE:
+            raise AuthFailed(self, data.message)
+        elif data.status == CANCEL:
+            raise AuthCanceled(self)
+        elif data.status != SUCCESS:
+            raise AuthUnknownError(self, data.status)
+
+    def setup_request(self, params=None):
         """Setup request"""
-        request = self.openid_request(extra_params)
+        request = self.openid_request(params)
         # Request some user details. Use attribute exchange if provider
         # advertises support.
         if request.endpoint.supportsType(ax.AXMessage.ns_uri):
@@ -188,7 +190,7 @@ class OpenIdAuth(BaseAuth):
             except (ValueError, TypeError):
                 max_age = None
 
-        if any((max_age, preferred_policies, preferred_level_types)):
+        if max_age is not None or preferred_policies or preferred_level_types:
             pape_request = pape.Request(
                 max_auth_age=max_age,
                 preferred_auth_policies=preferred_policies,
@@ -201,7 +203,7 @@ class OpenIdAuth(BaseAuth):
         """Create an OpenID Consumer object for the given Django request."""
         if not hasattr(self, '_consumer'):
             self._consumer = Consumer(
-                self.strategy.session_setdefault(SESSION_NAME, {}),
+                self.strategy.openid_session_dict(SESSION_NAME),
                 self.strategy.openid_store()
             )
         return self._consumer
@@ -212,13 +214,15 @@ class OpenIdAuth(BaseAuth):
         """
         return self.openid_request().shouldSendRedirect()
 
-    def openid_request(self, extra_params=None):
+    def openid_request(self, params=None):
         """Return openid request"""
         try:
             return self.consumer().begin(url_add_parameters(self.openid_url(),
-                                         extra_params))
+                                         params))
         except DiscoveryFailure as err:
-            raise AuthException(self, 'OpenID discovery error: %s' % err)
+            raise AuthException(self, 'OpenID discovery error: {0}'.format(
+                err
+            ))
 
     def openid_url(self):
         """Return service provider URL.

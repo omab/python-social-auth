@@ -33,7 +33,7 @@ and the database are defined, call ``init_social`` to register the models::
 
     from social.apps.flask_app.models import init_social
 
-    social_storage = init_social(app, db)
+    init_social(app, db)
 
 So far I wasn't able to find another way to define the models on another way
 rather than making it as a side-effect of calling this function since the

@@ -1,0 +1,2295 @@
+2014-02-05 v0.1.21
+==================
+
+  * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix iexact field lookup. Refs #179
+
+  * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Restore BackendWrapper to avoid session issues (this backend is
+    deprecated). Refs #128
+
+  * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Case insensitive query on django. Closes #179
+
+  * 2014-02-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Exclude sure broken version 1.2.4
+
+  * 2014-02-01 Michisu, Toshikazu <michisu@marici.co.jp>
+    Add version parameter to foursquare backend
+
+  * 2014-01-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Use response encoding only when available. Refs #173
+
+  * 2014-01-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Add pixelpin to backends index
+
+  * 2014-01-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Ensure encode() before md5 call for python3. Closes #168
+
+  * 2014-01-21 lukos <lukiebriner@gmail.com>
+    Added PixelPin to list of providers
+
+  * 2014-01-21 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8, file formats and line lengths fixes
+
+  * 2014-01-21 luke <luke@pixelpin.co.uk>
+    Add documentation for PixelPin
+
+  * 2014-01-21 luke <luke@pixelpin.co.uk>
+    Added new PixelPin provider.
+
+  * 2014-01-20 Matías Aguirre <matiasaguirre@gmail.com>
+    Use same DB name as other examples
+
+  * 2014-01-20 Yasin Aktimur <chardone@windowslive.com>
+    Serializer changed.
+
+  * 2014-01-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Support Weibo domain as username by setting. Closes #164
+
+  * 2014-01-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Snippet to get people from circles on Google+
+
+  * 2014-01-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Override get_user_id on tumblr backend. Refs #136
+
+2014-01-17 v0.1.20
+==================
+
+  * 2014-01-17 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.20
+
+  * 2014-01-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Decode bytes on Python3 otherwise it breaks session saving on Django. Refs
+    #139
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix linkedin docs about attributes names. Closes #161
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Also support old keys format in linkedin backend for basic data
+
+2014-01-16 v0.1.19
+==================
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.19
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Generate packages names dynamically
+
+2014-01-16 v0.1.18
+==================
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.18
+
+  * 2014-01-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Raise missing parameter error in facebook. Refs #153
+
+  * 2014-01-15 harshiljain <jainharsh79@yahoo.com>
+    AUTHORIZATION_URL changed to https
+
+  * 2014-01-14 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-01-14 Javier G. Sogo <jgsogo@gmail.com>
+    stores 'access_token' for GooglePlusAuth
+
+  * 2014-01-14 Javier G. Sogo <jgsogo@gmail.com>
+    for FacebookOAuth2::process_revoke_token_response call super (solves type
+    with 'status_code') and custom processing
+
+  * 2014-01-14 Javier G. Sogo <jgsogo@gmail.com>
+    moved revoking stuff to OAuthAuth class (should it be moved to BaseAuth?)
+
+  * 2014-01-13 Max Tepkeev <m.tepkeev@ailove.ru>
+    odnoklassniki backend iframe app fix
+
+  * 2014-01-10 xen <m@xen.ru>
+    Cleanup docs
+
+  * 2014-01-10 xen <m@xen.ru>
+    Simplify SQLAlchemy API usage
+
+  * 2014-01-10 xen <m@xen.ru>
+    Update to follow current state in documentations
+
+  * 2014-01-08 Roberto Robles <robertorobles0@gmail.com>
+    Remove SOCIAL_AUTH prefix on redirect_uri function
+
+  * 2014-01-08 Roberto Robles <robertorobles0@gmail.com>
+    Fixed issue with redirect_uri with https
+
+  * 2014-01-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Link Taobao docs on backends index
+
+  * 2014-01-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Docs styling and PEP8
+
+  * 2014-01-08 Jichao Ouyang <oyanglulu@gmail.com>
+    taobao docs
+
+  * 2014-01-08 Jichao Ouyang <oyanglulu@gmail.com>
+    get token with POST method
+
+  * 2014-01-07 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and cleanups. Refs #145
+
+  * 2014-01-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Move URLs gathering to helper
+
+  * 2014-01-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix dox underline
+
+  * 2014-01-07 Jichao Ouyang <oyanglulu@gmail.com>
+    remove unused import
+
+  * 2014-01-07 Jichao Ouyang <oyanglulu@gmail.com>
+    add to django example
+
+  * 2014-01-07 Jichao Ouyang <oyanglulu@gmail.com>
+    add support for taobao
+
+  * 2014-01-06 Adam Coddington <me@adamcoddington.net>
+    Updating readme to proclaim OAuth2 support for Dropbox.
+
+  * 2014-01-06 Adam Coddington <me@adamcoddington.net>
+    Updating Dropbox documentation to include notes regarding OAuth2 support.
+
+  * 2014-01-06 Adam Coddington <me@adamcoddington.net>
+    Adding Dropbox OAuth2 Support.
+
+  * 2014-01-06 Edwin Knuth <edwin@pointnineseven.com>
+    increasing length of salt field for django apps, fixes #141
+
+  * 2014-01-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify partial handling on actions
+
+  * 2014-01-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Updated readme with other dependencies. Closes #140
+
+  * 2014-01-06 Jichao Ouyang <oyanglulu@gmail.com>
+    add support for taobao
+
+  * 2014-01-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Always send email validations is required
+
+  * 2014-01-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Move extra-data logic to base clase
+
+  * 2014-01-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix ID_KEY for Tumblr backend. Refs #136
+
+  * 2014-01-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Use cases doc. Refs #137
+
+  * 2014-01-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix docstring. Refs #136
+
+  * 2013-12-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Line chars limit in docs. Refs #135
+
+  * 2013-12-28 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8. Refs #135
+
+  * 2013-12-28 Xmypblu <xmypblu.msk@gmail.com>
+    Add support for OpenStreetMap OAuth
+
+  * 2013-12-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Update porting docs regarding session value
+
+  * 2013-12-27 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2013-12-26 Nicolas Cortot <nc@rznc.net>
+    Support for MongoEngine authentication using Custom User Model
+
+  * 2013-12-25 Nick Sullivan <nick@sullivanflock.com>
+    Update reddit.py
+
+  * 2013-12-17 Jay Parlar <parlar@gmail.com>
+    Tiny typo fix
+
+  * 2013-12-16 maxtepkeev <tepkeev@gmail.com>
+    fix session expiration in vk backend
+
+  * 2013-12-11 Kevin Tran <hekevintran@gmail.com>
+    Added support for named URLs and URL translation using the django built-in
+    resolve_url before giving the url to tje HttpResponseRedirect. See also
+    https://code.djangoproject.com/ticket/15552
+
+  * 2013-12-11 Bob Alcorn <alcorn.bob@gmail.com>
+    Updated pipeline example to include externalized auth;
+
+  * 2013-12-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Avoid broken email entries on yahoo API. Closes #125
+
+  * 2013-12-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Allow unauthorized token retrieval/storage overrideable. Refs #111
+
+  * 2013-12-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Constant type compare on HMAC signatures. Closes #122
+
+  * 2013-12-07 monkut <nafein@hotmail.com>
+    Removed non-ascii character from author string
+
+  * 2013-12-06 Hans <hans@hansl.ca>
+    Add test backends to the package.
+
+  * 2013-12-06 Rodrigue Villetard <doddo@sacristi.fr>
+    Missing trailing slash on complete url
+
+  * 2013-12-03 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8. Refs #116
+
+  * 2013-12-03 Stephen McDonald <steve@jupo.org>
+    Add refs to getpocket.com in readme + docs
+
+  * 2013-12-03 Stephen McDonald <steve@jupo.org>
+    getpocket.com backend
+
+  * 2013-12-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Helper to get current backend instance. Refs #114
+
+  * 2013-11-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Set current strategy on pyramid app
+
+  * 2013-11-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify pyramid settings access
+
+  * 2013-11-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Set current strategy on webpy and flask apps
+
+  * 2013-11-29 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Link to backends docs in the modules instead of repeating the docs. Refs
+    #107
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Yammer docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Improves to Yahoo docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Xing docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Trello docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Podio docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Mendeley docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix backends index order
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    LiveJournal docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Jawbone docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Foursquare backend docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Fitbit docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Fedora openid docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix douban oauth1 title
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Dailymotion docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    File format fix to coinbase docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix backends order
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    BelgiumEID docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    AOL docs
+
+  * 2013-11-26 Norton Wang <nortantivirus@gmail.com>
+    fix uid in coinbase oauth
+
+  * 2013-11-23 Norton Wang <nortantivirus@gmail.com>
+    add coinbase docs, add runkeeper docs to index
+
+  * 2013-11-23 Norton Wang <nortantivirus@gmail.com>
+    add coinbase oauth
+
+  * 2013-11-23 Norton Wang <nortantivirus@gmail.com>
+    Add more examples to django_example, alphabetize, fix some grammar
+
+  * 2013-11-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix setting name in docs. Refs #97
+
+  * 2013-11-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Move default pipeline definitions to constants for easy import. Refs #99
+
+  * 2013-11-21 josseph <josseph.zhang@gmail.com>
+    Update weibo.py
+
+  * 2013-11-20 maxtepkeev <tepkeev@gmail.com>
+    Make vk-app backend to retrieve additional user data in respect to the
+    *_EXTRA_DATA setting
+
+  * 2013-11-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix typo
+
+  * 2013-11-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Mention callback URL definition on linkedin when using oauth2. Refs #58
+
+  * 2013-11-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Include backend name in setting if backend is defined. Refs #95
+
+  * 2013-11-18 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and simplifications. Refs #92
+
+  * 2013-11-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Restore prvious link, fix schema in readthedocs link. Refs #93
+
+  * 2013-11-17 Sahil Gupta <sahilgupta.29@gmail.com>
+    Updated README to point to the latest docs on Read The Docs.
+
+  * 2013-11-16 Marios <assiotis@alum.mit.edu>
+    Google Plus backend allows for a server-side flow that can grant a refresh
+    token that can be subsequently used to perform operations on behalf of the
+    user, even if the user is not online.
+
+  * 2013-11-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Replace format call with string join. Closes #91
+
+  * 2013-11-14 Juan Riaza <github@juanriaza.com>
+    a better way
+
+  * 2013-11-14 Juan Riaza <github@juanriaza.com>
+    fitbit uid
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix OpenId PAPE max age check. Closes #89
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Changelog update
+
+2013-11-13 v0.1.17
+==================
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.17
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Support remember flag when calling login on flask app
+
+  * 2013-11-13 Nitish Rathi <nitish7r@yahoo.com>
+    Use strategy.backend.name instead of strategy.backend_name
+
+  * 2013-11-13 Nitish Rathi <nitish7r@yahoo.com>
+    Use strategy.backend.name instead of strategy.backend_name
+
+  * 2013-11-13 Nitish Rathi <nitish7r@yahoo.com>
+    Use strategy.backend.name instead of strategy.backend_name
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Update ChangeLog
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Define exception to signal a backend-not-found error. Refs #83
+
+  * 2013-11-11 Алексей <despawn@gmail.com>
+    Raise Http404 in django auth view when the backend is not found
+
+  * 2013-11-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove BackendWrapper reference and set current-strategy cache to access it
+
+  * 2013-11-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Set social_ prefix on request attribute to avoid conflicts with other apps.
+    Keep social attribute if not set (backward compatibility)
+
+  * 2013-11-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Update github docs regarding callback URL. Closes #66
+
+  * 2013-11-08 yegle <cnyegle@gmail.com>
+    Mod: URL for registering Windows Live key/secret
+
+  * 2013-11-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix association id. Closes #78
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Mention method used
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Typo fix
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Update middleware docs
+
+2013-11-07 v0.1.16
+==================
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.16
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unused vars
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove or check which always default to settings.DEBUG if RAISE_EXCEPTIONS
+    was False
+
+  * 2013-11-07 Michal Čihař <mcihar@suse.cz>
+    Include actions module in distribution
+
+  * 2013-11-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Ensure IDs to openid association removal. Closes #76
+
+  * 2013-11-05 Branden Rolston <branden@disqus.com>
+    Update partial from session with newer kwargs.
+
+  * 2013-11-05 Branden Rolston <branden@disqus.com>
+    Use mock.
+
+  * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Link to tornado docs
+
+  * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix to douban access token retrieval method. Closes #72
+
+  * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Custom user model in mongoengine example app. Refs #70
+
+  * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Mention tornado on readme and docs intro
+
+  * 2013-11-05 Axel Haustant <noirbizarre@gmail.com>
+    Talk about tox in test documentation
+
+  * 2013-11-05 Axel Haustant <noirbizarre@gmail.com>
+    Upgrade HTTPretty for OSX/Requets 2.0 compatibility
+
+  * 2013-11-05 Axel Haustant <noirbizarre@gmail.com>
+    Added tox configuration
+
+  * 2013-11-05 Axel Haustant <noirbizarre@gmail.com>
+    quote message for url inclusion
+
+  * 2013-11-04 Branden Rolston <branden@disqus.com>
+    Return the updated dict.
+
+  * 2013-11-04 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.15
+
+2013-11-04 v0.1.15
+==================
+
+  * 2013-11-04 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.15
+
+  * 2013-11-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Test runkeeper backend
+
+  * 2013-11-02 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and implement missing method
+
+  * 2013-11-02 Martin Santos <msantos@itsgiddy.com>
+    Removed prints
+
+  * 2013-11-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Fixes to Tornado application (mostly cookies handling)
+
+  * 2013-11-02 Martin Santos <msantos@itsgiddy.com>
+    WIP: More changes
+
+  * 2013-11-02 Martin Santos <msantos@itsgiddy.com>
+    WIP: strategy and example app
+
+  * 2013-11-01 Martin Santos <msantos@itsgiddy.com>
+    Initial tornado support
+
+  * 2013-10-28 Andrey Mitroshin <mit@akamit.com>
+    Function user_data returns list. This leads to exception in
+    social/backends/oauth.py (line 340): "ValueError, dictionary update
+    sequence element #0 has length 31; 2 is required". Taking 1st elementt of
+    that list fixes the error.
+
+  * 2013-10-23 Jason Sanford <jason.sanford@mapmyfitness.com>
+    Add RunKeeper.
+
+  * 2013-10-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix reference
+
+  * 2013-10-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Add missing links
+
+  * 2013-10-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Support python3-openid last changes on Association class
+
+  * 2013-10-23 Hannes Ljungberg <hannes@5monkeys.se>
+    Make partial_pipeline JSON serializable for django 1.6
+
+  * 2013-10-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Add missing attribute to flask storage
+
+  * 2013-10-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix typo. Closes #61
+
+  * 2013-10-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Small fixes to apfuel doc. Refs #59
+
+  * 2013-10-14 z4r <24erre@gmail.com>
+    Appsfuel doc from dsa to psa
+
+  * 2013-10-14 z4r <24erre@gmail.com>
+    Appsfuel doc from dsa to psa
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Make BackendWrapper respect backends interface. Refs #53
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Docs regarding Django 1.6 and backends enforced into
+    AUTHENTICATION_BACKENDS. Refs #53
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Try setting with backend name and without
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove backend_name property
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix arguments on refresh_token() method. Refs #52
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Make backend_name a property. Refs #52
+
+  * 2013-10-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Pass the correct name to strategy setting method
+
+  * 2013-10-08 Michal Čihař <mcihar@suse.cz>
+    Add openSUSE OpenID login
+
+  * 2013-10-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix url check type. Refs #49
+
+  * 2013-10-08 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and small simplification on sanitize_url check. Refs #49
+
+  * 2013-10-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Clean every mergedict data type
+
+  * 2013-10-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Force dict type over response (convert mergedict types)
+
+  * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Enforce dict() on values
+
+  * 2013-10-07 Daniel Barreto <dbarreto@talpor.com>
+    Check for None when `sanitize_redirect` returns in `do_complete`.
+
+  * 2013-10-07 Daniel Barreto <dbarreto@talpor.com>
+    Make `sanitize_redirect` aware of possible proxies.
+
+2013-10-07 v0.1.14
+==================
+
+  * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.14
+
+  * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix encoding string between python2 and 3
+
+  * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Always wrap openid session value
+
+  * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Encode value to avoid Python3 errors. Refs #776
+
+  * 2013-10-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Google plus sign in docs
+
+  * 2013-10-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix links on google docs
+
+  * 2013-10-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Google+ Sign In backend example
+
+  * 2013-10-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Working Google+ Sign In backend
+
+  * 2013-10-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Move process_error() to upper class
+
+  * 2013-10-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable json serializer on example app
+
+  * 2013-10-04 Markus Holtermann <info@markusholtermann.eu>
+    Fixes #45 -- AttributeError while resolving the user model in Django
+
+  * 2013-10-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Serialize only well-known types, rename function to remark the usage. Refs
+    #36
+
+  * 2013-10-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Use seconds to set session expiration. Refs #36
+
+  * 2013-10-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename verification code parameter to avoid clashing with backends
+    parameters
+
+  * 2013-10-02 nvbn <nvbn.rm@gmail.com>
+    Fix work with django 1.6
+
+  * 2013-10-02 nvbn <nvbn.rm@gmail.com>
+    Make JSONField compatible with python 3
+
+  * 2013-10-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Update docs regarding yahoo keys. Refs #43
+
+  * 2013-09-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Small code changes
+
+  * 2013-09-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove path from urls
+
+  * 2013-09-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Only run tests on social/tests
+
+  * 2013-09-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Mention pyramid in keywords
+
+  * 2013-09-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove python-coveralls
+
+  * 2013-09-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Django tests
+
+  * 2013-09-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Move base classes to directories
+
+  * 2013-09-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove dbref=True from ReferenceField. Refs #42
+
+  * 2013-09-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Process facebook errors on complete. Refs #40
+
+  * 2013-09-24 Matías Aguirre <matiasaguirre@gmail.com>
+    White list setting
+
+  * 2013-09-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplified django example applications
+
+  * 2013-09-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Add mongoengine to requirements
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Mongoengine example
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix url for django mongoengine support, add str_id() helper
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Refactor common code on username/email backends tests
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Email backend test
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove print line
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Code model on tests
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    build_absolute_uri test case
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Small simplification on disconnect action
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Username backend test case
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Test suite defined on setup.py
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Move tests inside the social package
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove coveralls
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    First try with coveralls
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    More badges to README.rst
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove python 2.5 support from setup.py
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Doc clarification
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Changelog update
+
+2013-09-22 v0.1.13
+==================
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.13
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Move common code to base class
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Small improve to email partial pipeline on example app
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix titles and sections on some docs
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Link to pipeline section
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Code model docs
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Move email validation docs to pipeline.rst
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Improve email validation to only validate new accounts
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Email and Username backends docs
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Docstring fix
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Username backend
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Drop password
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Email validation only on new accounts
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Drop password support, let that to developers in pipeline
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Validate email only if needed
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Small improvement on partial decorator
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable password on user save fields
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Email validation on django example app
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Email validation pipeline and strategy functions
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Verification code models
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Django example for email auth
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Initial email auth backend (no email validation yet)
+
+  * 2013-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove complex class definition on django json field. Refs #35
+
+  * 2013-09-20 Matías Aguirre <matiasaguirre@gmail.com>
+    Define 'POST' method for access token retrieval in Odnoklassniki backend.
+    Refs #33
+
+  * 2013-09-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Sanitize redirects on complete before sending it
+
+  * 2013-09-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Link to Box doc
+
+  * 2013-09-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Link Pyramid and add it to list on README
+
+  * 2013-09-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Changelog update
+
+  * 2013-09-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Changelog file
+
+  * 2013-09-17 Jonathan Tsai <jontsai@jontsai.com>
+    Update README.rst
+
+  * 2013-09-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Update pipeline docs with disconnection-pipeline feature
+
+  * 2013-09-17 Jonathan Tsai <jontsai@jontsai.com>
+    Update pipeline.rst
+
+  * 2013-09-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Ensure request in the pipeline
+
+  * 2013-09-15 Jonathan Tsai <jontsai@jontsai.com>
+    Update README.rst
+
+  * 2013-09-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Add requirements for pyramid example app
+
+  * 2013-09-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Pyramid docs
+
+  * 2013-09-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Pyramid example app
+
+  * 2013-09-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Pyramid strategy and application
+
+  * 2013-09-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Move build_absolute_uri base code to utils
+
+  * 2013-09-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unused import
+
+  * 2013-09-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Change lists to tuples
+
+  * 2013-09-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Commit session only if flagged
+
+  * 2013-09-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Return the poped value
+
+  * 2013-09-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Return the poped value
+
+  * 2013-09-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove prints
+
+  * 2013-09-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Partial pipeline on django example
+
+2013-09-13 v0.1.12
+==================
+
+  * 2013-09-13 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.12
+
+  * 2013-09-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix get_social_auth_for_user on mongoengine storage
+
+  * 2013-09-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix rst syntax. Fix site index linking
+
+  * 2013-09-12 Matías Aguirre <matiasaguirre@gmail.com>
+    More settings fixes. Refs #29
+
+  * 2013-09-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Review setting names on docs. Refs #29. Refs #28.
+
+  * 2013-09-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Review setting names on docs. Refs #29
+
+  * 2013-09-10 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and code simplification. Refs #26
+
+  * 2013-09-09 Roman <roman@server.fake>
+    Added workaround for REDIRECT_STATE and urlencoding.
+
+  * 2013-09-09 Roman <roman@server.fake>
+    Fixed auth redirect URL for BaseOauth2 always redirecting wrong. OAuth2
+    providers expect the url to be an unquoted value.
+
+  * 2013-09-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix thisismyjam test
+
+  * 2013-09-09 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 on thisismyjam backend
+
+  * 2013-09-08 Rob McQueen <robmcqueen@Robs-MacBook-Pro.local>
+    changing back to default KEY/SECRET naming
+
+  * 2013-09-08 Sam Kuehn <samkuehn@gmail.com>
+    Remove data that should should not be stored in extra_data
+
+  * 2013-09-08 Rob McQueen <robmcqueen@Robs-MacBook-Pro.local>
+    change title of thisismyjam docs
+
+  * 2013-09-08 Rob McQueen <robmcqueen@Robs-MacBook-Pro.local>
+    Adding Support For ThisIsMyJam
+
+  * 2013-09-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Disconnect pipeline, move details/uid extraction to pipeline methods too.
+    Refactor pipeline run code
+
+  * 2013-09-08 Matías Aguirre <matiasaguirre@gmail.com>
+    New user redirect test
+
+  * 2013-09-08 Sam Kuehn <samkuehn@gmail.com>
+    Add box.net to readme
+
+  * 2013-09-08 Sam Kuehn <samkuehn@gmail.com>
+    Add box.net to list off supported providers
+
+  * 2013-09-08 Sam Kuehn <samkuehn@gmail.com>
+    Add box.net support
+
+  * 2013-09-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Test broken disconnect
+
+  * 2013-09-08 Sam Kuehn <samkuehn@gmail.com>
+    Ignore .DS_Store files
+
+  * 2013-09-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Custom user model for mongoengine backends
+
+  * 2013-09-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Thanks doc
+
+  * 2013-09-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Keep old data on refresh token if no new data was received
+
+  * 2013-09-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix extra data case for tuple with single value
+
+  * 2013-09-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Set request if not present on pipeline continuation, fix args passed to
+    continue_pipeline
+
+2013-09-03 v0.1.11
+==================
+
+  * 2013-09-03 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.11
+
+  * 2013-09-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Enforce list on pipeline method
+
+  * 2013-09-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Drop regex search on steam id. Refs #23
+
+  * 2013-09-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Steam link
+
+  * 2013-09-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Generic whitelist tests
+
+  * 2013-09-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Refactor email/domain whitelist checking, make it generic to all backends
+
+  * 2013-09-01 Matías Aguirre <matiasaguirre@gmail.com>
+    More revoke token test on dummy backend
+
+  * 2013-09-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplifications to revoke token code
+
+  * 2013-09-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Revoke token test
+
+  * 2013-09-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Fixes to revoke token code
+
+  * 2013-09-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix test name
+
+  * 2013-09-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Rewrite conditions on user pipeline
+
+  * 2013-08-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Associate by email test
+
+  * 2013-08-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Rewrite if
+
+  * 2013-08-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Move common testing code to base class
+
+  * 2013-08-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable broken steam test
+
+  * 2013-08-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Comment test, needs more investigation
+
+  * 2013-08-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Test @partial pipeline decorator
+
+  * 2013-08-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Steam test on missing steam id
+
+  * 2013-08-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix github emails retrieval. Add tests
+
+  * 2013-08-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Change missing %s to format() call
+
+  * 2013-08-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Switch %s in favor of .format
+
+  * 2013-08-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Pass parameters by name
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix deletion in sqlalchemy orm
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable reddit backend in example
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Add logout route, increase flask version in requirements
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unused parameters
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix format string
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Fetch emails if the scope allows it, support future response from API too.
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Port token revoke on disconnection
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Set lazy backref to user model in sqlalchemy orm
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Move disconnect common code to base class
+
+2013-08-29 v0.1.10
+==================
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.10
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Port associate by email pipeline entry
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix shopify and vk definitions
+
+2013-08-29 v0.1.9
+=================
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.9
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Allow to override strategy getter
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Port linkedin force profile language setting from DSA
+
+  * 2013-08-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Port slug func override from DSA, define identity funcs to avoid extra ifs
+
+  * 2013-08-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Requests oauthlib still broken
+
+  * 2013-08-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Requests oauthlib still broken
+
+  * 2013-08-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Port HTTPS ensure code from DSA
+
+  * 2013-08-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Port fields length config by settings
+
+  * 2013-08-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Wording fix
+
+  * 2013-07-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix Steam backend steam id retrieval
+
+  * 2013-07-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix super call.
+
+  * 2013-07-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Django imports for version lower than 1.4 and higher
+
+  * 2013-07-15 Florian Auroy <fauroy@gmail.com>
+    Pass synchronize_session='fetch' to delete.
+
+  * 2013-07-15 Florian Auroy <fauroy@gmail.com>
+    Commit the session after removing an association.
+
+  * 2013-07-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Django admin conf for default django app
+
+  * 2013-07-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Port ExactTarget backend from DSA
+
+  * 2013-07-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Port Jawbone backend from DSA
+
+  * 2013-07-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Port Fedora backend from DSA
+
+  * 2013-07-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Port Belgium e-ID backend from DSA
+
+  * 2013-07-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Port AppsFuel backend from DSA
+
+  * 2013-07-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Port AOL backend from DSA
+
+  * 2013-07-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Dummy change
+
+  * 2013-07-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Reduce the code in openid wrapper for flask 0.10
+
+2013-07-13 v0.1.8
+=================
+
+  * 2013-07-13 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.8
+
+  * 2013-07-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Add method to determine if current user is allowed to login
+
+  * 2013-06-30 Florian Auroy <fauroy@gmail.com>
+    Fix OpenId auth with Flask 0.10
+
+  * 2013-06-20 Matías Aguirre <matiasaguirre@gmail.com>
+    Add instance to session before commiting it
+
+  * 2013-06-20 Orchestrator81 <drorco@gmail.com>
+    Updated the CodersClan button to the right repo_id
+
+  * 2013-06-20 Orchestrator81 <drorco@gmail.com>
+    Add CodersClan button to the Readme file
+
+  * 2013-06-13 Martin Santos <m.sanmate@gmail.com>
+    Better aproach to the default value of response
+
+  * 2013-06-13 Martin Santos <m.sanmate@gmail.com>
+    No mandatory param "response" in do_auth of facebook backend
+
+  * 2013-06-13 Martin Santos <m.sanmate@gmail.com>
+    Forgot to declare the param response at the top of the function
+
+  * 2013-06-13 Martin Santos <m.sanmate@gmail.com>
+    Pass expected parameter response instead expires
+
+  * 2013-06-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Pass username as named parameter
+
+2013-06-03 v0.1.7
+=================
+
+  * 2013-06-03 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.7
+
+  * 2013-06-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix inheritance on flask and sqlalchemy orm
+
+  * 2013-06-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Pass session into flask app init
+
+2013-06-03 v0.1.6
+=================
+
+  * 2013-06-03 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.6
+
+  * 2013-06-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Enforce db session passing on flask init
+
+2013-06-01 v0.1.5
+=================
+
+  * 2013-06-01 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.5
+
+  * 2013-06-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Simpler code to convert values to and from session
+
+  * 2013-06-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix is_new flag
+
+  * 2013-06-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Added @partial decorator, much simpler than adding entries to pipeline
+
+  * 2013-06-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Clean pipeline after auth process
+
+  * 2013-06-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove is_response() method
+
+  * 2013-06-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Simpler partial pipeline check
+
+2013-05-31 v0.1.4
+=================
+
+  * 2013-05-31 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.4
+
+  * 2013-05-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Unrestricted user fields on instance creation, defaults to username and
+    email
+
+2013-05-31 v0.1.3
+=================
+
+  * 2013-05-31 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.3
+
+  * 2013-05-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Avoid version 0.3.2 of requests-oauthlib on python 3 (setup.py)
+
+  * 2013-05-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Avoid version 0.3.2 of requests-oauthlib on python 3
+
+  * 2013-05-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Amazon OAuth2 backend
+
+  * 2013-05-21 dongweiming <ciici123@gmail.com>
+    Modify trello.py to pass pep8
+
+  * 2013-05-20 jgsogo <jgsogo@gmail.com>
+    added support for django custom user with no 'username' field
+
+  * 2013-05-20 dongweiming <ciici123@gmail.com>
+    Add Trello backend support
+
+  * 2013-05-17 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2013-05-17 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2013-05-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Pass decoding=None to oauthlib since the default value (utf-8) creates
+    problems with python-requests on python3
+
+  * 2013-05-17 George Sakkis <george.sakkis@gmail.com>
+    Podio backend: proper way to split the work between user_data() and
+    get_user_details()
+
+  * 2013-05-17 George Sakkis <george.sakkis@gmail.com>
+    Podio backend
+
+  * 2013-05-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename backend import path
+
+  * 2013-05-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Avoid import error on local_settings
+
+  * 2013-05-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Add required settings to settings.py
+
+  * 2013-04-23 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 over vk module
+
+  * 2013-04-23 Alexey Boriskin <boriskin@adwz.ru>
+    Adjust examples to the vkontakte -> vk.com rename
+
+  * 2013-04-23 Alexey Boriskin <boriskin@adwz.ru>
+    Adjust documentation to the vkontakte -> vk.com rename
+
+  * 2013-04-23 Alexey Boriskin <boriskin@adwz.ru>
+    Rename vkontakte to vk.com in the code
+
+  * 2013-04-23 Alexey Boriskin <boriskin@adwz.ru>
+    Added test for vkontakte oauth2 backend.
+
+  * 2013-04-22 Alexey Boriskin <boriskin@adwz.ru>
+    Update links and API urls: rename vkontatke.ru to vk.com because of social
+    network official rename
+
+  * 2013-04-22 Alexey Boriskin <boriskin@adwz.ru>
+    Fixed bug, which prevented VK backend from picking user data (first_name
+    and last_name)
+
+  * 2013-04-22 Alexey Boriskin <boriskin@adwz.ru>
+    Fix mixed up key and secret
+
+  * 2013-04-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Freeze httpretty dep since that package breaks python3 support quite often
+
+  * 2013-04-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Mendeley backend
+
+  * 2013-04-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Ignore invalid tokens when building setting name
+
+  * 2013-04-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Yaru OAuth2 backend
+
+  * 2013-04-20 Andrey <mrairjordan93@gmail.com>
+    changed ACCESS_TOKEN_METHOD to POST
+
+  * 2013-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Support <backend name>_<setting name> setting format too
+
+  * 2013-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix persona backend
+
+2013-04-03 v0.1.2
+=================
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.2
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Update tests docs
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Encode string before calling b64
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Refresh token tests
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unused method
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Reddit backend test
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Dummy space align
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Pipeline tests
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Configurable clean step on usernames.
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename pipeline parameter from social_user to social
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Multiple accounts tests, move code from super class to subclass since it's
+    where they belong
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename handles from octocat to foobar on github data/tests
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename var to avoid override of function
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Encode seed() to be py3 complaint
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Storage tests
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Exceptions fixes, remove titled_name attribute from backends, use strategy
+    function instead of storage
+
+  * 2013-04-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Google whitelist domains/emails tests
+
+  * 2013-04-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix py3 import
+
+  * 2013-04-02 Matías Aguirre <matiasaguirre@gmail.com>
+    OpenId tests
+
+  * 2013-04-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unused import
+
+  * 2013-04-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unused code from google backend
+
+  * 2013-04-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify steam backend code, enable it on django demo
+
+2013-04-01 v0.1.1
+=================
+
+  * 2013-04-01 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.1
+
+  * 2013-04-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Use a default dict to play with the console and django strategy
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove exception handling
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Verify tokens returned by tokes property
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Discard invalid types when cleaning urls
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Utils and expiration_datetime test
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify utc handling on expiration_datetime method
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix exception for use with python3
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Exceptions tests
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Replace __unicode__ with __str__ on exceptions
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Google unique-id support test
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Dummy backend test
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Improve extra_data names handling, remove unused method
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Move common code to base class on linkedin tests
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix linkedin test to use json response format
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename extra_params to params
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Use linkedin JSON format instead of parsing XML
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Github organization backend improves and tests
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Small improve to yandex first/last name generation
+
+  * 2013-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Test backends info returned by social.backends.utils.user_backends_data
+
+  * 2013-03-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Tripit 100% coverage tests
+
+  * 2013-03-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix method type on stripe backend
+
+  * 2013-03-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Stocktwits 100% coverage tests
+
+  * 2013-03-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Improve soundcloud tests
+
+  * 2013-03-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Facebook fail on user-data test
+
+  * 2013-03-30 Matías Aguirre <matiasaguirre@gmail.com>
+    100% coverage of evernote backend
+
+  * 2013-03-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify yammer auth_complete code
+
+  * 2013-03-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify oauth1 and 2 tests code
+
+  * 2013-03-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Test running script
+
+  * 2013-03-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify auth error processing
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Add coverage to dependencies
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Backends utils tests
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Reset backends cache if force_load was set to True
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Run tests with coverage
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    More tests
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove else clause
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify user_data calls (remove try/except blocks)
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix partial pipeline arguments to avoid messing with broken pipeline case
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify tokens helper in models/backends since tokens are stored in
+    desired format already
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove stop-pipeline exception (not used at all)
+
+  * 2013-03-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix exception raised on skyrock backend
+
+  * 2013-03-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Reddit backend docs
+
+  * 2013-03-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Protect request access in case it's None
+
+  * 2013-03-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Reddit backend
+
+  * 2013-03-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix refresh-token method
+
+  * 2013-03-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Move strategy loader to outside function to ease strategy creation from
+    scripts
+
+  * 2013-03-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Github for organizations backend
+
+  * 2013-03-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Update twitter doc borrowed from DSA project
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Define scope separators for linkedin oauth1 and oauth2
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Linkedin OAuth2 docs
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify user_data method on linkedin backends
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Linkedin OAuth2 backend
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix setting reference in linkedin docs
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix settings references on docs
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix linkedin docs
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix association get method on tests
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Small rename on openid base code
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unnecessary lines in setUp methods
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Move __init__ code into setUp method
+
+  * 2013-03-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Partial pipeline tests on actions. Simplify unused code, return backend
+    stored on session on partial pipelines
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Add travis-ci build status image into README
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Change install method to avoid python2/python3 dependency issues on
+    travis-ci
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove debug print, use print() on docstring
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Add python3.3 to travis conf
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Set sorted fields selectors on linkedin to avoid HTTPretty failure on tests
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Travis YAML
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Update tests readme
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Disconnect test
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify actions tests, add association test
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Add actions tests (login so far)
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Add response class and define is_response() on test strategy
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Save user username in session and verify it on tests
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Define authenticate() method on test strategy
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify authenticate() code on flask and webpy strategies
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Catch custom user attributes in case login() resets the instance
+
+  * 2013-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Move actions module to root module
+
+  * 2013-03-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Allow already instanced template strategies
+
+  * 2013-03-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Use setdefault() to set current template strategy on tests
+
+  * 2013-03-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Use setdefault() to set current template strategy
+
+  * 2013-03-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Move rendering process into strategy class too
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Tests docs
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Tests readme
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Dropbox backend tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Define parameters names on class attributes. Fix Dropbox backend
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Xing backend tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix xing backend
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Twitter backend test
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Tumblr backend test
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Support POST request method on oauth1 backends tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Add option for POST request token method
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable tumblr backend in example app
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Skyrock tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix skyrock backend
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable skyrock backend on example app
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Tripit tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Readability tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix readability backend
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable readability backend on example app
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Linkedin tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename test classes to reflect the backend type
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Google OAuth1 test
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove empty line
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Flickr tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix and simplify flickr backend
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Fitbit tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix fitbit backend
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Evernote tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix evernote backend
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix evernote backend
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Yahoo tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Bitbucket tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    OAuth1 base tests
+
+  * 2013-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix OAuth1 unauth_token check. Support access token method on OAuth1
+    backends too. Fix test strategry method
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Move shared code to a method
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify backend definition to avoid messing with sys.path on each test
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Moved backends tests to backends module
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Use python3 workaround utils
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Removed unused imports
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Stackoverflow tests
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix stackoverflow backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Easier way to override access token response processing on oauth2 backends
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable stackoverflow backend on example app
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Yandex tests
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix yandex backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Yammer tests
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix yammer backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable yammer backend in example app
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Stocktwits tests
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix stocktwits backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Stripe tests
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix stripe backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Soundcloud test
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix soundcloud backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Small code simplification in shopify backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable rdio backends in example app
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix Rdio backends
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Mixcloud tests
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix mixcloud backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable mixcloud backend into example app
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix and simplify mail.ru backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Live tests
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix Live backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Instagram tests
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix instagram backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Google oauth2 test
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix google oauth2 backend
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Foursquare test
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename douban oauth2 backend. Enable douban backend in example app
+
+  * 2013-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fixed foursquare backend
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Disqus tests
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix disqus backend
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Dailymotion test
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix error processing
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix dailymotion backend
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Behance tests case
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix behance backend
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Support backends that don't support state/redirect_state. Angel backend
+    test
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Allow POST method on access_token exchange. Fixes angel backend
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Facebook tests
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Update requests values properly
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unittest call from github tests
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Requirements to run tests
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Reshape flask example app. Use filter_by instead of filter on disconnect
+    code
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Use declarative sqlalchemy base. Drop global update on init_social. Refs #1
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Small fixes
+
+  * 2013-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Initial testings
+
+  * 2013-03-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Drop parse_qsl call
+
+  * 2013-03-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove empty line
+
+  * 2013-03-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Proper requirements for python3 and python2
+
+  * 2013-03-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix token comparision to avoid None == None case
+
+  * 2013-03-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Improve refresh_token response processing
+
+  * 2013-03-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix use of request on stackoverflow backend
+
+  * 2013-03-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix google oauth1
+
+  * 2013-03-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix Python2 import, define json field in a compatible way with python
+    versions
+
+  * 2013-03-13 Matías Aguirre <matiasaguirre@gmail.com>
+    More Python3 support
+
+  * 2013-03-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Django 1.5 and Python 3 support
+
+  * 2013-03-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Port OAuth1 backends to oauthlib and requests-oauthlib
+
+  * 2013-03-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Move views/routes code to common module
+
+  * 2013-03-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Flag new associations in the pipeline
+
+  * 2013-03-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Port from urllib/urllib2 urlopen to python-requests
+
+  * 2013-03-03 Jannis Leidel <jannis@leidel.info>
+    Fixed South introspection path to new module structure.
+
+  * 2013-02-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename doc
+
+  * 2013-02-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Add some note about porting DSA settings
+
+  * 2013-02-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Mention mongoengine storage setting
+
+  * 2013-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Port DSA evernote expire time normalization
+
+  * 2013-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Link to project homepage and docs
+
+  * 2013-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix long_description on setup.py file
+
+  * 2013-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove frameworks classifier
+
+  * 2013-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Extra bits for versioning
+
+  * 2013-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Small requirements.txt for webpy example app
+
+  * 2013-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Comment on how to run migrations
+
+  * 2013-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Add default url prefix
+
+  * 2013-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix URLs paths for django app, support setting url prefix (to ease demo
+    setup)
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Add fabfile to ignore list
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Mark dev version
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Small markup changes
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Porting from DSA docs
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Update django url docs
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove the obsolete BACKENDS attribute, simplify backends loading
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Links to mailing list and irc channel
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Improve disconnect process and example apps styles/disconnect triggering
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Webpy example improves
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove print statement
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix disconnect link, must be a POST action
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Flask app and example improves
+
+  * 2013-02-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Django app and example improves
+
+  * 2013-02-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Move code to avoid dependencies issues
+
+  * 2013-02-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Basic site plus implementing backends docs
+
+  * 2013-02-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Add URL attribute to open id classes to reduce methods overrides
+
+  * 2013-02-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Docs markup improves
+
+  * 2013-02-24 Matías Aguirre <matiasaguirre@gmail.com>
+    pypi setup file
+
+  * 2013-02-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Small docs changes. Versioning
+
+  * 2013-02-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Docs
+
+  * 2013-02-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename some settings, improve vkontakte backend code
+
+  * 2013-02-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Four spaces indentation
+
+  * 2013-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Added template filters to flask app
+
+  * 2013-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Added context_processors for django app
+
+  * 2013-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove HTML template, leave that to developers
+
+  * 2013-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Ported rdio backend from DSA
+
+  * 2013-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Port tumblr backend from DSA
+
+  * 2013-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Port last douban changes from DSA
+
+  * 2013-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Port fields stored in session from DSA
+
+  * 2013-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Port slugify option from DSA
+
+  * 2013-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Enforce POST method on disconnect views
+
+  * 2013-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Ported SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL setting
+
+  * 2013-02-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Move is_active check to a function
+
+  * 2013-02-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Move is_authenticated check to a function
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Add django middleware
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Licence
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unused var
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Stackoverflow backend
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Readability backend
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename to be consistent with backend name
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Steam backend
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Move methods
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix removeAssociation method
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Docstrings, methods movement, simple_user_exists rename to user_exists
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix setting retrieval and remove testing webpy view
+
+  * 2013-02-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Move urls inside classes and fix a few on skyrock
+
+  * 2013-01-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Webpy example app
+
+  * 2013-01-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Webpy strategy and app
+
+  * 2012-12-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Moved get_strategy to strategies/utils.py
+
+  * 2012-12-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Cleanups
+
+  * 2012-12-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename modules
+
+  * 2012-12-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Add more examples links to flask example app
+
+  * 2012-12-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix association/nonce filtering queries
+
+  * 2012-12-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix absolute url building process
+
+  * 2012-12-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable GET/POST in routes
+
+  * 2012-12-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Set app in debug mode by default
+
+  * 2012-12-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Flask example
+
+  * 2012-12-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Flask strategy, sqlalchemy storage and flask app
+
+  * 2012-12-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Clean old settings, move code to main utils
+
+  * 2012-12-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Clean unused methods, move integrity error check to storage layer
+
+  * 2012-12-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Move store out from strategies module
+
+  * 2012-12-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Fixes and tests
+
+  * 2012-12-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Filter models by user
+
+  * 2012-12-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename example directory
+
+  * 2012-12-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Filter models by user
+
+  * 2012-12-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Port removeAssociation from django-social-auth
+
+  * 2012-12-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Add setting shortcut to backends
+
+  * 2012-12-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Odnoklassniki backend
+
+  * 2012-12-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove property decorator. PEP8
+
+  * 2012-12-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Cookies handling
+
+  * 2012-12-20 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix key
+
+  * 2012-12-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Yandex backends
+
+  * 2012-12-16 Matías Aguirre <matiasaguirre@gmail.com>
+    LiveJournal backend
+
+  * 2012-12-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Ported django-social-auth oauth backends
+
+  * 2012-12-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Google App Engine backend
+
+  * 2012-12-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Ported django-social-auth oauth2 backends
+
+  * 2012-12-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Facebook backend
+
+  * 2012-12-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Persona Auth
+
+  * 2012-12-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Stripe OAuth2 backend
+
+  * 2012-12-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Yahoo OpenId backend
+
+  * 2012-12-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Twitter OAuth backend
+
+  * 2012-12-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Google OpenId backend
+
+  * 2012-12-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Google oauth backend
+
+  * 2012-12-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Make openid work
+
+  * 2012-12-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify Strategy and Storage loading on django app
+
+  * 2012-12-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unneeded function
+
+  * 2012-12-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Apps description on __init__.py files
+
+  * 2012-12-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Restore import line
+
+  * 2012-12-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Django example requirements.txt
+
+  * 2012-12-14 Matías Aguirre <matiasaguirre@gmail.com>
+    requirements.txt
+
+  * 2012-12-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Move dj app views/utils/urls since they can be used by mongoengine too
+
+  * 2012-12-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Initial google oauth2 backend and django example app
+
+  * 2012-12-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Initial code for this lib (not working yet)
+
+  * 2012-12-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Initial commit

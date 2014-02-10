@@ -1,17 +1,7 @@
 """
-Orkut OAuth support.
-
-This contribution adds support for Orkut OAuth service. The scope is
-limited to http://orkut.gmodules.com/social/ by default, but can be
-extended with ORKUT_EXTRA_SCOPE on project settings. Also name, display
-name and emails are the default requested user data, but extra values
-can be specified by defining ORKUT_EXTRA_DATA setting.
-
-OAuth settings ORKUT_CONSUMER_KEY and ORKUT_CONSUMER_SECRET are needed
-to enable this service support.
+Orkut OAuth backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/google.html#orkut
 """
-import json
-
 from social.backends.google import GoogleOAuth
 
 
@@ -36,7 +26,7 @@ class OrkutOAuth(GoogleOAuth):
         """Loads user data from Orkut service"""
         fields = ','.join(set(['name', 'displayName', 'emails'] +
                           self.setting('EXTRA_DATA', [])))
-        scope = self.DEFAULT_SCOPE + self.setting('EXTRA_SCOPE', [])
+        scope = self.DEFAULT_SCOPE + self.setting('SCOPE', [])
         params = {'method': 'people.get',
                   'id': 'myself',
                   'userId': '@me',
@@ -45,13 +35,10 @@ class OrkutOAuth(GoogleOAuth):
                   'scope': self.SCOPE_SEPARATOR.join(scope)}
         url = 'http://www.orkut.com/social/rpc'
         request = self.oauth_request(access_token, url, params)
-        try:
-            return self.get_json(request.to_url())['data']
-        except (ValueError, KeyError):
-            return None
+        return self.get_json(request.to_url())['data']
 
-    def oauth_request(self, token, url, extra_params=None):
-        extra_params = extra_params or {}
-        scope = self.DEFAULT_SCOPE + self.setting('EXTRA_SCOPE', [])
-        extra_params['scope'] = self.SCOPE_SEPARATOR.join(scope)
-        return super(OrkutOAuth, self).oauth_request(token, url, extra_params)
+    def oauth_request(self, token, url, params=None):
+        params = params or {}
+        scope = self.DEFAULT_SCOPE + self.setting('SCOPE', [])
+        params['scope'] = self.SCOPE_SEPARATOR.join(scope)
+        return super(OrkutOAuth, self).oauth_request(token, url, params)

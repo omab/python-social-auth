@@ -1,12 +1,10 @@
 """
-Reddit OAuth2 support as detailed at:
-    https://github.com/reddit/reddit/wiki/OAuth2
+Reddit OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/reddit.html
 """
 import base64
-from requests import HTTPError
 
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthTokenError
 
 
 class RedditOAuth2(BaseOAuth2):
@@ -28,28 +26,23 @@ class RedditOAuth2(BaseOAuth2):
     ]
 
     def get_user_details(self, response):
-        """Return user details from Github account"""
+        """Return user details from Reddit account"""
         return {'username': response.get('name'),
                 'email': '', 'fullname': '',
                 'first_name': '', 'last_name': ''}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json(
-                'https://oauth.reddit.com/api/v1/me.json',
-                headers={'Authorization': 'bearer ' + access_token}
-            )
-        except ValueError:
-            return None
-        except HTTPError:
-            raise AuthTokenError(self)
+        return self.get_json(
+            'https://oauth.reddit.com/api/v1/me.json',
+            headers={'Authorization': 'bearer ' + access_token}
+        )
 
     def auth_headers(self):
         return {
-            'Authorization': 'Basic %s' % base64.urlsafe_b64encode(
-                '%s:%s' % self.get_key_and_secret()
-            )
+            'Authorization': 'Basic {0}'.format(base64.urlsafe_b64encode(
+                ('{0}:{1}'.format(*self.get_key_and_secret()).encode())
+            ))
         }
 
     def refresh_token_params(self, token, redirect_uri=None, *args, **kwargs):

@@ -14,6 +14,6 @@ Stackoverflow uses OAuth 2.0
 
 - You can ask for extra permissions with::
 
-      SOCIAL_AUTH_STACKOVERFLOW_SCOPE = [...]
+    SOCIAL_AUTH_STACKOVERFLOW_SCOPE = [...]
 
 .. _Stack Exchange API: https://api.stackexchange.com/

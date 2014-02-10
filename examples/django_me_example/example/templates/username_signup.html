@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block content %}
+<form action="{% url 'social:complete' "username" %}" method="post">
+  {% csrf_token %}
+  <label for="username">Username:</label>
+  <input id="username" type="text" name="username" value="" />
+
+  <label for="password">Password:</label>
+  <input id="password" type="password" name="password" value="" />
+
+  <label for="fullname">Full name:</label>
+  <input id="fullname" type="text" name="fullname" value="" />
+
+  <br />
+  <button>Signup</button>
+</form>
+{% endblock %}

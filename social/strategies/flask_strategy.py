@@ -1,6 +1,7 @@
 from flask import current_app, request, redirect, make_response, session, \
-                  render_template, render_template_string, Response
+                  render_template, render_template_string
 
+from social.utils import build_absolute_uri
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 
 
@@ -48,18 +49,10 @@ class FlaskStrategy(BaseStrategy):
         session[name] = value
 
     def session_pop(self, name):
-        session.pop(name, None)
+        return session.pop(name, None)
 
     def session_setdefault(self, name, value):
         return session.setdefault(name, value)
 
     def build_absolute_uri(self, path=None):
-        path = path or ''
-        if path.startswith('http://') or path.startswith('https://'):
-            return path
-        if request.host_url.endswith('/') and path.startswith('/'):
-            path = path[1:]
-        return request.host_url + (path or '')
-
-    def is_response(self, value):
-        return isinstance(value, Response)
+        return build_absolute_uri(request.host_url, path)

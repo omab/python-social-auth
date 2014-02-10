@@ -1,20 +1,8 @@
 """
-Dailymotion OAuth2 support.
-
-This adds support for Dailymotion OAuth service. An application must
-be registered first on dailymotion and the settings DAILYMOTION_CONSUMER_KEY
-and DAILYMOTION_CONSUMER_SECRET must be defined with the corresponding
-values.
-
-User screen name is used to generate username.
-
-By default account id is stored in extra_data field, check OAuthBackend
-class for details on how to extend it.
+DailyMotion OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/dailymotion.html
 """
-from requests import HTTPError
-
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthCanceled
 
 
 class DailymotionOAuth2(BaseOAuth2):
@@ -32,17 +20,5 @@ class DailymotionOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        try:
-            return self.get_json('https://api.dailymotion.com/me/',
-                                 params={'access_token': access_token})
-        except (ValueError, HTTPError):
-            return None
-
-    def auth_complete(self, *args, **kwargs):
-        """Completes login process, must return user instance"""
-        if 'denied' in self.data:
-            raise AuthCanceled(self)
-        return super(DailymotionOAuth2, self).auth_complete(*args, **kwargs)
-
-    def oauth_request(self, token, url, extra_params=None):
-        return extra_params or {}
+        return self.get_json('https://api.dailymotion.com/me/',
+                             params={'access_token': access_token})

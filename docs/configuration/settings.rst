@@ -159,6 +159,11 @@ to control usernames generation.
     this setting to ``True``. The feature is disabled by default to to not
     force this option to all projects.
 
+``SOCIAL_AUTH_CLEAN_USERNAMES = True``
+    By default the regex ``r'[^\w.@+-_]+'`` is applied over usernames to clean
+    them from usual undesired characters like spaces. Set this setting to
+    ``False`` to disable this behavior.
+
 
 Extra arguments on auth processes
 ---------------------------------
@@ -213,6 +218,23 @@ allow some tweaks to the behavior of these.
 
     ``timeout`` argument was introduced in python 2.6 according to `urllib2
     documentation`_
+
+
+Whitelists
+----------
+
+Registration can be limited to a set of users identified by their email
+address or domain name. To white-list just set any of these settings:
+
+``SOCIAL_AUTH_<BACKEND_NAME>_WHITELISTED_DOMAINS = ['foo.com', 'bar.com']``
+    Supply a list of domain names to be white-listed. Any user with an email
+    address on any of the allowed domains will login successfully, otherwise
+    ``AuthForbidden`` is raised.
+
+``SOCIAL_AUTH_<BACKEND_NAME>_WHITELISTED_EMAILS = ['me@foo.com', 'you@bar.com']``
+    Supply a list of email addresses to be white-listed. Any user with an email
+    address in this list will login successfully, otherwise ``AuthForbidden``
+    is raised.
 
 
 Miscellaneous settings

@@ -1,21 +1,8 @@
 """
-MSN Live Connect oAuth 2.0
-
-Settings:
-LIVE_CLIENT_ID
-LIVE_CLIENT_SECRET
-LIVE_EXTENDED_PERMISSIONS (defaults are: wl.basic, wl.emails)
-
-References:
-* oAuth  http://msdn.microsoft.com/en-us/library/live/hh243649.aspx
-* Scopes http://msdn.microsoft.com/en-us/library/live/hh243646.aspx
-* REST   http://msdn.microsoft.com/en-us/library/live/hh243648.aspx
-
-Throws:
-AuthUnknownError - if user data retrieval fails
+Live OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/live.html
 """
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthUnknownError
 
 
 class LiveOAuth2(BaseOAuth2):
@@ -37,21 +24,13 @@ class LiveOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Live Connect account"""
-        try:
-            email = response['emails']['account']
-        except KeyError:
-            email = ''
         return {'username': response.get('name'),
-                'email': email,
+                'email': response.get('emails', {}).get('account', ''),
                 'first_name': response.get('first_name'),
                 'last_name': response.get('last_name')}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        try:
-            return self.get_json('https://apis.live.net/v5.0/me', params={
-                'access_token': access_token
-            })
-        except (ValueError, IOError):
-            raise AuthUnknownError('Error during profile retrieval, '
-                                   'please, try again later')
+        return self.get_json('https://apis.live.net/v5.0/me', params={
+            'access_token': access_token
+        })

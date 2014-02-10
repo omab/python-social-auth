@@ -41,8 +41,8 @@ Sync database to create needed models::
     ./manage.py syncdb
 
 
-Autentication backends
-----------------------
+Authentication backends
+-----------------------
 
 Add desired authentication backends to Django's AUTHENTICATION_BACKENDS_
 setting::
@@ -154,9 +154,19 @@ Exception processing is disabled if any of this settings is defined with a
     RAISE_EXCEPTIONS = True
     DEBUG = True
 
+The redirect destination will get two ``GET`` parameters:
+
+``message = ''``
+    Message from the exception raised, in some cases it's the message returned
+    by the provider during the auth process.
+
+``backend = ''``
+    Backend name that was used, if it was a valid backend.
+
 
 .. _MongoEngine: http://mongoengine.org
 .. _MongoEngine Django integration: http://mongoengine-odm.readthedocs.org/en/latest/django.html
 .. _django-social-auth: https://github.com/omab/django-social-auth
 .. _Django built-in app: https://github.com/omab/python-social-auth/tree/master/social/apps/django_app
 .. _AUTHENTICATION_BACKENDS: http://docs.djangoproject.com/en/dev/ref/settings/?from=olddocs#authentication-backends
+.. _django@dc43fbc: https://github.com/django/django/commit/dc43fbc2f21c12e34e309d0e8a121020391aa03a

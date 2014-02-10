@@ -56,7 +56,7 @@ class WebpyStrategy(BaseStrategy):
         self.session[name] = value
 
     def session_pop(self, name):
-        self.session.pop(name, None)
+        return self.session.pop(name, None)
 
     def session_setdefault(self, name, value):
         return self.session.setdefault(name, value)
@@ -66,6 +66,3 @@ class WebpyStrategy(BaseStrategy):
         if path.startswith('http://') or path.startswith('https://'):
             return path
         return web.ctx.protocol + '://' + web.ctx.host + path
-
-    def is_response(self, value):
-        return isinstance(value, web.Storage)

@@ -1,10 +1,8 @@
 import re
 import sys
 import unicodedata
-import six
 import collections
-
-from datetime import timedelta, tzinfo
+import six
 
 from social.p3 import urlparse, urlunparse, urlencode, \
                       parse_qs as battery_parse_qs
@@ -35,25 +33,12 @@ def url_add_parameters(url, params):
     return url
 
 
-class UTC(tzinfo):
-    """UTC implementation taken from django 1.4."""
-    def __repr__(self):
-        return '<UTC>'
-
-    def utcoffset(self, dt):
-        return timedelta(0)
-
-    def tzname(self, dt):
-        return 'UTC'
-
-    def dst(self, dt):
-        return timedelta(0)
-
-utc = UTC()
+def to_setting_name(*names):
+    return '_'.join([name.upper().replace('-', '_') for name in names if name])
 
 
 def setting_name(*names):
-    return '_'.join((SETTING_PREFIX,) + tuple(names))
+    return to_setting_name(*((SETTING_PREFIX,) + names))
 
 
 def sanitize_redirect(host, redirect_to):
@@ -62,29 +47,16 @@ def sanitize_redirect(host, redirect_to):
     this method tests it to make sure it isn't garbage/harmful
     and returns it, else returns None, similar as how's it done
     on django.contrib.auth.views.
-
-    >>> print(sanitize_redirect('myapp.com', None))
-    None
-    >>> print(sanitize_redirect('myapp.com', ''))
-    None
-    >>> print(sanitize_redirect('myapp.com', {}))
-    None
-    >>> print(sanitize_redirect('myapp.com', 'http://notmyapp.com/path/'))
-    None
-    >>> print(sanitize_redirect('myapp.com', 'http://myapp.com/path/'))
-    http://myapp.com/path/
-    >>> print(sanitize_redirect('myapp.com', '/path/'))
-    /path/
     """
     # Quick sanity check.
-    if not redirect_to:
+    if not redirect_to or \
+       not isinstance(redirect_to, six.string_types) or \
+       getattr(redirect_to, 'decode', None) and \
+       not isinstance(redirect_to.decode(), six.string_types):
         return None
 
     # Heavier security check, don't allow redirection to a different host.
-    try:
-        netloc = urlparse(redirect_to)[1]
-    except TypeError:  # not valid redirect_to value
-        return None
+    netloc = urlparse(redirect_to)[1]
     if netloc and netloc != host:
         return None
     return redirect_to
@@ -150,3 +122,62 @@ def drop_lists(value):
             val = six.text_type(val, 'utf-8')
         out[key] = val
     return out
+
+
+def partial_pipeline_data(strategy, user, *args, **kwargs):
+    partial = strategy.session_get('partial_pipeline', None)
+    if partial:
+        idx, backend, xargs, xkwargs = strategy.partial_from_session(partial)
+        if backend == strategy.backend.name:
+            kwargs.setdefault('pipeline_index', idx)
+            kwargs.setdefault('user', user)
+            kwargs.setdefault('request', strategy.request)
+            xkwargs.update(kwargs)
+            return xargs, xkwargs
+        else:
+            strategy.clean_partial_pipeline()
+
+
+def build_absolute_uri(host_url, path=None):
+    """Build absolute URI with given (optional) path"""
+    path = path or ''
+    if path.startswith('http://') or path.startswith('https://'):
+        return path
+    if host_url.endswith('/') and path.startswith('/'):
+        path = path[1:]
+    return host_url + path
+
+
+def constant_time_compare(val1, val2):
+    """
+    Returns True if the two strings are equal, False otherwise.
+    The time taken is independent of the number of characters that match.
+    This code was borrowed from Django 1.5.4-final
+    """
+    if len(val1) != len(val2):
+        return False
+    result = 0
+    if six.PY3 and isinstance(val1, bytes) and isinstance(val2, bytes):
+        for x, y in zip(val1, val2):
+            result |= x ^ y
+    else:
+        for x, y in zip(val1, val2):
+            result |= ord(x) ^ ord(y)
+    return result == 0
+
+
+def is_url(value):
+    return value and \
+           (value.startswith('http://') or
+            value.startswith('https://') or
+            value.startswith('/'))
+
+
+def setting_url(strategy, *names):
+    for name in names:
+        if is_url(name):
+            return name
+        else:
+            value = strategy.setting(name)
+            if is_url(value):
+                return value

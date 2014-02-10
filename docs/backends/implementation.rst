@@ -1,13 +1,45 @@
-Adding new backend support
-==========================
+Adding a new backend
+====================
 
 Add new backends is quite easy, usually adding just a ``class`` with a couple
 settings and methods overrides to retrieve user data from services API. Follow
 the details below.
 
 
-OAuth providers
-===============
+Common attributes
+-----------------
+
+First, lets check the common attributes for all backend types.
+
+``name = ''``
+    Any backend needs a name, usually the popular name of the service is used,
+    like ``facebook``, ``twitter``, etc. It must be unique, otherwise another
+    backend can take precedence if it's listed before in
+    ``AUTHENTICATION_BACKENDS`` setting.
+
+``ID_KEY = None``
+    Defines the attribute in the service response that identifies the user as
+    unique in the service, the value is later stored in the ``uid`` attribute
+    in the ``UserSocialAuth`` instance.
+
+``REQUIRES_EMAIL_VALIDATION = False``
+    Flags the backend to enforce email validation during the pipeline (if the
+    corresponding pipeline ``social.pipeline.mail.mail_validation`` was
+    enabled).
+
+``EXTRA_DATA = None``
+    During the auth process some basic user data is returned by the provider or
+    retrieved by ``user_data()`` method which usually is used to call some API
+    on the provider to retrieve it. This data will be stored under
+    ``UserSocialAuth.extra_data`` attribute, but to make it accessible under
+    some common names on different providers, this attribute defines a list of
+    tuples in the form ``(name, alias)`` where ``name`` is the key in the user
+    data (which should be a ``dict`` instance) and ``alias`` is the name to
+    store it on ``extra_data``.
+
+
+OAuth
+-----
 
 OAuth1 and OAuth2 provide share some common definitions based on the shared
 behavior during the auth process, like a successful API response from
@@ -15,7 +47,7 @@ behavior during the auth process, like a successful API response from
 
 
 Shared attributes
------------------
+*****************
 
 ``name``
     This defines the backend name and identifies it during the auth process.
@@ -46,19 +78,9 @@ Shared attributes
     from provider to provider, override the default value with this attribute
     if it differs.
 
-``EXTRA_DATA = None``
-    During the auth process some basic user data is returned by the provider or
-    retrieved by the ``user_data()`` method which calls some API on the
-    provider to retrieve it. This data will be stored under
-    ``UserSocialAuth.extra_data`` attribute, but to make it accessible under
-    some common names on different providers, this attribute defines a list of
-    tuples in the form ``(name, alias)`` where ``name`` is the key in the user
-    data (which should be a ``dict`` instance) and ``alias`` is the name to
-    store it on ``extra_data``.
-
 
 OAuth2
-------
+******
 
 OAuth2 backends are fair simple to implement, just a few settings, a method
 override and it's mostly ready to go.
@@ -132,7 +154,7 @@ Example code::
 
 
 OAuth1
-------
+******
 
 OAuth1 process is a bit more trickier, `Twitter Docs`_ explains it quite well.
 Beside the ``AUTHORIZATION_URL`` and ``ACCESS_TOKEN_URL`` attributes, a third

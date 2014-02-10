@@ -1,14 +1,8 @@
 import sys
 
-from sqlalchemy import create_engine
-
 from flask import Flask, g
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext import login
-
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-
 
 sys.path.append('../..')
 
@@ -19,25 +13,21 @@ from social.apps.flask_app.template_filters import backends
 # App
 app = Flask(__name__)
 app.config.from_object('flask_example.settings')
-app.config.from_object('flask_example.local_settings')
+
+try:
+    app.config.from_object('flask_example.local_settings')
+except ImportError:
+    pass
 
 # DB
 db = SQLAlchemy(app)
-db.metadata.bind = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-
-engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'],
-                       convert_unicode=True)
-db_session = scoped_session(sessionmaker(bind=engine))
-Base = declarative_base()
-Base.query = db_session.query_property()
-
 app.register_blueprint(social_auth)
-social_storage = init_social(app, Base)
+init_social(app, db)
 
 login_manager = login.LoginManager()
 login_manager.login_view = 'main'
 login_manager.login_message = ''
-login_manager.setup_app(app)
+login_manager.init_app(app)
 
 from flask_example import models
 from flask_example import routes
@@ -59,12 +49,12 @@ def global_user():
 @app.teardown_appcontext
 def commit_on_success(error=None):
     if error is None:
-        db_session.commit()
+        db.session.commit()
 
 
 @app.teardown_request
 def shutdown_session(exception=None):
-    db_session.remove()
+    db.session.remove()
 
 
 @app.context_processor

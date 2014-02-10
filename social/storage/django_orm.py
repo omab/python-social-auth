@@ -2,9 +2,8 @@
 import base64
 import six
 
-from social.exceptions import NotAllowedToDisconnect
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
-                                BaseStorage
+                                CodeMixin, BaseStorage
 
 
 class DjangoUserMixin(UserMixin):
@@ -32,33 +31,32 @@ class DjangoUserMixin(UserMixin):
         return valid_password or qs.count() > 0
 
     @classmethod
-    def disconnect(cls, name, user, association_id=None):
-        if cls.allowed_to_disconnect(user, name, association_id):
-            qs = cls.get_social_auth_for_user(user)
-            if association_id:
-                qs = qs.get(id=association_id)
-            else:
-                qs = qs.filter(provider=name)
-            qs.delete()
-        else:
-            raise NotAllowedToDisconnect()
+    def disconnect(cls, entry):
+        entry.delete()
 
     @classmethod
-    def user_exists(cls, username):
+    def username_field(cls):
+        return getattr(cls.user_model(), 'USERNAME_FIELD', 'username')
+
+    @classmethod
+    def user_exists(cls, *args, **kwargs):
         """
         Return True/False if a User instance exists with the given arguments.
         Arguments are directly passed to filter() manager method.
         """
-        return cls.user_model().objects.filter(username=username).count() > 0
+        if 'username' in kwargs:
+            kwargs[cls.username_field()] = kwargs.pop('username')
+        return cls.user_model().objects.filter(*args, **kwargs).count() > 0
 
     @classmethod
     def get_username(cls, user):
-        return getattr(user, 'username', None)
+        return getattr(user, cls.username_field(), None)
 
     @classmethod
-    def create_user(cls, username, email=None):
-        return cls.user_model().objects.create_user(username=username,
-                                                    email=email)
+    def create_user(cls, *args, **kwargs):
+        if 'username' in kwargs:
+            kwargs[cls.username_field()] = kwargs.pop('username')
+        return cls.user_model().objects.create_user(*args, **kwargs)
 
     @classmethod
     def get_user(cls, pk):
@@ -66,6 +64,10 @@ class DjangoUserMixin(UserMixin):
             return cls.user_model().objects.get(pk=pk)
         except cls.user_model().DoesNotExist:
             return None
+
+    @classmethod
+    def get_users_by_email(cls, email):
+        return cls.user_model().objects.filter(email__iexact=email)
 
     @classmethod
     def get_social_auth(cls, provider, uid):
@@ -77,8 +79,13 @@ class DjangoUserMixin(UserMixin):
             return None
 
     @classmethod
-    def get_social_auth_for_user(cls, user):
-        return user.social_auth.all()
+    def get_social_auth_for_user(cls, user, provider=None, id=None):
+        qs = user.social_auth.all()
+        if provider:
+            qs = qs.filter(provider=provider)
+        if id:
+            qs = qs.filter(id=id)
+        return qs
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):
@@ -120,7 +127,17 @@ class DjangoAssociationMixin(AssociationMixin):
         cls.objects.filter(pk__in=ids_to_delete).delete()
 
 
+class DjangoCodeMixin(CodeMixin):
+    @classmethod
+    def get_code(cls, code):
+        try:
+            return cls.objects.get(code=code)
+        except cls.DoesNotExist:
+            return None
+
+
 class BaseDjangoStorage(BaseStorage):
     user = DjangoUserMixin
     nonce = DjangoNonceMixin
     association = DjangoAssociationMixin
+    code = DjangoCodeMixin

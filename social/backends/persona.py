@@ -1,5 +1,6 @@
 """
-BrowserID support
+Mozilla Persona authentication backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/persona.html
 """
 from social.backends.base import BaseAuth
 from social.exceptions import AuthFailed, AuthMissingParameter
@@ -37,15 +38,11 @@ class PersonaAuth(BaseAuth):
         if not 'assertion' in self.data:
             raise AuthMissingParameter(self, 'assertion')
 
-        try:
-            response = self.get_json('https://browserid.org/verify', params={
-                'assertion': self.data['assertion'],
-                'audience': self.strategy.request_host()
-            })
-        except ValueError:
-            pass
-        else:
-            if response.get('status') == 'failure':
-                raise AuthFailed(self)
-            kwargs.update({'response': response, 'backend': self})
-            return self.strategy.authenticate(*args, **kwargs)
+        response = self.get_json('https://browserid.org/verify', data={
+            'assertion': self.data['assertion'],
+            'audience': self.strategy.request_host()
+        }, method='POST')
+        if response.get('status') == 'failure':
+            raise AuthFailed(self)
+        kwargs.update({'response': response, 'backend': self})
+        return self.strategy.authenticate(*args, **kwargs)

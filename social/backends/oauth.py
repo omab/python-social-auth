@@ -1,8 +1,10 @@
+import six
+
 from requests import HTTPError
 from requests_oauthlib import OAuth1
 from oauthlib.oauth1 import SIGNATURE_TYPE_AUTH_HEADER
 
-from social.p3 import urlencode
+from social.p3 import urlencode, unquote
 from social.utils import url_add_parameters, parse_qs
 from social.exceptions import AuthFailed, AuthCanceled, AuthUnknownError, \
                               AuthMissingParameter, AuthStateMissing, \
@@ -13,10 +15,6 @@ from social.backends.base import BaseAuth
 class OAuthAuth(BaseAuth):
     """OAuth authentication backend base class.
 
-    EXTRA_DATA defines a set of name that will be stored in
-               extra_data field. It must be a list of tuples with
-               name and alias.
-
     Also settings will be inspected to get more values names that should be
     stored on extra_data field. Setting name is created from current backend
     name (all uppercase) plus _EXTRA_DATA.
@@ -26,30 +24,16 @@ class OAuthAuth(BaseAuth):
     SCOPE_PARAMETER_NAME = 'scope'
     DEFAULT_SCOPE = None
     SCOPE_SEPARATOR = ' '
-    EXTRA_DATA = None
     ID_KEY = 'id'
     ACCESS_TOKEN_METHOD = 'GET'
+    REVOKE_TOKEN_URL = None
+    REVOKE_TOKEN_METHOD = 'POST'
 
     def extra_data(self, user, uid, response, details=None):
         """Return access_token and extra defined names to store in
         extra_data field"""
-        data = {'access_token': response.get('access_token', '')}
-        names = (self.EXTRA_DATA or []) + \
-                self.setting('EXTRA_DATA', [])
-        for entry in names:
-            if len(entry) == 2:
-                (name, alias), discard = entry, False
-            elif len(entry) == 3:
-                name, alias, discard = entry
-            elif len(entry) == 1:
-                name = alias = entry
-            else:  # ???
-                continue
-
-            value = response.get(name)
-            if discard and not value:
-                continue
-            data[alias] = value
+        data = super(OAuthAuth, self).extra_data(user, uid, response, details)
+        data['access_token'] = response.get('access_token', '')
         return data
 
     def get_scope(self):
@@ -68,6 +52,29 @@ class OAuthAuth(BaseAuth):
         """Loads user data from service. Implement in subclass"""
         return {}
 
+    def revoke_token_url(self, token, uid):
+        return self.REVOKE_TOKEN_URL
+
+    def revoke_token_params(self, token, uid):
+        return {}
+
+    def revoke_token_headers(self, token, uid):
+        return {}
+
+    def process_revoke_token_response(self, response):
+        return response.status_code == 200
+
+    def revoke_token(self, token, uid):
+        if self.REVOKE_TOKEN_URL:
+            url = self.revoke_token_url(token, uid)
+            params = self.revoke_token_params(token, uid)
+            headers = self.revoke_token_headers(token, uid)
+            data = urlencode(params) if self.REVOKE_TOKEN_METHOD != 'GET' \
+                                     else None
+            response = self.request(url, params=params, headers=headers,
+                                    data=data, method=self.REVOKE_TOKEN_METHOD)
+            return self.process_revoke_token_response(response)
+
 
 class BaseOAuth1(OAuthAuth):
     """Consumer based mechanism OAuth authentication, fill the needed
@@ -83,39 +90,24 @@ class BaseOAuth1(OAuthAuth):
     OAUTH_TOKEN_PARAMETER_NAME = 'oauth_token'
     REDIRECT_URI_PARAMETER_NAME = 'redirect_uri'
     ACCESS_TOKEN_URL = ''
+    UNATHORIZED_TOKEN_SUFIX = 'unauthorized_token_name'
 
     def auth_url(self):
         """Return redirect url"""
-        token = self.unauthorized_token()
-        name = self.name + 'unauthorized_token_name'
-        tokens = self.strategy.session_get(name, []) + [token]
-        self.strategy.session_set(name, tokens)
+        token = self.set_unauthorized_token()
         return self.oauth_authorization_request(token)
+
+    def process_error(self, data):
+        if 'oauth_problem' in data:
+            if data['oauth_problem'] == 'user_refused':
+                raise AuthCanceled(self, 'User refused the access')
+            raise AuthUnknownError(self, 'Error was ' + data['oauth_problem'])
 
     def auth_complete(self, *args, **kwargs):
         """Return user, might be logged in"""
         # Multiple unauthorized tokens are supported (see #521)
-        name = self.name + 'unauthorized_token_name'
-        token = None
-        unauthed_tokens = self.strategy.session_get(name, [])
-        if not unauthed_tokens:
-            raise AuthTokenError(self, 'Missing unauthorized token')
-        token_param_name = self.OAUTH_TOKEN_PARAMETER_NAME
-        data_token = self.data.get(token_param_name, 'no-token')
-        for unauthed_token in unauthed_tokens:
-            orig_unauthed_token = unauthed_token
-            if not isinstance(unauthed_token, dict):
-                unauthed_token = parse_qs(unauthed_token)
-            if unauthed_token.get(token_param_name) == data_token:
-                self.strategy.session_set(name, list(
-                    set(unauthed_tokens) -
-                    set([orig_unauthed_token]))
-                )
-                token = unauthed_token
-                break
-        else:
-            raise AuthTokenError(self, 'Incorrect tokens')
-
+        self.process_error(self.data)
+        token = self.get_unauthorized_token()
         try:
             access_token = self.access_token(token)
         except HTTPError as err:
@@ -127,23 +119,67 @@ class BaseOAuth1(OAuthAuth):
 
     def do_auth(self, access_token, *args, **kwargs):
         """Finish the auth process once the access_token was retrieved"""
+        if not isinstance(access_token, dict):
+            access_token = parse_qs(access_token)
         data = self.user_data(access_token)
         if data is not None and 'access_token' not in data:
             data['access_token'] = access_token
         kwargs.update({'response': data, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
 
+    def get_unauthorized_token(self):
+        name = self.name + self.UNATHORIZED_TOKEN_SUFIX
+        unauthed_tokens = self.strategy.session_get(name, [])
+        if not unauthed_tokens:
+            raise AuthTokenError(self, 'Missing unauthorized token')
+
+        data_token = self.data.get(self.OAUTH_TOKEN_PARAMETER_NAME)
+
+        if data_token is None:
+            raise AuthTokenError(self, 'Missing unauthorized token')
+
+        token = None
+        for utoken in unauthed_tokens:
+            orig_utoken = utoken
+            if not isinstance(utoken, dict):
+                utoken = parse_qs(utoken)
+            if utoken.get(self.OAUTH_TOKEN_PARAMETER_NAME) == data_token:
+                self.strategy.session_set(name, list(set(unauthed_tokens) -
+                                                     set([orig_utoken])))
+                token = utoken
+                break
+        else:
+            raise AuthTokenError(self, 'Incorrect tokens')
+        return token
+
+    def set_unauthorized_token(self):
+        token = self.unauthorized_token()
+        name = self.name + self.UNATHORIZED_TOKEN_SUFIX
+        tokens = self.strategy.session_get(name, []) + [token]
+        self.strategy.session_set(name, tokens)
+        return token
+
     def unauthorized_token(self):
         """Return request for unauthorized token (first stage)"""
         params = self.request_token_extra_arguments()
         params.update(self.get_scope_argument())
         key, secret = self.get_key_and_secret()
+        # decoding='utf-8' produces errors with python-requests on Python3
+        # since the final URL will be of type bytes
+        decoding = None if six.PY3 else 'utf-8'
         response = self.request(self.REQUEST_TOKEN_URL,
                                 params=params,
                                 auth=OAuth1(key, secret,
-                                            callback_uri=self.redirect_uri),
+                                            callback_uri=self.redirect_uri,
+                                            decoding=decoding),
                                 method=self.REQUEST_TOKEN_METHOD)
-        return response.content
+        content = response.content
+        if response.encoding or response.apparent_encoding:
+            content = content.decode(response.encoding or
+                                     response.apparent_encoding)
+        else:
+            content = response.content.decode()
+        return content
 
     def oauth_authorization_request(self, token):
         """Generate OAuth request to authorize token."""
@@ -162,21 +198,20 @@ class BaseOAuth1(OAuthAuth):
         key, secret = self.get_key_and_secret()
         oauth_verifier = oauth_verifier or self.data.get('oauth_verifier')
         token = token or {}
+        # decoding='utf-8' produces errors with python-requests on Python3
+        # since the final URL will be of type bytes
+        decoding = None if six.PY3 else 'utf-8'
         return OAuth1(key, secret,
                       resource_owner_key=token.get('oauth_token'),
                       resource_owner_secret=token.get('oauth_token_secret'),
                       callback_uri=self.redirect_uri,
                       verifier=oauth_verifier,
-                      signature_type=signature_type)
+                      signature_type=signature_type,
+                      decoding=decoding)
 
-    def oauth_request(self, token, url, extra_params=None, method='GET'):
+    def oauth_request(self, token, url, params=None, method='GET'):
         """Generate OAuth request, setups callback url"""
-        # params = {'oauth_callback': self.redirect_uri}
-        # params.update(extra_params or {})
-        # oauth_verifier = self.data.get('oauth_verifier')
-        # if oauth_verifier:
-        #     params['oauth_verifier'] = oauth_verifier
-        return self.request(url, method=method, params=extra_params,
+        return self.request(url, method=method, params=params,
                             auth=self.oauth_auth(token))
 
     def access_token(self, token):
@@ -235,7 +270,7 @@ class BaseOAuth2(OAuthAuth):
             # but also added to redirect, that way we can still verify the
             # request if the provider doesn't implement the state parameter.
             # Reuse token if any.
-            name = self.titled_name + '_state'
+            name = self.name + '_state'
             state = self.strategy.session_get(name)
             if state is None:
                 state = self.state_token()
@@ -246,29 +281,32 @@ class BaseOAuth2(OAuthAuth):
         params = self.auth_params(state)
         params.update(self.get_scope_argument())
         params.update(self.auth_extra_arguments())
-        return self.AUTHORIZATION_URL + '?' + urlencode(params)
+        params = urlencode(params)
+        if not self.REDIRECT_STATE:
+            # redirect_uri matching is strictly enforced, so match the
+            # providers value exactly.
+            params = unquote(params)
+        return self.AUTHORIZATION_URL + '?' + params
 
     def validate_state(self):
         """Validate state value. Raises exception on error, returns state
         value if valid."""
         if not self.STATE_PARAMETER and not self.REDIRECT_STATE:
             return None
-        state = self.strategy.session_get(self.titled_name + '_state')
-        if state:
-            request_state = self.data.get('state') or \
-                            self.data.get('redirect_state')
-            if not request_state:
-                raise AuthMissingParameter(self, 'state')
-            elif not state:
-                raise AuthStateMissing(self, 'state')
-            elif not request_state == state:
-                raise AuthStateForbidden(self)
-        return state
+        state = self.strategy.session_get(self.name + '_state')
+        request_state = self.data.get('state') or \
+                        self.data.get('redirect_state')
+        if request_state and isinstance(request_state, list):
+            request_state = request_state[0]
 
-    def process_error(self, data):
-        if data.get('error'):
-            raise AuthFailed(self, data.get('error_description') or
-                                   data['error'])
+        if not request_state:
+            raise AuthMissingParameter(self, 'state')
+        elif not state:
+            raise AuthStateMissing(self, 'state')
+        elif not request_state == state:
+            raise AuthStateForbidden(self)
+        else:
+            return state
 
     def auth_complete_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
@@ -286,6 +324,15 @@ class BaseOAuth2(OAuthAuth):
 
     def request_access_token(self, *args, **kwargs):
         return self.get_json(*args, **kwargs)
+
+    def process_error(self, data):
+        if data.get('error'):
+            if data['error'] == 'denied' or data['error'] == 'access_denied':
+                raise AuthCanceled(self, data.get('error_description', ''))
+            raise AuthFailed(self, data.get('error_description') or
+                                   data['error'])
+        elif 'denied' in data:
+            raise AuthCanceled(self, data['denied'])
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
@@ -330,7 +377,11 @@ class BaseOAuth2(OAuthAuth):
 
     def refresh_token(self, token, *args, **kwargs):
         params = self.refresh_token_params(token, *args, **kwargs)
-        request = self.request(self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL,
-                               params=params, headers=self.auth_headers(),
-                               method=self.REFRESH_TOKEN_METHOD)
+        url = self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL
+        method = self.REFRESH_TOKEN_METHOD
+        key = 'params' if method == 'GET' else 'data'
+        request_args = {'headers': self.auth_headers(),
+                        'method': method,
+                        key: params}
+        request = self.request(url, **request_args)
         return self.process_refresh_token_response(request, *args, **kwargs)

@@ -1,7 +1,7 @@
 Webpy Framework
 ===============
 
-Webpy_ framework is easy to setup, once that python-socialt-auth_ is installed
+Webpy_ framework is easy to setup, once that python-social-auth_ is installed
 or accessible in the ``PYTHONPATH``, just add the needed configurations to make
 it run.
 
