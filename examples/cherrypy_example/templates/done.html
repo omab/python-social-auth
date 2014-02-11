@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>You are logged in as {{ user.username }}!</p>
+
+<p>Associated:</p>
+<ul>
+  {% for assoc in backends.associated %}
+    <li>
+      {{ assoc.provider }}
+      <form method="post" action="/disconnect/{{ assoc.provider }}"><button>Disconnect</button></form>
+    </li>
+  {% endfor %}
+</ul>
+
+<p>Associate:</p>
+<ul>
+  {% for name in backends.not_associated %}
+    <li>
+      <a href="/login/{{ name }}">{{ name }}</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
