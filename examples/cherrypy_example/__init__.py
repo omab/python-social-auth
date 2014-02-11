@@ -25,6 +25,8 @@ class PSAExample(CherryPyPSAViews):
     @cherrypy.expose
     def done(self):
         user = getattr(cherrypy.request, 'user', None)
+        if user is None:
+            raise cherrypy.HTTPRedirect('/')
         return self.render_to('done.html', user=user, backends=backends(user))
 
     @cherrypy.expose
