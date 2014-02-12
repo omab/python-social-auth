@@ -15,11 +15,13 @@ class LiveOAuth2(BaseOAuth2):
     EXTRA_DATA = [
         ('id', 'id'),
         ('access_token', 'access_token'),
-        ('reset_token', 'reset_token'),
-        ('expires', 'expires'),
+        ('authentication_token', 'authentication_token'),
+        ('refresh_token', 'refresh_token'),
+        ('expires_in', 'expires'),
         ('email', 'email'),
         ('first_name', 'first_name'),
         ('last_name', 'last_name'),
+        ('token_type', 'token_type'),
     ]
 
     def get_user_details(self, response):
