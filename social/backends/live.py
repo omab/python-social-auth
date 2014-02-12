@@ -24,11 +24,6 @@ class LiveOAuth2(BaseOAuth2):
         ('token_type', 'token_type'),
     ]
 
-    def extra_data(self, user, uid, response, details):
-        extra_data = super(LiveOAuth2, self).extra_data(user, uid, response, details)
-        extra_data['email'] = response.get('emails', {}).get('account')
-        return extra_data
-
     def get_user_details(self, response):
         """Return user details from Live Connect account"""
         return {'username': response.get('name'),
