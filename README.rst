@@ -17,6 +17,10 @@ for more frameworks and ORMs.
 .. image:: https://pypip.in/d/python-social-auth/badge.png
    :target: https://crate.io/packages/python-social-auth?version=latest
 
+.. image:: https://d2weczhvl823v0.cloudfront.net/omab/python-social-auth/trend.png
+   :alt: Bitdeli badge
+   :target: https://bitdeli.com/free
+
 .. contents:: Table of Contents
 
 
@@ -276,9 +280,3 @@ check `django-social-auth LICENSE`_ for details:
 .. _six: http://pythonhosted.org/six/
 .. _requests: http://docs.python-requests.org/en/latest/
 .. _PixelPin: http://pixelpin.co.uk
-
-
-.. image:: https://d2weczhvl823v0.cloudfront.net/omab/python-social-auth/trend.png
-   :alt: Bitdeli badge
-   :target: https://bitdeli.com/free
-
