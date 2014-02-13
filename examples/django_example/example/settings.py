@@ -185,6 +185,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.yahoo.YahooOpenId',
     'social.backends.yammer.YammerOAuth2',
     'social.backends.yandex.YandexOAuth2',
+    'social.backends.vimeo.VimeoOAuth1',
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
     'django.contrib.auth.backends.ModelBackend',

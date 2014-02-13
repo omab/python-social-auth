@@ -100,6 +100,7 @@ Social backends
    tumblr
    twilio
    twitter
+   vimeo
    vk
    weibo
    xing
