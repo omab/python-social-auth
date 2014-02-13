@@ -276,3 +276,9 @@ check `django-social-auth LICENSE`_ for details:
 .. _six: http://pythonhosted.org/six/
 .. _requests: http://docs.python-requests.org/en/latest/
 .. _PixelPin: http://pixelpin.co.uk
+
+
+.. image:: https://d2weczhvl823v0.cloudfront.net/omab/python-social-auth/trend.png
+   :alt: Bitdeli badge
+   :target: https://bitdeli.com/free
+
