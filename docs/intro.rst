@@ -75,6 +75,7 @@ or extend current one):
     * Tumblr_ OAuth1
     * Twilio_ Auth
     * Twitter_ OAuth1
+    * Vimeo_ OAuth1
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
     * Xing_ OAuth1
@@ -152,6 +153,7 @@ section.
 .. _Stackoverflow: http://stackoverflow.com/
 .. _Steam: http://steamcommunity.com/
 .. _Rdio: https://www.rdio.com
+.. _Vimeo: https://vimeo.com/
 .. _Tumblr: http://www.tumblr.com/
 .. _Django: https://github.com/omab/python-social-auth/tree/master/social/apps/django_app
 .. _Flask: https://github.com/omab/python-social-auth/tree/master/social/apps/flask_app

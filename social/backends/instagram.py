@@ -1,3 +1,7 @@
+"""
+Instagram OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/instagram.html
+"""
 from social.backends.oauth import BaseOAuth2
 
 

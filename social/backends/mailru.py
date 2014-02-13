@@ -1,13 +1,6 @@
 """
-Mail.ru OAuth2 support
-
-Take a look to http://api.mail.ru/docs/guides/oauth/
-
-You need to register OAuth site here:
-http://api.mail.ru/sites/my/add
-
-Then update your settings values using registration information
-
+Mail.ru OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/mailru.html
 """
 from hashlib import md5
 
@@ -44,6 +37,8 @@ class MailruOAuth2(BaseOAuth2):
                 'app_id': key,
                 'secure': '1'}
         param_list = sorted(list(item + '=' + data[item] for item in data))
-        data['sig'] = md5(''.join(param_list) + secret).hexdigest()
+        data['sig'] = md5(
+            (''.join(param_list) + secret).encode('utf-8')
+        ).hexdigest()
         return self.get_json('http://www.appsmail.ru/platform/api',
                              params=data)[0]

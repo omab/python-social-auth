@@ -1,13 +1,6 @@
 """
-Shopify OAuth support.
-
-You must:
-
-- Register an App in the shopify partner control panel
-- Add the API Key and shared secret in your django settings
-- Set the Application URL in shopify app settings
-- Install the shopify package
-
+Shopify OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/shopify.html
 """
 import imp
 import six

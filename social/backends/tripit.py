@@ -1,12 +1,6 @@
 """
-TripIt OAuth support.
-
-This adds support for TripIt OAuth service. An application must
-be registered first on TripIt and the settings TRIPIT_API_KEY
-and TRIPIT_API_SECRET must be defined with the corresponding
-values.
-
-User screen name is used to generate username.
+Tripit OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/tripit.html
 """
 from xml.dom import minidom
 

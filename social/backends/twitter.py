@@ -1,15 +1,6 @@
 """
-Twitter OAuth support.
-
-This adds support for Twitter OAuth service. An application must
-be registered first on twitter and the settings TWITTER_CONSUMER_KEY
-and TWITTER_CONSUMER_SECRET must be defined with the corresponding
-values.
-
-User screen name is used to generate username.
-
-By default account id is stored in extra_data field, check OAuthBackend
-class for details on how to extend it.
+Twitter OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/twitter.html
 """
 from social.backends.oauth import BaseOAuth1
 
@@ -18,7 +9,7 @@ class TwitterOAuth(BaseOAuth1):
     """Twitter OAuth authentication backend"""
     name = 'twitter'
     EXTRA_DATA = [('id', 'id')]
-    AUTHORIZATION_URL = 'http://api.twitter.com/oauth/authenticate'
+    AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authenticate'
     REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
     ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
 

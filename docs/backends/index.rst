@@ -48,41 +48,61 @@ Social backends
 
    amazon
    angel
+   aol
    appsfuel
    behance
+   belgium_eid
    bitbucket
    box
+   coinbase
+   dailymotion
    disqus
    douban
    dropbox
    evernote
    facebook
+   fedora
+   fitbit
    flickr
+   foursquare
    github
    google
    instagram
+   jawbone
    linkedin
+   livejournal
    live
    mailru
+   mendeley
    mixcloud
    odnoklassnikiru
+   openstreetmap
    persona
+   pixelpin
+   pocket
+   podio
    rdio
    readability
    reddit
+   runkeeper
    shopify
    skyrock
    soundcloud
    suse
-   thisismyjam
    stackoverflow
    steam
    stocktwits
    stripe
+   taobao
+   thisismyjam
+   trello
    tripit
    tumblr
    twilio
    twitter
+   vimeo
    vk
    weibo
+   xing
    yahoo
+   yammer

@@ -15,10 +15,6 @@ from social.backends.base import BaseAuth
 class OAuthAuth(BaseAuth):
     """OAuth authentication backend base class.
 
-    EXTRA_DATA defines a set of name that will be stored in
-               extra_data field. It must be a list of tuples with
-               name and alias.
-
     Also settings will be inspected to get more values names that should be
     stored on extra_data field. Setting name is created from current backend
     name (all uppercase) plus _EXTRA_DATA.
@@ -28,32 +24,16 @@ class OAuthAuth(BaseAuth):
     SCOPE_PARAMETER_NAME = 'scope'
     DEFAULT_SCOPE = None
     SCOPE_SEPARATOR = ' '
-    EXTRA_DATA = None
     ID_KEY = 'id'
     ACCESS_TOKEN_METHOD = 'GET'
+    REVOKE_TOKEN_URL = None
+    REVOKE_TOKEN_METHOD = 'POST'
 
     def extra_data(self, user, uid, response, details=None):
         """Return access_token and extra defined names to store in
         extra_data field"""
-        data = {'access_token': response.get('access_token', '')}
-        names = (self.EXTRA_DATA or []) + \
-                self.setting('EXTRA_DATA', [])
-        for entry in names:
-            if not isinstance(entry, (list, tuple)):
-                entry = (entry,)
-            size = len(entry)
-            if size >= 1 and size <= 3:
-                if size == 3:
-                    name, alias, discard = entry
-                elif size == 2:
-                    (name, alias), discard = entry, False
-                elif size == 1:
-                    name = alias = entry[0]
-                    discard = False
-                value = response.get(name)
-                if discard and not value:
-                    continue
-                data[alias] = value
+        data = super(OAuthAuth, self).extra_data(user, uid, response, details)
+        data['access_token'] = response.get('access_token', '')
         return data
 
     def get_scope(self):
@@ -72,6 +52,29 @@ class OAuthAuth(BaseAuth):
         """Loads user data from service. Implement in subclass"""
         return {}
 
+    def revoke_token_url(self, token, uid):
+        return self.REVOKE_TOKEN_URL
+
+    def revoke_token_params(self, token, uid):
+        return {}
+
+    def revoke_token_headers(self, token, uid):
+        return {}
+
+    def process_revoke_token_response(self, response):
+        return response.status_code == 200
+
+    def revoke_token(self, token, uid):
+        if self.REVOKE_TOKEN_URL:
+            url = self.revoke_token_url(token, uid)
+            params = self.revoke_token_params(token, uid)
+            headers = self.revoke_token_headers(token, uid)
+            data = urlencode(params) if self.REVOKE_TOKEN_METHOD != 'GET' \
+                                     else None
+            response = self.request(url, params=params, headers=headers,
+                                    data=data, method=self.REVOKE_TOKEN_METHOD)
+            return self.process_revoke_token_response(response)
+
 
 class BaseOAuth1(OAuthAuth):
     """Consumer based mechanism OAuth authentication, fill the needed
@@ -87,13 +90,11 @@ class BaseOAuth1(OAuthAuth):
     OAUTH_TOKEN_PARAMETER_NAME = 'oauth_token'
     REDIRECT_URI_PARAMETER_NAME = 'redirect_uri'
     ACCESS_TOKEN_URL = ''
+    UNATHORIZED_TOKEN_SUFIX = 'unauthorized_token_name'
 
     def auth_url(self):
         """Return redirect url"""
-        token = self.unauthorized_token()
-        name = self.name + 'unauthorized_token_name'
-        tokens = self.strategy.session_get(name, []) + [token]
-        self.strategy.session_set(name, tokens)
+        token = self.set_unauthorized_token()
         return self.oauth_authorization_request(token)
 
     def process_error(self, data):
@@ -106,27 +107,7 @@ class BaseOAuth1(OAuthAuth):
         """Return user, might be logged in"""
         # Multiple unauthorized tokens are supported (see #521)
         self.process_error(self.data)
-        name = self.name + 'unauthorized_token_name'
-        token = None
-        unauthed_tokens = self.strategy.session_get(name, [])
-        if not unauthed_tokens:
-            raise AuthTokenError(self, 'Missing unauthorized token')
-        token_param_name = self.OAUTH_TOKEN_PARAMETER_NAME
-        data_token = self.data.get(token_param_name, 'no-token')
-        for unauthed_token in unauthed_tokens:
-            orig_unauthed_token = unauthed_token
-            if not isinstance(unauthed_token, dict):
-                unauthed_token = parse_qs(unauthed_token)
-            if unauthed_token.get(token_param_name) == data_token:
-                self.strategy.session_set(name, list(
-                    set(unauthed_tokens) -
-                    set([orig_unauthed_token]))
-                )
-                token = unauthed_token
-                break
-        else:
-            raise AuthTokenError(self, 'Incorrect tokens')
-
+        token = self.get_unauthorized_token()
         try:
             access_token = self.access_token(token)
         except HTTPError as err:
@@ -138,11 +119,45 @@ class BaseOAuth1(OAuthAuth):
 
     def do_auth(self, access_token, *args, **kwargs):
         """Finish the auth process once the access_token was retrieved"""
+        if not isinstance(access_token, dict):
+            access_token = parse_qs(access_token)
         data = self.user_data(access_token)
         if data is not None and 'access_token' not in data:
             data['access_token'] = access_token
         kwargs.update({'response': data, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
+
+    def get_unauthorized_token(self):
+        name = self.name + self.UNATHORIZED_TOKEN_SUFIX
+        unauthed_tokens = self.strategy.session_get(name, [])
+        if not unauthed_tokens:
+            raise AuthTokenError(self, 'Missing unauthorized token')
+
+        data_token = self.data.get(self.OAUTH_TOKEN_PARAMETER_NAME)
+
+        if data_token is None:
+            raise AuthTokenError(self, 'Missing unauthorized token')
+
+        token = None
+        for utoken in unauthed_tokens:
+            orig_utoken = utoken
+            if not isinstance(utoken, dict):
+                utoken = parse_qs(utoken)
+            if utoken.get(self.OAUTH_TOKEN_PARAMETER_NAME) == data_token:
+                self.strategy.session_set(name, list(set(unauthed_tokens) -
+                                                     set([orig_utoken])))
+                token = utoken
+                break
+        else:
+            raise AuthTokenError(self, 'Incorrect tokens')
+        return token
+
+    def set_unauthorized_token(self):
+        token = self.unauthorized_token()
+        name = self.name + self.UNATHORIZED_TOKEN_SUFIX
+        tokens = self.strategy.session_get(name, []) + [token]
+        self.strategy.session_set(name, tokens)
+        return token
 
     def unauthorized_token(self):
         """Return request for unauthorized token (first stage)"""
@@ -158,7 +173,13 @@ class BaseOAuth1(OAuthAuth):
                                             callback_uri=self.redirect_uri,
                                             decoding=decoding),
                                 method=self.REQUEST_TOKEN_METHOD)
-        return response.content
+        content = response.content
+        if response.encoding or response.apparent_encoding:
+            content = content.decode(response.encoding or
+                                     response.apparent_encoding)
+        else:
+            content = response.content.decode()
+        return content
 
     def oauth_authorization_request(self, token):
         """Generate OAuth request to authorize token."""
@@ -214,8 +235,6 @@ class BaseOAuth2(OAuthAuth):
     ACCESS_TOKEN_URL = None
     REFRESH_TOKEN_URL = None
     REFRESH_TOKEN_METHOD = 'POST'
-    REVOKE_TOKEN_URL = None
-    REVOKE_TOKEN_METHOD = 'POST'
     RESPONSE_TYPE = 'code'
     REDIRECT_STATE = True
     STATE_PARAMETER = True
@@ -366,26 +385,3 @@ class BaseOAuth2(OAuthAuth):
                         key: params}
         request = self.request(url, **request_args)
         return self.process_refresh_token_response(request, *args, **kwargs)
-
-    def revoke_token_url(self, token, uid):
-        return self.REVOKE_TOKEN_URL
-
-    def revoke_token_params(self, token, uid):
-        return {}
-
-    def revoke_token_headers(self, token, uid):
-        return {}
-
-    def process_revoke_token_response(self, response):
-        return response.status_code == 200
-
-    def revoke_token(self, token, uid):
-        if self.REVOKE_TOKEN_URL:
-            url = self.revoke_token_url(token, uid)
-            params = self.revoke_token_params(token, uid)
-            headers = self.revoke_token_headers(token, uid)
-            data = urlencode(params) if self.REVOKE_TOKEN_METHOD != 'GET' \
-                                     else None
-            response = self.request(url, params=params, headers=headers,
-                                    data=data, method=self.REVOKE_TOKEN_METHOD)
-            return self.process_revoke_token_response(response)

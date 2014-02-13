@@ -1,5 +1,395 @@
+2014-02-05 v0.1.21
+==================
+
+  * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix iexact field lookup. Refs #179
+
+  * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Restore BackendWrapper to avoid session issues (this backend is
+    deprecated). Refs #128
+
+  * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Case insensitive query on django. Closes #179
+
+  * 2014-02-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Exclude sure broken version 1.2.4
+
+  * 2014-02-01 Michisu, Toshikazu <michisu@marici.co.jp>
+    Add version parameter to foursquare backend
+
+  * 2014-01-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Use response encoding only when available. Refs #173
+
+  * 2014-01-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Add pixelpin to backends index
+
+  * 2014-01-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Ensure encode() before md5 call for python3. Closes #168
+
+  * 2014-01-21 lukos <lukiebriner@gmail.com>
+    Added PixelPin to list of providers
+
+  * 2014-01-21 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8, file formats and line lengths fixes
+
+  * 2014-01-21 luke <luke@pixelpin.co.uk>
+    Add documentation for PixelPin
+
+  * 2014-01-21 luke <luke@pixelpin.co.uk>
+    Added new PixelPin provider.
+
+  * 2014-01-20 Matías Aguirre <matiasaguirre@gmail.com>
+    Use same DB name as other examples
+
+  * 2014-01-20 Yasin Aktimur <chardone@windowslive.com>
+    Serializer changed.
+
+  * 2014-01-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Support Weibo domain as username by setting. Closes #164
+
+  * 2014-01-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Snippet to get people from circles on Google+
+
+  * 2014-01-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Override get_user_id on tumblr backend. Refs #136
+
+2014-01-17 v0.1.20
+==================
+
+  * 2014-01-17 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.20
+
+  * 2014-01-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Decode bytes on Python3 otherwise it breaks session saving on Django. Refs
+    #139
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix linkedin docs about attributes names. Closes #161
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Also support old keys format in linkedin backend for basic data
+
+2014-01-16 v0.1.19
+==================
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.19
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Generate packages names dynamically
+
+2014-01-16 v0.1.18
+==================
+
+  * 2014-01-16 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.18
+
+  * 2014-01-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Raise missing parameter error in facebook. Refs #153
+
+  * 2014-01-15 harshiljain <jainharsh79@yahoo.com>
+    AUTHORIZATION_URL changed to https
+
+  * 2014-01-14 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-01-14 Javier G. Sogo <jgsogo@gmail.com>
+    stores 'access_token' for GooglePlusAuth
+
+  * 2014-01-14 Javier G. Sogo <jgsogo@gmail.com>
+    for FacebookOAuth2::process_revoke_token_response call super (solves type
+    with 'status_code') and custom processing
+
+  * 2014-01-14 Javier G. Sogo <jgsogo@gmail.com>
+    moved revoking stuff to OAuthAuth class (should it be moved to BaseAuth?)
+
+  * 2014-01-13 Max Tepkeev <m.tepkeev@ailove.ru>
+    odnoklassniki backend iframe app fix
+
+  * 2014-01-10 xen <m@xen.ru>
+    Cleanup docs
+
+  * 2014-01-10 xen <m@xen.ru>
+    Simplify SQLAlchemy API usage
+
+  * 2014-01-10 xen <m@xen.ru>
+    Update to follow current state in documentations
+
+  * 2014-01-08 Roberto Robles <robertorobles0@gmail.com>
+    Remove SOCIAL_AUTH prefix on redirect_uri function
+
+  * 2014-01-08 Roberto Robles <robertorobles0@gmail.com>
+    Fixed issue with redirect_uri with https
+
+  * 2014-01-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Link Taobao docs on backends index
+
+  * 2014-01-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Docs styling and PEP8
+
+  * 2014-01-08 Jichao Ouyang <oyanglulu@gmail.com>
+    taobao docs
+
+  * 2014-01-08 Jichao Ouyang <oyanglulu@gmail.com>
+    get token with POST method
+
+  * 2014-01-07 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and cleanups. Refs #145
+
+  * 2014-01-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Move URLs gathering to helper
+
+  * 2014-01-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix dox underline
+
+  * 2014-01-07 Jichao Ouyang <oyanglulu@gmail.com>
+    remove unused import
+
+  * 2014-01-07 Jichao Ouyang <oyanglulu@gmail.com>
+    add to django example
+
+  * 2014-01-07 Jichao Ouyang <oyanglulu@gmail.com>
+    add support for taobao
+
+  * 2014-01-06 Adam Coddington <me@adamcoddington.net>
+    Updating readme to proclaim OAuth2 support for Dropbox.
+
+  * 2014-01-06 Adam Coddington <me@adamcoddington.net>
+    Updating Dropbox documentation to include notes regarding OAuth2 support.
+
+  * 2014-01-06 Adam Coddington <me@adamcoddington.net>
+    Adding Dropbox OAuth2 Support.
+
+  * 2014-01-06 Edwin Knuth <edwin@pointnineseven.com>
+    increasing length of salt field for django apps, fixes #141
+
+  * 2014-01-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify partial handling on actions
+
+  * 2014-01-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Updated readme with other dependencies. Closes #140
+
+  * 2014-01-06 Jichao Ouyang <oyanglulu@gmail.com>
+    add support for taobao
+
+  * 2014-01-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Always send email validations is required
+
+  * 2014-01-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Move extra-data logic to base clase
+
+  * 2014-01-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix ID_KEY for Tumblr backend. Refs #136
+
+  * 2014-01-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Use cases doc. Refs #137
+
+  * 2014-01-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix docstring. Refs #136
+
+  * 2013-12-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Line chars limit in docs. Refs #135
+
+  * 2013-12-28 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8. Refs #135
+
+  * 2013-12-28 Xmypblu <xmypblu.msk@gmail.com>
+    Add support for OpenStreetMap OAuth
+
+  * 2013-12-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Update porting docs regarding session value
+
+  * 2013-12-27 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2013-12-26 Nicolas Cortot <nc@rznc.net>
+    Support for MongoEngine authentication using Custom User Model
+
+  * 2013-12-25 Nick Sullivan <nick@sullivanflock.com>
+    Update reddit.py
+
+  * 2013-12-17 Jay Parlar <parlar@gmail.com>
+    Tiny typo fix
+
+  * 2013-12-16 maxtepkeev <tepkeev@gmail.com>
+    fix session expiration in vk backend
+
+  * 2013-12-11 Kevin Tran <hekevintran@gmail.com>
+    Added support for named URLs and URL translation using the django built-in
+    resolve_url before giving the url to tje HttpResponseRedirect. See also
+    https://code.djangoproject.com/ticket/15552
+
+  * 2013-12-11 Bob Alcorn <alcorn.bob@gmail.com>
+    Updated pipeline example to include externalized auth;
+
+  * 2013-12-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Avoid broken email entries on yahoo API. Closes #125
+
+  * 2013-12-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Allow unauthorized token retrieval/storage overrideable. Refs #111
+
+  * 2013-12-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Constant type compare on HMAC signatures. Closes #122
+
+  * 2013-12-07 monkut <nafein@hotmail.com>
+    Removed non-ascii character from author string
+
+  * 2013-12-06 Hans <hans@hansl.ca>
+    Add test backends to the package.
+
+  * 2013-12-06 Rodrigue Villetard <doddo@sacristi.fr>
+    Missing trailing slash on complete url
+
+  * 2013-12-03 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8. Refs #116
+
+  * 2013-12-03 Stephen McDonald <steve@jupo.org>
+    Add refs to getpocket.com in readme + docs
+
+  * 2013-12-03 Stephen McDonald <steve@jupo.org>
+    getpocket.com backend
+
+  * 2013-12-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Helper to get current backend instance. Refs #114
+
+  * 2013-11-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Set current strategy on pyramid app
+
+  * 2013-11-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify pyramid settings access
+
+  * 2013-11-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Set current strategy on webpy and flask apps
+
+  * 2013-11-29 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Link to backends docs in the modules instead of repeating the docs. Refs
+    #107
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Yammer docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Improves to Yahoo docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Xing docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Trello docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Podio docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Mendeley docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix backends index order
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    LiveJournal docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Jawbone docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Foursquare backend docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Fitbit docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Fedora openid docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix douban oauth1 title
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Dailymotion docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    File format fix to coinbase docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix backends order
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    BelgiumEID docs
+
+  * 2013-11-28 Matías Aguirre <matiasaguirre@gmail.com>
+    AOL docs
+
+  * 2013-11-26 Norton Wang <nortantivirus@gmail.com>
+    fix uid in coinbase oauth
+
+  * 2013-11-23 Norton Wang <nortantivirus@gmail.com>
+    add coinbase docs, add runkeeper docs to index
+
+  * 2013-11-23 Norton Wang <nortantivirus@gmail.com>
+    add coinbase oauth
+
+  * 2013-11-23 Norton Wang <nortantivirus@gmail.com>
+    Add more examples to django_example, alphabetize, fix some grammar
+
+  * 2013-11-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix setting name in docs. Refs #97
+
+  * 2013-11-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Move default pipeline definitions to constants for easy import. Refs #99
+
+  * 2013-11-21 josseph <josseph.zhang@gmail.com>
+    Update weibo.py
+
+  * 2013-11-20 maxtepkeev <tepkeev@gmail.com>
+    Make vk-app backend to retrieve additional user data in respect to the
+    *_EXTRA_DATA setting
+
+  * 2013-11-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix typo
+
+  * 2013-11-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Mention callback URL definition on linkedin when using oauth2. Refs #58
+
+  * 2013-11-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Include backend name in setting if backend is defined. Refs #95
+
+  * 2013-11-18 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and simplifications. Refs #92
+
+  * 2013-11-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Restore prvious link, fix schema in readthedocs link. Refs #93
+
+  * 2013-11-17 Sahil Gupta <sahilgupta.29@gmail.com>
+    Updated README to point to the latest docs on Read The Docs.
+
+  * 2013-11-16 Marios <assiotis@alum.mit.edu>
+    Google Plus backend allows for a server-side flow that can grant a refresh
+    token that can be subsequently used to perform operations on behalf of the
+    user, even if the user is not online.
+
+  * 2013-11-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Replace format call with string join. Closes #91
+
+  * 2013-11-14 Juan Riaza <github@juanriaza.com>
+    a better way
+
+  * 2013-11-14 Juan Riaza <github@juanriaza.com>
+    fitbit uid
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix OpenId PAPE max age check. Closes #89
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Changelog update
+
 2013-11-13 v0.1.17
 ==================
+
+  * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.17
 
   * 2013-11-13 Matías Aguirre <matiasaguirre@gmail.com>
     Support remember flag when calling login on flask app
@@ -51,6 +441,9 @@
 ==================
 
   * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.16
+
+  * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
     Remove unused vars
 
   * 2013-11-07 Matías Aguirre <matiasaguirre@gmail.com>
@@ -62,6 +455,12 @@
 
   * 2013-11-06 Matías Aguirre <matiasaguirre@gmail.com>
     Ensure IDs to openid association removal. Closes #76
+
+  * 2013-11-05 Branden Rolston <branden@disqus.com>
+    Update partial from session with newer kwargs.
+
+  * 2013-11-05 Branden Rolston <branden@disqus.com>
+    Use mock.
 
   * 2013-11-05 Matías Aguirre <matiasaguirre@gmail.com>
     Link to tornado docs
@@ -98,6 +497,9 @@
 
 2013-11-04 v0.1.15
 ==================
+
+  * 2013-11-04 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.15
 
   * 2013-11-04 Matías Aguirre <matiasaguirre@gmail.com>
     Test runkeeper backend
@@ -204,6 +606,9 @@
 
 2013-10-07 v0.1.14
 ==================
+
+  * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.14
 
   * 2013-10-07 Matías Aguirre <matiasaguirre@gmail.com>
     Fix encoding string between python2 and 3
@@ -346,6 +751,9 @@
 ==================
 
   * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.13
+
+  * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
     Move common code to base class
 
   * 2013-09-22 Matías Aguirre <matiasaguirre@gmail.com>
@@ -484,6 +892,9 @@
 2013-09-13 v0.1.12
 ==================
 
+  * 2013-09-13 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.12
+
   * 2013-09-12 Matías Aguirre <matiasaguirre@gmail.com>
     Fix get_social_auth_for_user on mongoengine storage
 
@@ -567,6 +978,9 @@
 
 2013-09-03 v0.1.11
 ==================
+
+  * 2013-09-03 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.11
 
   * 2013-09-03 Matías Aguirre <matiasaguirre@gmail.com>
     Enforce list on pipeline method
@@ -665,6 +1079,9 @@
 ==================
 
   * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.10
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
     PEP8
 
   * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
@@ -675,6 +1092,9 @@
 
 2013-08-29 v0.1.9
 =================
+
+  * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.9
 
   * 2013-08-29 Matías Aguirre <matiasaguirre@gmail.com>
     Allow to override strategy getter
@@ -746,6 +1166,9 @@
 =================
 
   * 2013-07-13 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.8
+
+  * 2013-07-13 Matías Aguirre <matiasaguirre@gmail.com>
     Add method to determine if current user is allowed to login
 
   * 2013-06-30 Florian Auroy <fauroy@gmail.com>
@@ -779,6 +1202,9 @@
 =================
 
   * 2013-06-03 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.7
+
+  * 2013-06-03 Matías Aguirre <matiasaguirre@gmail.com>
     Fix inheritance on flask and sqlalchemy orm
 
   * 2013-06-03 Matías Aguirre <matiasaguirre@gmail.com>
@@ -788,10 +1214,16 @@
 =================
 
   * 2013-06-03 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.6
+
+  * 2013-06-03 Matías Aguirre <matiasaguirre@gmail.com>
     Enforce db session passing on flask init
 
 2013-06-01 v0.1.5
 =================
+
+  * 2013-06-01 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.5
 
   * 2013-06-01 Matías Aguirre <matiasaguirre@gmail.com>
     Simpler code to convert values to and from session
@@ -815,11 +1247,17 @@
 =================
 
   * 2013-05-31 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.4
+
+  * 2013-05-31 Matías Aguirre <matiasaguirre@gmail.com>
     Unrestricted user fields on instance creation, defaults to username and
     email
 
 2013-05-31 v0.1.3
 =================
+
+  * 2013-05-31 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.3
 
   * 2013-05-30 Matías Aguirre <matiasaguirre@gmail.com>
     Avoid version 0.3.2 of requests-oauthlib on python 3 (setup.py)
@@ -916,6 +1354,9 @@
 =================
 
   * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.2
+
+  * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
     Update tests docs
 
   * 2013-04-03 Matías Aguirre <matiasaguirre@gmail.com>
@@ -982,6 +1423,9 @@
 
 2013-04-01 v0.1.1
 =================
+
+  * 2013-04-01 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.1
 
   * 2013-04-01 Matías Aguirre <matiasaguirre@gmail.com>
     Use a default dict to play with the console and django strategy

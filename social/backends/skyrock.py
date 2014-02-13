@@ -1,13 +1,6 @@
 """
-Skyrock OAuth support.
-
-This adds support for Skyrock OAuth service. An application must
-be registered first on skyrock and the settings SKYROCK_CONSUMER_KEY
-and SKYROCK_CONSUMER_SECRET must be defined with they corresponding
-values.
-
-By default account id is stored in extra_data field, check OAuthBackend
-class for details on how to extend it.
+Skyrock OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/skyrock.html
 """
 from social.backends.oauth import BaseOAuth1
 

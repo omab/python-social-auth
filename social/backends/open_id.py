@@ -108,7 +108,12 @@ class OpenIdAuth(BaseAuth):
         """
         sreg_names = self.setting('SREG_EXTRA_DATA')
         ax_names = self.setting('AX_EXTRA_DATA')
-        return self.values_from_response(response, sreg_names, ax_names)
+        values = self.values_from_response(response, sreg_names, ax_names)
+        from_details = super(OpenIdAuth, self).extra_data(
+            user, uid, {}, details
+        )
+        values.update(from_details)
+        return values
 
     def auth_url(self):
         """Return auth URL returned by service"""

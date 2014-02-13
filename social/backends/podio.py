@@ -1,9 +1,7 @@
 """
-Podio OAuth2 support
-
-https://developers.podio.com/authentication/server_side
+Podio OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/podio.html
 """
-
 from social.backends.oauth import BaseOAuth2
 
 

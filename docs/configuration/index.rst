@@ -19,5 +19,6 @@ Contents:
    django
    flask
    pyramid
+   cherrypy
    webpy
    porting_from_dsa

@@ -1,18 +1,7 @@
 """
-Trello OAuth support.
-
-This contribution adds support for Trello OAuth service. The settings
-SOCIAL_AUTH_TRELLO_KEY and SOCIAL_AUTH_TRELLO_SECRET must be defined with
-the values given by `https://trello.com/1/appKey/generate`.
-
-Extended permissions are supported by defining TRELLO_EXTENDED_PERMISSIONS
-setting, it must be a list of values to request.
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
-
+Trello OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/trello.html
 """
-
 from social.backends.oauth import BaseOAuth1
 
 

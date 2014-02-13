@@ -1,6 +1,6 @@
 """
-Reddit OAuth2 support as detailed at:
-    https://github.com/reddit/reddit/wiki/OAuth2
+Reddit OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/reddit.html
 """
 import base64
 
@@ -26,7 +26,7 @@ class RedditOAuth2(BaseOAuth2):
     ]
 
     def get_user_details(self, response):
-        """Return user details from Github account"""
+        """Return user details from Reddit account"""
         return {'username': response.get('name'),
                 'email': '', 'fullname': '',
                 'first_name': '', 'last_name': ''}

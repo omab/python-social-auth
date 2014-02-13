@@ -1,4 +1,7 @@
-"""Steam OpenId support"""
+"""
+Steam OpenId backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/steam.html
+"""
 from social.backends.open_id import OpenIdAuth
 from social.exceptions import AuthFailed
 

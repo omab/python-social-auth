@@ -1,5 +1,6 @@
 """
-BrowserID support
+Mozilla Persona authentication backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/persona.html
 """
 from social.backends.base import BaseAuth
 from social.exceptions import AuthFailed, AuthMissingParameter

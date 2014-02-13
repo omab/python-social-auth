@@ -1,15 +1,6 @@
 """
-Box.net OAuth support.
-
-This contribution adds support for GitHub OAuth service. The settings
-SOCIAL_AUTH_BOX_KEY and SOCIAL_AUTH_BOX_SECRET must be defined with the values
-given by Box.net application registration process.
-
-Extended permissions are supported by defining BOX_EXTENDED_PERMISSIONS
-setting, it must be a list of values to request.
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
+Box.net OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/box.html
 """
 from social.backends.oauth import BaseOAuth2
 

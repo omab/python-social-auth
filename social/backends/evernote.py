@@ -1,7 +1,6 @@
 """
-EverNote OAuth support
-
-No extra configurations are needed to make this work.
+Evernote OAuth1 backend (with sandbox mode support), docs at:
+    http://psa.matiasaguirre.net/docs/backends/evernote.html
 """
 from requests import HTTPError
 

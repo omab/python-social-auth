@@ -17,6 +17,10 @@ for more frameworks and ORMs.
 .. image:: https://pypip.in/d/python-social-auth/badge.png
    :target: https://crate.io/packages/python-social-auth?version=latest
 
+.. image:: https://d2weczhvl823v0.cloudfront.net/omab/python-social-auth/trend.png
+   :alt: Bitdeli badge
+   :target: https://bitdeli.com/free
+
 .. contents:: Table of Contents
 
 
@@ -59,7 +63,7 @@ or current ones extended):
     * Dailymotion_ OAuth2
     * Disqus_ OAuth2
     * Douban_ OAuth1 and OAuth2
-    * Dropbox_ OAuth1
+    * Dropbox_ OAuth1 and OAuth2
     * Evernote_ OAuth1
     * Exacttarget OAuth2
     * Facebook_ OAuth2 and OAuth2 for Applications
@@ -81,8 +85,11 @@ or current ones extended):
     * `Mozilla Persona`_
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
+    * OpenStreetMap_ OAuth1 http://wiki.openstreetmap.org/wiki/OAuth
     * OpenSuse_ OpenId http://en.opensuse.org/openSUSE:Connect
     * Orkut_ OAuth1
+    * PixelPin_ OAuth2
+    * Pocket_ OAuth2
     * Podio_ OAuth2
     * Rdio_ OAuth1 and OAuth2
     * Readability_ OAuth1
@@ -94,6 +101,7 @@ or current ones extended):
     * Steam_ OpenId
     * Stocktwits_ OAuth2
     * Stripe_ OAuth2
+    * Taobao_ OAuth2 http://open.taobao.com/doc/detail.htm?id=118
     * ThisIsMyJam_ OAuth1 https://www.thisismyjam.com/developers/authentication
     * Trello_ OAuth1 https://trello.com/docs/gettingstarted/oauth.html
     * Tripit_ OAuth1
@@ -140,6 +148,10 @@ Dependencies that **must** be met to use the application:
 
 - Several backends demand application registration on their corresponding
   sites and other dependencies like sqlalchemy_ on Flask and Webpy.
+
+- Other dependencies:
+    * six_
+    * requests_
 
 
 Documents
@@ -223,12 +235,14 @@ check `django-social-auth LICENSE`_ for details:
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
 .. _Orkut: http://www.orkut.com
+.. _Pocket: http://getpocket.com
 .. _Podio: https://podio.com
 .. _Shopify: http://shopify.com
 .. _Skyrock: https://skyrock.com
 .. _Soundcloud: https://soundcloud.com
 .. _Stocktwits: https://stocktwits.com
 .. _Stripe: https://stripe.com
+.. _Taobao: http://open.taobao.com/doc/detail.htm?id=118
 .. _Tripit: https://www.tripit.com
 .. _Twilio: https://www.twilio.com
 .. _Twitter: http://twitter.com
@@ -262,3 +276,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _python-oauth2: https://github.com/simplegeo/python-oauth2
 .. _sqlalchemy: http://www.sqlalchemy.org/
 .. _pypi: http://pypi.python.org/pypi/python-social-auth/
+.. _OpenStreetMap: http://www.openstreetmap.org
+.. _six: http://pythonhosted.org/six/
+.. _requests: http://docs.python-requests.org/en/latest/
+.. _PixelPin: http://pixelpin.co.uk

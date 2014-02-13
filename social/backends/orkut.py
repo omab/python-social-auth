@@ -1,14 +1,6 @@
 """
-Orkut OAuth support.
-
-This contribution adds support for Orkut OAuth service. The scope is
-limited to http://orkut.gmodules.com/social/ by default, but can be
-extended with ORKUT_SCOPE on project settings. Also name, display
-name and emails are the default requested user data, but extra values
-can be specified by defining ORKUT_EXTRA_DATA setting.
-
-OAuth settings ORKUT_CONSUMER_KEY and ORKUT_CONSUMER_SECRET are needed
-to enable this service support.
+Orkut OAuth backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/google.html#orkut
 """
 from social.backends.google import GoogleOAuth
 

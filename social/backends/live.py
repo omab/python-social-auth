@@ -1,18 +1,6 @@
 """
-MSN Live Connect oAuth 2.0
-
-Settings:
-LIVE_CLIENT_ID
-LIVE_CLIENT_SECRET
-LIVE_EXTENDED_PERMISSIONS (defaults are: wl.basic, wl.emails)
-
-References:
-* oAuth  http://msdn.microsoft.com/en-us/library/live/hh243649.aspx
-* Scopes http://msdn.microsoft.com/en-us/library/live/hh243646.aspx
-* REST   http://msdn.microsoft.com/en-us/library/live/hh243648.aspx
-
-Throws:
-AuthUnknownError - if user data retrieval fails
+Live OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/live.html
 """
 from social.backends.oauth import BaseOAuth2
 
@@ -27,11 +15,13 @@ class LiveOAuth2(BaseOAuth2):
     EXTRA_DATA = [
         ('id', 'id'),
         ('access_token', 'access_token'),
-        ('reset_token', 'reset_token'),
-        ('expires', 'expires'),
+        ('authentication_token', 'authentication_token'),
+        ('refresh_token', 'refresh_token'),
+        ('expires_in', 'expires'),
         ('email', 'email'),
         ('first_name', 'first_name'),
         ('last_name', 'last_name'),
+        ('token_type', 'token_type'),
     ]
 
     def get_user_details(self, response):

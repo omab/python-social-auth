@@ -1,8 +1,8 @@
 import re
 import sys
 import unicodedata
-import six
 import collections
+import six
 
 from social.p3 import urlparse, urlunparse, urlencode, \
                       parse_qs as battery_parse_qs
@@ -128,11 +128,14 @@ def partial_pipeline_data(strategy, user, *args, **kwargs):
     partial = strategy.session_get('partial_pipeline', None)
     if partial:
         idx, backend, xargs, xkwargs = strategy.partial_from_session(partial)
-        kwargs = kwargs.copy()
-        kwargs.setdefault('user', user)
-        kwargs.setdefault('request', strategy.request)
-        kwargs.update(xkwargs)
-        return idx, backend, xargs, kwargs
+        if backend == strategy.backend.name:
+            kwargs.setdefault('pipeline_index', idx)
+            kwargs.setdefault('user', user)
+            kwargs.setdefault('request', strategy.request)
+            xkwargs.update(kwargs)
+            return xargs, xkwargs
+        else:
+            strategy.clean_partial_pipeline()
 
 
 def build_absolute_uri(host_url, path=None):
@@ -143,3 +146,38 @@ def build_absolute_uri(host_url, path=None):
     if host_url.endswith('/') and path.startswith('/'):
         path = path[1:]
     return host_url + path
+
+
+def constant_time_compare(val1, val2):
+    """
+    Returns True if the two strings are equal, False otherwise.
+    The time taken is independent of the number of characters that match.
+    This code was borrowed from Django 1.5.4-final
+    """
+    if len(val1) != len(val2):
+        return False
+    result = 0
+    if six.PY3 and isinstance(val1, bytes) and isinstance(val2, bytes):
+        for x, y in zip(val1, val2):
+            result |= x ^ y
+    else:
+        for x, y in zip(val1, val2):
+            result |= ord(x) ^ ord(y)
+    return result == 0
+
+
+def is_url(value):
+    return value and \
+           (value.startswith('http://') or
+            value.startswith('https://') or
+            value.startswith('/'))
+
+
+def setting_url(strategy, *names):
+    for name in names:
+        if is_url(name):
+            return name
+        else:
+            value = strategy.setting(name)
+            if is_url(value):
+                return value

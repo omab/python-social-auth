@@ -11,6 +11,7 @@ from social.tests.backends.test_behance import *
 from social.tests.backends.test_bitbucket import *
 from social.tests.backends.test_box import *
 from social.tests.backends.test_broken import *
+from social.tests.backends.test_coinbase import *
 from social.tests.backends.test_dailymotion import *
 from social.tests.backends.test_disqus import *
 from social.tests.backends.test_dropbox import *

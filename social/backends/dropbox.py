@@ -1,14 +1,8 @@
 """
-Dropbox OAuth support.
-
-This contribution adds support for Dropbox OAuth service. The settings
-DROPBOX_APP_ID and DROPBOX_API_SECRET must be defined with the values
-given by Dropbox application registration process.
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
+Dropbox OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/dropbox.html
 """
-from social.backends.oauth import BaseOAuth1
+from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
 class DropboxOAuth(BaseOAuth1):
@@ -36,3 +30,28 @@ class DropboxOAuth(BaseOAuth1):
         """Loads user data from service"""
         return self.get_json('https://api.dropbox.com/1/account/info',
                              auth=self.oauth_auth(access_token))
+
+
+class DropboxOAuth2(BaseOAuth2):
+    name = 'dropbox-oauth2'
+    ID_KEY = 'uid'
+    AUTHORIZATION_URL = 'https://www.dropbox.com/1/oauth2/authorize'
+    ACCESS_TOKEN_URL = 'https://api.dropbox.com/1/oauth2/token'
+    ACCESS_TOKEN_METHOD = 'POST'
+    REDIRECT_STATE = False
+    EXTRA_DATA = [
+        ('uid', 'username'),
+    ]
+
+    def get_user_details(self, response):
+        """Return user details from Dropbox account"""
+        return {'username': str(response.get('uid')),
+                'email': response.get('email'),
+                'first_name': response.get('display_name')}
+
+    def user_data(self, access_token, *args, **kwargs):
+        """Loads user data from service"""
+        return self.get_json(
+            'https://api.dropbox.com/1/account/info',
+            headers={'Authorization': 'Bearer {0}'.format(access_token)}
+        )

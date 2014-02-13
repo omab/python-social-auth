@@ -1,15 +1,16 @@
 """
-Linkedin OAuth support
-
-No extra configurations are needed to make this work.
+LinkedIn OAuth1 and OAuth2 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/linkedin.html
 """
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
 class BaseLinkedinAuth(object):
     EXTRA_DATA = [('id', 'id'),
-                  ('first-name', 'first_name'),
-                  ('last-name', 'last_name')]
+                  ('first-name', 'first_name', True),
+                  ('last-name', 'last_name', True),
+                  ('firstName', 'first_name', True),
+                  ('lastName', 'last_name', True)]
     USER_DETAILS = 'https://api.linkedin.com/v1/people/~:({0})'
 
     def get_user_details(self, response):
@@ -81,4 +82,12 @@ class LinkedinOAuth2(BaseLinkedinAuth, BaseOAuth2):
             params={'oauth2_access_token': access_token,
                     'format': 'json'},
             headers=self.user_data_headers()
+        )
+
+    def request_access_token(self, *args, **kwargs):
+        # LinkedIn expects a POST request with querystring parameters, despite
+        # the spec http://tools.ietf.org/html/rfc6749#section-4.1.3
+        kwargs['params'] = kwargs.pop('data')
+        return super(LinkedinOAuth2, self).request_access_token(
+            *args, **kwargs
         )

@@ -1,10 +1,6 @@
 """
-Readability OAuth support.
-
-This contribution adds support for Readability OAuth service. The settings
-SOCIAL_AUTH_READABILITY_CONSUMER_KEY and
-SOCIAL_AUTH_READABILITY_CONSUMER_SECRET must be defined with the values given
-by Readability in the Connections page of your account settings.
+Readability OAuth1 backend, docs at:
+    http://psa.matiasaguirre.net/docs/backends/readability.html
 """
 from social.backends.oauth import BaseOAuth1
 

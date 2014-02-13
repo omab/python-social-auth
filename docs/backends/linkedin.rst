@@ -45,9 +45,9 @@ would add these settings::
     SOCIAL_AUTH_LINKEDIN_FIELD_SELECTORS = ['email-address', 'headline', 'industry']
     # Arrange to add the fields to UserSocialAuth.extra_data
     SOCIAL_AUTH_LINKEDIN_EXTRA_DATA = [('id', 'id'),
-                                       ('first-name', 'first_name'),
-                                       ('last-name', 'last_name'),
-                                       ('email-address', 'email_address'),
+                                       ('firstName', 'first_name'),
+                                       ('lastName', 'last_name'),
+                                       ('emailAddress', 'email_address'),
                                        ('headline', 'headline'),
                                        ('industry', 'industry')]
 

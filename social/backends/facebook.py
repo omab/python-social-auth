@@ -1,16 +1,6 @@
 """
-Facebook OAuth support.
-
-This contribution adds support for Facebook OAuth service. The settings
-SOCIAL_AUTH_FACEBOOK_KEY and SOCIAL_AUTH_FACEBOOK_SECRET must be defined with
-the values given by Facebook application registration process.
-
-Extended permissions are supported by defining
-SOCIAL_AUTH_FACEBOOK_EXTENDED_PERMISSIONS setting, it must be a list of values
-to request.
-
-By default account id and token expiration time are stored in extra_data
-field, check OAuthBackend class for details on how to extend it.
+Facebook OAuth2 and Canvas Application backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/facebook.html
 """
 import hmac
 import time
@@ -18,9 +8,10 @@ import json
 import base64
 import hashlib
 
-from social.utils import parse_qs
+from social.utils import parse_qs, constant_time_compare
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import AuthException, AuthCanceled, AuthUnknownError
+from social.exceptions import AuthException, AuthCanceled, AuthUnknownError, \
+                              AuthMissingParameter
 
 
 class FacebookOAuth2(BaseOAuth2):
@@ -61,6 +52,8 @@ class FacebookOAuth2(BaseOAuth2):
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         self.process_error(self.data)
+        if not self.data.get('code'):
+            raise AuthMissingParameter(self, 'code')
         state = self.validate_state()
         key, secret = self.get_key_and_secret()
         url = self.ACCESS_TOKEN_URL
@@ -112,7 +105,9 @@ class FacebookOAuth2(BaseOAuth2):
         return {'access_token': token}
 
     def process_revoke_token_response(self, response):
-        return response.code == 200 and response.content == 'true'
+        return super(FacebookOAuth2, self).process_revoke_token_response(
+            response
+        ) and response.content == 'true'
 
 
 class FacebookAppOAuth2(FacebookOAuth2):
@@ -176,6 +171,6 @@ class FacebookAppOAuth2(FacebookOAuth2):
             expected_sig = hmac.new(secret, msg=payload,
                                     digestmod=hashlib.sha256).digest()
             # allow the signed_request to function for upto 1 day
-            if sig == expected_sig and \
+            if constant_time_compare(sig, expected_sig) and \
                data['issued_at'] > (time.time() - 86400):
                 return data
