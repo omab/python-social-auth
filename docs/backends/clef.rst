@@ -4,7 +4,7 @@ Clef
 Clef works similar to Facebook (OAuth).
 
 - Register a new application at `Clef Developers`_, set the callback URL to
-  ``http://example.com/complete/github/`` replacing ``example.com`` with your
+  ``http://example.com/complete/clef/`` replacing ``example.com`` with your
   domain.
 
 - Fill ``App Id`` and ``App Secret`` values in the settings::
