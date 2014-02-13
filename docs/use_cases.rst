@@ -18,19 +18,21 @@ Django::
 
     <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">Login with Facebook</a>
 
+
 Pass custom GET/POST parameters and retrieve them on authentication
---------------------------------------------------------------------------
+-------------------------------------------------------------------
 
-In some cases, you might need to send data over the url, and retrieve it while processing the after-effect. 
-For example, for conditionally executing code in custom pipelines. 
+In some cases, you might need to send data over the URL, and retrieve it while
+processing the after-effect. For example, for conditionally executing code in
+custom pipelines.
 
-In such cases, add it to FIELDS_STORED_IN_SESSION.
+In such cases, add it to ``FIELDS_STORED_IN_SESSION``.
 
-In settings.py,::
+In your settings::
 
     FIELDS_STORED_IN_SESSION = ['key']
 
-In template,::
+In template::
 
     <a href="{% url 'social:begin' 'facebook' %}?key={{ value }}">Login with Facebook</a>
 
