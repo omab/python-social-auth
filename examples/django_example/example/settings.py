@@ -127,6 +127,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.belgiumeid.BelgiumEIDOpenId',
     'social.backends.bitbucket.BitbucketOAuth',
     'social.backends.box.BoxOAuth2',
+    'social.backends.clef.ClefOAuth2',
     'social.backends.coinbase.CoinbaseOAuth2',
     'social.backends.dailymotion.DailymotionOAuth2',
     'social.backends.disqus.DisqusOAuth2',

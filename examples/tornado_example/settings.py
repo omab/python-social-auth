@@ -36,6 +36,7 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.thisismyjam.ThisIsMyJamOAuth1',
     'social.backends.stocktwits.StocktwitsOAuth2',
     'social.backends.tripit.TripItOAuth',
+    'social.backends.tripit.ClefOAuth2',
     'social.backends.twilio.TwilioAuth',
     'social.backends.xing.XingOAuth',
     'social.backends.yandex.YandexOAuth2',
