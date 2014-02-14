@@ -1,10 +1,7 @@
 import json
 
-from httpretty import HTTPretty
-
-from social.exceptions import AuthFailed
-
 from social.tests.backends.oauth import OAuth2Test
+
 
 class ClefOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.clef.ClefOAuth2'

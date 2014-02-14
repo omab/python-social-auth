@@ -38,7 +38,7 @@ SOCIAL_AUTH_SETTINGS = {
         'social.backends.stocktwits.StocktwitsOAuth2',
         'social.backends.tripit.TripItOAuth',
         'social.backends.twilio.TwilioAuth',
-        'social.backends.tripit.ClefOAuth2',
+        'social.backends.clef.ClefOAuth2',
         'social.backends.xing.XingOAuth',
         'social.backends.yandex.YandexOAuth2',
         'social.backends.podio.PodioOAuth2',
