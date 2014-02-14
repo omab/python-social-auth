@@ -60,6 +60,7 @@ or current ones extended):
     * BelgiumEIDOpenId_ OpenId https://www.e-contract.be/
     * Bitbucket_ OAuth1
     * Box_ OAuth2
+    * Clef_ OAuth2
     * Dailymotion_ OAuth2
     * Disqus_ OAuth2
     * Douban_ OAuth1 and OAuth2
@@ -214,6 +215,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Behance: https://www.behance.net
 .. _Bitbucket: https://bitbucket.org
 .. _Box: https://www.box.com
+.. _Clef: https://getclef.com/
 .. _Dailymotion: https://dailymotion.com
 .. _Disqus: https://disqus.com
 .. _Douban: http://www.douban.com
