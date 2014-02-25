@@ -8,7 +8,7 @@ from social.backends.oauth import BaseOAuth2
 class CoinbaseOAuth2(BaseOAuth2):
     name = 'coinbase'
     SCOPE_SEPARATOR = '+'
-    DEFAULT_SCOPE = ['balance']
+    DEFAULT_SCOPE = ['user', 'balance']
     AUTHORIZATION_URL = 'https://coinbase.com/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://coinbase.com/oauth/token'
     ACCESS_TOKEN_METHOD = 'POST'
