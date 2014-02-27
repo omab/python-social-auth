@@ -55,7 +55,7 @@ def get_username(strategy, details, user=None, *args, **kwargs):
 
 def create_user(strategy, details, response, uid, user=None, *args, **kwargs):
     if user:
-        return
+        return {'is_new': False}
 
     fields = dict((name, kwargs.get(name) or details.get(name))
                         for name in strategy.setting('USER_FIELDS',
