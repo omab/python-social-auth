@@ -53,7 +53,9 @@ class MendeleyOAuth2(MendeleyMixin, BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     DEFAULT_SCOPE = ['all']
     EXTRA_DATA = MendeleyMixin.EXTRA_DATA + [
-        ('refresh_token', 'refresh_token')
+        ('refresh_token', 'refresh_token'),
+        ('expires_in', 'expires_in'),
+        ('token_type', 'token_type'),
     ]
 
     def get_user_data(self, access_token, *args, **kwargs):
