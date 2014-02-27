@@ -73,7 +73,7 @@ def associate_by_email(strategy, details, user=None, *args, **kwargs):
         elif len(users) > 1:
             raise AuthException(
                 strategy.backend,
-                'The given email address is associated with multiple accounts'
+                'The given email address is associated with another account'
             )
         else:
             return {'user': users[0]}
