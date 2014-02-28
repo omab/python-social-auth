@@ -30,6 +30,9 @@ class SQLAlchemyMixin(object):
             cls._session().commit()
         return instance
 
+    def save(self):
+        self._save_instance(self)
+
 
 class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
     """Social Auth association model"""

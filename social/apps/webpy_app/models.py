@@ -12,7 +12,7 @@ from social.storage.sqlalchemy_orm import SQLAlchemyUserMixin, \
                                           SQLAlchemyNonceMixin, \
                                           SQLAlchemyCodeMixin, \
                                           BaseSQLAlchemyStorage
-from social.apps.flask_app.fields import JSONType
+from social.apps.webpy_app.fields import JSONType
 
 
 SocialBase = declarative_base()
@@ -83,6 +83,10 @@ class Code(SQLAlchemyCodeMixin, SocialBase):
     id = Column(Integer, primary_key=True)
     email = Column(String(200))
     code = Column(String(32), index=True)
+
+    @classmethod
+    def _session(cls):
+        return web.db_session
 
 
 class WebpyStorage(BaseSQLAlchemyStorage):
