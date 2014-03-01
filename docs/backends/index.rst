@@ -54,6 +54,7 @@ Social backends
    belgium_eid
    bitbucket
    box
+   clef
    coinbase
    dailymotion
    disqus
