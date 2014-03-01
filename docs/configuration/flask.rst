@@ -91,8 +91,33 @@ handlers to these::
             return {'user': None}
 
 
+Exceptions handling
+-------------------
+
+The Django application has a middleware (that fits in the framework
+architecture) to facilitate the different exceptions_ handling raised by
+python-social-auth_. The same can be accomplished (even on a simpler way) in
+Flask by defining an errorhandler_. For example the next code will redirect any
+social-auth exception to a ``/socialerror`` URL::
+
+    from social.exceptions import SocialAuthBaseException
+
+
+    @app.errorhandler(500)
+    def error_handler(error):
+        if isinstance(error, SocialAuthBaseException):
+            return redirect('/socialerror')
+
+
+Be sure to set your debug and test flags to ``False`` when testing this on your
+development environment, otherwise the exception will be raised and error
+handlers won't be called.
+
+
 .. _Flask Blueprint: http://flask.pocoo.org/docs/blueprints/
 .. _Flask-Login: https://github.com/maxcountryman/flask-login
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _Flask built-in app: https://github.com/omab/python-social-auth/tree/master/social/apps/flask_app
 .. _sqlalchemy: http://www.sqlalchemy.org/
+.. _exceptions: https://github.com/omab/python-social-auth/blob/master/social/exceptions.py
+.. _errorhandler: http://flask.pocoo.org/docs/api/#flask.Flask.errorhandler
