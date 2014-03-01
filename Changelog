@@ -1,5 +1,130 @@
+2014-03-01 v0.1.22
+==================
+
+  * 2014-03-01 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.22
+
+  * 2014-02-28 Andrey Kuzmin <unsoundscapes@gmail.com>
+    Fixes broken email confirmation for SQLAlchemy storage and webpy_app
+
+  * 2014-02-27 Sebastian Bassi <sbassi@genesdigitales.com>
+    Update mendeley.py
+
+  * 2014-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Don't update user if it's set to None (non-authenticated pipeline
+    continuation). Refs #198
+
+  * 2014-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Set is_new flag on pipeline if user is not new. Refs #201
+
+  * 2014-02-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Better error message
+
+  * 2014-02-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Add 'user' to default scope on coinbase backend. Closes #199
+
+  * 2014-02-24 Matías Aguirre <matiasaguirre@gmail.com>
+    User USERNAME_FIELD on mongoengine. Closes #197
+
+  * 2014-02-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Dev marker
+
+  * 2014-02-18 David Kingman <david.kingman@gmail.com>
+    Removed commit marker
+
+  * 2014-02-13 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8, Python3 and example fixes
+
+  * 2014-02-13 Thomas Lovett <tklovett@gmail.com>
+    fix copy-paste typo in callback url
+
+  * 2014-02-13 Thomas Lovett <tklovett@gmail.com>
+    add clef to main README
+
+  * 2014-02-14 Yan Kalchevskiy <yan.kalchevskiy@gmail.com>
+    Fixed a typo.
+
+  * 2014-02-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Vimeo backend
+
+  * 2014-02-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Move badge to the top
+
+  * 2014-02-13 Bitdeli Chef <chef@bitdeli.com>
+    Add a Bitdeli badge to README
+
+  * 2014-02-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Docs about associate user by email
+
+  * 2014-02-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Style recent docs
+
+  * 2014-02-13 Joe B. Lewis <joe@humblepaper.com>
+    added information for FIELDS_STORED_IN_SESSION
+
+  * 2014-02-12 Hassek <tomas@onereceipt.me>
+    removed extra_data override
+
+  * 2014-02-11 Hassek <tomas@onereceipt.me>
+    updated live connection for better support
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    CherryPy mention in project index
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    CherryPy docs
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Disconnection on example app
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Pass user on disconnect
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Get extra_data from details on openid too
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Mendeley OAuth2 in example app
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix Mendeley OAuth2 implementation, use https URLs
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Switch parent class to avoid overrides
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Finishe CherryPy app support and add example application
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Mendeley OAuth2 docs and thanks to Sebastian Bassi (initial author)
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Mendeley OAuth2 backend
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix AuthFailed calls
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Raise social-auth exception on connection error. Closes #155
+
+  * 2014-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Parse token if it's an string (keep a compatible API). Refs #180
+
+  * 2014-02-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Stick with sure 1.2.3 (higher is broken, I should drop sure)
+
+  * 2014-02-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Update sure to 1.2.5
+
+  * 2014-02-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix LinkedIn OAuth2 backend, pass access token parameter in querystring.
+    Closes #181
+
 2014-02-05 v0.1.21
 ==================
+
+  * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.21
 
   * 2014-02-05 Matías Aguirre <matiasaguirre@gmail.com>
     Fix iexact field lookup. Refs #179
@@ -342,6 +467,9 @@
 
   * 2013-11-21 josseph <josseph.zhang@gmail.com>
     Update weibo.py
+
+  * 2013-11-20 Jesse Pollak <jpollak92@gmail.com>
+    adds clef as a login provider
 
   * 2013-11-20 maxtepkeev <tepkeev@gmail.com>
     Make vk-app backend to retrieve additional user data in respect to the
@@ -1544,6 +1672,9 @@
 
   * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
     Remove stop-pipeline exception (not used at all)
+
+  * 2013-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Initial cherrypy support
 
   * 2013-03-26 Matías Aguirre <matiasaguirre@gmail.com>
     Fix exception raised on skyrock backend
