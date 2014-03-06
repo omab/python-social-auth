@@ -75,5 +75,6 @@ setup(name='python-social-auth',
                    'Programming Language :: Python :: 2.6',
                    'Programming Language :: Python :: 2.7',
                    'Programming Language :: Python :: 3'],
+      tests_require=['sure>=1.2.5', 'httpretty>=0.8.0', 'mock>=1.0.1'],
       test_suite='social.tests',
       zip_safe=False)
