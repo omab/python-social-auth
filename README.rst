@@ -17,10 +17,6 @@ for more frameworks and ORMs.
 .. image:: https://pypip.in/d/python-social-auth/badge.png
    :target: https://crate.io/packages/python-social-auth?version=latest
 
-.. image:: https://d2weczhvl823v0.cloudfront.net/omab/python-social-auth/trend.png
-   :alt: Bitdeli badge
-   :target: https://bitdeli.com/free
-
 .. contents:: Table of Contents
 
 
