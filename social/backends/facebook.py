@@ -129,7 +129,7 @@ class FacebookAppOAuth2(FacebookOAuth2):
 
             if response is not None:
                 access_token = response.get('access_token') or \
-                               response['oauth_token'] or \
+                               response.get('oauth_token') or \
                                self.data.get('access_token')
 
         if access_token is None:
