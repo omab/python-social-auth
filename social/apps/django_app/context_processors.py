@@ -5,7 +5,7 @@ try:
     from django.utils.functional import empty as _empty
     empty = _empty
 except ImportError:  # django < 1.4
-    empty = object()
+    empty = None
 
 
 from social.backends.utils import user_backends_data
