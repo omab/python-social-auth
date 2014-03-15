@@ -97,6 +97,7 @@ or current ones extended):
     * Stackoverflow_ OAuth2
     * Steam_ OpenId
     * Stocktwits_ OAuth2
+    * Strava_ OAuth2
     * Stripe_ OAuth2
     * Taobao_ OAuth2 http://open.taobao.com/doc/detail.htm?id=118
     * ThisIsMyJam_ OAuth1 https://www.thisismyjam.com/developers/authentication
@@ -239,6 +240,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Skyrock: https://skyrock.com
 .. _Soundcloud: https://soundcloud.com
 .. _Stocktwits: https://stocktwits.com
+.. _Strava: http://strava.com
 .. _Stripe: https://stripe.com
 .. _Taobao: http://open.taobao.com/doc/detail.htm?id=118
 .. _Tripit: https://www.tripit.com
