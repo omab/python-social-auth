@@ -48,18 +48,15 @@ def sanitize_redirect(host, redirect_to):
     and returns it, else returns None, similar as how's it done
     on django.contrib.auth.views.
     """
-    # Quick sanity check.
-    if not redirect_to or \
-       not isinstance(redirect_to, six.string_types) or \
-       getattr(redirect_to, 'decode', None) and \
-       not isinstance(redirect_to.decode(), six.string_types):
-        return None
-
-    # Heavier security check, don't allow redirection to a different host.
-    netloc = urlparse(redirect_to)[1]
-    if netloc and netloc != host:
-        return None
-    return redirect_to
+    if redirect_to:
+        try:
+            # Don't redirect to a different host
+            netloc = urlparse(redirect_to)[1] or host
+        except (TypeError, AttributeError):
+            pass
+        else:
+            if netloc == host:
+                return redirect_to
 
 
 def user_is_authenticated(user):
