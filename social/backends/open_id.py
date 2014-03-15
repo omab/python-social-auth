@@ -207,11 +207,11 @@ class OpenIdAuth(BaseAuth):
     def consumer(self):
         """Create an OpenID Consumer object for the given Django request."""
         if not hasattr(self, '_consumer'):
-            self._consumer = Consumer(
-                self.strategy.openid_session_dict(SESSION_NAME),
-                self.strategy.openid_store()
-            )
+            self._consumer = self.create_consumer(self.strategy.openid_store())
         return self._consumer
+
+    def create_consumer(self, store=None):
+        return Consumer(self.strategy.openid_session_dict(SESSION_NAME), store)
 
     def uses_redirect(self):
         """Return true if openid request will be handled with redirect or
