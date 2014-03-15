@@ -5,13 +5,14 @@
 <p>You are logged in as {{ user.username }}!</p>
 
 <p>Associated:</p>
-<ul>
-  {% for assoc in backends.associated %}
-    <li>
-      {{ assoc.provider }} (<a href="{% url 'social:disconnect_individual' assoc.provider assoc.str_id %}" class="disconnect">Disconnect</a>)
-    </li>
-  {% endfor %}
-</ul>
+{% for assoc in backends.associated %}
+  <div>
+    <strong>{{ assoc.provider }}</strong>
+    <form action="{% url 'social:disconnect_individual' assoc.provider assoc.id %}" method="post">{% csrf_token %}
+      <button>Disconnect</button>
+    </form>
+  </div>
+{% endfor %}
 
 <p>Associate:</p>
 <ul>

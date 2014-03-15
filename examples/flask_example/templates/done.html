@@ -4,13 +4,14 @@
 <p>You are logged in as {{ user.username }}!</p>
 
 <p>Associated:</p>
-<ul>
-  {% for assoc in backends.associated %}
-    <li>
-      {{ assoc.provider }} (<a href="{{ url_for("social.disconnect", backend=assoc.provider, association_id=assoc.id) }}" class="disconnect">Disconnect</a>)
-    </li>
-  {% endfor %}
-</ul>
+{% for assoc in backends.associated %}
+  <div>
+    {{ assoc.provider }}
+    <form method="post" action="{{ url_for("social.disconnect", backend=assoc.provider, association_id=assoc.id) }}">
+      <button>Disconnect</button>
+    </form>
+  </div>
+{% endfor %}
 
 <p>Associate:</p>
 <ul>
