@@ -3,7 +3,7 @@ import json
 from social.tests.backends.oauth import OAuth2Test
 
 
-class InstagramOAuth2Test(OAuth2Test):
+class StravaOAuthTest(OAuth2Test):
     backend_path = 'social.backends.strava.StravaOAuth'
     user_data_url = 'https://www.strava.com/api/v3/athlete'
     expected_username = 227615
