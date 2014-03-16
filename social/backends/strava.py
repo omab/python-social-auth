@@ -16,10 +16,11 @@ class StravaOAuth(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Strava account"""
-        username = response['athlete']['id'] # because there is no usernames on strava
+        # because there is no usernames on strava
+        username = response['athlete']['id']
         first_name = response['athlete'].get('first_name', '')
         email = response['athlete'].get('email', '')
-        return {'username': username,
+        return {'username': str(username),
                 'first_name': first_name,
                 'email': email}
 

@@ -6,7 +6,7 @@ from social.tests.backends.oauth import OAuth2Test
 class StravaOAuthTest(OAuth2Test):
     backend_path = 'social.backends.strava.StravaOAuth'
     user_data_url = 'https://www.strava.com/api/v3/athlete'
-    expected_username = 227615
+    expected_username = '227615'
     access_token_body = json.dumps({
       "access_token": "83ebeabdec09f6670863766f792ead24d61fe3f9",
       "athlete": {
@@ -20,9 +20,9 @@ class StravaOAuthTest(OAuth2Test):
         "state": "California",
         "country": "United States",
         "sex": "M",
-        "friend": null,
-        "follower": null,
-        "premium": true,
+        "friend": "null",
+        "follower": "null",
+        "premium": "true",
         "created_at": "2008-01-01T17:44:00Z",
         "updated_at": "2013-09-04T20:00:50Z",
         "follower_count": 273,
@@ -31,9 +31,9 @@ class StravaOAuthTest(OAuth2Test):
         "date_preference": "%m/%d/%Y",
         "measurement_preference": "feet",
         "email": "john@applestrava.com",
-        "clubs": [ ],
-        "bikes": [ ],
-        "shoes": [ ]
+        "clubs": [],
+        "bikes": [],
+        "shoes": []
       }
     })
     user_data_body = json.dumps({
@@ -47,12 +47,12 @@ class StravaOAuthTest(OAuth2Test):
       "state": "CA",
       "country": "United States",
       "sex": "M",
-      "friend": null,
+      "friend": "null",
       "follower": "accepted",
-      "premium": true,
+      "premium": "true",
       "created_at": "2011-03-19T21:59:57Z",
       "updated_at": "2013-09-05T16:46:54Z",
-      "approve_followers": false
+      "approve_followers": "false"
     })
 
     def test_login(self):
