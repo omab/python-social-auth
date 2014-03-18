@@ -103,5 +103,44 @@ doesn't validate his email with that same account. Finally this user will turn
 to your site (which supports that provider) and sign up to it, since the email
 is the same, the malicious user will take control over the User A account.
 
+
+Signup by OAuth access_token
+----------------------------
+
+It's a common scenario that mobile applications will use an SDK to signup
+a user withing the app, but that signup won't be reflected by
+``python-socia-auth`` unless the corresponding database entries are created. In
+order to do so, it's possible to create a view / route that creates those
+entries by a given ``access_token``. Take the following code for instance (the
+code follows Django conventions, but versions for others frameworks can be
+implemented easily)::
+
+    from django.contrib.auth import login
+    from social.apps.django_app.utils import strategy
+
+    # Define an URL entry to point to this view, call it passing the
+    # access_token parameter like ?access_token=<token>. The URL entry must
+    # contain the backend, like this:
+    #
+    #   url(r'^register-by-token/(?P<backend>[^/]+)/$',
+    #       'register_by_access_token')
+
+    @strategy('social:complete')
+    def register_by_access_token(request, backend):
+        # This view expects an access_token GET parameter
+        token = request.GET.get('access_token')
+        user = backend.do_auth(request.GET.get('access_token'))
+        if user:
+            login(request, user)
+            return 'OK'
+        else:
+            return 'ERROR'
+
+The snipped above is quite simple, it doesn't return JSON and usually this call
+will be done by AJAX. It doesn't return the user information, but that's
+something that can be extended and filled to suit the project where it's going
+to be used.
+
+
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _People API endpoint: https://developers.google.com/+/api/latest/people/list
