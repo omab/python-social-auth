@@ -109,7 +109,7 @@ Signup by OAuth access_token
 
 It's a common scenario that mobile applications will use an SDK to signup
 a user withing the app, but that signup won't be reflected by
-``python-socia-auth`` unless the corresponding database entries are created. In
+python-socia-auth_ unless the corresponding database entries are created. In
 order to do so, it's possible to create a view / route that creates those
 entries by a given ``access_token``. Take the following code for instance (the
 code follows Django conventions, but versions for others frameworks can be
@@ -141,6 +141,68 @@ will be done by AJAX. It doesn't return the user information, but that's
 something that can be extended and filled to suit the project where it's going
 to be used.
 
+
+Multiple scopes per provider
+----------------------------
+
+At the moment python-social-auth_ doesn't provide a method to define multiple
+scopes for single backend, this is usually desired since it's recommended to
+ask the user for the minimum scope possible and increase the access when it's
+really needed. It's possible to add a new backend extending the original one to
+accomplish that behavior, there are two ways to do it.
+
+1. Overriding ``get_scope()`` method::
+
+    from social.backends.facebook import FacebookOAuth2
+
+
+    class CustomFacebookOAuth2(FacebookOauth2):
+        def get_scope(self):
+            scope = super(CustomFacebookOAuth2, self).get_scope()
+            if self.data.get('extrascope'):
+                scope += [('foo', 'bar')]
+            return scope
+
+
+   This method is quite simple, it overrides the method that returns the scope
+   value in a backend (``get_scope()``) and adds extra values tot he list if it
+   was indicated by a parameter in the ``GET`` or ``POST`` data
+   (``self.data``).
+
+   Put this new backend in some place in your project and replace the original
+   ``FacebookOAuth2`` in ``AUTHENTICATION_BACKENDS`` with this new version.
+
+2. It's possible to do the same by defining a second backend which extends from
+   the original but overrides the name, this will imply new URLs and also new
+   settings for the new backend (since the name is used to build the settings
+   names), it also implies a new application in the provider since not all
+   providers give you the option of defining multiple redirect URLs. To do it
+   just add a backend like::
+
+    from social.backends.facebook import FacebookOAuth2
+
+
+    class CustomFacebookOAuth2(FacebookOauth2):
+        name = 'facebook-custom'
+
+   Put this new backend in some place in your project keeping the original
+   ``FacebookOAuth2`` in ``AUTHENTICATION_BACKENDS``. Now a new set of URLs
+   will be functional::
+
+    /login/facebook-custom
+    /complete/facebook-custom
+    /disconnect/facebook-custom
+
+   And also a new set of settings::
+
+    SOCIAL_AUTH_FACEBOOK_CUSTOM_KEY = '...'
+    SOCIAL_AUTH_FACEBOOK_CUSTOM_SECRET = '...'
+    SOCIAL_AUTH_FACEBOOK_CUSTOM_SCOPE = [...]
+
+   When the extra permissions are needed, just redirect the user to
+   ``/login/facebook-custom`` and then get the social auth entry for this new
+   backend with ``user.social_auth.get(provider='facebook-custom')`` and use
+   the ``access_token`` in it.
 
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _People API endpoint: https://developers.google.com/+/api/latest/people/list
