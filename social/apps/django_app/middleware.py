@@ -3,6 +3,7 @@ import six
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.messages.api import MessageFailure
 from django.shortcuts import redirect
 from django.utils.http import urlquote
 
@@ -29,13 +30,10 @@ class SocialAuthExceptionMiddleware(object):
             backend_name = strategy.backend.name
             message = self.get_message(request, exception)
             url = self.get_redirect_uri(request, exception)
-
-            if request.user.is_authenticated():
-                # Ensure that messages are added to authenticated users only,
-                # otherwise this fails
+            try:
                 messages.error(request, message,
                                extra_tags='social-auth ' + backend_name)
-            else:
+            except MessageFailure:
                 url += ('?' in url and '&' or '?') + \
                        'message={0}&backend={1}'.format(urlquote(message),
                                                         backend_name)
