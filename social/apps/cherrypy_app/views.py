@@ -24,5 +24,5 @@ class CherryPyPSAViews(object):
         user = getattr(cherrypy.request, 'user', None)
         return do_disconnect(self.strategy, user, association_id)
 
-    def do_login(self, strategy, user):
+    def do_login(self, strategy, user, social_user):
         strategy.session_set('user_id', user.id)

@@ -33,7 +33,7 @@ def disconnect(backend, association_id=None):
     return do_disconnect(g.strategy, g.user, association_id)
 
 
-def do_login(strategy, user):
+def do_login(strategy, user, social_user):
     return login_user(user, remember=request.cookies.get('remember') or
                                      request.args.get('remember') or
                                      request.form.get('remember') or False)

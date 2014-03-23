@@ -55,9 +55,11 @@ class complete(BaseViewClass):
 
     @strategy('/complete/%(backend)s/')
     def _complete(self, backend, *args, **kwargs):
-        return do_complete(self.strategy,
-                           login=lambda strat, user: self.login_user(user),
-                           user=self.get_current_user(), *args, **kwargs)
+        return do_complete(
+            self.strategy,
+            login=lambda strat, user, social_user: self.login_user(user),
+            user=self.get_current_user(), *args, **kwargs
+        )
 
 
 class disconnect(BaseViewClass):

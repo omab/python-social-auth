@@ -58,7 +58,7 @@ def do_complete(strategy, login, user=None, redirect_name='next',
             # catch is_new/social_user in case login() resets the instance
             is_new = getattr(user, 'is_new', False)
             social_user = user.social_user
-            login(strategy, user)
+            login(strategy, user, social_user)
             # store last login backend name in session
             strategy.session_set('social_auth_last_login_backend',
                                  social_user.provider)

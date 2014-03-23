@@ -38,9 +38,11 @@ class CompleteHandler(BaseHandler):
 
     @strategy('complete')
     def _complete(self, backend):
-        do_complete(self.strategy,
-                    login=lambda strategy, user: self.login_user(user),
-                    user=self.get_current_user())
+        do_complete(
+            self.strategy,
+            login=lambda strategy, user, social_user: self.login_user(user),
+            user=self.get_current_user()
+        )
 
 
 class DisconnectHandler(BaseHandler):

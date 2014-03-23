@@ -120,8 +120,8 @@ class BaseActionTest(unittest.TestCase):
         redirect = do_complete(
             self.strategy,
             user=self.user,
-            login=lambda strategy, user: strategy.session_set('username',
-                                                              user.username)
+            login=lambda strategy, user, social_user:
+                    strategy.session_set('username', user.username)
         )
         if after_complete_checks:
             expect(self.strategy.session_get('username')).to.equal(
@@ -184,7 +184,7 @@ class BaseActionTest(unittest.TestCase):
                                    content_type='text/json')
         self.strategy.set_request_data(location_query)
 
-        def _login(strategy, user):
+        def _login(strategy, user, social_user):
             strategy.session_set('username', user.username)
 
         redirect = do_complete(self.strategy, user=self.user, login=_login)
