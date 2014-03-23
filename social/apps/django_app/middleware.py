@@ -21,12 +21,12 @@ class SocialAuthExceptionMiddleware(object):
     get_redirect_uri methods, which each accept request and exception.
     """
     def process_exception(self, request, exception):
-        self.strategy = getattr(request, 'social_strategy', None)
-        if self.strategy is None or self.raise_exception(request, exception):
+        strategy = getattr(request, 'social_strategy', None)
+        if strategy is None or self.raise_exception(request, exception):
             return
 
         if isinstance(exception, SocialAuthBaseException):
-            backend_name = self.strategy.backend.name
+            backend_name = strategy.backend.name
             message = self.get_message(request, exception)
             url = self.get_redirect_uri(request, exception)
 
@@ -42,10 +42,13 @@ class SocialAuthExceptionMiddleware(object):
             return redirect(url)
 
     def raise_exception(self, request, exception):
-        return self.strategy.setting('RAISE_EXCEPTIONS', settings.DEBUG)
+        strategy = getattr(request, 'social_strategy', None)
+        if strategy is not None:
+            return strategy.setting('RAISE_EXCEPTIONS', settings.DEBUG)
 
     def get_message(self, request, exception):
         return six.text_type(exception)
 
     def get_redirect_uri(self, request, exception):
-        return self.strategy.setting('LOGIN_ERROR_URL')
+        strategy = getattr(request, 'social_strategy', None)
+        return strategy.setting('LOGIN_ERROR_URL')
