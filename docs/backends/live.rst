@@ -18,4 +18,7 @@ Live uses OAuth2 for its connect workflow, notice that it isn't OAuth WRAP.
   Defaults are ``wl.basic`` and ``wl.emails``. Latter one is necessary to
   retrieve user email.
 
+- Ensure to have a valid ``Redirect URL`` (``http://your-domain/complete/live``)
+  defined in the application if ``Enhanced security redirection`` is enabled.
+
 .. _Live Connect Developer Center: https://account.live.com/developers/applications/create
