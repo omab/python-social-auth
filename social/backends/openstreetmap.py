@@ -45,9 +45,13 @@ class OpenStreetMapOAuth(BaseOAuth1):
         except ValueError:
             return None
         user = dom.getElementsByTagName('user')[0]
+        try:
+            avatar = dom.getElementsByTagName('img')[0].getAttribute('href')
+        except IndexError:
+            avatar = None
         return {
             'id': user.getAttribute('id'),
             'username': user.getAttribute('display_name'),
             'account_created': user.getAttribute('account_created'),
-            'avatar': dom.getElementsByTagName('img')[0].getAttribute('href')
+            'avatar': avatar
         }
