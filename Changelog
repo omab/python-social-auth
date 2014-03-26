@@ -1,5 +1,90 @@
-2014-03-01 v0.1.22
+2014-03-26 v0.1.23
 ==================
+
+  * 2014-03-26 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.23
+
+  * 2014-03-24 Yohan Boniface <yb@enix.org>
+    OpenStreetMap: no img element if user has no avatar
+
+  * 2014-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Define a custom user model
+
+  * 2014-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Comment about enhanced security flag in Live backend. Refs #218
+
+  * 2014-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Try to use django messages app, fallback to URL. Fixes #210
+
+  * 2014-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Don't assign strategy in middleware. Closes #221
+
+  * 2014-03-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Pass the social_user to login functions. Refs #190
+
+  * 2014-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Multiple scopes use case
+
+  * 2014-03-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Register by token use case
+
+  * 2014-03-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix strava tests and username generation. Refs #217
+
+  * 2014-03-15 Auston Bunsen <auston.bunsen@gmail.com>
+    final changes
+
+  * 2014-03-15 Auston Bunsen <auston.bunsen@gmail.com>
+    updated some docs
+
+  * 2014-03-15 Auston Bunsen <auston.bunsen@gmail.com>
+    added strava support!
+
+  * 2014-03-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove symlinks. Fixes #177
+
+  * 2014-03-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Use stateless mode with Steam. Fixes #200
+
+  * 2014-03-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Get social_user instance before login. Refs #190
+
+  * 2014-03-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify redirect cleaner method. Closes #191
+
+  * 2014-03-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Use forms to disconnect
+
+  * 2014-03-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Mention localhost limitation on facebook. Closes #207
+
+  * 2014-03-13 Andrey Kuzmin <unsoundscapes@gmail.com>
+    Removes flask dependency from webpy_app
+
+  * 2014-03-12 Dave Murphy <dave@schwuk.com>
+    Added backend for Ubuntu (One).
+
+  * 2014-03-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Make oauth_token retrieval optional. Refs #212
+
+  * 2014-03-08 Baptiste Mispelon <bmispelon@gmail.com>
+    Fixed Django < 1.4 support in context processors.
+
+  * 2014-03-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove bitdeli badge
+
+  * 2014-03-06 Peter Schmidt <pschmidt@mathspace.com.au>
+    Add some missing dependencies for running
+    `social.apps.django_app.default.tests`
+
+  * 2014-03-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Link backend docs in index
+
+  * 2014-03-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Docs about flask error handling
+
+  * 2014-03-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Mark dev version
 
   * 2014-03-01 Matías Aguirre <matiasaguirre@gmail.com>
     v0.1.22
