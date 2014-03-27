@@ -58,6 +58,7 @@ Social backends
    coinbase
    dailymotion
    disqus
+   docker
    douban
    dropbox
    evernote
