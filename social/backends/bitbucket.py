@@ -2,8 +2,8 @@
 Bitbucket OAuth1 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/bitbucket.html
 """
-from social.backends.oauth import BaseOAuth1
 from social.exceptions import AuthForbidden
+from social.backends.oauth import BaseOAuth1
 
 
 class BitbucketOAuth(BaseOAuth1):
@@ -23,12 +23,12 @@ class BitbucketOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Bitbucket account"""
-        return {'username': response.get('username'),
-                'email': response.get('email'),
-                'fullname': ' '.join((response.get('first_name'),
-                                      response.get('last_name'))),
-                'first_name': response.get('first_name'),
-                'last_name': response.get('last_name')}
+        return {'username': response.get('username') or '',
+                'email': response.get('email') or '',
+                'fullname': ' '.join((response.get('first_name') or '',
+                                      response.get('last_name') or '')),
+                'first_name': response.get('first_name') or '',
+                'last_name': response.get('last_name') or ''}
 
     def user_data(self, access_token):
         """Return user data provided"""
@@ -44,8 +44,13 @@ class BitbucketOAuth(BaseOAuth1):
                 email = address['email']
                 if address['primary']:
                     break
-        if email is None:
-            raise AuthForbidden(self, "Bitbucket account has any verified email")
-        return dict(self.get_json('https://bitbucket.org/api/1.0/users/' +
-                                  email)['user'],
-                    email=email)
+
+        if email:
+            return dict(self.get_json('https://bitbucket.org/api/1.0/users/' +
+                                      email)['user'],
+                        email=email)
+        elif self.setting('VERIFIED_EMAILS_ONLY', False):
+            raise AuthForbidden(self,
+                                'Bitbucket account has any verified email')
+        else:
+            return {}
