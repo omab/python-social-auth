@@ -3,6 +3,7 @@ Bitbucket OAuth1 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/bitbucket.html
 """
 from social.backends.oauth import BaseOAuth1
+from social.exceptions import AuthForbidden
 
 
 class BitbucketOAuth(BaseOAuth1):
@@ -37,11 +38,14 @@ class BitbucketOAuth(BaseOAuth1):
         # the top email
         emails = self.get_json('https://bitbucket.org/api/1.0/emails/',
                                auth=self.oauth_auth(access_token))
+        email = None
         for address in reversed(emails):
             if address['active']:
                 email = address['email']
                 if address['primary']:
                     break
+        if email is None:
+            raise AuthForbidden(self, "Bitbucket account has any verified email")
         return dict(self.get_json('https://bitbucket.org/api/1.0/users/' +
                                   email)['user'],
                     email=email)
