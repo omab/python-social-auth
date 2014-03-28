@@ -92,8 +92,9 @@ def do_disconnect(strategy, user, association_id=None, redirect_name='next',
     partial = partial_pipeline_data(strategy, user, *args, **kwargs)
     if partial:
         xargs, xkwargs = partial
-        response = strategy.disconnect(association_id=association_id,
-                                       *xargs, **xkwargs)
+        if association_id and not xkwargs.get('association_id'):
+            xkwargs['association_id'] = association_id
+        response = strategy.disconnect(*xargs, **xkwargs)
     else:
         response = strategy.disconnect(user=user,
                                        association_id=association_id,
