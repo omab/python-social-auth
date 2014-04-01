@@ -109,7 +109,7 @@ Signup by OAuth access_token
 
 It's a common scenario that mobile applications will use an SDK to signup
 a user withing the app, but that signup won't be reflected by
-python-socia-auth_ unless the corresponding database entries are created. In
+python-social-auth_ unless the corresponding database entries are created. In
 order to do so, it's possible to create a view / route that creates those
 entries by a given ``access_token``. Take the following code for instance (the
 code follows Django conventions, but versions for others frameworks can be
@@ -129,6 +129,7 @@ implemented easily)::
     def register_by_access_token(request, backend):
         # This view expects an access_token GET parameter
         token = request.GET.get('access_token')
+        backend = request.strategy.backend
         user = backend.do_auth(request.GET.get('access_token'))
         if user:
             login(request, user)
