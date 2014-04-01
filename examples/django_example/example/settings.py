@@ -187,6 +187,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.yammer.YammerOAuth2',
     'social.backends.yandex.YandexOAuth2',
     'social.backends.vimeo.VimeoOAuth1',
+    'social.backends.lastfm.LastFmAuth',
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
     'django.contrib.auth.backends.ModelBackend',
