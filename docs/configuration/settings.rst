@@ -97,7 +97,7 @@ User model
 ----------
 
 ``UserSocialAuth`` instances keep a reference to the ``User`` model of your
-project, since this is not know, the ``User`` model must be configured by
+project, since this is not known, the ``User`` model must be configured by
 a setting::
 
     SOCIAL_AUTH_USER_MODEL = 'foo.bar.User'
