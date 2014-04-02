@@ -49,11 +49,11 @@ the ``social`` namespace. Replace the old include with::
 
 On templates use a namespaced URL::
 
-    {% url social:begin "google-oauth2" %}
+    {% url 'social:begin' "google-oauth2" %}
 
 Account disconnection URL would be::
 
-    {% url social:disconnect_individual provider, id %}
+    {% url 'social:disconnect_individual' provider, id %}
 
 
 Porting settings
