@@ -4,7 +4,7 @@ Configuration
 Application setup
 -----------------
 
-Once the application was installed (check Installation_) define the following
+Once the application is installed (check Installation_) define the following
 settings to enable the application behavior. Also check the sections dedicated
 to each framework for detailed instructions.
 
