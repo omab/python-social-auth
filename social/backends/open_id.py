@@ -36,6 +36,7 @@ class OpenIdAuth(BaseAuth):
     """Generic OpenID authentication backend"""
     name = 'openid'
     URL = None
+    USERNAME_KEY = 'username'
 
     def get_user_id(self, details, response):
         """Return user unique id provided by service"""
@@ -89,9 +90,10 @@ class OpenIdAuth(BaseAuth):
             except ValueError:
                 last_name = fullname
 
+        username_key = self.setting('USERNAME_KEY') or self.USERNAME_KEY
         values.update({'fullname': fullname, 'first_name': first_name,
                        'last_name': last_name,
-                       'username': values.get('username') or
+                       'username': values.get(username_key) or
                                    (first_name.title() + last_name.title())})
         return values
 
