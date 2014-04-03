@@ -95,6 +95,7 @@ Social backends
    stackoverflow
    steam
    stocktwits
+   strava
    stripe
    taobao
    thisismyjam
