@@ -142,10 +142,6 @@ defaults to generating one if needed.
 An UUID is appended to usernames in case of collisions. Here are some settings
 to control usernames generation.
 
-``SOCIAL_AUTH_DEFAULT_USERNAME = 'foobar'``
-    Default value to use as username, can be a callable. An UUID will be
-    appended in case of duplicate entries.
-    
 ``SOCIAL_AUTH_UUID_LENGTH = 16``
     This controls the length of the UUID appended to usernames.
 
