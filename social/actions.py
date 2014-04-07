@@ -50,8 +50,8 @@ def do_complete(strategy, login, user=None, redirect_name='next',
         if not user:
             url = setting_url(strategy, redirect_value, 'LOGIN_REDIRECT_URL')
         else:
-            url = setting_url(strategy, redirect_value,
-                              'NEW_ASSOCIATION_REDIRECT_URL',
+            url = setting_url(strategy, 'NEW_ASSOCIATION_REDIRECT_URL',
+                              redirect_value,
                               'LOGIN_REDIRECT_URL')
     elif user:
         if user_is_active(user):
@@ -64,8 +64,8 @@ def do_complete(strategy, login, user=None, redirect_name='next',
                                  social_user.provider)
 
             if is_new:
-                url = setting_url(strategy, redirect_value,
-                                  'NEW_USER_REDIRECT_URL',
+                url = setting_url(strategy, 'NEW_USER_REDIRECT_URL',
+                                  redirect_value,
                                   'LOGIN_REDIRECT_URL')
             else:
                 url = setting_url(strategy, redirect_value,
