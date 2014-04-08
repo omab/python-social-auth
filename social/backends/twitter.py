@@ -3,6 +3,7 @@ Twitter OAuth1 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/twitter.html
 """
 from social.backends.oauth import BaseOAuth1
+from social.exceptions import AuthCanceled
 
 
 class TwitterOAuth(BaseOAuth1):
@@ -12,6 +13,12 @@ class TwitterOAuth(BaseOAuth1):
     AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authenticate'
     REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
     ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
+
+    def process_error(self, data):
+        if 'denied' in data:
+            raise AuthCanceled(self)
+        else:
+            super(TwitterOAuth, self).process_error(data)
 
     def get_user_details(self, response):
         """Return user details from Twitter account"""
