@@ -3,8 +3,7 @@ from social.pipeline.partial import partial
 
 
 @partial
-def mail_validation(strategy, details, user=None, is_new=False,
-                    *args, **kwargs):
+def mail_validation(strategy, details, *args, **kwargs):
     requires_validation = strategy.backend.REQUIRES_EMAIL_VALIDATION or \
                           strategy.setting('FORCE_EMAIL_VALIDATION', False)
     if requires_validation and details.get('email'):
