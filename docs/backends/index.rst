@@ -103,6 +103,7 @@ Social backends
    tripit
    tumblr
    twilio
+   twitch
    twitter
    vimeo
    vk
