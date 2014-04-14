@@ -16,10 +16,15 @@ class TwitchOAuth2(BaseOAuth2):
     REDIRECT_STATE = False
 
     def get_user_details(self, response):
-        return {'username': response.get('name'), 'email': response.get('email'),
-                'first_name': '', 'last_name': ''}
+        return {
+            'username': response.get('name'),
+            'email': response.get('email'),
+            'first_name': '',
+            'last_name': ''
+        }
 
     def user_data(self, access_token, *args, **kwargs):
-        url = 'https://api.twitch.tv/kraken/user/'
-        user_data = self.get_json(url, params={'oauth_token': access_token})
-        return user_data
+        return self.get_json(
+            'https://api.twitch.tv/kraken/user/',
+            params={'oauth_token': access_token}
+        )

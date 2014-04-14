@@ -3,8 +3,9 @@ Twitch
 
 Twitch works similar to Facebook (OAuth).
 
-- Register a new application in the `connections tab`_ of your Twitch settings page, set the callback URL to
-  ``http://example.com/complete/twitch/`` replacing ``example.com`` with your domain.
+- Register a new application in the `connections tab`_ of your Twitch settings
+  page, set the callback URL to ``http://example.com/complete/twitch/``
+  replacing ``example.com`` with your domain.
 
 - Fill ``Client Id`` and ``Client Secret`` values in the settings::
 
