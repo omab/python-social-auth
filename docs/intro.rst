@@ -74,6 +74,7 @@ or extend current one):
     * Tripit_ OAuth1
     * Tumblr_ OAuth1
     * Twilio_ Auth
+    * Twitch_ OAuth2
     * Twitter_ OAuth1
     * Vimeo_ OAuth1
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
@@ -142,6 +143,7 @@ section.
 .. _Stripe: https://stripe.com
 .. _Tripit: https://www.tripit.com
 .. _Twilio: https://www.twilio.com
+.. _Twitch: http://www.twitch.tv/
 .. _Twitter: http://twitter.com
 .. _VK.com: http://vk.com
 .. _Weibo: http://weibo.com
