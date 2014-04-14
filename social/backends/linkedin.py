@@ -75,6 +75,7 @@ class LinkedinOAuth2(BaseLinkedinAuth, BaseOAuth2):
     AUTHORIZATION_URL = 'https://www.linkedin.com/uas/oauth2/authorization'
     ACCESS_TOKEN_URL = 'https://www.linkedin.com/uas/oauth2/accessToken'
     ACCESS_TOKEN_METHOD = 'POST'
+    REDIRECT_STATE = False
 
     def user_data(self, access_token, *args, **kwargs):
         return self.get_json(
