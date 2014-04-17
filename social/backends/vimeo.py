@@ -1,3 +1,5 @@
+from social.p3 import urlencode, unquote
+
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
@@ -41,7 +43,8 @@ class VimeoOAuth2(BaseOAuth2):
     ACCESS_TOKEN_URL  = 'https://api.vimeo.com/oauth/access_token'
     REFRESH_TOKEN_URL = 'https://api.vimeo.com/oauth/request_token'
     ACCESS_TOKEN_METHOD = 'POST'
-    SCOPE_SEPARATOR = ','
+    SCOPE_PARAMETER_NAME = 'scope'
+    SCOPE_SEPARATOR = ' '
 
     API_ACCEPT_HEADER = {'Accept' : 'application/vnd.vimeo.*+json;version=3.0'}
 
@@ -53,6 +56,32 @@ class VimeoOAuth2(BaseOAuth2):
         additional state parameter included
         """
         return self.redirect_uri
+
+    def auth_url(self):
+        """Return redirect url - scopes require %20 instead of + for space"""
+        if self.STATE_PARAMETER or self.REDIRECT_STATE:
+            # Store state in session for further request validation. The state
+            # value is passed as state parameter (as specified in OAuth2 spec),
+            # but also added to redirect, that way we can still verify the
+            # request if the provider doesn't implement the state parameter.
+            # Reuse token if any.
+            name = self.name + '_state'
+            state = self.strategy.session_get(name)
+            if state is None:
+                state = self.state_token()
+                self.strategy.session_set(name, state)
+        else:
+            state = None
+
+        params = self.auth_params(state)
+        params.update(self.get_scope_argument())
+        params.update(self.auth_extra_arguments())
+        params = urlencode(params, doseq=0).replace('+', '%20')
+        if not self.REDIRECT_STATE:
+            # redirect_uri matching is strictly enforced, so match the
+            # providers value exactly.
+            params = unquote(params)
+        return self.AUTHORIZATION_URL + '?' + params
 
     def get_user_id(self, details, response):
         """Return user id"""
@@ -84,4 +113,3 @@ class VimeoOAuth2(BaseOAuth2):
             params={'access_token' : access_token},
             headers=VimeoOAuth2.API_ACCEPT_HEADER,
         )
-
