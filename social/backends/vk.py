@@ -6,6 +6,7 @@ VK.com OpenAPI, OAuth2 and Iframe application OAuth2 backends, docs at:
 from time import time
 from hashlib import md5
 
+from social.utils import parse_qs
 from social.backends.base import BaseAuth
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthTokenRevoked, AuthException
@@ -44,25 +45,24 @@ class VKontakteOpenAPI(BaseAuth):
     def auth_complete(self, *args, **kwargs):
         """Performs check of authentication in VKontakte, returns User if
         succeeded"""
-        app_cookie = 'vk_app_' + self.setting('APP_ID')
-
-        if not 'id' in self.data or not self.strategy.cookie_get(app_cookie):
+        session_value = self.strategy.session_get(
+            'vk_app_' + self.setting('APP_ID')
+        )
+        if 'id' not in self.data or not session_value:
             raise ValueError('VK.com authentication is not completed')
 
-        key, secret = self.get_key_and_secret()
-        cookie_dict = dict(item.split('=') for item in
-                               self.strategy.cookie_get(app_cookie).split('&'))
-        check_str = ''.join(item + '=' + cookie_dict[item]
+        mapping = parse_qs(session_value)
+        check_str = ''.join(item + '=' + mapping[item]
                                 for item in ['expire', 'mid', 'secret', 'sid'])
 
+        key, secret = self.get_key_and_secret()
         hash = md5((check_str + secret).encode('utf-8')).hexdigest()
+        if hash != mapping['sig'] or int(mapping['expire']) < time():
+            raise ValueError('VK.com authentication failed: Invalid Hash')
 
-        if hash != cookie_dict['sig'] or int(cookie_dict['expire']) < time():
-            raise ValueError('VK.com authentication failed: invalid hash')
-        else:
-            kwargs.update({'backend': self,
-                           'response': self.user_data(cookie_dict['mid'])})
-            return self.strategy.authenticate(*args, **kwargs)
+        kwargs.update({'backend': self,
+                       'response': self.user_data(mapping['mid'])})
+        return self.strategy.authenticate(*args, **kwargs)
 
     def uses_redirect(self):
         """VK.com does not require visiting server url in order
