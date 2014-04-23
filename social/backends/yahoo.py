@@ -41,7 +41,7 @@ class YahooOAuth(BaseOAuth1):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        url = 'http://social.yahooapis.com/v1/user/{0}/profile?format=json'
+        url = 'https://social.yahooapis.com/v1/user/{0}/profile?format=json'
         return self.get_json(
             url.format(self._get_guid(access_token)),
             auth=self.oauth_auth(access_token)
@@ -53,6 +53,6 @@ class YahooOAuth(BaseOAuth1):
             it's also returned during one of OAuth calls
         """
         return self.get_json(
-            'http://social.yahooapis.com/v1/me/guid?format=json',
+            'https://social.yahooapis.com/v1/me/guid?format=json',
             auth=self.oauth_auth(access_token)
         )['guid']['value']
