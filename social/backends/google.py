@@ -20,11 +20,17 @@ class BaseGoogleAuth(object):
     def get_user_details(self, response):
         """Return user details from Orkut account"""
         email = response.get('email', '')
+
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('name', ''),
+            response.get('given_name', ''),
+            response.get('family_name', '')
+        )
         return {'username': email.split('@', 1)[0],
                 'email': email,
-                'fullname': response.get('name', ''),
-                'first_name': response.get('given_name', ''),
-                'last_name': response.get('family_name', '')}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
 
 class BaseGoogleOAuth2API(BaseGoogleAuth):

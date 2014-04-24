@@ -12,11 +12,16 @@ class BaseRdio(OAuthAuth):
     ID_KEY = 'key'
 
     def get_user_details(self, response):
+        fullname, first_name, last_name = self.get_user_names(
+            fullname=response['displayName'],
+            first_name=response['firstName'],
+            last_name=response['lastName']
+        )
         return {
             'username': response['username'],
-            'first_name': response['firstName'],
-            'last_name': response['lastName'],
-            'fullname': response['displayName'],
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name
         }
 
 

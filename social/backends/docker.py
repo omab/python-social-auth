@@ -26,9 +26,14 @@ class DockerOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Docker.io account"""
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('full_name') or response.get('username') or ''
+        )
         return {
             'username': response.get('username'),
-            'first_name': response.get('full_name', response.get('username')),
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name,
             'email': response.get('email', '')
         }
 

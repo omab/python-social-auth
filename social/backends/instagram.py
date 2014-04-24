@@ -17,10 +17,14 @@ class InstagramOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from Instagram account"""
         username = response['user']['username']
-        fullname = response['user'].get('full_name', '')
         email = response['user'].get('email', '')
+        fullname, first_name, last_name = self.get_user_names(
+            response['user'].get('full_name', '')
+        )
         return {'username': username,
-                'first_name': fullname,
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name,
                 'email': email}
 
     def user_data(self, access_token, *args, **kwargs):

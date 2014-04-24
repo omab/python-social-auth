@@ -47,10 +47,11 @@ class LastFmAuth(BaseAuth):
         return response.get('name')
 
     def get_user_details(self, response):
+        fullname, first_name, last_name = self.get_user_names(response['name'])
         return {
             'username': response['name'],
             'email': '',
-            'fullname': response['name'],
-            'first_name': '',
-            'last_name': '',
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name
         }

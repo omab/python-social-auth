@@ -22,12 +22,9 @@ class SoundcloudOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Soundcloud account"""
-        fullname = response.get('full_name')
-        full_name = fullname.split(' ')
-        first_name = full_name[0]
-        last_name = ''
-        if len(full_name) > 1:
-            last_name = full_name[-1]
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('full_name')
+        )
         return {'username': response.get('username'),
                 'email': response.get('email') or '',
                 'fullname': fullname,

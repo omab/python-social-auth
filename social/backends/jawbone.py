@@ -19,10 +19,13 @@ class JawboneOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from Jawbone account"""
         data = response['data']
-        first_name = data.get('first', '')
-        last_name = data.get('last', '')
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=data.get('first', ''),
+            last_name=data.get('last', '')
+        )
         return {
             'username': first_name + ' ' + last_name,
+            'fullname': fullname,
             'first_name': first_name,
             'last_name': last_name,
             'dob': data.get('dob', ''),

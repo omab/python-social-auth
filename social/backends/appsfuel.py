@@ -15,12 +15,16 @@ class AppsfuelOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Appsfuel account"""
-        fullname = response.get('display_name', '')
         email = response.get('email', '')
         username = email.split('@')[0] if email else ''
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('display_name', '')
+        )
         return {
             'username': username,
-            'first_name': fullname,
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name,
             'email': email
         }
 

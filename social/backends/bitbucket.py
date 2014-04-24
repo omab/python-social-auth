@@ -23,12 +23,15 @@ class BitbucketOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Bitbucket account"""
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=response.get('first_name', ''),
+            last_name=response.get('last_name', '')
+        )
         return {'username': response.get('username') or '',
                 'email': response.get('email') or '',
-                'fullname': ' '.join((response.get('first_name') or '',
-                                      response.get('last_name') or '')),
-                'first_name': response.get('first_name') or '',
-                'last_name': response.get('last_name') or ''}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token):
         """Return user data provided"""

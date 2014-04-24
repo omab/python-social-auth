@@ -42,8 +42,13 @@ class DoubanOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Douban"""
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('name', '')
+        )
         return {'username': response.get('uid', ''),
-                'fullname': response.get('name', ''),
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name,
                 'email': ''}
 
     def user_data(self, access_token, *args, **kwargs):

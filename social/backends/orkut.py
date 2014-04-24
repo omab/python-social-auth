@@ -16,11 +16,17 @@ class OrkutOAuth(GoogleOAuth):
             emails = response['emails'][0]['value']
         except (KeyError, IndexError):
             emails = ''
+
+        fullname, first_name, last_name = self.get_user_names(
+            fullname=response['displayName'],
+            first_name=response['name']['givenName'],
+            last_name=response['name']['familyName']
+        )
         return {'username': response['displayName'],
                 'email': emails,
-                'fullname': response['displayName'],
-                'first_name': response['name']['givenName'],
-                'last_name': response['name']['familyName']}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from Orkut service"""

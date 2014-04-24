@@ -20,12 +20,11 @@ class CoinbaseOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from Coinbase account"""
         user_data = response['users'][0]['user']
-        name = user_data['name']
-        name_split = name.split()
-        first_name = name_split[0]
-        last_name = name_split[1]
         email = user_data.get('email', '')
+        name = user_data['name']
+        fullname, first_name, last_name = self.get_user_names(name)
         return {'username': name,
+                'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name,
                 'email': email}

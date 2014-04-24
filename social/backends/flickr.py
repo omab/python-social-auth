@@ -19,9 +19,14 @@ class FlickrOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Flickr account"""
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('fullname')
+        )
         return {'username': response.get('username') or response.get('id'),
                 'email': '',
-                'first_name': response.get('fullname')}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""

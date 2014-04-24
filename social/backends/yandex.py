@@ -38,13 +38,13 @@ class YandexOAuth2(BaseOAuth2):
     REDIRECT_STATE = False
 
     def get_user_details(self, response):
-        first_name = response.get('real_name') or response.get('display_name')
-        last_name = ''
-        if ' ' in first_name:
-            first_name, last_name = first_name.split(' ', 1)
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('real_name') or response.get('display_name') or ''
+        )
         return {'username': response.get('display_name'),
                 'email': response.get('default_email') or
                          response.get('emails', [''])[0],
+                'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name}
 
@@ -62,13 +62,13 @@ class YaruOAuth2(BaseOAuth2):
     REDIRECT_STATE = False
 
     def get_user_details(self, response):
-        first_name = response.get('real_name') or response.get('display_name')
-        last_name = ''
-        if ' ' in first_name:
-            first_name, last_name = first_name.split(' ', 1)
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('real_name') or response.get('display_name') or ''
+        )
         return {'username': response.get('display_name'),
                 'email': response.get('default_email') or
                          response.get('emails', [''])[0],
+                'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name}
 

@@ -15,11 +15,13 @@ class BaseLinkedinAuth(object):
 
     def get_user_details(self, response):
         """Return user details from Linkedin account"""
-        first_name = response['firstName']
-        last_name = response['lastName']
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=response['firstName'],
+            last_name=response['lastName']
+        )
         email = response.get('emailAddress', '')
         return {'username': first_name + last_name,
-                'fullname': first_name + ' ' + last_name,
+                'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name,
                 'email': email}

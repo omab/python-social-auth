@@ -22,14 +22,10 @@ class TwitterOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Twitter account"""
-        try:
-            first_name, last_name = response['name'].split(' ', 1)
-        except:
-            first_name = response['name']
-            last_name = ''
+        fullname, first_name, last_name = self.get_user_names(response['name'])
         return {'username': response['screen_name'],
                 'email': '',  # not supplied
-                'fullname': response['name'],
+                'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name}
 

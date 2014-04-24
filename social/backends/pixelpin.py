@@ -15,9 +15,15 @@ class PixelPinOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from PixelPin account"""
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=response.get('firstName'),
+            last_name=response.get('lastName')
+        )
         return {'username': response.get('firstName'),
                 'email': response.get('email') or '',
-                'first_name': response.get('firstName')}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""

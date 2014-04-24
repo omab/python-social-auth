@@ -28,16 +28,18 @@ class YahooOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Yahoo Profile"""
-        fname = response.get('givenName')
-        lname = response.get('familyName')
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=response.get('givenName'),
+            last_name=response.get('familyName')
+        )
         emails = [email for email in response.get('emails', [])
                         if email.get('handle')]
         emails.sort(key=lambda e: e.get('primary', False))
         return {'username': response.get('nickname'),
                 'email': emails[0]['handle'] if emails else '',
-                'fullname': '{0} {1}'.format(fname, lname),
-                'first_name': fname,
-                'last_name': lname}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""

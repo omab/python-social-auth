@@ -14,11 +14,9 @@ class VimeoOAuth1(BaseOAuth1):
     def get_user_details(self, response):
         """Return user details from Twitter account"""
         person = response.get('person', {})
-        fullname = person.get('display_name', '')
-        if ' ' in fullname:
-            first_name, last_name = fullname.split(' ', 1)
-        else:
-            first_name, last_name = fullname, ''
+        fullname, first_name, last_name = self.get_user_names(
+            person.get('display_name', '')
+        )
         return {'username': person.get('username', ''),
                 'email': '',
                 'fullname': fullname,
@@ -38,12 +36,11 @@ class VimeoOAuth2(BaseOAuth2):
     """Vimeo OAuth2 authentication backend"""
     name = 'vimeo-oauth2'
     AUTHORIZATION_URL = 'https://api.vimeo.com/oauth/authorize'
-    ACCESS_TOKEN_URL  = 'https://api.vimeo.com/oauth/access_token'
+    ACCESS_TOKEN_URL = 'https://api.vimeo.com/oauth/access_token'
     REFRESH_TOKEN_URL = 'https://api.vimeo.com/oauth/request_token'
     ACCESS_TOKEN_METHOD = 'POST'
     SCOPE_SEPARATOR = ','
-
-    API_ACCEPT_HEADER = {'Accept' : 'application/vnd.vimeo.*+json;version=3.0'}
+    API_ACCEPT_HEADER = {'Accept': 'application/vnd.vimeo.*+json;version=3.0'}
 
     def get_redirect_uri(self, state=None):
         """
@@ -65,23 +62,18 @@ class VimeoOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from account"""
         user = response.get('user', {})
-        fullname = user.get('name', '')
-
-        if ' ' in fullname:
-            first_name, last_name = fullname.split(' ', 1)
-        else:
-            first_name, last_name = fullname, ''
-
+        fullname, first_name, last_name = self.get_user_names(
+            user.get('name', '')
+        )
         return {'username': fullname,
                 'fullname': fullname,
                 'first_name': first_name,
-                'last_name': last_name,}
+                'last_name': last_name}
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
         return self.get_json(
             'https://api.vimeo.com/me',
-            params={'access_token' : access_token},
+            params={'access_token': access_token},
             headers=VimeoOAuth2.API_ACCEPT_HEADER,
         )
-
