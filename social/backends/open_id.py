@@ -42,6 +42,14 @@ class OpenIdAuth(BaseAuth):
         """Return user unique id provided by service"""
         return response.identity_url
 
+    def get_ax_attributes(self):
+        return self.setting('AX_SCHEMA_ATTRS') or (
+            AX_SCHEMA_ATTRS + OLD_AX_ATTRS
+        )
+
+    def get_sreg_attributes(self):
+        return self.setting('SREG_ATTR') or SREG_ATTR
+
     def values_from_response(self, response, sreg_names=None, ax_names=None):
         """Return values from SimpleRegistration response or
         AttributeExchange response if present.
@@ -73,10 +81,9 @@ class OpenIdAuth(BaseAuth):
                   'first_name': '', 'last_name': ''}
         # update values using SimpleRegistration or AttributeExchange
         # values
-        values.update(self.values_from_response(response,
-                                                SREG_ATTR,
-                                                OLD_AX_ATTRS +
-                                                AX_SCHEMA_ATTRS))
+        values.update(self.values_from_response(
+            response, self.get_sreg_attributes(), self.get_ax_attributes()
+        ))
 
         fullname = values.get('fullname') or ''
         first_name = values.get('first_name') or ''
@@ -174,12 +181,12 @@ class OpenIdAuth(BaseAuth):
         if request.endpoint.supportsType(ax.AXMessage.ns_uri):
             fetch_request = ax.FetchRequest()
             # Mark all attributes as required, Google ignores optional ones
-            for attr, alias in (AX_SCHEMA_ATTRS + OLD_AX_ATTRS):
+            for attr, alias in self.get_ax_attributes():
                 fetch_request.add(ax.AttrInfo(attr, alias=alias,
                                               required=True))
         else:
             fetch_request = sreg.SRegRequest(
-                optional=list(dict(SREG_ATTR).keys())
+                optional=list(dict(self.get_sreg_attributes()).keys())
             )
         request.addExtension(fetch_request)
 
