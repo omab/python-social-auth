@@ -51,6 +51,7 @@ or extend current one):
     * Github_ OAuth2
     * Google_ OAuth1, OAuth2 and OpenId
     * Instagram_ OAuth2
+    * Kakao_ OAuth2
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
@@ -126,6 +127,7 @@ section.
 .. _Github: https://github.com
 .. _Google: http://google.com
 .. _Instagram: https://instagram.com
+.. _Kakao: https://kakao.com
 .. _Linkedin: https://www.linkedin.com
 .. _Live: https://www.live.com
 .. _Livejournal: http://livejournal.com
