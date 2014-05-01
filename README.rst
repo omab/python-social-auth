@@ -76,6 +76,7 @@ or current ones extended):
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
+    * LoginRadius_ OAuth2 and Application Auth
     * Mailru_ OAuth2
     * Mendeley_ OAuth1 http://mendeley.com
     * Mixcloud_ OAuth2
