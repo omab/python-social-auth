@@ -76,6 +76,7 @@ Social backends
    linkedin
    livejournal
    live
+   loginradius
    mailru
    mendeley
    mixcloud
