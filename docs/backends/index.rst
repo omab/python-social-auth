@@ -71,6 +71,7 @@ Social backends
    google
    instagram
    jawbone
+   kakao
    lastfm
    linkedin
    livejournal
