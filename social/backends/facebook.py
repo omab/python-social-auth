@@ -179,3 +179,20 @@ class FacebookAppOAuth2(FacebookOAuth2):
             if constant_time_compare(sig, expected_sig) and \
                data['issued_at'] > (time.time() - 86400):
                 return data
+
+class Facebook2OAuth2(FacebookOAuth2):
+    """Facebook OAuth2 authentication backend using Facebook Open Graph 2.0"""
+
+    AUTHORIZATION_URL = 'https://www.facebook.com/v2.0/dialog/oauth'
+    ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.0/oauth/access_token'
+    REVOKE_TOKEN_URL = 'https://graph.facebook.com/v2.0/{uid}/permissions'
+
+    def user_data(self, access_token, *args, **kwargs):
+        """Loads user data from service"""
+        params = self.setting('PROFILE_EXTRA_PARAMS', {})
+        params['access_token'] = access_token
+        return self.get_json('https://graph.facebook.com/v2.0/me',
+                             params=params)
+
+class Facebook2AppOAuth2(Facebook2OAuth2, FacebookAppOAuth2):
+    pass
