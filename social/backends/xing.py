@@ -8,7 +8,7 @@ from social.backends.oauth import BaseOAuth1
 class XingOAuth(BaseOAuth1):
     """Xing OAuth authentication backend"""
     name = 'xing'
-    AUTHORIZATION_URL = 'https://www.xing.com/v1/authorize'
+    AUTHORIZATION_URL = 'https://api.xing.com/v1/authorize'
     REQUEST_TOKEN_URL = 'https://api.xing.com/v1/request_token'
     ACCESS_TOKEN_URL = 'https://api.xing.com/v1/access_token'
     SCOPE_SEPARATOR = '+'
