@@ -182,6 +182,24 @@ settings in the same way explained above but with this other suffix::
 
       <uppercase backend name>_REQUEST_TOKEN_EXTRA_ARGUMENTS = {...}
 
+Basic information is requested to the different providers in order to create
+a coherent user instance (with first and last name, email and full name), this
+could be too intrusive for some sites that want to ask users the minimum data
+possible. It's possible to override the default values requested by defining
+any of the following settings, for Open Id providers::
+
+    SOCIAL_AUTH_<BACKEND_NAME>_IGNORE_DEFAULT_AX_ATTRS = True
+    SOCIAL_AUTH_<BACKEND_NAME>_AX_SCHEMA_ATTRS = [
+        (schema, alias)
+    ]
+
+For OAuth backends::
+
+    SOCIAL_AUTH_<BACKEND_NAME>_IGNORE_DEFAULT_SCOPE = True
+    SOCIAL_AUTH_<BACKEND_NAME>_SCOPE = [
+        ...
+    ]
+
 
 Processing redirects and urlopen
 --------------------------------

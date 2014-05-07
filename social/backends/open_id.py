@@ -43,9 +43,10 @@ class OpenIdAuth(BaseAuth):
         return response.identity_url
 
     def get_ax_attributes(self):
-        return self.setting('AX_SCHEMA_ATTRS') or (
-            AX_SCHEMA_ATTRS + OLD_AX_ATTRS
-        )
+        attrs = self.setting('AX_SCHEMA_ATTRS', [])
+        if attrs and self.setting('IGNORE_DEFAULT_AX_ATTRS', True):
+            return attrs
+        return attrs + AX_SCHEMA_ATTRS + OLD_AX_ATTRS
 
     def get_sreg_attributes(self):
         return self.setting('SREG_ATTR') or SREG_ATTR
