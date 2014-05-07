@@ -23,6 +23,7 @@ class FacebookOAuth2(BaseOAuth2):
     ACCESS_TOKEN_URL = 'https://graph.facebook.com/oauth/access_token'
     REVOKE_TOKEN_URL = 'https://graph.facebook.com/{uid}/permissions'
     REVOKE_TOKEN_METHOD = 'DELETE'
+    USER_DATA_URL = 'https://graph.facebook.com/me'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires')
@@ -45,8 +46,7 @@ class FacebookOAuth2(BaseOAuth2):
         """Loads user data from service"""
         params = self.setting('PROFILE_EXTRA_PARAMS', {})
         params['access_token'] = access_token
-        return self.get_json('https://graph.facebook.com/me',
-                             params=params)
+        return self.get_json(self.USER_DATA_URL, params=params)
 
     def process_error(self, data):
         super(FacebookOAuth2, self).process_error(data)
@@ -180,19 +180,14 @@ class FacebookAppOAuth2(FacebookOAuth2):
                data['issued_at'] > (time.time() - 86400):
                 return data
 
+
 class Facebook2OAuth2(FacebookOAuth2):
     """Facebook OAuth2 authentication backend using Facebook Open Graph 2.0"""
-
     AUTHORIZATION_URL = 'https://www.facebook.com/v2.0/dialog/oauth'
     ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.0/oauth/access_token'
     REVOKE_TOKEN_URL = 'https://graph.facebook.com/v2.0/{uid}/permissions'
+    USER_DATA_URL = 'https://graph.facebook.com/v2.0/me'
 
-    def user_data(self, access_token, *args, **kwargs):
-        """Loads user data from service"""
-        params = self.setting('PROFILE_EXTRA_PARAMS', {})
-        params['access_token'] = access_token
-        return self.get_json('https://graph.facebook.com/v2.0/me',
-                             params=params)
 
 class Facebook2AppOAuth2(Facebook2OAuth2, FacebookAppOAuth2):
     pass
