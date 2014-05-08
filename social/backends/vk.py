@@ -92,7 +92,7 @@ class VKOAuth2(BaseOAuth2):
             last_name=response.get('last_name')
         )
         return {'username': response.get('screen_name'),
-                'email': '',
+                'email': response.get('email', ''),
                 'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name}
