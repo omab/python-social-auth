@@ -142,8 +142,7 @@ Dependencies that **must** be met to use the application:
 
 - OpenId_ support depends on python-openid_
 
-- OAuth_ support depends on python-oauth2_ (despite the name, this is just for
-  OAuth1)
+- OAuth_ support depends on requests-oauthlib_
 
 - Several backends demand application registration on their corresponding
   sites and other dependencies like sqlalchemy_ on Flask and Webpy.
@@ -274,7 +273,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Webpy: https://github.com/omab/python-social-auth/tree/master/social/apps/webpy_app
 .. _Tornado: http://www.tornadoweb.org/
 .. _python-openid: http://pypi.python.org/pypi/python-openid/
-.. _python-oauth2: https://github.com/simplegeo/python-oauth2
+.. _requests-oauthlib: https://requests-oauthlib.readthedocs.org/
 .. _sqlalchemy: http://www.sqlalchemy.org/
 .. _pypi: http://pypi.python.org/pypi/python-social-auth/
 .. _OpenStreetMap: http://www.openstreetmap.org
