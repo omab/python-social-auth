@@ -78,6 +78,7 @@ or current ones extended):
     * Livejournal_ OpenId
     * LoginRadius_ OAuth2 and Application Auth
     * Mailru_ OAuth2
+    * MapMyFitness_ OAuth2
     * Mendeley_ OAuth1 http://mendeley.com
     * Mixcloud_ OAuth2
     * `Mozilla Persona`_
@@ -230,6 +231,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Live: https://live.com
 .. _Livejournal: http://livejournal.com
 .. _Mailru: https://mail.ru
+.. _MapMyFitness: http://www.mapmyfitness.com/
 .. _Mixcloud: https://www.mixcloud.com
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
