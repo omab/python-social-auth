@@ -17,7 +17,6 @@ class SpotifyOAuth2(BaseOAuth2):
     AUTHORIZATION_URL = 'https://accounts.spotify.com/authorize'
     ACCESS_TOKEN_URL = 'https://accounts.spotify.com/api/token'
     ACCESS_TOKEN_METHOD = 'POST'
-#     RESPONSE_TYPE = 'token'
     REDIRECT_STATE = False
     STATE_PARAMETER = False
 #     EXTRA_DATA = [
@@ -44,6 +43,7 @@ class SpotifyOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
+        
         return self.get_json(
             'https://api.spotify.com/v1/me',
             headers={'Authorization': 'Bearer {0}'.format(access_token)}
