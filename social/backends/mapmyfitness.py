@@ -42,7 +42,7 @@ class MapMyFitnessOAuth2(BaseOAuth2):
         key = self.get_key_and_secret()[0]
         url = 'https://oauth2-api.mapmyapi.com/v7.0/user/self/'
         headers = {
-            'Authorization': 'Bearer {}'.format(access_token),
+            'Authorization': 'Bearer {0}'.format(access_token),
             'Api-Key': key
         }
         return self.get_json(url, headers=headers)        
