@@ -93,6 +93,7 @@ Social backends
    shopify
    skyrock
    soundcloud
+   spotify
    suse
    stackoverflow
    steam

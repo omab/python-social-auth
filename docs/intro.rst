@@ -67,6 +67,7 @@ or extend current one):
     * Shopify_ OAuth2
     * Skyrock_ OAuth1
     * Soundcloud_ OAuth2
+    * Spotify_ OAuth2
     * ThisIsMyJam_ OAuth1
     * Stackoverflow_ OAuth2
     * Steam_ OpenId
@@ -140,6 +141,7 @@ section.
 .. _Shopify: http://shopify.com
 .. _Skyrock: https://skyrock.com
 .. _Soundcloud: https://soundcloud.com
+.. _Spotify: https://www.spotify.com
 .. _ThisIsMyJam: https://thisismyjam.com
 .. _Stocktwits: https://stocktwits.com
 .. _Stripe: https://stripe.com

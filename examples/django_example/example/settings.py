@@ -168,6 +168,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.runkeeper.RunKeeperOAuth2',
     'social.backends.skyrock.SkyrockOAuth',
     'social.backends.soundcloud.SoundcloudOAuth2',
+    'social.backends.spotify.SpotifyOAuth2',
     'social.backends.stackoverflow.StackoverflowOAuth2',
     'social.backends.steam.SteamOpenId',
     'social.backends.stocktwits.StocktwitsOAuth2',
