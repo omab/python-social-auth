@@ -78,6 +78,7 @@ Social backends
    live
    loginradius
    mailru
+   mapmyfitness
    mendeley
    mixcloud
    odnoklassnikiru
