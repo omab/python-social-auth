@@ -1,5 +1,5 @@
 MapMyFitness
-=========
+============
 
 MapMyFitness uses OAuth v2 for authentication.
 
