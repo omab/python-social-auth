@@ -35,6 +35,7 @@ Several supported service by simple backends definition (easy to add new ones
 or extend current one):
 
     * Angel_ OAuth2
+    * Beats_ OAuth2
     * Behance_ OAuth2
     * Bitbucket_ OAuth1
     * Box_ OAuth2
@@ -112,6 +113,7 @@ section.
 .. _OAuth: http://oauth.net/
 .. _myOpenID: https://www.myopenid.com/
 .. _Angel: https://angel.co
+.. _Beats: https://www.beats.com
 .. _Behance: https://www.behance.net
 .. _Bitbucket: https://bitbucket.org
 .. _Box: https://www.box.com

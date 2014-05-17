@@ -123,6 +123,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.angel.AngelOAuth2',
     'social.backends.aol.AOLOpenId',
     'social.backends.appsfuel.AppsfuelOAuth2',
+    'social.backends.beats.BeatsOAuth2',
     'social.backends.behance.BehanceOAuth2',
     'social.backends.belgiumeid.BelgiumEIDOpenId',
     'social.backends.bitbucket.BitbucketOAuth',
