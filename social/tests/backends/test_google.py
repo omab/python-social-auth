@@ -13,25 +13,64 @@ from social.tests.backends.open_id import OpenIdTest
 
 class GoogleOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.google.GoogleOAuth2'
-    user_data_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
+    user_data_url = 'https://www.googleapis.com/plus/v1/people/me'
     expected_username = 'foo'
     access_token_body = json.dumps({
         'access_token': 'foobar',
         'token_type': 'bearer'
     })
     user_data_body = json.dumps({
-        'family_name': 'Bar',
-        'name': 'Foo Bar',
-        'picture': 'https://lh5.googleusercontent.com/-ui-GqpNh5Ms/'
-                   'AAAAAAAAAAI/AAAAAAAAAZw/a7puhHMO_fg/photo.jpg',
-        'locale': 'en',
+        'aboutMe': 'About me text',
+        'cover': {
+            'coverInfo': {
+                'leftImageOffset': 0,
+                'topImageOffset': 0
+            },
+            'coverPhoto': {
+                'height': 629,
+                'url': 'https://lh5.googleusercontent.com/-ui-GqpNh5Ms/'
+                       'AAAAAAAAAAI/AAAAAAAAAZw/a7puhHMO_fg/photo.jpg',
+                'width': 940
+            },
+            'layout': 'banner'
+        },
+        'displayName': 'Foo Bar',
+        'emails': [{
+            'type': 'account',
+            'value': 'foo@bar.com'
+        }],
+        'etag': '"e-tag string"',
         'gender': 'male',
-        'email': 'foo@bar.com',
-        'birthday': '0000-01-22',
-        'link': 'https://plus.google.com/101010101010101010101',
-        'given_name': 'Foo',
         'id': '101010101010101010101',
-        'verified_email': True
+        'image': {
+            'url': 'https://lh5.googleusercontent.com/-ui-GqpNh5Ms/'
+                   'AAAAAAAAAAI/AAAAAAAAAZw/a7puhHMO_fg/photo.jpg',
+        },
+        'isPlusUser': True,
+        'kind': 'plus#person',
+        'language': 'en',
+        'name': {
+            'familyName': 'Bar',
+            'givenName': 'Foo'
+        },
+        'objectType': 'person',
+        'occupation': 'Software developer',
+        'organizations': [{
+            'name': 'Org name',
+            'primary': True,
+            'type': 'school'
+        }],
+        'placesLived': [{
+            'primary': True,
+            'value': 'Anyplace'
+        }],
+        'url': 'https://plus.google.com/101010101010101010101',
+        'urls': [{
+            'label': 'http://foobar.com',
+            'type': 'otherProfile',
+            'value': 'http://foobar.com',
+        }],
+        'verified': False
     })
 
     def test_login(self):

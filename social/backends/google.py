@@ -18,13 +18,19 @@ class BaseGoogleAuth(object):
             return details['email']
 
     def get_user_details(self, response):
-        """Return user details from Orkut account"""
-        email = response.get('email', '')
+        """Return user details from Google API account"""
+        if response.get('emails'):
+            email = response['emails'][0]['value']
+        elif response.get('email'):
+            email = response['email']
+        else:
+            email = ''
 
+        names = response.get('name') or {}
         fullname, first_name, last_name = self.get_user_names(
-            response.get('name', ''),
-            response.get('given_name', ''),
-            response.get('family_name', '')
+            response.get('displayName', ''),
+            names.get('givenName', ''),
+            names.get('familyName', '')
         )
         return {'username': email.split('@', 1)[0],
                 'email': email,
@@ -37,7 +43,7 @@ class BaseGoogleOAuth2API(BaseGoogleAuth):
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Google API"""
         return self.get_json(
-            'https://www.googleapis.com/oauth2/v1/userinfo',
+            'https://www.googleapis.com/plus/v1/people/me',
             params={'access_token': access_token, 'alt': 'json'}
         )
 
@@ -51,8 +57,7 @@ class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
     REVOKE_TOKEN_METHOD = 'GET'
-    DEFAULT_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
-                     'https://www.googleapis.com/auth/userinfo.profile']
+    DEFAULT_SCOPE = ['email', 'profile']
     EXTRA_DATA = [
         ('refresh_token', 'refresh_token', True),
         ('expires_in', 'expires'),
@@ -74,9 +79,7 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
     REVOKE_TOKEN_METHOD = 'GET'
-    DEFAULT_SCOPE = ['https://www.googleapis.com/auth/plus.login',
-                     'https://www.googleapis.com/auth/userinfo.email',
-                     'https://www.googleapis.com/auth/userinfo.profile']
+    DEFAULT_SCOPE = ['plus.login', 'email']
     EXTRA_DATA = [
         ('id', 'user_id'),
         ('refresh_token', 'refresh_token', True),
