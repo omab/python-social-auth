@@ -355,10 +355,6 @@ class BaseOAuth2(OAuthAuth):
             raise AuthUnknownError(self)
         self.process_error(response)
         
-        # mashery wraps in jsonrpc
-        if response.get('jsonrpc', None):
-            response = response.get('result', None)
-        
         return self.do_auth(response['access_token'], response=response,
                             *args, **kwargs)
 
