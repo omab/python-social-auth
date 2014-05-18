@@ -93,6 +93,30 @@
   <a rel="nofollow" id="persona" href="#">Persona</a>
 </form>
 
+<form id="ajax-login" method="get" action="#">
+  <div id="form-fields">
+    <select name="backend">
+      <option value="twitter">Twitter</option>
+      <option value="facebook">Facebook</option>
+      <option value="google-oauth2">Google OAuth2</option>
+    </select>
+
+    <label for="access_token">Access token (for OAuth1 or OAuth2 backends):</label>
+    <input id="access_token" name="access_token" type="text" value="" />
+
+    <label for="access_token_secret">Access token secret (for OAuth1 backends):</label>
+    <input id="access_token_secret" name="access_token_secret" type="text" value="" />
+
+    <p><button>Login</button></p>
+  </div>
+
+  <div id="login-result" style="display: none;">
+    <p><strong>User Id:</strong><span id="user-id"></span></p>
+    <p><strong>Username:</strong><span id="user-username"></span></p>
+    <p>This page will be reloaded in 10s and the user should be logged in.</p>
+  </div>
+</form>
+
 {% if plus_id %}
 <form id="google-plus" method="post" action="{% url 'social:complete' 'google-plus' %}">{% csrf_token %}
   <input id="at" type="hidden" name="access_token" value="" />
@@ -157,5 +181,29 @@
         $('#google-plus').submit();
       }
   };
+</script>
+
+<script type="text/javascript">
+  $(function () {
+    $('#ajax-login').on('submit', function (event) {
+      event.preventDefault();
+      var $backend = $('[name="backend"]'),
+          $accessToken = $('[name="access_token"]'),
+          $accessTokenSecret = $('[name="access_token_secret"]'),
+          $fields = $('#form-fields'),
+          $result = $('#login-result');
+
+      $.get('/ajax-auth/' + $backend.val() + '/', {
+        access_token: $accessToken.val(),
+        access_token_secret: $accessTokenSecret.val(),
+      }, function (data, xhr, response) {
+        $result.find('#user-id').html(data.id);
+        $result.find('#user-username').html(data.username);
+        $fields.hide();
+        $result.show();
+        setTimeout(function () { window.location = '/'; }, 10000);
+      }, 'json')
+    });
+  });
 </script>
 {% endblock %}
