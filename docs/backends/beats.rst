@@ -1,5 +1,5 @@
 Beats
-=======
+=====
 
 Beats supports OAuth 2.
 
