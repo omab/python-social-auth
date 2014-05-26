@@ -65,7 +65,7 @@ class RdioOAuth2(BaseRdio, BaseOAuth2):
     ]
 
     def user_data(self, access_token, *args, **kwargs):
-        return self.get_json(RDIO_API, data={
+        return self.get_json(RDIO_API, method='POST', data={
             'method': 'currentUser',
             'extras': 'username,displayName,streamRegion',
             'access_token': access_token
