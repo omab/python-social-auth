@@ -2,28 +2,26 @@
 Beats backend, docs at:
     https://developer.beatsmusic.com/docs
 """
-from re import sub
-
 import base64
 
-from social.p3 import urlencode
+from requests import HTTPError
+
+from social.exceptions import AuthCanceled, AuthUnknownError
 from social.backends.oauth import BaseOAuth2
+
 
 class BeatsOAuth2(BaseOAuth2):
     name = 'beats'
     SCOPE_SEPARATOR = ' '
     ID_KEY = 'user_context'
-    AUTHORIZATION_URL = 'https://partner.api.beatsmusic.com/v1/oauth2/authorize'
+    AUTHORIZATION_URL = \
+        'https://partner.api.beatsmusic.com/v1/oauth2/authorize'
     ACCESS_TOKEN_URL = 'https://partner.api.beatsmusic.com/oauth2/token'
     ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
-#     STATE_PARAMETER = False
-#     EXTRA_DATA = [
-#         ('id', 'username'),
-#     ]
 
     def get_user_id(self, details, response):
-        return response["result"][BeatsOAuth2.ID_KEY]
+        return response['result'][BeatsOAuth2.ID_KEY]
 
     def auth_headers(self):
         return {
@@ -50,18 +48,15 @@ class BeatsOAuth2(BaseOAuth2):
         except KeyError:
             raise AuthUnknownError(self)
         self.process_error(response)
-        
         # mashery wraps in jsonrpc
         if response.get('jsonrpc', None):
             response = response.get('result', None)
-        
         return self.do_auth(response['access_token'], response=response,
                             *args, **kwargs)
-        
+
     def get_user_details(self, response):
         """Return user details from Beats account"""
-        response = response["result"]
-        print response
+        response = response['result']
         fullname, first_name, last_name = self.get_user_names(
             response.get('display_name')
         )
@@ -73,7 +68,6 @@ class BeatsOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        
         return self.get_json(
             'https://partner.api.beatsmusic.com/v1/api/me',
             headers={'Authorization': 'Bearer {0}'.format(access_token)}

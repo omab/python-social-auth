@@ -3,12 +3,10 @@ Spotify backend, docs at:
     https://developer.spotify.com/spotify-web-api/
     https://developer.spotify.com/spotify-web-api/authorization-guide/
 """
-from re import sub
-
 import base64
 
-from social.p3 import urlencode
 from social.backends.oauth import BaseOAuth2
+
 
 class SpotifyOAuth2(BaseOAuth2):
     name = 'spotify'
@@ -19,9 +17,6 @@ class SpotifyOAuth2(BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
     STATE_PARAMETER = False
-#     EXTRA_DATA = [
-#         ('id', 'username'),
-#     ]
 
     def auth_headers(self):
         return {
@@ -43,7 +38,6 @@ class SpotifyOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        
         return self.get_json(
             'https://api.spotify.com/v1/me',
             headers={'Authorization': 'Bearer {0}'.format(access_token)}
