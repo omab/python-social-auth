@@ -35,6 +35,7 @@ Several supported service by simple backends definition (easy to add new ones
 or extend current one):
 
     * Angel_ OAuth2
+    * Beats_ OAuth2
     * Behance_ OAuth2
     * Bitbucket_ OAuth1
     * Box_ OAuth2
@@ -67,6 +68,7 @@ or extend current one):
     * Shopify_ OAuth2
     * Skyrock_ OAuth1
     * Soundcloud_ OAuth2
+    * Spotify_ OAuth2
     * ThisIsMyJam_ OAuth1
     * Stackoverflow_ OAuth2
     * Steam_ OpenId
@@ -111,6 +113,7 @@ section.
 .. _OAuth: http://oauth.net/
 .. _myOpenID: https://www.myopenid.com/
 .. _Angel: https://angel.co
+.. _Beats: https://www.beats.com
 .. _Behance: https://www.behance.net
 .. _Bitbucket: https://bitbucket.org
 .. _Box: https://www.box.com
@@ -140,6 +143,7 @@ section.
 .. _Shopify: http://shopify.com
 .. _Skyrock: https://skyrock.com
 .. _Soundcloud: https://soundcloud.com
+.. _Spotify: https://www.spotify.com
 .. _ThisIsMyJam: https://thisismyjam.com
 .. _Stocktwits: https://stocktwits.com
 .. _Stripe: https://stripe.com
