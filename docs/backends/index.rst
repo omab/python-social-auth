@@ -50,6 +50,7 @@ Social backends
    angel
    aol
    appsfuel
+   beats
    behance
    belgium_eid
    bitbucket
@@ -94,6 +95,7 @@ Social backends
    shopify
    skyrock
    soundcloud
+   spotify
    suse
    stackoverflow
    steam
