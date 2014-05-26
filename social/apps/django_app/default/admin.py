@@ -14,7 +14,7 @@ class UserSocialAuthOption(admin.ModelAdmin):
     raw_id_fields = ('user',)
     list_select_related = True
 
-    def get_search_fields(self, request):
+    def get_search_fields(self, request=None):
         search_fields = getattr(
             settings, setting_name('ADMIN_USER_SEARCH_FIELDS'), None
         )
