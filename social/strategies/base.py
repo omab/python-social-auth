@@ -37,19 +37,14 @@ class BaseStrategy(object):
     SERIALIZABLE_TYPES = (dict, list, tuple, set, bool, type(None)) + \
                          six.integer_types + six.string_types + \
                          (six.text_type, six.binary_type,)
+    DEFAULT_TEMPLATE_STRATEGY = BaseTemplateStrategy
 
-    def __init__(self, backend=None, storage=None, request=None,
-                 tpl=BaseTemplateStrategy, backends=None, *args, **kwargs):
-        self.tpl = tpl(self)
-        self.request = request
+    def __init__(self, storage=None, tpl=None):
         self.storage = storage
-        self.backends = backends
-        self.backend = backend(strategy=self, *args, **kwargs) \
-                            if backend else None
+        self.tpl = (tpl or self.DEFAULT_TEMPLATE_STRATEGY)(self)
 
     def setting(self, name, default=None, backend=None):
         names = [setting_name(name), name]
-        backend = backend or getattr(self, 'backend', None)
         if backend:
             names.insert(0, setting_name(backend.name, name))
         for name in names:
@@ -58,32 +53,6 @@ class BaseStrategy(object):
             except (AttributeError, KeyError):
                 pass
         return default
-
-    def start(self):
-        # Clean any partial pipeline info before starting the process
-        self.clean_partial_pipeline()
-        if self.backend.uses_redirect():
-            return self.redirect(self.backend.auth_url())
-        else:
-            return self.html(self.backend.auth_html())
-
-    def complete(self, *args, **kwargs):
-        return self.backend.auth_complete(*args, **kwargs)
-
-    def continue_pipeline(self, *args, **kwargs):
-        return self.backend.continue_pipeline(*args, **kwargs)
-
-    def disconnect(self, user, association_id=None, *args, **kwargs):
-        return self.backend.disconnect(
-            user=user, association_id=association_id,
-            *args, **kwargs
-        )
-
-    def authenticate(self, *args, **kwargs):
-        kwargs['strategy'] = self
-        kwargs['storage'] = self.storage
-        kwargs['backend'] = self.backend
-        return self.backend.authenticate(*args, **kwargs)
 
     def create_user(self, *args, **kwargs):
         return self.storage.user.create_user(*args, **kwargs)
@@ -219,6 +188,14 @@ class BaseStrategy(object):
     def render_html(self, tpl=None, html=None, context=None):
         """Render given template or raw html with given context"""
         return self.tpl.render(tpl, html, context)
+
+    def authenticate(self, backend, *args, **kwargs):
+        """Trigger the authentication mechanism tied to the current
+        framework"""
+        kwargs['strategy'] = self
+        kwargs['storage'] = self.storage
+        kwargs['backend'] = backend
+        return backend.authenticate(*args, **kwargs)
 
     # Implement the following methods on strategies sub-classes
 

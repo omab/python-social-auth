@@ -20,8 +20,9 @@ class BaseBackendTest(unittest.TestCase):
 
     def setUp(self):
         HTTPretty.enable()
-        self.backend = module_member(self.backend_path)
-        self.strategy = TestStrategy(self.backend, TestStorage)
+        Backend = module_member(self.backend_path)
+        self.strategy = TestStrategy(TestStorage)
+        self.backend = Backend(self.strategy, redirect_uri=self.complete_url)
         self.name = self.backend.name.upper().replace('-', '_')
         self.complete_url = self.strategy.build_absolute_uri(
             self.raw_complete_url.format(self.backend.name)

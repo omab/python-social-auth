@@ -16,10 +16,12 @@ class TornadoTemplateStrategy(BaseTemplateStrategy):
 
 
 class TornadoStrategy(BaseStrategy):
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault('tpl', TornadoTemplateStrategy)
-        self.request_handler = kwargs.get('request_handler')
-        super(TornadoStrategy, self).__init__(*args, **kwargs)
+    DEFAULT_TEMPLATE_STRATEGY = TornadoTemplateStrategy
+
+    def __init__(self, storage, request_handler, tpl=None):
+        self.request_handler = request_handler
+        self.request = self.request_handler.request
+        super(TornadoStrategy, self).__init__(storage, tpl)
 
     def get_setting(self, name):
         return self.request_handler.settings[name]

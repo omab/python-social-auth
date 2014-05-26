@@ -171,7 +171,7 @@ class VKAppOAuth2(VKOAuth2):
         auth_data = {
             'auth': self,
             'backend': self,
-            'request': self.strategy.request,
+            'request': self.strategy.request_data(),
             'response': {
                 'user_id': user_id,
             }

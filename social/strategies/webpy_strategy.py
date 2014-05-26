@@ -12,10 +12,7 @@ class WebpyTemplateStrategy(BaseTemplateStrategy):
 
 
 class WebpyStrategy(BaseStrategy):
-    def __init__(self, *args, **kwargs):
-        self.session = web.web_session
-        kwargs.setdefault('tpl', WebpyTemplateStrategy)
-        super(WebpyStrategy, self).__init__(*args, **kwargs)
+    DEFAULT_TEMPLATE_STRATEGY = WebpyTemplateStrategy
 
     def get_setting(self, name):
         return getattr(web.config, name)
@@ -50,16 +47,16 @@ class WebpyStrategy(BaseStrategy):
         return tpl(**context)
 
     def session_get(self, name, default=None):
-        return self.session.get(name, default)
+        return web.web_session.get(name, default)
 
     def session_set(self, name, value):
-        self.session[name] = value
+        web.web_session[name] = value
 
     def session_pop(self, name):
-        return self.session.pop(name, None)
+        return web.web_session.pop(name, None)
 
     def session_setdefault(self, name, value):
-        return self.session.setdefault(name, value)
+        return web.web_session.setdefault(name, value)
 
     def build_absolute_uri(self, path=None):
         path = path or ''

@@ -276,8 +276,7 @@ class GoogleRevokeTokenTest(GoogleOAuth2Test):
         self.do_login()
         user = User.get(self.expected_username)
         user.password = 'password'
-        backend = self.backend
-        HTTPretty.register_uri(self._method(backend.REVOKE_TOKEN_METHOD),
-                               backend.REVOKE_TOKEN_URL,
+        HTTPretty.register_uri(self._method(self.backend.REVOKE_TOKEN_METHOD),
+                               self.backend.REVOKE_TOKEN_URL,
                                status=200)
-        do_disconnect(self.strategy, user)
+        do_disconnect(self.backend, user)

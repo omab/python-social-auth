@@ -1,6 +1,4 @@
 from social.utils import module_member
-from social.exceptions import MissingBackend
-from social.backends.utils import get_backend
 
 
 # Current strategy getter cache, currently only used by Django to set a method
@@ -11,18 +9,10 @@ from social.backends.utils import get_backend
 _current_strategy_getter = None
 
 
-def get_strategy(backends, strategy, storage, request=None, backend=None,
-                 *args, **kwargs):
-    if backend:
-        Backend = get_backend(backends, backend)
-        if not Backend:
-            raise MissingBackend(backend)
-    else:
-        Backend = None
+def get_strategy(strategy, storage, *args, **kwargs):
     Strategy = module_member(strategy)
     Storage = module_member(storage)
-    return Strategy(Backend, Storage, request, backends=backends,
-                    *args, **kwargs)
+    return Strategy(Storage, *args, **kwargs)
 
 
 def set_current_strategy_getter(func):

@@ -19,12 +19,13 @@ class TestTemplateStrategy(BaseTemplateStrategy):
 
 
 class TestStrategy(BaseStrategy):
-    def __init__(self, *args, **kwargs):
+    DEFAULT_TEMPLATE_STRATEGY = TestTemplateStrategy
+
+    def __init__(self, storage, tpl=None):
         self._request_data = {}
         self._settings = {}
         self._session = {}
-        kwargs.setdefault('tpl', TestTemplateStrategy)
-        super(TestStrategy, self).__init__(*args, **kwargs)
+        super(TestStrategy, self).__init__(storage, tpl)
 
     def redirect(self, url):
         return Redirect(url)

@@ -1,8 +1,10 @@
 """SQLAlchemy models for Social Auth"""
 import base64
 import six
+import json
 
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.types import PickleType, Text
 
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
                                 CodeMixin, BaseStorage
@@ -170,3 +172,12 @@ class BaseSQLAlchemyStorage(BaseStorage):
     @classmethod
     def is_integrity_error(cls, exception):
         return exception.__class__ is IntegrityError
+
+
+# JSON type field
+class JSONType(PickleType):
+    impl = Text
+
+    def __init__(self, *args, **kwargs):
+        kwargs['pickler'] = json
+        super(JSONType, self).__init__(*args, **kwargs)

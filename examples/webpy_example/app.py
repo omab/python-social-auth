@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from social.utils import setting_name
-from social.apps.webpy_app.utils import strategy, backends
+from social.apps.webpy_app.utils import psa, backends
 from social.apps.webpy_app import app as social_app
 
 import local_settings
@@ -74,7 +74,7 @@ class main(object):
 
 
 class done(social_app.BaseViewClass):
-    @strategy()
+    @psa()
     def GET(self):
         user = self.get_current_user()
         return render.done(user=user, backends=backends(user))

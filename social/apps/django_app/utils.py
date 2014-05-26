@@ -7,6 +7,7 @@ from django.http import Http404
 from social.utils import setting_name, module_member
 from social.exceptions import MissingBackend
 from social.strategies.utils import get_strategy
+from social.backends.utils import get_backend
 
 
 BACKENDS = settings.AUTHENTICATION_BACKENDS
@@ -18,11 +19,16 @@ Strategy = module_member(STRATEGY)
 Storage = module_member(STORAGE)
 
 
-def load_strategy(*args, **kwargs):
-    return get_strategy(BACKENDS, STRATEGY, STORAGE, *args, **kwargs)
+def load_strategy(request=None):
+    return get_strategy(STRATEGY, STORAGE, request)
 
 
-def strategy(redirect_uri=None, load_strategy=load_strategy):
+def load_backend(strategy, name, redirect_uri):
+    Backend = get_backend(BACKENDS, name)
+    return Backend(strategy, redirect_uri)
+
+
+def psa(redirect_uri=None, load_strategy=load_strategy):
     def decorator(func):
         @wraps(func)
         def wrapper(request, backend, *args, **kwargs):
@@ -30,18 +36,17 @@ def strategy(redirect_uri=None, load_strategy=load_strategy):
             if uri and not uri.startswith('/'):
                 uri = reverse(redirect_uri, args=(backend,))
 
-            try:
-                request.social_strategy = load_strategy(
-                    request=request, backend=backend,
-                    redirect_uri=uri, *args, **kwargs
-                )
-            except MissingBackend:
-                raise Http404('Backend not found')
-
+            request.social_strategy = load_strategy(request)
             # backward compatibility in attribute name, only if not already
             # defined
             if not hasattr(request, 'strategy'):
                 request.strategy = request.social_strategy
+
+            try:
+                request.backend = load_backend(request.social_strategy,
+                                               backend, uri)
+            except MissingBackend:
+                raise Http404('Backend not found')
             return func(request, backend, *args, **kwargs)
         return wrapper
     return decorator

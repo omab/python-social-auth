@@ -3,7 +3,7 @@ import web
 from functools import wraps
 
 from social.utils import setting_name, module_member
-from social.backends.utils import user_backends_data
+from social.backends.utils import get_backend, user_backends_data
 from social.strategies.utils import get_strategy
 
 
@@ -19,26 +19,26 @@ def get_helper(name, do_import=False):
     return do_import and module_member(config) or config
 
 
-def load_strategy(*args, **kwargs):
+def load_strategy():
+    return get_strategy(get_helper('STRATEGY'), get_helper('STORAGE'))
+
+
+def load_backend(strategy, name, redirect_uri):
     backends = get_helper('AUTHENTICATION_BACKENDS')
-    strategy = get_helper('STRATEGY')
-    storage = get_helper('STORAGE')
-    return get_strategy(backends, strategy, storage, *args, **kwargs)
+    Backend = get_backend(backends, name)
+    return Backend(strategy, redirect_uri)
 
 
-def strategy(redirect_uri=None):
+def psa(redirect_uri=None):
     def decorator(func):
         @wraps(func)
-        def wrapper(self, backend=None, *args, **kwargs):
+        def wrapper(self, backend, *args, **kwargs):
             uri = redirect_uri
             if uri and backend and '%(backend)s' in uri:
                 uri = uri % {'backend': backend}
-            self.strategy = load_strategy(request=web.ctx, backend=backend,
-                                          redirect_uri=uri, *args, **kwargs)
-            if backend:
-                return func(self, backend=backend, *args, **kwargs)
-            else:
-                return func(self, *args, **kwargs)
+            self.strategy = load_strategy()
+            self.backend = load_backend(self.strategy, backend, uri)
+            return func(self, backend=backend, *args, **kwargs)
         return wrapper
     return decorator
 

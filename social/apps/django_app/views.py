@@ -4,36 +4,36 @@ from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
 
 from social.actions import do_auth, do_complete, do_disconnect
-from social.apps.django_app.utils import strategy
+from social.apps.django_app.utils import psa
 
 
-@strategy('social:complete')
+@psa('social:complete')
 def auth(request, backend):
-    return do_auth(request.social_strategy, redirect_name=REDIRECT_FIELD_NAME)
+    return do_auth(request.backend, redirect_name=REDIRECT_FIELD_NAME)
 
 
 @csrf_exempt
-@strategy('social:complete')
+@psa('social:complete')
 def complete(request, backend, *args, **kwargs):
     """Authentication complete view, override this view if transaction
     management doesn't suit your needs."""
-    return do_complete(request.social_strategy, _do_login, request.user,
+    return do_complete(request.backend, _do_login, request.user,
                        redirect_name=REDIRECT_FIELD_NAME, *args, **kwargs)
 
 
 @login_required
-@strategy()
+@psa()
 @require_POST
 @csrf_protect
 def disconnect(request, backend, association_id=None):
     """Disconnects given backend from current logged in user."""
-    return do_disconnect(request.social_strategy, request.user, association_id,
+    return do_disconnect(request.backend, request.user, association_id,
                          redirect_name=REDIRECT_FIELD_NAME)
 
 
-def _do_login(strategy, user, social_user):
-    login(strategy.request, user)
-    if strategy.setting('SESSION_EXPIRATION', True):
+def _do_login(backend, user, social_user):
+    login(backend.strategy.request, user)
+    if backend.setting('SESSION_EXPIRATION', True):
         # Set session expiration date if present and not disabled
         # by setting. Use last social-auth instance for current
         # provider, users can associate several accounts with
@@ -41,9 +41,9 @@ def _do_login(strategy, user, social_user):
         expiration = social_user.expiration_datetime()
         if expiration:
             try:
-                strategy.request.session.set_expiry(
+                backend.strategy.request.session.set_expiry(
                     expiration.seconds + expiration.days * 86400
                 )
             except OverflowError:
                 # Handle django time zone overflow
-                strategy.request.session.set_expiry(None)
+                backend.strategy.request.session.set_expiry(None)

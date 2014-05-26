@@ -22,13 +22,12 @@ class DjangoTemplateStrategy(BaseTemplateStrategy):
 
 
 class DjangoStrategy(BaseStrategy):
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault('tpl', DjangoTemplateStrategy)
-        super(DjangoStrategy, self).__init__(*args, **kwargs)
-        if self.request:
-            self.session = self.request.session
-        else:
-            self.session = {}
+    DEFAULT_TEMPLATE_STRATEGY = DjangoTemplateStrategy
+
+    def __init__(self, storage, request=None, tpl=None):
+        self.request = request
+        self.session = request.session if request else {}
+        super(DjangoStrategy, self).__init__(storage, tpl)
 
     def get_setting(self, name):
         return getattr(settings, name)
@@ -64,10 +63,10 @@ class DjangoStrategy(BaseStrategy):
             template = loader.get_template_from_string(html)
         return template.render(RequestContext(self.request, context))
 
-    def authenticate(self, *args, **kwargs):
+    def authenticate(self, backend, *args, **kwargs):
         kwargs['strategy'] = self
         kwargs['storage'] = self.storage
-        kwargs['backend'] = self.backend
+        kwargs['backend'] = backend
         return authenticate(*args, **kwargs)
 
     def session_get(self, name, default=None):

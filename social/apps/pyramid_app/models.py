@@ -8,8 +8,8 @@ from social.storage.sqlalchemy_orm import SQLAlchemyUserMixin, \
                                           SQLAlchemyAssociationMixin, \
                                           SQLAlchemyNonceMixin, \
                                           SQLAlchemyCodeMixin, \
-                                          BaseSQLAlchemyStorage
-from social.apps.pyramid_app.fields import JSONType
+                                          BaseSQLAlchemyStorage, \
+                                          JSONType
 
 
 class PyramidStorage(BaseSQLAlchemyStorage):

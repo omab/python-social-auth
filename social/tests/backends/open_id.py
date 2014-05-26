@@ -53,11 +53,11 @@ class OpenIdTest(BaseBackendTest):
 
     def setUp(self):
         HTTPretty.enable()
-        self.backend = module_member(self.backend_path)
+        Backend = module_member(self.backend_path)
         name = self.backend.name
         self.complete_url = self.raw_complete_url.format(name)
-        self.strategy = TestStrategy(self.backend, TestStorage,
-                                     redirect_uri=self.complete_url)
+        self.strategy = TestStrategy(TestStorage)
+        self.backend = Backend(self.strategy, redirect_uri=self.complete_url)
         self.strategy.set_settings({
             'SOCIAL_AUTH_AUTHENTICATION_BACKENDS': (
                 self.backend_path,

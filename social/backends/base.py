@@ -13,7 +13,7 @@ class BaseAuth(object):
     EXTRA_DATA = None
     REQUIRES_EMAIL_VALIDATION = False
 
-    def __init__(self, strategy=None, redirect_uri=None, *args, **kwargs):
+    def __init__(self, strategy=None, redirect_uri=None):
         self.strategy = strategy
         self.redirect_uri = redirect_uri
         self.data = {}
@@ -26,6 +26,17 @@ class BaseAuth(object):
     def setting(self, name, default=None):
         """Return setting value from strategy"""
         return self.strategy.setting(name, default=default, backend=self)
+
+    def start(self):
+        # Clean any partial pipeline info before starting the process
+        self.strategy.clean_partial_pipeline()
+        if self.uses_redirect():
+            return self.strategy.redirect(self.auth_url())
+        else:
+            return self.strategy.html(self.auth_html())
+
+    def complete(self, *args, **kwargs):
+        return self.auth_complete(*args, **kwargs)
 
     def auth_url(self):
         """Must return redirect URL to auth provider"""
@@ -90,7 +101,7 @@ class BaseAuth(object):
         out = kwargs.copy()
         out.setdefault('strategy', self.strategy)
         out.setdefault('backend', out.pop(self.name, None) or self)
-        out.setdefault('request', self.strategy.request)
+        out.setdefault('request', self.strategy.request_data())
 
         for idx, name in enumerate(pipeline):
             out['pipeline_index'] = pipeline_index + idx
@@ -176,7 +187,7 @@ class BaseAuth(object):
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""
         kwargs.update({'backend': self})
-        return self.strategy.authenticate(*args, **kwargs)
+        return self.authenticate(*args, **kwargs)
 
     def request_token_extra_arguments(self):
         """Return extra arguments needed on request-token process"""

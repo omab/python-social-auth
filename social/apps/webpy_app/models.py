@@ -11,8 +11,8 @@ from social.storage.sqlalchemy_orm import SQLAlchemyUserMixin, \
                                           SQLAlchemyAssociationMixin, \
                                           SQLAlchemyNonceMixin, \
                                           SQLAlchemyCodeMixin, \
-                                          BaseSQLAlchemyStorage
-from social.apps.webpy_app.fields import JSONType
+                                          BaseSQLAlchemyStorage, \
+                                          JSONType
 
 
 SocialBase = declarative_base()

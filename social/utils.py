@@ -121,19 +121,20 @@ def drop_lists(value):
     return out
 
 
-def partial_pipeline_data(strategy, user=None, *args, **kwargs):
-    partial = strategy.session_get('partial_pipeline', None)
+def partial_pipeline_data(backend, user=None, *args, **kwargs):
+    partial = backend.strategy.session_get('partial_pipeline', None)
     if partial:
-        idx, backend, xargs, xkwargs = strategy.partial_from_session(partial)
-        if backend == strategy.backend.name:
+        idx, backend_name, xargs, xkwargs = \
+            backend.strategy.partial_from_session(partial)
+        if backend_name == backend.name:
             kwargs.setdefault('pipeline_index', idx)
             if user:  # don't update user if it's None
                 kwargs.setdefault('user', user)
-            kwargs.setdefault('request', strategy.request)
+            kwargs.setdefault('request', backend.strategy.request_data())
             xkwargs.update(kwargs)
             return xargs, xkwargs
         else:
-            strategy.clean_partial_pipeline()
+            backend.strategy.clean_partial_pipeline()
 
 
 def build_absolute_uri(host_url, path=None):
@@ -171,11 +172,11 @@ def is_url(value):
             value.startswith('/'))
 
 
-def setting_url(strategy, *names):
+def setting_url(backend, *names):
     for name in names:
         if is_url(name):
             return name
         else:
-            value = strategy.setting(name)
+            value = backend.setting(name)
             if is_url(value):
                 return value

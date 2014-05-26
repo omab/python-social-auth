@@ -15,7 +15,7 @@ class DisconnectActionTest(BaseActionTest):
     def test_not_allowed_to_disconnect(self):
         self.do_login()
         user = User.get(self.expected_username)
-        do_disconnect.when.called_with(self.strategy, user).should.throw(
+        do_disconnect.when.called_with(self.backend, user).should.throw(
             NotAllowedToDisconnect
         )
 
@@ -23,7 +23,7 @@ class DisconnectActionTest(BaseActionTest):
         self.do_login()
         user = User.get(self.expected_username)
         user.password = 'password'
-        do_disconnect(self.strategy, user)
+        do_disconnect(self.backend, user)
         expect(len(user.social)).to.equal(0)
 
     def test_disconnect_with_partial_pipeline(self):
@@ -40,7 +40,7 @@ class DisconnectActionTest(BaseActionTest):
         })
         self.do_login()
         user = User.get(self.expected_username)
-        redirect = do_disconnect(self.strategy, user)
+        redirect = do_disconnect(self.backend, user)
 
         url = self.strategy.build_absolute_uri('/password')
         expect(redirect.url).to.equal(url)
@@ -55,5 +55,5 @@ class DisconnectActionTest(BaseActionTest):
         expect(data['password']).to.equal(password)
         self.strategy.session_set('password', data['password'])
 
-        redirect = do_disconnect(self.strategy, user)
+        redirect = do_disconnect(self.backend, user)
         expect(len(user.social)).to.equal(0)
