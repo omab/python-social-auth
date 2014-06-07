@@ -104,11 +104,14 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
     name = 'google-plus'
     REDIRECT_STATE = False
     STATE_PARAMETER = False
+    AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/auth'
     ACCESS_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
     ACCESS_TOKEN_METHOD = 'POST'
     REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
     REVOKE_TOKEN_METHOD = 'GET'
-    DEFAULT_SCOPE = ['plus.login', 'email']
+    DEFAULT_SCOPE = [
+        'https://www.googleapis.com/auth/plus.login',
+    ]
     DEPRECATED_DEFAULT_SCOPE = [
         'https://www.googleapis.com/auth/plus.login',
         'https://www.googleapis.com/auth/userinfo.email',
@@ -124,18 +127,22 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
 
     def auth_complete_params(self, state=None):
         params = super(GooglePlusAuth, self).auth_complete_params(state)
-        params['redirect_uri'] = 'postmessage'
+        if self.data.get('access_token'):
+            # Don't add postmessage if this is plain server-side workflow
+            params['redirect_uri'] = 'postmessage'
         return params
 
     def auth_complete(self, *args, **kwargs):
-        token = self.data.get('access_token')
-        if not token:
-            raise AuthMissingParameter(self, 'access_token')
+        if 'access_token' in self.data and not 'code' in self.data:
+            raise AuthMissingParameter(self, 'access_token or code')
 
-        self.process_error(self.get_json(
-            'https://www.googleapis.com/oauth2/v1/tokeninfo',
-            params={'access_token': token}
-        ))
+        # Token won't be available in plain server-side workflow
+        token = self.data.get('access_token')
+        if token:
+            self.process_error(self.get_json(
+                'https://www.googleapis.com/oauth2/v1/tokeninfo',
+                params={'access_token': token}
+            ))
 
         try:
             response = self.request_access_token(
