@@ -81,7 +81,44 @@ class GoogleOAuth2Test(OAuth2Test):
 
     def test_with_unique_user_id(self):
         self.strategy.set_settings({
-            'SOCIAL_AUTH_GOOGLE_OAUTH2_USE_UNIQUE_USER_ID': True
+            'SOCIAL_AUTH_GOOGLE_OAUTH2_USE_UNIQUE_USER_ID': True,
+        })
+        self.do_login()
+
+
+class GoogleOAuth2DeprecatedAPITest(GoogleOAuth2Test):
+    user_data_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
+    user_data_body = json.dumps({
+        'family_name': 'Bar',
+        'name': 'Foo Bar',
+        'picture': 'https://lh5.googleusercontent.com/-ui-GqpNh5Ms/'
+                   'AAAAAAAAAAI/AAAAAAAAAZw/a7puhHMO_fg/photo.jpg',
+        'locale': 'en',
+        'gender': 'male',
+        'email': 'foo@bar.com',
+        'birthday': '0000-01-22',
+        'link': 'https://plus.google.com/101010101010101010101',
+        'given_name': 'Foo',
+        'id': '101010101010101010101',
+        'verified_email': True
+    })
+
+    def test_login(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_OAUTH2_USE_DEPRECATED_API': True
+        })
+        self.do_login()
+
+    def test_partial_pipeline(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_OAUTH2_USE_DEPRECATED_API': True
+        })
+        self.do_partial_pipeline()
+
+    def test_with_unique_user_id(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_GOOGLE_OAUTH2_USE_UNIQUE_USER_ID': True,
+            'SOCIAL_AUTH_GOOGLE_OAUTH2_USE_DEPRECATED_API': True
         })
         self.do_login()
 

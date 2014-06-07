@@ -196,6 +196,13 @@ possible with the following settings::
         'https://www.googleapis.com/auth/userinfo.profile'
     ]
 
+To ease the change, the old API and scopes is still supported by the
+application, the new values are the default option but if having troubles
+supporting them you can default to the old values by defining this setting::
+
+    SOCIAL_AUTH_GOOGLE_OAUTH2_USE_DEPRECATED_API = True
+    SOCIAL_AUTH_GOOGLE_PLUS_USE_DEPRECATED_API = True
+
 .. _Google support: http://www.google.com/support/a/bin/answer.py?hl=en&answer=162105
 .. _Orkut API:  http://code.google.com/apis/orkut/docs/rest/developers_guide_protocol.html#Authenticating
 .. _Google OpenID: http://code.google.com/apis/accounts/docs/OpenID.html

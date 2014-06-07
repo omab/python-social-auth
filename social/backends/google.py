@@ -19,18 +19,27 @@ class BaseGoogleAuth(object):
 
     def get_user_details(self, response):
         """Return user details from Google API account"""
-        if response.get('emails'):
-            email = response['emails'][0]['value']
-        elif response.get('email'):
+        if 'email' in response:
             email = response['email']
+        elif 'emails' in response:
+            email = response['emails'][0]['value']
         else:
             email = ''
-
-        names = response.get('name') or {}
+        if self.setting('USE_DEPRECATED_API', False):
+            name, given_name, family_name = (
+                response.get('name', ''),
+                response.get('given_name', ''),
+                response.get('family_name', '')
+            )
+        else:
+            names = response.get('name') or {}
+            name, given_name, family_name = (
+                response.get('displayName', ''),
+                names.get('givenName', ''),
+                names.get('familyName', '')
+            )
         fullname, first_name, last_name = self.get_user_names(
-            response.get('displayName', ''),
-            names.get('givenName', ''),
-            names.get('familyName', '')
+            name, given_name, family_name
         )
         return {'username': email.split('@', 1)[0],
                 'email': email,
@@ -40,12 +49,28 @@ class BaseGoogleAuth(object):
 
 
 class BaseGoogleOAuth2API(BaseGoogleAuth):
+    def get_scope(self):
+        """Return list with needed access scope"""
+        scope = self.setting('SCOPE', [])
+        if not self.setting('IGNORE_DEFAULT_SCOPE', False):
+            default_scope = []
+            if self.setting('USE_DEPRECATED_API', False):
+                default_scope = self.DEPRECATED_DEFAULT_SCOPE
+            else:
+                default_scope = self.DEFAULT_SCOPE
+            scope += default_scope or []
+        return scope
+
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Google API"""
-        return self.get_json(
-            'https://www.googleapis.com/plus/v1/people/me',
-            params={'access_token': access_token, 'alt': 'json'}
-        )
+        if self.setting('USE_DEPRECATED_API', False):
+            url = 'https://www.googleapis.com/oauth2/v1/userinfo'
+        else:
+            url = 'https://www.googleapis.com/plus/v1/people/me'
+        return self.get_json(url, params={
+            'access_token': access_token,
+            'alt': 'json'
+        })
 
 
 class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
@@ -58,6 +83,10 @@ class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
     REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
     REVOKE_TOKEN_METHOD = 'GET'
     DEFAULT_SCOPE = ['email', 'profile']
+    DEPRECATED_DEFAULT_SCOPE = [
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile'
+    ]
     EXTRA_DATA = [
         ('refresh_token', 'refresh_token', True),
         ('expires_in', 'expires'),
@@ -80,6 +109,11 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
     REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
     REVOKE_TOKEN_METHOD = 'GET'
     DEFAULT_SCOPE = ['plus.login', 'email']
+    DEPRECATED_DEFAULT_SCOPE = [
+        'https://www.googleapis.com/auth/plus.login',
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile'
+    ]
     EXTRA_DATA = [
         ('id', 'user_id'),
         ('refresh_token', 'refresh_token', True),
