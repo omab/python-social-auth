@@ -134,17 +134,23 @@ class BaseStrategy(object):
             } or None
         }
         clean_kwargs.update(kwargs)
+
         # Clean any MergeDict data type from the values
-        clean_kwargs.update((name, dict(value))
-                                for name, value in clean_kwargs.items()
-                                    if isinstance(value, dict))
+        kwargs = {}
+        for name, value in clean_kwargs.items():
+            # Check for class name to avoid importing Django MergeDict or
+            # Werkzeug MultiDict
+            if isinstance(value, dict) or \
+               value.__class__.__name__ in ('MergeDict', 'MultiDict'):
+                value = dict(value)
+            if isinstance(value, self.SERIALIZABLE_TYPES):
+                kwargs[name] = self.to_session_value(value)
+
         return {
             'next': next,
             'backend': backend.name,
             'args': tuple(map(self.to_session_value, args)),
-            'kwargs': dict((key, self.to_session_value(val))
-                                for key, val in clean_kwargs.items()
-                                   if isinstance(val, self.SERIALIZABLE_TYPES))
+            'kwargs': kwargs
         }
 
     def partial_from_session(self, session):
