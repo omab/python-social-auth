@@ -32,6 +32,8 @@ def disconnect(request, backend, association_id=None):
 
 
 def _do_login(backend, user, social_user):
+    user.backend = '{}.{}'.format(backend.__module__,
+                                  backend.__class__.__name__)
     login(backend.strategy.request, user)
     if backend.setting('SESSION_EXPIRATION', True):
         # Set session expiration date if present and not disabled
