@@ -93,7 +93,7 @@ class BaseAuth(object):
         pipeline = self.strategy.get_disconnect_pipeline()
         if 'pipeline_index' in kwargs:
             pipeline = pipeline[kwargs['pipeline_index']:]
-        kwargs['name'] = self.strategy.backend.name
+        kwargs['name'] = self.name
         kwargs['user_storage'] = self.strategy.storage.user
         return self.run_pipeline(pipeline, *args, **kwargs)
 
@@ -186,7 +186,7 @@ class BaseAuth(object):
 
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""
-        kwargs.update({'backend': self})
+        kwargs.update({'backend': self, 'strategy': self.strategy})
         return self.authenticate(*args, **kwargs)
 
     def request_token_extra_arguments(self):

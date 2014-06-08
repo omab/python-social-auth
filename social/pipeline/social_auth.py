@@ -42,7 +42,7 @@ def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
             # Protect for possible race condition, those bastard with FTL
             # clicking capabilities, check issue #131:
             #   https://github.com/omab/django-social-auth/issues/131
-            return social_user(backend.strategy, uid, user, *args, **kwargs)
+            return social_user(backend, uid, user, *args, **kwargs)
         else:
             return {'social': social,
                     'user': social.user,

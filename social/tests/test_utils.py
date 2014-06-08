@@ -124,26 +124,26 @@ class BuildAbsoluteURITest(unittest.TestCase):
 
 class PartialPipelineData(unittest.TestCase):
     def test_kwargs_included_in_result(self):
-        strategy = self._strategy()
+        backend = self._backend()
         kwargitem = ('foo', 'bar')
-        _, xkwargs = partial_pipeline_data(strategy, None,
+        _, xkwargs = partial_pipeline_data(backend, None,
                                            *(), **dict([kwargitem]))
         xkwargs.should.have.key(kwargitem[0]).being.equal(kwargitem[1])
 
     def test_update_user(self):
         user = object()
-        strategy = self._strategy(session_kwargs={'user': None})
-        _, xkwargs = partial_pipeline_data(strategy, user)
+        backend = self._backend(session_kwargs={'user': None})
+        _, xkwargs = partial_pipeline_data(backend, user)
         xkwargs.should.have.key('user').being.equal(user)
 
-    def _strategy(self, session_kwargs=None):
-        backend = Mock()
-        backend.name = 'mock-backend'
-
+    def _backend(self, session_kwargs=None):
         strategy = Mock()
         strategy.request = None
-        strategy.backend = backend
         strategy.session_get.return_value = object()
         strategy.partial_from_session.return_value = \
-            (0, backend.name, [], session_kwargs or {})
-        return strategy
+            (0, 'mock-backend', [], session_kwargs or {})
+
+        backend = Mock()
+        backend.name = 'mock-backend'
+        backend.strategy = strategy
+        return backend

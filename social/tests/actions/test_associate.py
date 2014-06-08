@@ -13,6 +13,7 @@ class AssociateActionTest(BaseActionTest):
     def setUp(self):
         super(AssociateActionTest, self).setUp()
         self.user = User(username='foobar', email='foo@bar.com')
+        self.backend.strategy.session_set('username', self.user.username)
 
     def test_associate(self):
         self.do_login()

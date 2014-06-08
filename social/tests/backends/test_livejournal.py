@@ -83,12 +83,14 @@ class LiveJournalOpenIdTest(OpenIdTest):
         )
 
     def test_login(self):
-        self.strategy.set_request_data({'openid_lj_user': 'foobar'})
+        self.strategy.set_request_data({'openid_lj_user': 'foobar'},
+                                       self.backend)
         self._setup_handlers()
         self.do_login()
 
     def test_partial_pipeline(self):
-        self.strategy.set_request_data({'openid_lj_user': 'foobar'})
+        self.strategy.set_request_data({'openid_lj_user': 'foobar'},
+                                       self.backend)
         self._setup_handlers()
         self.do_partial_pipeline()
 

@@ -57,8 +57,8 @@ class UnknownErrorStorage(IntegrityErrorStorage):
 
 class IntegrityErrorOnLoginTest(BaseActionTest):
     def setUp(self):
-        super(IntegrityErrorOnLoginTest, self).setUp()
         self.strategy = TestStrategy(IntegrityErrorStorage)
+        super(IntegrityErrorOnLoginTest, self).setUp()
 
     def test_integrity_error(self):
         self.do_login()
@@ -66,8 +66,8 @@ class IntegrityErrorOnLoginTest(BaseActionTest):
 
 class UnknownErrorOnLoginTest(BaseActionTest):
     def setUp(self):
-        super(UnknownErrorOnLoginTest, self).setUp()
         self.strategy = TestStrategy(UnknownErrorStorage)
+        super(UnknownErrorOnLoginTest, self).setUp()
 
     def test_unknown_error(self):
         self.do_login.when.called_with().should.throw(UnknownError)

@@ -66,13 +66,14 @@ class BaseOAuthTest(BaseBackendTest):
         return target_url
 
     def do_start(self):
-        start_url = self.strategy.start().url
+        start_url = self.backend.start().url
         target_url = self.auth_handlers(start_url)
         response = requests.get(start_url)
         expect(response.url).to.equal(target_url)
         expect(response.text).to.equal('foobar')
-        self.strategy.set_request_data(parse_qs(urlparse(target_url).query))
-        return self.strategy.complete()
+        self.strategy.set_request_data(parse_qs(urlparse(target_url).query),
+                                       self.backend)
+        return self.backend.complete()
 
 
 class OAuth1Test(BaseOAuthTest):

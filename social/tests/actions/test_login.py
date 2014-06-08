@@ -15,13 +15,13 @@ class LoginActionTest(BaseActionTest):
         self.strategy.set_settings({
             'SOCIAL_AUTH_FIELDS_STORED_IN_SESSION': ['foo', 'bar']
         })
-        self.strategy.set_request_data({'foo': '1', 'bar': '2'})
+        self.strategy.set_request_data({'foo': '1', 'bar': '2'}, self.backend)
         self.do_login()
         expect(self.strategy.session_get('foo')).to.equal('1')
         expect(self.strategy.session_get('bar')).to.equal('2')
 
     def test_redirect_value(self):
-        self.strategy.set_request_data({'next': '/after-login'})
+        self.strategy.set_request_data({'next': '/after-login'}, self.backend)
         redirect = self.do_login(after_complete_checks=False)
         expect(redirect.url).to.equal('/after-login')
 

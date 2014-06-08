@@ -25,7 +25,7 @@ class UserMixin(object):
     def get_backend(self, strategy=None):
         strategy = strategy or get_current_strategy()
         if strategy:
-            return get_backend(strategy.backends, self.provider)
+            return get_backend(strategy.get_backends(), self.provider)
 
     def get_backend_instance(self, strategy=None):
         strategy = strategy or get_current_strategy()

@@ -65,7 +65,7 @@ class BaseBackendTest(unittest.TestCase):
         expect(user.username).to.equal(username)
         expect(self.strategy.session_get('username')).to.equal(username)
         expect(self.strategy.get_user(user.id)).to.equal(user)
-        expect(self.strategy.backend.get_user(user.id)).to.equal(user)
+        expect(self.backend.get_user(user.id)).to.equal(user)
         user_backends = user_backends_data(
             user,
             self.strategy.get_setting('SOCIAL_AUTH_AUTHENTICATION_BACKENDS'),
@@ -136,8 +136,8 @@ class BaseBackendTest(unittest.TestCase):
         data = self.strategy.session_pop('partial_pipeline')
         idx, backend, xargs, xkwargs = self.strategy.partial_from_session(data)
         expect(backend).to.equal(self.backend.name)
-        redirect = self.strategy.continue_pipeline(pipeline_index=idx,
-                                                   *xargs, **xkwargs)
+        redirect = self.backend.continue_pipeline(pipeline_index=idx,
+                                                  *xargs, **xkwargs)
 
         url = self.strategy.build_absolute_uri('/slug')
         expect(redirect.url).to.equal(url)
@@ -147,8 +147,8 @@ class BaseBackendTest(unittest.TestCase):
         data = self.strategy.session_pop('partial_pipeline')
         idx, backend, xargs, xkwargs = self.strategy.partial_from_session(data)
         expect(backend).to.equal(self.backend.name)
-        user = self.strategy.continue_pipeline(pipeline_index=idx,
-                                               *xargs, **xkwargs)
+        user = self.backend.continue_pipeline(pipeline_index=idx,
+                                              *xargs, **xkwargs)
 
         expect(user.username).to.equal(self.expected_username)
         expect(user.slug).to.equal(slug)

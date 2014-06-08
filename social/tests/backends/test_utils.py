@@ -5,6 +5,7 @@ from social.tests.models import TestStorage
 from social.tests.strategy import TestStrategy
 from social.backends.utils import load_backends, get_backend
 from social.backends.github import GithubOAuth2
+from social.exceptions import MissingBackend
 
 
 class BaseBackendUtilsTest(unittest.TestCase):
@@ -41,9 +42,10 @@ class GetBackendTest(BaseBackendUtilsTest):
         expect(backend).to.equal(GithubOAuth2)
 
     def test_get_missing_backend(self):
-        backend = get_backend((
+        get_backend.when.called_with((
             'social.backends.github.GithubOAuth2',
             'social.backends.facebook.FacebookOAuth2',
             'social.backends.flickr.FlickrOAuth'
-        ), 'foobar')
-        expect(backend).to.equal(None)
+        ), 'foobar').should.throw(
+            MissingBackend, 'Missing backend "foobar" entry'
+        )

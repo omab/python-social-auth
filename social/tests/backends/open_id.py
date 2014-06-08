@@ -54,9 +54,8 @@ class OpenIdTest(BaseBackendTest):
     def setUp(self):
         HTTPretty.enable()
         Backend = module_member(self.backend_path)
-        name = self.backend.name
-        self.complete_url = self.raw_complete_url.format(name)
         self.strategy = TestStrategy(TestStorage)
+        self.complete_url = self.raw_complete_url.format(Backend.name)
         self.backend = Backend(self.strategy, redirect_uri=self.complete_url)
         self.strategy.set_settings({
             'SOCIAL_AUTH_AUTHENTICATION_BACKENDS': (
@@ -84,7 +83,7 @@ class OpenIdTest(BaseBackendTest):
         return parser.form, parser.inputs
 
     def openid_url(self):
-        return self.strategy.backend.openid_url()
+        return self.backend.openid_url()
 
     def post_start(self):
         pass
@@ -95,7 +94,7 @@ class OpenIdTest(BaseBackendTest):
                                status=200,
                                body=self.discovery_body,
                                content_type='application/xrds+xml')
-        start = self.strategy.start()
+        start = self.backend.start()
         self.post_start()
         form, inputs = self.get_form_data(start)
         HTTPretty.register_uri(HTTPretty.POST,
@@ -103,9 +102,10 @@ class OpenIdTest(BaseBackendTest):
                                status=200,
                                body=self.server_response)
         response = requests.post(form.get('action'), data=inputs)
-        self.strategy.set_request_data(parse_qs(response.content))
+        self.strategy.set_request_data(parse_qs(response.content),
+                                       self.backend)
         HTTPretty.register_uri(HTTPretty.POST,
                                form.get('action'),
                                status=200,
                                body='is_valid:true\n')
-        return self.strategy.complete()
+        return self.backend.complete()

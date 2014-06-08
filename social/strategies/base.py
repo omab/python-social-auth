@@ -197,6 +197,10 @@ class BaseStrategy(object):
         kwargs['backend'] = backend
         return backend.authenticate(*args, **kwargs)
 
+    def get_backends(self):
+        """Return configured backends"""
+        return self.setting('AUTHENTICATION_BACKENDS', [])
+
     # Implement the following methods on strategies sub-classes
 
     def redirect(self, url):

@@ -90,16 +90,15 @@ def do_complete(backend, login, user=None, redirect_name='next',
 
 def do_disconnect(backend, user, association_id=None, redirect_name='next',
                   *args, **kwargs):
-    partial = partial_pipeline_data(backend.strategy, user, *args, **kwargs)
+    partial = partial_pipeline_data(backend, user, *args, **kwargs)
     if partial:
         xargs, xkwargs = partial
         if association_id and not xkwargs.get('association_id'):
             xkwargs['association_id'] = association_id
-        response = backend.strategy.disconnect(*xargs, **xkwargs)
+        response = backend.disconnect(*xargs, **xkwargs)
     else:
-        response = backend.strategy.disconnect(user=user,
-                                       association_id=association_id,
-                                       *args, **kwargs)
+        response = backend.disconnect(user=user, association_id=association_id,
+                                      *args, **kwargs)
 
     if isinstance(response, dict):
         response = backend.strategy.redirect(

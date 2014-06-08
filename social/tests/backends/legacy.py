@@ -25,7 +25,7 @@ class BaseLegacyTest(BaseBackendTest):
                     '/login/{0}'.format(self.backend.name)}
 
     def do_start(self):
-        start_url = self.strategy.build_absolute_uri(self.strategy.start().url)
+        start_url = self.strategy.build_absolute_uri(self.backend.start().url)
         HTTPretty.register_uri(
             HTTPretty.GET,
             start_url,
@@ -45,5 +45,5 @@ class BaseLegacyTest(BaseBackendTest):
             self.complete_url,
             data=parse_qs(self.response_body)
         )
-        self.strategy.set_request_data(parse_qs(response.text))
-        return self.strategy.complete()
+        self.strategy.set_request_data(parse_qs(response.text), self.backend)
+        return self.backend.complete()

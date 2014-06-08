@@ -72,8 +72,9 @@ class TestStrategy(BaseStrategy):
     def set_settings(self, values):
         self._settings.update(values)
 
-    def set_request_data(self, values):
+    def set_request_data(self, values, backend):
         self._request_data.update(values)
+        backend.data = self._request_data
 
     def remove_from_request_data(self, name):
         self._request_data.pop(name, None)
