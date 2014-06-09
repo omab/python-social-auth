@@ -1,5 +1,5 @@
 """
-Docker.io OAuth2 backend, docs at:
+Docker Hub OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/docker.html
 """
 from social.backends.oauth import BaseOAuth2
@@ -8,9 +8,9 @@ from social.backends.oauth import BaseOAuth2
 class DockerOAuth2(BaseOAuth2):
     name = 'docker'
     ID_KEY = 'user_id'
-    AUTHORIZATION_URL = 'https://www.docker.io/api/v1.1/o/authorize/'
-    ACCESS_TOKEN_URL = 'https://www.docker.io/api/v1.1/o/token/'
-    REFRESH_TOKEN_URL = 'https://www.docker.io/api/v1.1/o/token/'
+    AUTHORIZATION_URL = 'https://hub.docker.com/api/v1.1/o/authorize/'
+    ACCESS_TOKEN_URL = 'https://hub.docker.com/api/v1.1/o/token/'
+    REFRESH_TOKEN_URL = 'https://hub.docker.com/api/v1.1/o/token/'
     ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
     EXTRA_DATA = [
@@ -25,7 +25,7 @@ class DockerOAuth2(BaseOAuth2):
     ]
 
     def get_user_details(self, response):
-        """Return user details from Docker.io account"""
+        """Return user details from Docker Hub account"""
         fullname, first_name, last_name = self.get_user_names(
             response.get('full_name') or response.get('username') or ''
         )
@@ -38,9 +38,9 @@ class DockerOAuth2(BaseOAuth2):
         }
 
     def user_data(self, access_token, *args, **kwargs):
-        """Grab user profile information from Docker.io."""
+        """Grab user profile information from Docker Hub."""
         username = kwargs['response']['username']
         return self.get_json(
-            'https://www.docker.io/api/v1.1/users/%s/' % username,
+            'https://hub.docker.com/api/v1.1/users/%s/' % username,
             headers={'Authorization': 'Bearer %s' % access_token}
         )
