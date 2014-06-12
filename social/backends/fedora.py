@@ -8,3 +8,4 @@ from social.backends.open_id import OpenIdAuth
 class FedoraOpenId(OpenIdAuth):
     name = 'fedora'
     URL = 'https://id.fedoraproject.org'
+    USERNAME_KEY = 'nickname'

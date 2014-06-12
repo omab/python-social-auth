@@ -33,6 +33,10 @@ class BaseStrategy(object):
     ALLOWED_CHARS = 'abcdefghijklmnopqrstuvwxyz' \
                     'ABCDEFGHIJKLMNOPQRSTUVWXYZ' \
                     '0123456789'
+    # well-known serializable types
+    SERIALIZABLE_TYPES = (dict, list, tuple, set, bool, type(None)) + \
+                         six.integer_types + six.string_types + \
+                         (six.text_type, six.binary_type,)
 
     def __init__(self, backend=None, storage=None, request=None,
                  tpl=BaseTemplateStrategy, backends=None, *args, **kwargs):
@@ -129,11 +133,7 @@ class BaseStrategy(object):
                 'uid': social.uid
             } or None
         }
-        # Only allow well-known serializable types
-        types = (dict, list, tuple, set) + six.integer_types + \
-                six.string_types + (six.text_type,) + (six.binary_type,)
-        clean_kwargs.update((name, value) for name, value in kwargs.items()
-                                if isinstance(value, types))
+        clean_kwargs.update(kwargs)
         # Clean any MergeDict data type from the values
         clean_kwargs.update((name, dict(value))
                                 for name, value in clean_kwargs.items()
@@ -143,7 +143,8 @@ class BaseStrategy(object):
             'backend': backend.name,
             'args': tuple(map(self.to_session_value, args)),
             'kwargs': dict((key, self.to_session_value(val))
-                                for key, val in clean_kwargs.items())
+                                for key, val in clean_kwargs.items()
+                                   if isinstance(val, self.SERIALIZABLE_TYPES))
         }
 
     def partial_from_session(self, session):

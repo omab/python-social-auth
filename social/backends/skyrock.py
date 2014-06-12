@@ -16,11 +16,15 @@ class SkyrockOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Skyrock account"""
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=response['firstname'],
+            last_name=response['name']
+        )
         return {'username': response['username'],
                 'email': response['email'],
-                'fullname': response['firstname'] + ' ' + response['name'],
-                'first_name': response['firstname'],
-                'last_name': response['name']}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token):
         """Return user data provided"""

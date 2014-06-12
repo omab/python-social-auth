@@ -7,7 +7,7 @@ from social.tests.backends.oauth import OAuth1Test
 
 class YahooOAuth1Test(OAuth1Test):
     backend_path = 'social.backends.yahoo.YahooOAuth'
-    user_data_url = 'http://social.yahooapis.com/v1/user/a-guid/profile?' \
+    user_data_url = 'https://social.yahooapis.com/v1/user/a-guid/profile?' \
                     'format=json'
     expected_username = 'foobar'
     access_token_body = json.dumps({
@@ -21,7 +21,7 @@ class YahooOAuth1Test(OAuth1Test):
     })
     guid_body = json.dumps({
         'guid': {
-            'uri': 'http://social.yahooapis.com/v1/me/guid',
+            'uri': 'https://social.yahooapis.com/v1/me/guid',
             'value': 'a-guid'
         }
     })
@@ -37,7 +37,7 @@ class YahooOAuth1Test(OAuth1Test):
                 'height': 192
             },
             'created': '2013-03-18T04:15:08Z',
-            'uri': 'http://social.yahooapis.com/v1/user/a-guid/profile',
+            'uri': 'https://social.yahooapis.com/v1/user/a-guid/profile',
             'isConnected': False,
             'profileUrl': 'http://profile.yahoo.com/a-guid',
             'guid': 'a-guid',
@@ -48,7 +48,7 @@ class YahooOAuth1Test(OAuth1Test):
     def test_login(self):
         HTTPretty.register_uri(
             HTTPretty.GET,
-            'http://social.yahooapis.com/v1/me/guid?format=json',
+            'https://social.yahooapis.com/v1/me/guid?format=json',
             status=200,
             body=self.guid_body
         )

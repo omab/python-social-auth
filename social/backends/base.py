@@ -150,6 +150,20 @@ class BaseAuth(object):
         """
         raise NotImplementedError('Implement in subclass')
 
+    def get_user_names(self, fullname='', first_name='', last_name=''):
+        # Avoid None values
+        fullname = fullname or ''
+        first_name = first_name or ''
+        last_name = last_name or ''
+        if fullname and not (first_name or last_name):
+            try:
+                first_name, last_name = fullname.split(' ', 1)
+            except ValueError:
+                first_name = first_name or fullname or ''
+                last_name = last_name or ''
+        fullname = fullname or ' '.join((first_name, last_name))
+        return fullname.strip(), first_name.strip(), last_name.strip()
+
     def get_user(self, user_id):
         """
         Return user with given ID from the User model used by this backend.
@@ -171,7 +185,7 @@ class BaseAuth(object):
     def auth_extra_arguments(self):
         """Return extra arguments needed on auth process. The defaults can be
         overriden by GET parameters."""
-        extra_arguments = self.setting('AUTH_EXTRA_ARGUMENTS', {})
+        extra_arguments = self.setting('AUTH_EXTRA_ARGUMENTS', {}).copy()
         extra_arguments.update((key, self.data[key]) for key in extra_arguments
                                     if key in self.data)
         return extra_arguments

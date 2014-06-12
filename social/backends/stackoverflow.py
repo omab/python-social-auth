@@ -20,8 +20,13 @@ class StackoverflowOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Stackoverflow account"""
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('display_name')
+        )
         return {'username': response.get('link').rsplit('/', 1)[-1],
-                'full_name': response.get('display_name')}
+                'full_name': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""

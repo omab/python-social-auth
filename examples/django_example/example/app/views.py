@@ -1,10 +1,15 @@
+import json
+
 from django.conf import settings
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import logout as auth_logout, login
 
+from social.backends.oauth import BaseOAuth1, BaseOAuth2
 from social.backends.google import GooglePlusAuth
+from social.apps.django_app.utils import strategy
 
 
 def logout(request):
@@ -49,3 +54,21 @@ def require_email(request):
         backend = request.session['partial_pipeline']['backend']
         return redirect('social:complete', backend=backend)
     return render_to_response('email.html', RequestContext(request))
+
+
+@strategy('social:complete')
+def ajax_auth(request, backend):
+    backend = request.strategy.backend
+    if isinstance(backend, BaseOAuth1):
+        token = {
+            'oauth_token': request.REQUEST.get('access_token'),
+            'oauth_token_secret': request.REQUEST.get('access_token_secret'),
+        }
+    elif isinstance(backend, BaseOAuth2):
+        token = request.REQUEST.get('access_token')
+    else:
+        raise HttpResponseBadRequest('Wrong backend type')
+    user = request.strategy.backend.do_auth(token, ajax=True)
+    login(request, user)
+    data = {'id': user.id, 'username': user.username}
+    return HttpResponse(json.dumps(data), mimetype='application/json')

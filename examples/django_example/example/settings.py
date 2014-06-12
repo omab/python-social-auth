@@ -123,6 +123,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.angel.AngelOAuth2',
     'social.backends.aol.AOLOpenId',
     'social.backends.appsfuel.AppsfuelOAuth2',
+    'social.backends.beats.BeatsOAuth2',
     'social.backends.behance.BehanceOAuth2',
     'social.backends.belgiumeid.BelgiumEIDOpenId',
     'social.backends.bitbucket.BitbucketOAuth',
@@ -168,6 +169,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.runkeeper.RunKeeperOAuth2',
     'social.backends.skyrock.SkyrockOAuth',
     'social.backends.soundcloud.SoundcloudOAuth2',
+    'social.backends.spotify.SpotifyOAuth2',
     'social.backends.stackoverflow.StackoverflowOAuth2',
     'social.backends.steam.SteamOpenId',
     'social.backends.stocktwits.StocktwitsOAuth2',
@@ -187,10 +189,13 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.yammer.YammerOAuth2',
     'social.backends.yandex.YandexOAuth2',
     'social.backends.vimeo.VimeoOAuth1',
+    'social.backends.lastfm.LastFmAuth',
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+AUTH_USER_MODEL = 'app.CustomUser'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/done/'
@@ -221,6 +226,9 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details'
 )
+
+# SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['first_name', 'last_name', 'email',
+#                                         'username']
 
 try:
     from example.local_settings import *

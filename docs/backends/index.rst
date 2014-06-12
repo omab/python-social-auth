@@ -50,6 +50,7 @@ Social backends
    angel
    aol
    appsfuel
+   beats
    behance
    belgium_eid
    bitbucket
@@ -58,6 +59,7 @@ Social backends
    coinbase
    dailymotion
    disqus
+   docker
    douban
    dropbox
    evernote
@@ -70,10 +72,14 @@ Social backends
    google
    instagram
    jawbone
+   kakao
+   lastfm
    linkedin
    livejournal
    live
+   loginradius
    mailru
+   mapmyfitness
    mendeley
    mixcloud
    odnoklassnikiru
@@ -89,10 +95,12 @@ Social backends
    shopify
    skyrock
    soundcloud
+   spotify
    suse
    stackoverflow
    steam
    stocktwits
+   strava
    stripe
    taobao
    thisismyjam
@@ -100,6 +108,7 @@ Social backends
    tripit
    tumblr
    twilio
+   twitch
    twitter
    vimeo
    vk

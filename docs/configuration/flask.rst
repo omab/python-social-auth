@@ -8,17 +8,23 @@ details on how to enable this application on Flask.
 Dependencies
 ------------
 
-The `Flask built-in app` depends on sqlalchemy_, there's no support for others
-ORMs yet but pull-requests are welcome.
+The `Flask built-in app` depends on sqlalchemy_, there's initial support for
+MongoEngine_ ORM too (check below for more details).
 
 
 Enabling the application
 ------------------------
 
-The application defines a `Flask Blueprint`_, which needs to be registered once
+The applications define a `Flask Blueprint`_, which needs to be registered once
 the Flask app is configured::
 
     from social.apps.flask_app.routes import social_auth
+
+    app.register_blueprint(social_auth)
+
+For MongoEngine_ version::
+
+    from social.apps.flask_me_app.routes import social_auth
 
     app.register_blueprint(social_auth)
 
@@ -32,6 +38,12 @@ used on your project (check *User model reference* below). Once the Flask app
 and the database are defined, call ``init_social`` to register the models::
 
     from social.apps.flask_app.models import init_social
+
+    init_social(app, db)
+
+For MongoEngine_::
+
+    from social.apps.flask_me_app.models import init_social
 
     init_social(app, db)
 
@@ -121,3 +133,4 @@ handlers won't be called.
 .. _sqlalchemy: http://www.sqlalchemy.org/
 .. _exceptions: https://github.com/omab/python-social-auth/blob/master/social/exceptions.py
 .. _errorhandler: http://flask.pocoo.org/docs/api/#flask.Flask.errorhandler
+.. _MongoEngine: http://mongoengine.org

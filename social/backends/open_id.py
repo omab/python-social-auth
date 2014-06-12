@@ -36,10 +36,20 @@ class OpenIdAuth(BaseAuth):
     """Generic OpenID authentication backend"""
     name = 'openid'
     URL = None
+    USERNAME_KEY = 'username'
 
     def get_user_id(self, details, response):
         """Return user unique id provided by service"""
         return response.identity_url
+
+    def get_ax_attributes(self):
+        attrs = self.setting('AX_SCHEMA_ATTRS', [])
+        if attrs and self.setting('IGNORE_DEFAULT_AX_ATTRS', True):
+            return attrs
+        return attrs + AX_SCHEMA_ATTRS + OLD_AX_ATTRS
+
+    def get_sreg_attributes(self):
+        return self.setting('SREG_ATTR') or SREG_ATTR
 
     def values_from_response(self, response, sreg_names=None, ax_names=None):
         """Return values from SimpleRegistration response or
@@ -72,10 +82,9 @@ class OpenIdAuth(BaseAuth):
                   'first_name': '', 'last_name': ''}
         # update values using SimpleRegistration or AttributeExchange
         # values
-        values.update(self.values_from_response(response,
-                                                SREG_ATTR,
-                                                OLD_AX_ATTRS +
-                                                AX_SCHEMA_ATTRS))
+        values.update(self.values_from_response(
+            response, self.get_sreg_attributes(), self.get_ax_attributes()
+        ))
 
         fullname = values.get('fullname') or ''
         first_name = values.get('first_name') or ''
@@ -89,9 +98,10 @@ class OpenIdAuth(BaseAuth):
             except ValueError:
                 last_name = fullname
 
+        username_key = self.setting('USERNAME_KEY') or self.USERNAME_KEY
         values.update({'fullname': fullname, 'first_name': first_name,
                        'last_name': last_name,
-                       'username': values.get('username') or
+                       'username': values.get(username_key) or
                                    (first_name.title() + last_name.title())})
         return values
 
@@ -172,12 +182,12 @@ class OpenIdAuth(BaseAuth):
         if request.endpoint.supportsType(ax.AXMessage.ns_uri):
             fetch_request = ax.FetchRequest()
             # Mark all attributes as required, Google ignores optional ones
-            for attr, alias in (AX_SCHEMA_ATTRS + OLD_AX_ATTRS):
+            for attr, alias in self.get_ax_attributes():
                 fetch_request.add(ax.AttrInfo(attr, alias=alias,
                                               required=True))
         else:
             fetch_request = sreg.SRegRequest(
-                optional=list(dict(SREG_ATTR).keys())
+                optional=list(dict(self.get_sreg_attributes()).keys())
             )
         request.addExtension(fetch_request)
 

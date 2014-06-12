@@ -22,9 +22,14 @@ class TrelloOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Trello account"""
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('fullName')
+        )
         return {'username': response.get('username'),
                 'email': response.get('email'),
-                'fullName': response.get('fullName')}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token):
         """Return user data provided"""

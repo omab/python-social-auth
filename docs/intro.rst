@@ -35,6 +35,7 @@ Several supported service by simple backends definition (easy to add new ones
 or extend current one):
 
     * Angel_ OAuth2
+    * Beats_ OAuth2
     * Behance_ OAuth2
     * Bitbucket_ OAuth1
     * Box_ OAuth2
@@ -51,6 +52,7 @@ or extend current one):
     * Github_ OAuth2
     * Google_ OAuth1, OAuth2 and OpenId
     * Instagram_ OAuth2
+    * Kakao_ OAuth2
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
@@ -66,6 +68,7 @@ or extend current one):
     * Shopify_ OAuth2
     * Skyrock_ OAuth1
     * Soundcloud_ OAuth2
+    * Spotify_ OAuth2
     * ThisIsMyJam_ OAuth1
     * Stackoverflow_ OAuth2
     * Steam_ OpenId
@@ -74,6 +77,7 @@ or extend current one):
     * Tripit_ OAuth1
     * Tumblr_ OAuth1
     * Twilio_ Auth
+    * Twitch_ OAuth2
     * Twitter_ OAuth1
     * Vimeo_ OAuth1
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
@@ -109,6 +113,7 @@ section.
 .. _OAuth: http://oauth.net/
 .. _myOpenID: https://www.myopenid.com/
 .. _Angel: https://angel.co
+.. _Beats: https://www.beats.com
 .. _Behance: https://www.behance.net
 .. _Bitbucket: https://bitbucket.org
 .. _Box: https://www.box.com
@@ -125,6 +130,7 @@ section.
 .. _Github: https://github.com
 .. _Google: http://google.com
 .. _Instagram: https://instagram.com
+.. _Kakao: https://kakao.com
 .. _Linkedin: https://www.linkedin.com
 .. _Live: https://www.live.com
 .. _Livejournal: http://livejournal.com
@@ -137,11 +143,13 @@ section.
 .. _Shopify: http://shopify.com
 .. _Skyrock: https://skyrock.com
 .. _Soundcloud: https://soundcloud.com
+.. _Spotify: https://www.spotify.com
 .. _ThisIsMyJam: https://thisismyjam.com
 .. _Stocktwits: https://stocktwits.com
 .. _Stripe: https://stripe.com
 .. _Tripit: https://www.tripit.com
 .. _Twilio: https://www.twilio.com
+.. _Twitch: http://www.twitch.tv/
 .. _Twitter: http://twitter.com
 .. _VK.com: http://vk.com
 .. _Weibo: http://weibo.com

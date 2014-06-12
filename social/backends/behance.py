@@ -21,10 +21,13 @@ class BehanceOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from Behance account"""
         user = response['user']
+        fullname, first_name, last_name = self.get_user_names(
+            user['display_name'], user['first_name'], user['last_name']
+        )
         return {'username': user['username'],
-                'last_name': user['last_name'],
-                'first_name': user['first_name'],
-                'fullname': user['display_name'],
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name,
                 'email': ''}
 
     def extra_data(self, user, uid, response, details):

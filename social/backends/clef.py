@@ -26,11 +26,16 @@ class ClefOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from Github account"""
         info = response.get('info')
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=info.get('first_name'),
+            last_name=info.get('last_name')
+        )
         return {
             'username': response.get('clef_id'),
             'email': info.get('email', ''),
-            'first_name': info.get('first_name'),
-            'last_name': info.get('last_name'),
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name,
             'phone_number': info.get('phone_number', '')
         }
 

@@ -4,7 +4,7 @@ Configuration
 Application setup
 -----------------
 
-Once the application was installed (check Installation_) define the following
+Once the application is installed (check Installation_) define the following
 settings to enable the application behavior. Also check the sections dedicated
 to each framework for detailed instructions.
 
@@ -97,7 +97,7 @@ User model
 ----------
 
 ``UserSocialAuth`` instances keep a reference to the ``User`` model of your
-project, since this is not know, the ``User`` model must be configured by
+project, since this is not known, the ``User`` model must be configured by
 a setting::
 
     SOCIAL_AUTH_USER_MODEL = 'foo.bar.User'
@@ -142,10 +142,6 @@ defaults to generating one if needed.
 An UUID is appended to usernames in case of collisions. Here are some settings
 to control usernames generation.
 
-``SOCIAL_AUTH_DEFAULT_USERNAME = 'foobar'``
-    Default value to use as username, can be a callable. An UUID will be
-    appended in case of duplicate entries.
-    
 ``SOCIAL_AUTH_UUID_LENGTH = 16``
     This controls the length of the UUID appended to usernames.
 
@@ -185,6 +181,24 @@ Also, you can send extra parameters on request token process by defining
 settings in the same way explained above but with this other suffix::
 
       <uppercase backend name>_REQUEST_TOKEN_EXTRA_ARGUMENTS = {...}
+
+Basic information is requested to the different providers in order to create
+a coherent user instance (with first and last name, email and full name), this
+could be too intrusive for some sites that want to ask users the minimum data
+possible. It's possible to override the default values requested by defining
+any of the following settings, for Open Id providers::
+
+    SOCIAL_AUTH_<BACKEND_NAME>_IGNORE_DEFAULT_AX_ATTRS = True
+    SOCIAL_AUTH_<BACKEND_NAME>_AX_SCHEMA_ATTRS = [
+        (schema, alias)
+    ]
+
+For OAuth backends::
+
+    SOCIAL_AUTH_<BACKEND_NAME>_IGNORE_DEFAULT_SCOPE = True
+    SOCIAL_AUTH_<BACKEND_NAME>_SCOPE = [
+        ...
+    ]
 
 
 Processing redirects and urlopen

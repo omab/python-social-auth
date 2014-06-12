@@ -53,7 +53,7 @@ def get_username(strategy, details, user=None, *args, **kwargs):
     return {'username': final_username}
 
 
-def create_user(strategy, details, response, uid, user=None, *args, **kwargs):
+def create_user(strategy, details, user=None, *args, **kwargs):
     if user:
         return {'is_new': False}
 
@@ -69,7 +69,7 @@ def create_user(strategy, details, response, uid, user=None, *args, **kwargs):
     }
 
 
-def user_details(strategy, details, response, user=None, *args, **kwargs):
+def user_details(strategy, details, user=None, *args, **kwargs):
     """Update user details using data from provider."""
     if user:
         changed = False  # flag to track changes

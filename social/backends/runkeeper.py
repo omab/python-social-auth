@@ -26,9 +26,14 @@ class RunKeeperOAuth2(BaseOAuth2):
             profile_url_parts = profile_url.split('http://runkeeper.com/user/')
             if len(profile_url_parts) > 1 and len(profile_url_parts[1]):
                 username = profile_url_parts[1]
+        fullname, first_name, last_name = self.get_user_names(
+            fullname=response.get('name')
+        )
         return {'username': username,
                 'email': response.get('email') or '',
-                'first_name': response.get('name')}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token, *args, **kwargs):
         # We need to use the /user endpoint to get the user id, the /profile

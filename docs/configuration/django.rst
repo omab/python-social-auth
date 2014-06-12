@@ -164,6 +164,30 @@ The redirect destination will get two ``GET`` parameters:
     Backend name that was used, if it was a valid backend.
 
 
+Django Admin
+------------
+
+The default application (not the MongoEngine_ one) contains an ``admin.py``
+module that will be auto-discovered by the usual mechanism.
+
+But, by the nature of the application which depends on the existence of a user
+model, it's easy to fall in a recursive import ordering making the application
+fail to load. This happens because the admin module will build a set of fields
+to populate the ``search_fields`` property to search for related users in the
+administration UI, but this requires the user model to be retrieved which might
+not be defined at that time.
+
+To avoid this issue define the following setting to circumvent the import
+error::
+
+    SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['field1', 'field2']
+
+For example::
+
+    SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
+
+The fields listed **must** be user models fields.
+
 .. _MongoEngine: http://mongoengine.org
 .. _MongoEngine Django integration: http://mongoengine-odm.readthedocs.org/en/latest/django.html
 .. _django-social-auth: https://github.com/omab/django-social-auth

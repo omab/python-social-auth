@@ -15,12 +15,16 @@ class ThisIsMyJamOAuth1(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from ThisIsMyJam account"""
+        info = response.get('person')
+        fullname, first_name, last_name = self.get_user_names(
+            info.get('fullname')
+        )
         return {
-            'username': response.get('person').get('name'),
-            'fullname': response.get('person').get('fullname'),
+            'username': info.get('name'),
             'email': '',
-            'first_name': '',
-            'last_name': ''
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name
         }
 
     def user_data(self, access_token, *args, **kwargs):
