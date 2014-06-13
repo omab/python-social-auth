@@ -88,6 +88,7 @@ Social backends
    pixelpin
    pocket
    podio
+   qq
    rdio
    readability
    reddit
