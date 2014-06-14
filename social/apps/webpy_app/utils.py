@@ -38,7 +38,7 @@ def psa(redirect_uri=None):
                 uri = uri % {'backend': backend}
             self.strategy = load_strategy()
             self.backend = load_backend(self.strategy, backend, uri)
-            return func(self, backend=backend, *args, **kwargs)
+            return func(self, backend, *args, **kwargs)
         return wrapper
     return decorator
 

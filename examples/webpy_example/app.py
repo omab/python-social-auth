@@ -74,7 +74,6 @@ class main(object):
 
 
 class done(social_app.BaseViewClass):
-    @psa()
     def GET(self):
         user = self.get_current_user()
         return render.done(user=user, backends=backends(user))

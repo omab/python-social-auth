@@ -5,9 +5,20 @@ import json
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.types import PickleType, Text
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.schema import UniqueConstraint
 
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
                                 CodeMixin, BaseStorage
+
+
+# JSON type field
+class JSONType(PickleType):
+    impl = Text
+
+    def __init__(self, *args, **kwargs):
+        kwargs['pickler'] = json
+        super(JSONType, self).__init__(*args, **kwargs)
 
 
 class SQLAlchemyMixin(object):
@@ -38,6 +49,15 @@ class SQLAlchemyMixin(object):
 
 class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
     """Social Auth association model"""
+    __tablename__ = 'social_auth_usersocialauth'
+    __table_args__ = (UniqueConstraint('provider', 'uid'),)
+    id = Column(Integer, primary_key=True)
+    provider = Column(String(32))
+    extra_data = Column(JSONType)
+    uid = None
+    user_id = None
+    user = None
+
     @classmethod
     def changed(cls, user):
         cls._save_instance(user)
@@ -120,6 +140,13 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
 
 
 class SQLAlchemyNonceMixin(SQLAlchemyMixin, NonceMixin):
+    __tablename__ = 'social_auth_nonce'
+    __table_args__ = (UniqueConstraint('server_url', 'timestamp', 'salt'),)
+    id = Column(Integer, primary_key=True)
+    server_url = Column(String(255))
+    timestamp = Column(Integer)
+    salt = Column(String(40))
+
     @classmethod
     def use(cls, server_url, timestamp, salt):
         kwargs = {'server_url': server_url, 'timestamp': timestamp,
@@ -131,6 +158,16 @@ class SQLAlchemyNonceMixin(SQLAlchemyMixin, NonceMixin):
 
 
 class SQLAlchemyAssociationMixin(SQLAlchemyMixin, AssociationMixin):
+    __tablename__ = 'social_auth_association'
+    __table_args__ = (UniqueConstraint('server_url', 'handle'),)
+    id = Column(Integer, primary_key=True)
+    server_url = Column(String(255))
+    handle = Column(String(255))
+    secret = Column(String(255))  # base64 encoded
+    issued = Column(Integer)
+    lifetime = Column(Integer)
+    assoc_type = Column(String(64))
+
     @classmethod
     def store(cls, server_url, association):
         # Don't use get_or_create because issued cannot be null
@@ -158,6 +195,12 @@ class SQLAlchemyAssociationMixin(SQLAlchemyMixin, AssociationMixin):
 
 
 class SQLAlchemyCodeMixin(SQLAlchemyMixin, CodeMixin):
+    __tablename__ = 'social_auth_code'
+    __table_args__ = (UniqueConstraint('code', 'email'),)
+    id = Column(Integer, primary_key=True)
+    email = Column(String(200))
+    code = Column(String(32), index=True)
+
     @classmethod
     def get_code(cls, code):
         return cls._query().filter(cls.code == code).first()
@@ -172,12 +215,3 @@ class BaseSQLAlchemyStorage(BaseStorage):
     @classmethod
     def is_integrity_error(cls, exception):
         return exception.__class__ is IntegrityError
-
-
-# JSON type field
-class JSONType(PickleType):
-    impl = Text
-
-    def __init__(self, *args, **kwargs):
-        kwargs['pickler'] = json
-        super(JSONType, self).__init__(*args, **kwargs)

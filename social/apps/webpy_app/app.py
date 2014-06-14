@@ -1,7 +1,7 @@
 import web
 
 from social.actions import do_auth, do_complete, do_disconnect
-from social.apps.webpy_app.utils import psa
+from social.apps.webpy_app.utils import psa, load_strategy
 
 
 urls = (
@@ -16,13 +16,14 @@ class BaseViewClass(object):
     def __init__(self, *args, **kwargs):
         self.session = web.web_session
         method = web.ctx.method == 'POST' and 'post' or 'get'
+        self.strategy = load_strategy()
         self.data = web.input(_method=method)
         super(BaseViewClass, self).__init__(*args, **kwargs)
 
     def get_current_user(self):
         if not hasattr(self, '_user'):
             if self.session.get('logged_in'):
-                self._user = self.backend.strategy.get_user(
+                self._user = self.strategy.get_user(
                     self.session.get('user_id')
                 )
             else:

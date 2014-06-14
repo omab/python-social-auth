@@ -3,7 +3,6 @@ import cherrypy
 
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
 
 from social.utils import setting_name, module_member
@@ -11,7 +10,6 @@ from social.storage.sqlalchemy_orm import SQLAlchemyUserMixin, \
                                           SQLAlchemyAssociationMixin, \
                                           SQLAlchemyNonceMixin, \
                                           BaseSQLAlchemyStorage
-from social.apps.flask_app.fields import JSONType
 
 
 SocialBase = declarative_base()
@@ -29,12 +27,7 @@ class CherryPySocialBase(object):
 
 class UserSocialAuth(CherryPySocialBase, SQLAlchemyUserMixin, SocialBase):
     """Social Auth association model"""
-    __tablename__ = 'social_auth_usersocialauth'
-    __table_args__ = (UniqueConstraint('provider', 'uid'),)
-    id = Column(Integer, primary_key=True)
-    provider = Column(String(32))
     uid = Column(String(UID_LENGTH))
-    extra_data = Column(JSONType)
     user_id = Column(Integer, ForeignKey(User.id),
                      nullable=False, index=True)
     user = relationship(User, backref='social_auth')
@@ -50,25 +43,12 @@ class UserSocialAuth(CherryPySocialBase, SQLAlchemyUserMixin, SocialBase):
 
 class Nonce(CherryPySocialBase, SQLAlchemyNonceMixin, SocialBase):
     """One use numbers"""
-    __tablename__ = 'social_auth_nonce'
-    __table_args__ = (UniqueConstraint('server_url', 'timestamp', 'salt'),)
-    id = Column(Integer, primary_key=True)
-    server_url = Column(String(255))
-    timestamp = Column(Integer)
-    salt = Column(String(40))
+    pass
 
 
 class Association(CherryPySocialBase, SQLAlchemyAssociationMixin, SocialBase):
     """OpenId account association"""
-    __tablename__ = 'social_auth_association'
-    __table_args__ = (UniqueConstraint('server_url', 'handle'),)
-    id = Column(Integer, primary_key=True)
-    server_url = Column(String(255))
-    handle = Column(String(255))
-    secret = Column(String(255))  # base64 encoded
-    issued = Column(Integer)
-    lifetime = Column(Integer)
-    assoc_type = Column(String(64))
+    pass
 
 
 class CherryPyStorage(BaseSQLAlchemyStorage):

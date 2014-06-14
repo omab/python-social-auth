@@ -27,7 +27,7 @@ class WebpyStrategy(BaseStrategy):
         return data
 
     def request_host(self):
-        return self.request.host
+        return web.ctx.host
 
     def redirect(self, url):
         return web.seeother(url)
