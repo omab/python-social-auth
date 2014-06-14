@@ -33,12 +33,14 @@ class MapMyFitnessOAuth2Test(OAuth2Test):
         '_links': {
             'stats': [
                 {
-                    'href': '/v7.0/user_stats/112233/?aggregate_by_period=month',
+                    'href': '/v7.0/user_stats/112233/?'
+                            'aggregate_by_period=month',
                     'id': '112233',
                     'name': 'month'
                 },
                 {
-                    'href': '/v7.0/user_stats/112233/?aggregate_by_period=year',
+                    'href': '/v7.0/user_stats/112233/?'
+                            'aggregate_by_period=year',
                     'id': '112233',
                     'name': 'year'
                 },
@@ -48,12 +50,14 @@ class MapMyFitnessOAuth2Test(OAuth2Test):
                     'name': 'day'
                 },
                 {
-                    'href': '/v7.0/user_stats/112233/?aggregate_by_period=week',
+                    'href': '/v7.0/user_stats/112233/?'
+                            'aggregate_by_period=week',
                     'id': '112233',
                     'name': 'week'
                 },
                 {
-                    'href': '/v7.0/user_stats/112233/?aggregate_by_period=lifetime',
+                    'href': '/v7.0/user_stats/112233/?'
+                            'aggregate_by_period=lifetime',
                     'id': '112233',
                     'name': 'lifetime'
                 }
@@ -109,7 +113,8 @@ class MapMyFitnessOAuth2Test(OAuth2Test):
             ],
             'workouts': [
                 {
-                    'href': '/v7.0/workout/?user=112233&order_by=-start_datetime'
+                    'href': '/v7.0/workout/?user=112233&'
+                            'order_by=-start_datetime'
                 }
             ],
             'deactivation': [

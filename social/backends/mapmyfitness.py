@@ -9,7 +9,8 @@ class MapMyFitnessOAuth2(BaseOAuth2):
     """MapMyFitness OAuth authentication backend"""
     name = 'mapmyfitness'
     AUTHORIZATION_URL = 'https://www.mapmyfitness.com/v7.0/oauth2/authorize'
-    ACCESS_TOKEN_URL = 'https://oauth2-api.mapmyapi.com/v7.0/oauth2/access_token'
+    ACCESS_TOKEN_URL = \
+        'https://oauth2-api.mapmyapi.com/v7.0/oauth2/access_token'
     REQUEST_TOKEN_METHOD = 'POST'
     ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
@@ -45,4 +46,4 @@ class MapMyFitnessOAuth2(BaseOAuth2):
             'Authorization': 'Bearer {0}'.format(access_token),
             'Api-Key': key
         }
-        return self.get_json(url, headers=headers)        
+        return self.get_json(url, headers=headers)

@@ -10,7 +10,7 @@ class TaobaoOAuth2Test(OAuth2Test):
     access_token_body = json.dumps({
         'access_token': 'foobar',
         'token_type': 'bearer'
-        })
+    })
     user_data_body = json.dumps({
         'w2_expires_in': 0,
         'taobao_user_id': '1',

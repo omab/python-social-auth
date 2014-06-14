@@ -14,8 +14,10 @@ class KakaoOAuth2Test(OAuth2Test):
         'id': '101010101',
         'properties': {
             'nickname': 'foobar',
-            'thumbnail_image': 'http://mud-kage.kakao.co.kr/14/dn/btqbh1AKmRf/ujlHpQhxtMSbhKrBisrxe1/o.jpg',
-            'profile_image': 'http://mud-kage.kakao.co.kr/14/dn/btqbjCnl06Q/wbMJSVAUZB7lzSImgGdsoK/o.jpg'
+            'thumbnail_image': 'http://mud-kage.kakao.co.kr/14/dn/btqbh1AKmRf/'
+                               'ujlHpQhxtMSbhKrBisrxe1/o.jpg',
+            'profile_image': 'http://mud-kage.kakao.co.kr/14/dn/btqbjCnl06Q/'
+                             'wbMJSVAUZB7lzSImgGdsoK/o.jpg'
         }
     })
 
