@@ -15,8 +15,7 @@ def auth(request, backend):
 @csrf_exempt
 @psa('social:complete')
 def complete(request, backend, *args, **kwargs):
-    """Authentication complete view, override this view if transaction
-    management doesn't suit your needs."""
+    """Authentication complete view"""
     return do_complete(request.backend, _do_login, request.user,
                        redirect_name=REDIRECT_FIELD_NAME, *args, **kwargs)
 
