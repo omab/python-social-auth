@@ -1,22 +1,19 @@
 """
-MongoEngine models for Social Auth
-
-Requires MongoEngine 0.6.10
+MongoEngine Django models for Social Auth.
+Requires MongoEngine 0.8.6 or higher.
 """
-import six
-
 from django.conf import settings
 
-from mongoengine import DictField, Document, IntField, ReferenceField, \
-                        StringField, EmailField, BooleanField
+from mongoengine import Document, ReferenceField
 from mongoengine.queryset import OperationError
 
 from social.utils import setting_name, module_member
-from social.storage.django_orm import DjangoUserMixin, \
-                                      DjangoAssociationMixin, \
-                                      DjangoNonceMixin, \
-                                      DjangoCodeMixin, \
-                                      BaseDjangoStorage
+from social.storage.django_orm import BaseDjangoStorage
+
+from social.storage.mongoengine_orm import MongoengineUserMixin, \
+                                           MongoengineNonceMixin, \
+                                           MongoengineAssociationMixin, \
+                                           MongoengineCodeMixin
 
 
 UNUSABLE_PASSWORD = '!'  # Borrowed from django 1.4
@@ -44,86 +41,28 @@ def _get_user_model():
 USER_MODEL = _get_user_model()
 
 
-class UserSocialAuth(Document, DjangoUserMixin):
+class UserSocialAuth(Document, MongoengineUserMixin):
     """Social Auth association model"""
     user = ReferenceField(USER_MODEL)
-    provider = StringField(max_length=32)
-    uid = StringField(max_length=255, unique_with='provider')
-    extra_data = DictField()
-
-    def str_id(self):
-        return str(self.id)
-
-    @classmethod
-    def get_social_auth_for_user(cls, user, provider=None, id=None):
-        qs = cls.objects
-        if provider:
-            qs = qs.filter(provider=provider)
-        if id:
-            qs = qs.filter(id=id)
-        return qs.filter(user=user)
-
-    @classmethod
-    def create_social_auth(cls, user, uid, provider):
-        if not isinstance(type(uid), six.string_types):
-            uid = str(uid)
-        return cls.objects.create(user=user, uid=uid, provider=provider)
-
-    @classmethod
-    def username_max_length(cls):
-        username_field = cls.username_field()
-        field = getattr(UserSocialAuth.user_model(), username_field)
-        return field.max_length
 
     @classmethod
     def user_model(cls):
         return USER_MODEL
 
-    @classmethod
-    def create_user(cls, *args, **kwargs):
-        kwargs['password'] = UNUSABLE_PASSWORD
-        if 'email' in kwargs:
-            # Empty string makes email regex validation fail
-            kwargs['email'] = kwargs['email'] or None
-        return cls.user_model().create_user(*args, **kwargs)
 
-    @classmethod
-    def allowed_to_disconnect(cls, user, backend_name, association_id=None):
-        if association_id is not None:
-            qs = cls.objects.filter(id__ne=association_id)
-        else:
-            qs = cls.objects.filter(provider__ne=backend_name)
-        qs = qs.filter(user=user)
-
-        if hasattr(user, 'has_usable_password'):
-            valid_password = user.has_usable_password()
-        else:
-            valid_password = True
-
-        return valid_password or qs.count() > 0
-
-
-class Nonce(Document, DjangoNonceMixin):
+class Nonce(Document, MongoengineNonceMixin):
     """One use numbers"""
-    server_url = StringField(max_length=255)
-    timestamp = IntField()
-    salt = StringField(max_length=40)
+    pass
 
 
-class Association(Document, DjangoAssociationMixin):
+class Association(Document, MongoengineAssociationMixin):
     """OpenId account association"""
-    server_url = StringField(max_length=255)
-    handle = StringField(max_length=255)
-    secret = StringField(max_length=255)  # Stored base64 encoded
-    issued = IntField()
-    lifetime = IntField()
-    assoc_type = StringField(max_length=64)
+    pass
 
 
-class Code(Document, DjangoCodeMixin):
-    email = EmailField()
-    code = StringField(max_length=32)
-    verified = BooleanField(default=False)
+class Code(Document, MongoengineCodeMixin):
+    """Mail validation single one time use code"""
+    pass
 
 
 class DjangoStorage(BaseDjangoStorage):

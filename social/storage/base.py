@@ -88,6 +88,11 @@ class UserMixin(object):
             return True
 
     @classmethod
+    def clean_username(cls, value):
+        """Clean username removing any unsupported character"""
+        return CLEAN_USERNAME_REGEX.sub('', value)
+
+    @classmethod
     def changed(cls, user):
         """The given user instance is ready to be saved"""
         raise NotImplementedError('Implement in subclass')
@@ -106,10 +111,6 @@ class UserMixin(object):
     def username_max_length(cls):
         """Return the max length for username"""
         raise NotImplementedError('Implement in subclass')
-
-    @classmethod
-    def clean_username(cls, value):
-        return CLEAN_USERNAME_REGEX.sub('', value)
 
     @classmethod
     def allowed_to_disconnect(cls, user, backend_name, association_id=None):
