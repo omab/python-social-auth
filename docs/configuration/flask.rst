@@ -16,17 +16,15 @@ Enabling the application
 ------------------------
 
 The applications define a `Flask Blueprint`_, which needs to be registered once
-the Flask app is configured::
+the Flask app is configured by::
 
     from social.apps.flask_app.routes import social_auth
 
     app.register_blueprint(social_auth)
 
-For MongoEngine_ version::
+For MongoEngine_ you need this setting::
 
-    from social.apps.flask_me_app.routes import social_auth
-
-    app.register_blueprint(social_auth)
+    SOCIAL_AUTH_STORAGE = 'social.apps.flask_app.me.models.FlaskStorage'
 
 
 Models Setup
@@ -37,13 +35,13 @@ because they need the reference to the current db instance and the User model
 used on your project (check *User model reference* below). Once the Flask app
 and the database are defined, call ``init_social`` to register the models::
 
-    from social.apps.flask_app.models import init_social
+    from social.apps.flask_app.default.models import init_social
 
     init_social(app, db)
 
 For MongoEngine_::
 
-    from social.apps.flask_me_app.models import init_social
+    from social.apps.flask_app.me.models import init_social
 
     init_social(app, db)
 

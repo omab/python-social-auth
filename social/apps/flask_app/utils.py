@@ -8,7 +8,7 @@ from social.backends.utils import get_backend
 
 
 DEFAULTS = {
-    'STORAGE': 'social.apps.flask_app.models.FlaskStorage',
+    'STORAGE': 'social.apps.flask_app.default.models.FlaskStorage',
     'STRATEGY': 'social.strategies.flask_strategy.FlaskStrategy'
 }
 
@@ -25,7 +25,7 @@ def load_strategy():
     return get_strategy(strategy, storage)
 
 
-def load_backend(strategy, name, redirect_uri):
+def load_backend(strategy, name, redirect_uri, *args, **kwargs):
     backends = get_helper('AUTHENTICATION_BACKENDS')
     Backend = get_backend(backends, name)
     return Backend(strategy=strategy, redirect_uri=redirect_uri)

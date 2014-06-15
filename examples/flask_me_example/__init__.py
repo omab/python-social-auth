@@ -6,14 +6,15 @@ from flask.ext.mongoengine import MongoEngine
 
 sys.path.append('../..')
 
-from social.apps.flask_me_app.routes import social_auth
-from social.apps.flask_me_app.models import init_social
-from social.apps.flask_me_app.template_filters import backends
+from social.apps.flask_app.routes import social_auth
+from social.apps.flask_app.me.models import init_social
+from social.apps.flask_app.template_filters import backends
 
 
 # App
 app = Flask(__name__)
 app.config.from_object('flask_me_example.settings')
+app.debug = True
 
 try:
     app.config.from_object('flask_me_example.local_settings')

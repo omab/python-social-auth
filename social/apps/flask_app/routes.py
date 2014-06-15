@@ -26,6 +26,8 @@ def complete(backend, *args, **kwargs):
 @social_auth.route('/disconnect/<string:backend>/', methods=('POST',))
 @social_auth.route('/disconnect/<string:backend>/<int:association_id>/',
                    methods=('POST',))
+@social_auth.route('/disconnect/<string:backend>/<string:association_id>/',
+                   methods=('POST',))
 @login_required
 @psa()
 def disconnect(backend, association_id=None):
