@@ -7,7 +7,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', 'example.app.views.home'),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^signup-email/', 'example.app.views.signup_email'),
     url(r'^email-sent/', 'example.app.views.validation_sent'),
     url(r'^login/$', 'example.app.views.home'),
     url(r'^logout/$', 'example.app.views.logout'),

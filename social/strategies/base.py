@@ -126,11 +126,11 @@ class BaseStrategy(object):
         """Return current language"""
         return ''
 
-    def send_email_validation(self, email):
+    def send_email_validation(self, backend, email):
         email_validation = self.setting('EMAIL_VALIDATION_FUNCTION')
         send_email = module_member(email_validation)
         code = self.storage.code.make_code(email)
-        send_email(self, code)
+        send_email(self, backend, code)
         return code
 
     def validate_email(self, email, code):

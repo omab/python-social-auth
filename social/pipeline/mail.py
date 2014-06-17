@@ -14,7 +14,7 @@ def mail_validation(backend, details, *args, **kwargs):
                                            data['verification_code']):
                 raise InvalidEmail(backend)
         else:
-            backend.strategy.send_email_validation(details['email'])
+            backend.strategy.send_email_validation(backend, details['email'])
             backend.strategy.session_set('email_validation_address',
                                          details['email'])
             return backend.strategy.redirect(
