@@ -31,6 +31,7 @@ def icon_name(name):
         'stackoverflow': 'stack-overflow',
         'google-oauth': 'google',
         'google-oauth2': 'google',
+        'google-openidconnect': 'google',
         'yahoo-oauth': 'yahoo',
         'facebook-app': 'facebook',
         'email': 'envelope',

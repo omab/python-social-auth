@@ -6,6 +6,7 @@ from social.utils import url_add_parameters
 from social.exceptions import AuthException, AuthFailed, AuthCanceled, \
                               AuthUnknownError, AuthMissingParameter
 from social.backends.base import BaseAuth
+from social.backends.oauth import BaseOAuth2
 
 
 # OpenID configuration
@@ -249,3 +250,8 @@ class OpenIdAuth(BaseAuth):
             return self.data[OPENID_ID_FIELD]
         else:
             raise AuthMissingParameter(self, OPENID_ID_FIELD)
+
+
+class OpenIdConnectAuth(BaseOAuth2):
+    DEFAULT_SCOPE = ['openid']
+    EXTRA_DATA = ['id_token', 'refresh_token']

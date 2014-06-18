@@ -4,7 +4,7 @@ Google OpenId, OAuth2, OAuth1, Google+ Sign-in backends, docs at:
 """
 from requests import HTTPError
 
-from social.backends.open_id import OpenIdAuth
+from social.backends.open_id import OpenIdAuth, OpenIdConnectAuth
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
 from social.exceptions import AuthMissingParameter, AuthCanceled
 
@@ -25,19 +25,21 @@ class BaseGoogleAuth(object):
             email = response['emails'][0]['value']
         else:
             email = ''
-        if self.setting('USE_DEPRECATED_API', False):
-            name, given_name, family_name = (
-                response.get('name', ''),
-                response.get('given_name', ''),
-                response.get('family_name', '')
-            )
-        else:
+
+        if isinstance(response.get('name'), dict):
             names = response.get('name') or {}
             name, given_name, family_name = (
                 response.get('displayName', ''),
                 names.get('givenName', ''),
                 names.get('familyName', '')
             )
+        else:
+            name, given_name, family_name = (
+                response.get('name', ''),
+                response.get('given_name', ''),
+                response.get('family_name', '')
+            )
+
         fullname, first_name, last_name = self.get_user_names(
             name, given_name, family_name
         )
@@ -199,3 +201,14 @@ class GoogleOpenId(OpenIdAuth):
         http://axschema.org/contact/email
         """
         return details['email']
+
+
+class GoogleOpenIdConnect(GoogleOAuth2, OpenIdConnectAuth):
+    name = 'google-openidconnect'
+
+    def user_data(self, access_token, *args, **kwargs):
+        """Return user data from Google API"""
+        return self.get_json(
+            'https://www.googleapis.com/plus/v1/people/me/openIdConnect',
+            params={'access_token': access_token, 'alt': 'json'}
+        )

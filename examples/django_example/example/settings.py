@@ -146,6 +146,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'social.backends.google.GoogleOpenId',
     'social.backends.google.GooglePlusAuth',
+    'social.backends.google.GoogleOpenIdConnect',
     'social.backends.instagram.InstagramOAuth2',
     'social.backends.jawbone.JawboneOAuth2',
     'social.backends.linkedin.LinkedinOAuth',
@@ -224,7 +225,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
-    'social.pipeline.user.user_details'
+    'social.pipeline.user.user_details',
+    #'social.pipeline.debug.debug'
 )
 
 # SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['first_name', 'last_name', 'email',
