@@ -168,6 +168,17 @@ or::
 depending on the backends in use.
 
 
+Refresh Tokens
+--------------
+
+To get an OAuth2 refresh token along with the access token, you must pass an extra argument: ``access_type=offline``.
+To do this with Google+ sign-in::
+
+      SOCIAL_AUTH_GOOGLE_PLUS_AUTH_EXTRA_ARGUMENTS = {
+            'access_type': 'offline'
+      }
+
+
 Scopes deprecation
 ------------------
 
