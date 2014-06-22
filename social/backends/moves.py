@@ -24,7 +24,6 @@ class MovesOAuth2(BaseOAuth2):
     EXTRA_DATA = [
         ('refresh_token', 'refresh_token', True),
         ('expires_in', 'expires'),
-        ('firstDate', 'firstdate')
     ]
 
     def get_user_details(self, response):
