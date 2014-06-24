@@ -113,5 +113,5 @@ means to force the user to login again.
 
 .. _django-social-auth: https://github.com/omab/django-social-auth
 .. _python-social-auth: https://github.com/omab/python-social-auth
-.. _example app: https://github.com/omab/python-social-auth/blob/master/examples/django_example/dj/urls.py#L7
+.. _example app: https://github.com/omab/python-social-auth/blob/master/examples/django_example/example/urls.py#L17
 .. _Facebook OAuth2 backend: https://github.com/omab/python-social-auth/blob/master/social/backends/facebook.py#L29
