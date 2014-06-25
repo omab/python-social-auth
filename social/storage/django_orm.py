@@ -59,7 +59,7 @@ class DjangoUserMixin(UserMixin):
         return cls.user_model().objects.create_user(*args, **kwargs)
 
     @classmethod
-    def get_user(cls, pk, **kwargs):
+    def get_user(cls, pk=None, **kwargs):
         if pk:
             kwargs = {'pk': pk}
         try:
