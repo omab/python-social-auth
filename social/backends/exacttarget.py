@@ -23,6 +23,11 @@ class ExactTargetOAuth2(BaseOAuth2):
             user['username'] = user['email']
         return user
 
+
+    def get_user_id(self, details, response):
+        """Create a user ID from the ET user ID. Uses details rather than the default response"""
+        return "exacttarget_%s" % details.get('id')
+
     def uses_redirect(self):
         return False
 
