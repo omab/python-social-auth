@@ -5,6 +5,7 @@ Reddit OAuth2 backend, docs at:
 import base64
 
 from social.backends.oauth import BaseOAuth2
+import sys
 
 
 class RedditOAuth2(BaseOAuth2):
