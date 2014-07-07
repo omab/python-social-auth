@@ -83,7 +83,11 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
     @classmethod
     def disconnect(cls, entry):
         cls._session().delete(entry)
-        cls._session().commit()
+        try:
+            cls._session().commit()
+        except AssertionError:
+            import transaction
+            transaction.commit()
 
     @classmethod
     def user_query(cls):
