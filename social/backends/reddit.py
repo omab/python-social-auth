@@ -5,7 +5,6 @@ Reddit OAuth2 backend, docs at:
 import base64
 
 from social.backends.oauth import BaseOAuth2
-import sys
 
 
 class RedditOAuth2(BaseOAuth2):
@@ -18,6 +17,7 @@ class RedditOAuth2(BaseOAuth2):
     REDIRECT_STATE = False
     SCOPE_SEPARATOR = ','
     DEFAULT_SCOPE = ['identity']
+    SEND_USER_AGENT = True
     EXTRA_DATA = [
         ('id', 'id'),
         ('link_karma', 'link_karma'),
@@ -50,13 +50,3 @@ class RedditOAuth2(BaseOAuth2):
         params = super(RedditOAuth2, self).refresh_token_params(token)
         params['redirect_uri'] = self.redirect_uri or redirect_uri
         return params
-
-    def request(self, url, method='GET', *args, **kwargs):
-        """override request so User-Agent does not get lumped in with all urllib hits on reddit (results in "429 Too Many Requests")
-            http://stackoverflow.com/questions/13213048/urllib2-http-error-429"""
-        ua = 'python-social-auth-' + sys.modules['social'].__version__
-        if 'headers' not in kwargs:
-            kwargs.set('headers', {})
-        if 'User-Agent' not in kwargs['headers']:
-            kwargs['headers']['User-Agent'] = ua 
-        return super(RedditOAuth2, self).request(url, method, *args, **kwargs)

@@ -1,6 +1,6 @@
 from requests import request, ConnectionError
 
-from social.utils import module_member, parse_qs
+from social.utils import module_member, parse_qs, user_agent
 from social.exceptions import AuthFailed
 
 
@@ -12,6 +12,7 @@ class BaseAuth(object):
     ID_KEY = None
     EXTRA_DATA = None
     REQUIRES_EMAIL_VALIDATION = False
+    SEND_USER_AGENT = False
 
     def __init__(self, strategy=None, redirect_uri=None):
         self.strategy = strategy
@@ -207,8 +208,13 @@ class BaseAuth(object):
         return True
 
     def request(self, url, method='GET', *args, **kwargs):
+        kwargs.setdefault('headers', {})
         kwargs.setdefault('timeout', self.setting('REQUESTS_TIMEOUT') or
                                      self.setting('URLOPEN_TIMEOUT'))
+
+        if self.SEND_USER_AGENT and 'User-Agent' not in kwargs['headers']:
+            kwargs['headers']['User-Agent'] = user_agent()
+
         try:
             response = request(method, url, *args, **kwargs)
         except ConnectionError as err:

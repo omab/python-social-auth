@@ -4,6 +4,8 @@ import unicodedata
 import collections
 import six
 
+import social
+
 from social.p3 import urlparse, urlunparse, urlencode, \
                       parse_qs as battery_parse_qs
 
@@ -20,6 +22,11 @@ def module_member(name):
     mod, member = name.rsplit('.', 1)
     module = import_module(mod)
     return getattr(module, member)
+
+
+def user_agent():
+    """Builds a simple User-Agent string to send in requests"""
+    return 'python-social-auth-' + social.__version__
 
 
 def url_add_parameters(url, params):
