@@ -27,7 +27,7 @@ class UserSocialAuthOption(admin.ModelAdmin):
             all_names = _User._meta.get_all_field_names()
             search_fields = [name for name in fieldnames
                                 if name and name in all_names]
-        return ['user_' + name for name in search_fields]
+        return ['user__' + name for name in search_fields]
 
 
 class NonceOption(admin.ModelAdmin):
