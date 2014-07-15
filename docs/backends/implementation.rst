@@ -95,7 +95,7 @@ The key points on this backends are:
 
 ``ACCESS_TOKEN_URL``
     Must point to the API endpoint that provides an ``access_token`` needed to
-    authenticate in users behalf on futer API calls.
+    authenticate in users behalf on future API calls.
 
 ``REFRESH_TOKEN_URL``
     Some providers give the option to renew the ``access_token`` since they are
@@ -110,12 +110,12 @@ The key points on this backends are:
 
 ``STATE_PARAMETER``
     OAuth2 defines that an ``state`` parameter can be passed in order to
-    validate the process, it's kinda a CSRF check to avoid man in the middle
-    attacks. Some don't recognice it or don't return it which will making the
-    auth process invalid, set this attribute as ``False`` in such case.
+    validate the process, it's kind of a CSRF check to avoid man in the middle
+    attacks. Some don't recognise it or don't return it which will make the
+    auth process invalid. Set this attribute to ``False`` in that case.
 
 ``REDIRECT_STATE``
-    For those providers that don't recognice the ``state`` parameter, the app
+    For those providers that don't recognise the ``state`` parameter, the app
     can add a ``redirect_state`` argument to the ``redirect_uri`` to mimic it.
     Set this value to ``False`` if the provider likes to verify the
     ``redirect_uri`` value and this parameter invalidates that check.
