@@ -82,7 +82,7 @@ Shared attributes
 OAuth2
 ******
 
-OAuth2 backends are fair simple to implement, just a few settings, a method
+OAuth2 backends are fairly simple to implement; just a few settings, a method
 override and it's mostly ready to go.
 
 The key points on this backends are:
