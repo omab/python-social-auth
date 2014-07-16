@@ -110,7 +110,7 @@ class BaseActionTest(unittest.TestCase):
         expect(response.url).to.equal(location_url)
         expect(response.text).to.equal('foobar')
 
-        HTTPretty.register_uri(HTTPretty.GET,
+        HTTPretty.register_uri(HTTPretty.POST,
                                uri=self.backend.ACCESS_TOKEN_URL,
                                status=200,
                                body=self.access_token_body or '',
