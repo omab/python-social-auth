@@ -13,6 +13,7 @@ class GithubOAuth2(BaseOAuth2):
     name = 'github'
     AUTHORIZATION_URL = 'https://github.com/login/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token'
+    ACCESS_TOKEN_METHOD = 'POST'
     SCOPE_SEPARATOR = ','
     EXTRA_DATA = [
         ('id', 'id'),
