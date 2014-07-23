@@ -29,7 +29,6 @@ def remove_user(strategy, user, *args, **kwargs):
 
 @partial
 def set_user_from_kwargs(strategy, *args, **kwargs):
-    # from nose.tools import set_trace; set_trace()
     if strategy.session_get('attribute'):
         kwargs['user'].id
     else:
@@ -37,7 +36,6 @@ def set_user_from_kwargs(strategy, *args, **kwargs):
 
 @partial
 def set_user_from_args(strategy, user, *args, **kwargs):
-    # from nose.tools import set_trace; set_trace()
     if strategy.session_get('attribute'):
         user.id
     else:
