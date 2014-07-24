@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
 import django
 from django.db import models
+
 
 if django.get_version() < (1,7):
     from south.utils import datetime_utils as datetime
@@ -150,9 +153,7 @@ if django.get_version() < (1,7):
 
         complete_apps = ['default']
 else:
-    from __future__ import unicode_literals
-
-    from django.db import models, migrations
+    from django.db import migrations
     import social.apps.django_app.default.fields
     from django.conf import settings
     import social.storage.django_orm
