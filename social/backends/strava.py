@@ -25,7 +25,7 @@ class StravaOAuth(BaseOAuth2):
         username = response['athlete']['id']
         email = response['athlete'].get('email', '')
         fullname, first_name, last_name = self.get_user_names(
-            first_name=response['athlete'].get('first_name', '')
+            first_name=response['athlete'].get('firstname', '')
         )
         return {'username': str(username),
                 'fullname': fullname,
