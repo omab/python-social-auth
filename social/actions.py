@@ -72,8 +72,14 @@ def do_complete(strategy, login, user=None, redirect_name='next',
                 url = setting_url(strategy, redirect_value,
                                   'LOGIN_REDIRECT_URL')
         else:
-            url = setting_url(strategy, 'INACTIVE_USER_URL', 'LOGIN_ERROR_URL',
-                              'LOGIN_URL')
+            is_new = getattr(user, 'is_new', False)
+            if is_new:
+                url = setting_url(strategy, 'NEW_INACTIVE_USER_URL',
+                                  'INACTIVE_USER_URL',
+                                  'LOGIN_ERROR_URL', 'LOGIN_URL')
+            else:
+                url = setting_url(strategy, 'INACTIVE_USER_URL',
+                                  'LOGIN_ERROR_URL', 'LOGIN_URL')
     else:
         url = setting_url(strategy, 'LOGIN_ERROR_URL', 'LOGIN_URL')
 
