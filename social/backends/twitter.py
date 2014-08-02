@@ -13,6 +13,7 @@ class TwitterOAuth(BaseOAuth1):
     AUTHORIZATION_URL = 'https://api.twitter.com/oauth/authenticate'
     REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
     ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
+    REDIRECT_STATE = True
 
     def process_error(self, data):
         if 'denied' in data:
