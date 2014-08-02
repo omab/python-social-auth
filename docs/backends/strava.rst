@@ -12,6 +12,6 @@ Strava uses OAuth v2 for Authentication.
 
 - extra scopes can be defined by using::
 
-    SOCIAL_AUTH_INSTAGRAM_AUTH_EXTRA_ARGUMENTS = {'scope': 'likes comments relationships'}
+    SOCIAL_AUTH_STRAVA_SCOPE = ['view_private']
 
 .. _Strava API: https://www.strava.com/settings/api
