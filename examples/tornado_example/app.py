@@ -59,9 +59,10 @@ def main():
 
 
 def syncdb():
-    from models import User
+    from models import user_syncdb
     init_social(Base, session, tornado_settings)
     Base.metadata.create_all(engine)
+    user_syncdb()
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'syncdb':
