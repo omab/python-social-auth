@@ -192,6 +192,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.yandex.YandexOAuth2',
     'social.backends.vimeo.VimeoOAuth1',
     'social.backends.lastfm.LastFmAuth',
+    'social.backends.moves.MovesOAuth2',
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
     'django.contrib.auth.backends.ModelBackend',

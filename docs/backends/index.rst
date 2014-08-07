@@ -82,6 +82,7 @@ Social backends
    mapmyfitness
    mendeley
    mixcloud
+   moves
    odnoklassnikiru
    openstreetmap
    persona
