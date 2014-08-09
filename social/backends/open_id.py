@@ -1,13 +1,16 @@
-from calendar import timegm
 import datetime
-import jwt
+from calendar import timegm
+
+from jwt import DecodeError, ExpiredSignature, decode as jwt_decode
+
 from openid.consumer.consumer import Consumer, SUCCESS, CANCEL, FAILURE
 from openid.consumer.discover import DiscoveryFailure
 from openid.extensions import sreg, ax, pape
 
 from social.utils import url_add_parameters
 from social.exceptions import AuthException, AuthFailed, AuthCanceled, \
-                              AuthUnknownError, AuthMissingParameter, AuthTokenError
+                              AuthUnknownError, AuthMissingParameter, \
+                              AuthTokenError
 from social.backends.base import BaseAuth
 from social.backends.oauth import BaseOAuth2
 
@@ -272,67 +275,60 @@ class OpenIdConnectAuth(BaseOAuth2):
 
     Currently only the code response type is supported.
     """
-
     ID_TOKEN_ISSUER = None
     DEFAULT_SCOPE = ['openid']
     EXTRA_DATA = ['id_token', 'refresh_token', ('sub', 'id')]
-
     # Set after access_token is retrieved
     id_token = None
 
     def auth_params(self, state=None):
         """Return extra arguments needed on auth process."""
         params = super(OpenIdConnectAuth, self).auth_params(state)
-
-        params['nonce'] = self._get_and_store_nonce(self.AUTHORIZATION_URL, state)
-
+        params['nonce'] = self.get_and_store_nonce(
+            self.AUTHORIZATION_URL, state
+        )
         return params
 
     def auth_complete_params(self, state=None):
         params = super(OpenIdConnectAuth, self).auth_complete_params(state)
-
         # Add a nonce to the request so that to help counter CSRF
-        params['nonce'] = self._get_and_store_nonce(self.ACCESS_TOKEN_URL, state)
-
+        params['nonce'] = self.get_and_store_nonce(
+            self.ACCESS_TOKEN_URL, state
+        )
         return params
 
-    def _get_and_store_nonce(self, url, state):
+    def get_and_store_nonce(self, url, state):
         # Create a nonce
         nonce = self.strategy.random_string(64)
-
         # Store the nonce
         association = OpenIdConnectAssociation(nonce, assoc_type=state)
         self.strategy.storage.association.store(url, association)
-
         return nonce
 
-    def _get_nonce(self, nonce):
-        server_url = self.ACCESS_TOKEN_URL
+    def get_nonce(self, nonce):
         try:
-            return self.strategy.storage.association.get(server_url=server_url, handle=nonce)[0]
-        except:     # pylint: disable=bare-except
-            return None
+            return self.strategy.storage.association.get(
+                server_url=self.ACCESS_TOKEN_URL,
+                handle=nonce
+            )[0]
+        except IndexError:
+            pass
 
-    def _remove_nonce(self, nonce_id):
-        try:
-            self.strategy.storage.association.remove([nonce_id])
-        except:     # pylint: disable=bare-except
-            return None
+    def remove_nonce(self, nonce_id):
+        self.strategy.storage.association.remove([nonce_id])
 
-    def _validate_and_return_id_token(self, id_token):
+    def validate_and_return_id_token(self, id_token):
         """
         Validates the id_token according to the steps at
         http://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation.
         """
-
         client_id, _client_secret = self.get_key_and_secret()
-
+        decryption_key = self.setting('ID_TOKEN_DECRYPTION_KEY')
         try:
             # Decode the JWT and raise an error if the secret is invalid or
             # the response has expired.
-            decryption_key = self.setting('ID_TOKEN_DECRYPTION_KEY')
-            id_token = jwt.decode(id_token, decryption_key)
-        except (jwt.DecodeError, jwt.ExpiredSignature) as de:
+            id_token = jwt_decode(id_token, decryption_key)
+        except (DecodeError, ExpiredSignature) as de:
             raise AuthTokenError(self, de)
 
         # Verify the issuer of the id_token is correct
@@ -354,12 +350,11 @@ class OpenIdConnectAuth(BaseOAuth2):
         if not nonce:
             raise AuthTokenError(self, 'Incorrect id_token: nonce')
 
-        nonce_obj = self._get_nonce(id_token['nonce'])
+        nonce_obj = self.get_nonce(nonce)
         if nonce_obj:
-            self._remove_nonce(nonce_obj.id)
+            self.remove_nonce(nonce_obj.id)
         else:
             raise AuthTokenError(self, 'Incorrect id_token: nonce')
-
         return id_token
 
     def request_access_token(self, *args, **kwargs):
@@ -368,5 +363,5 @@ class OpenIdConnectAuth(BaseOAuth2):
         store it (temporarily).
         """
         response = self.get_json(*args, **kwargs)
-        self.id_token = self._validate_and_return_id_token(response['id_token'])
+        self.id_token = self.validate_and_return_id_token(response['id_token'])
         return response
