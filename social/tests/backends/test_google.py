@@ -1,5 +1,5 @@
-import json
 import datetime
+import json
 
 from httpretty import HTTPretty
 
@@ -8,7 +8,7 @@ from social.actions import do_disconnect
 
 from social.tests.models import User
 from social.tests.backends.oauth import OAuth1Test, OAuth2Test
-from social.tests.backends.open_id import OpenIdTest
+from social.tests.backends.open_id import OpenIdTest, OpenIdConnectTestMixin
 
 
 class GoogleOAuth2Test(OAuth2Test):
@@ -169,65 +169,53 @@ class GoogleOpenIdTest(OpenIdTest):
     backend_path = 'social.backends.google.GoogleOpenId'
     expected_username = 'FooBar'
     discovery_body = ''.join([
-      '<?xml version="1.0" encoding="UTF-8"?>',
-      '<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)">',
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)">',
         '<XRD>',
-          '<Service priority="0">',
-            '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
-            '<Type>http://openid.net/srv/ax/1.0</Type>',
-            '<Type>'
-              'http://specs.openid.net/extensions/ui/1.0/mode/popup'
-            '</Type>',
-            '<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>',
-            '<Type>http://specs.openid.net/extensions/pape/1.0</Type>',
-            '<URI>https://www.google.com/accounts/o8/ud</URI>',
-          '</Service>',
-          '<Service priority="10">',
-            '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
-            '<Type>http://openid.net/srv/ax/1.0</Type>',
-            '<Type>'
-              'http://specs.openid.net/extensions/ui/1.0/mode/popup'
-            '</Type>',
-            '<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>',
-            '<Type>http://specs.openid.net/extensions/pape/1.0</Type>',
-            '<URI>https://www.google.com/accounts/o8/ud?source=mail</URI>',
-          '</Service>',
-          '<Service priority="10">',
-            '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
-            '<Type>http://openid.net/srv/ax/1.0</Type>',
-            '<Type>'
-              'http://specs.openid.net/extensions/ui/1.0/mode/popup'
-            '</Type>',
-            '<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>',
-            '<Type>http://specs.openid.net/extensions/pape/1.0</Type>',
-            '<URI>'
-              'https://www.google.com/accounts/o8/ud?source=gmail.com'
-            '</URI>',
-          '</Service>',
-          '<Service priority="10">',
-            '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
-            '<Type>http://openid.net/srv/ax/1.0</Type>',
-            '<Type>'
-              'http://specs.openid.net/extensions/ui/1.0/mode/popup'
-            '</Type>',
-            '<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>',
-            '<Type>http://specs.openid.net/extensions/pape/1.0</Type>',
-            '<URI>'
-              'https://www.google.com/accounts/o8/ud?source=googlemail.com'
-            '</URI>',
-          '</Service>',
-          '<Service priority="10">',
-            '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
-            '<Type>http://openid.net/srv/ax/1.0</Type>',
-            '<Type>'
-              'http://specs.openid.net/extensions/ui/1.0/mode/popup'
-            '</Type>',
-            '<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>',
-            '<Type>http://specs.openid.net/extensions/pape/1.0</Type>',
-            '<URI>https://www.google.com/accounts/o8/ud?source=profiles</URI>',
-          '</Service>',
+        '<Service priority="0">',
+        '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
+        '<Type>http://openid.net/srv/ax/1.0</Type>',
+        '<Type>http://specs.openid.net/extensions/ui/1.0/mode/popup</Type>',
+        '<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>',
+        '<Type>http://specs.openid.net/extensions/pape/1.0</Type>',
+        '<URI>https://www.google.com/accounts/o8/ud</URI>',
+        '</Service>',
+        '<Service priority="10">',
+        '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
+        '<Type>http://openid.net/srv/ax/1.0</Type>',
+        '<Type>http://specs.openid.net/extensions/ui/1.0/mode/popup</Type>',
+        '<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>',
+        '<Type>http://specs.openid.net/extensions/pape/1.0</Type>',
+        '<URI>https://www.google.com/accounts/o8/ud?source=mail</URI>',
+        '</Service>',
+        '<Service priority="10">',
+        '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
+        '<Type>http://openid.net/srv/ax/1.0</Type>',
+        '<Type>http://specs.openid.net/extensions/ui/1.0/mode/popup</Type>',
+        '<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>',
+        '<Type>http://specs.openid.net/extensions/pape/1.0</Type>',
+        '<URI>https://www.google.com/accounts/o8/ud?source=gmail.com</URI>',
+        '</Service>',
+        '<Service priority="10">',
+        '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
+        '<Type>http://openid.net/srv/ax/1.0</Type>',
+        '<Type>http://specs.openid.net/extensions/ui/1.0/mode/popup</Type>',
+        '<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>',
+        '<Type>http://specs.openid.net/extensions/pape/1.0</Type>',
+        '<URI>',
+        'https://www.google.com/accounts/o8/ud?source=googlemail.com',
+        '</URI>',
+        '</Service>',
+        '<Service priority="10">',
+        '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
+        '<Type>http://openid.net/srv/ax/1.0</Type>',
+        '<Type>http://specs.openid.net/extensions/ui/1.0/mode/popup</Type>',
+        '<Type>http://specs.openid.net/extensions/ui/1.0/icon</Type>',
+        '<Type>http://specs.openid.net/extensions/pape/1.0</Type>',
+        '<URI>https://www.google.com/accounts/o8/ud?source=profiles</URI>',
+        '</Service>',
         '</XRD>',
-      '</xrds:XRDS>'
+        '</xrds:XRDS>'
     ])
     server_response = urlencode({
         'janrain_nonce': JANRAIN_NONCE,
@@ -280,3 +268,14 @@ class GoogleRevokeTokenTest(GoogleOAuth2Test):
                                self.backend.REVOKE_TOKEN_URL,
                                status=200)
         do_disconnect(self.backend, user)
+
+
+class GoogleOpenIdConnectTest(OpenIdConnectTestMixin, GoogleOAuth2Test):
+    backend_path = 'social.backends.google.GoogleOpenIdConnect'
+    user_data_url = \
+        'https://www.googleapis.com/plus/v1/people/me/openIdConnect'
+    issuer = "accounts.google.com"
+
+    def setUp(self):
+        GoogleOAuth2Test.setUp(self)
+        self.access_token_body = self.parse_nonce_and_return_access_token_body
