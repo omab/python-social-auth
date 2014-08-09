@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+from calendar import timegm
+import json
 import sys
+import datetime
+import jwt
 import requests
 from openid import oidutil
+from social.exceptions import AuthTokenError
 
 PY3 = sys.version_info[0] == 3
 
@@ -109,3 +114,91 @@ class OpenIdTest(BaseBackendTest):
                                status=200,
                                body='is_valid:true\n')
         return self.backend.complete()
+
+
+class OpenIdConnectTestMixin(object):
+    """
+    Mixin to test OpenID Connect consumers. Inheriting classes should also inherit OAuth2Test.
+    """
+
+    client_key = 'a-key'
+    client_secret = 'a-secret-key'
+    issuer = None  # id_token issuer
+
+    def setUp(self):
+        super(OpenIdConnectTestMixin, self).setUp()
+        self.access_token_body = self._parse_nonce_and_return_access_token_body
+
+    def extra_settings(self):
+        xs = super(OpenIdConnectTestMixin, self).extra_settings()
+        xs.update({
+            'SOCIAL_AUTH_{}_KEY'.format(self.name): self.client_key,
+            'SOCIAL_AUTH_{}_SECRET'.format(self.name): self.client_secret,
+            'SOCIAL_AUTH_{}_ID_TOKEN_DECRYPTION_KEY'.format(self.name): self.client_secret
+        })
+        return xs
+
+    def _parse_nonce_and_return_access_token_body(self, request, _url, headers):
+        """
+        Get the nonce from the request parameters, add it to the id_token, and return the complete response.
+        """
+        body = self.prepare_access_token_body(nonce=request.parsed_body[u'nonce'][0])
+        return 200, headers, body
+
+    def prepare_access_token_body(self, client_key=None, client_secret=None, expiration_datetime=None,
+                                   issue_datetime=None, nonce=None, issuer=None):
+        """
+        Prepares a provider access token response
+
+        Arguments
+            client_id (str)             --  OAuth ID for the client that requested authentication.
+            client_secret (str)         --  OAuth secret for the client that requested authentication.
+            expiration_time (datetime)  --  Date and time after which the response should be considered invalid.
+        """
+
+        body = {'access_token': 'foobar', 'token_type': 'bearer'}
+        client_key = client_key or self.client_key
+        client_secret = client_secret or self.client_secret
+        now = datetime.datetime.utcnow()
+        expiration_datetime = expiration_datetime or (now + datetime.timedelta(seconds=30))
+        issue_datetime = issue_datetime or now
+        nonce = nonce or None
+        issuer = issuer or self.issuer
+
+        id_token = {
+            u'iss': issuer,
+            u'nonce': nonce,
+            u'aud': client_key,
+            u'azp': client_key,
+            u'exp': timegm(expiration_datetime.utctimetuple()),
+            u'iat': timegm(issue_datetime.utctimetuple()),
+            u'sub': u'1234',
+        }
+
+        body[u'id_token'] = jwt.encode(id_token, client_secret)
+
+        return json.dumps(body)
+
+    def assertAutTokenErrorRaised(self, expected_message, **access_token_kwargs):
+        self.access_token_body = self.prepare_access_token_body(**access_token_kwargs)
+        self.assertRaisesRegexp(AuthTokenError, expected_message, self.do_login)
+
+    def test_invalid_secret(self):
+        self.assertAutTokenErrorRaised('Token error: Signature verification failed', client_secret='wrong!')
+
+    def test_expired_signature(self):
+        expiration_datetime = datetime.datetime.utcnow() - datetime.timedelta(seconds=30)
+        self.assertAutTokenErrorRaised('Token error: Signature has expired', expiration_datetime=expiration_datetime)
+
+    def test_invalid_issuer(self):
+        self.assertAutTokenErrorRaised('Token error: Incorrect id_token: iss', issuer='someone-else')
+
+    def test_invalid_audience(self):
+        self.assertAutTokenErrorRaised('Token error: Incorrect id_token: aud', client_key='someone-else')
+
+    def test_invalid_issue_time(self):
+        expiration_datetime = datetime.datetime.utcnow() - datetime.timedelta(hours=1)
+        self.assertAutTokenErrorRaised('Token error: Incorrect id_token: iat', issue_datetime=expiration_datetime)
+
+    def test_invalid_nonce(self):
+        self.assertAutTokenErrorRaised('Token error: Incorrect id_token: nonce', nonce='something-wrong')

@@ -205,6 +205,7 @@ class GoogleOpenId(OpenIdAuth):
 
 class GoogleOpenIdConnect(GoogleOAuth2, OpenIdConnectAuth):
     name = 'google-openidconnect'
+    ID_TOKEN_ISSUER = "accounts.google.com"
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Google API"""
