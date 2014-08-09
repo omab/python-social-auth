@@ -8,7 +8,7 @@ from social.actions import do_disconnect
 
 from social.tests.models import User
 from social.tests.backends.oauth import OAuth1Test, OAuth2Test
-from social.tests.backends.open_id import OpenIdTest
+from social.tests.backends.open_id import OpenIdTest, OpenIdConnectTestMixin
 
 
 class GoogleOAuth2Test(OAuth2Test):
@@ -280,3 +280,9 @@ class GoogleRevokeTokenTest(GoogleOAuth2Test):
                                self.backend.REVOKE_TOKEN_URL,
                                status=200)
         do_disconnect(self.backend, user)
+
+
+class GoogleOpenIdConnectTest(OpenIdConnectTestMixin, GoogleOAuth2Test):
+    backend_path = 'social.backends.google.GoogleOpenIdConnect'
+    user_data_url = 'https://www.googleapis.com/plus/v1/people/me/openIdConnect'
+    issuer = "accounts.google.com"
