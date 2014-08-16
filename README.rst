@@ -17,6 +17,10 @@ for more frameworks and ORMs.
 .. image:: https://pypip.in/d/python-social-auth/badge.png
    :target: https://crate.io/packages/python-social-auth?version=latest
 
+.. image:: https://readthedocs.org/projects/pip/badge/?version=latest
+   :target: https://readthedocs.org/projects/pip/?badge=latest
+   :alt: Documentation Status
+
 .. contents:: Table of Contents
 
 
