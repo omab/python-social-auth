@@ -276,6 +276,12 @@ Miscellaneous settings
     In this case ``foo`` field's value will be stored when user follows this
     link ``<a href="{% url socialauth_begin 'github' %}?foo=bar">...</a>``.
 
+``SOCIAL_AUTH_PASSWORDLESS = False``
+    When this setting is ``True`` and ``social.pipeline.mail.send_validation``
+    is enabled, it allows the implementation of a `passwordless authentication
+    mechanism`_. Example of this implementation can be found at
+    psa-passwordless_.
+
 
 Account disconnection
 ---------------------
@@ -291,3 +297,5 @@ using POST.
 .. _Installation: ../installing.html
 .. _Backends: ../backends/index.html
 .. _OAuth: http://oauth.net/
+.. _passwordless authentication mechanism: https://medium.com/@ninjudd/passwords-are-obsolete-9ed56d483eb
+.. _psa-passwordless: https://github.com/omab/psa-passwordless
