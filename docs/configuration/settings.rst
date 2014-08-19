@@ -259,11 +259,15 @@ Miscellaneous settings
     objects, such as ``email``. Set this to a list of fields you only want to
     set for newly created users and avoid updating on further logins.
 
-``SOCIAL_AUTH_SESSION_EXPIRATION = True``
-    Some providers return the time that the access token will live, the value is
-    stored in ``UserSocialAuth.extra_data`` under the key ``expires``. By default
-    the current user session is set to expire if this value is present, this
-    behavior can be disabled by setting.
+``SOCIAL_AUTH_SESSION_EXPIRATION = False``
+    By default, user session expiration time will be set by your web
+    framework (in Django, for example, it is set with
+    SOCIAL_AUTH_SESSION_EXPIRATION). Some providers return the time that the
+    access token will live, which is stored in ``UserSocialAuth.extra_data``
+    under the key ``expires``. Changing this setting to True will override your
+    web framework's session length setting and set user session lengths to
+    match the ``expires`` value from the auth provider.
+
 
 ``SOCIAL_AUTH_OPENID_PAPE_MAX_AUTH_AGE = <int value>``
     Enable `OpenID PAPE`_ extension support by defining this setting.
