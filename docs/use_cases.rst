@@ -108,7 +108,7 @@ Signup by OAuth access_token
 ----------------------------
 
 It's a common scenario that mobile applications will use an SDK to signup
-a user withing the app, but that signup won't be reflected by
+a user within the app, but that signup won't be reflected by
 python-social-auth_ unless the corresponding database entries are created. In
 order to do so, it's possible to create a view / route that creates those
 entries by a given ``access_token``. Take the following code for instance (the
