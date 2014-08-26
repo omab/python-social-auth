@@ -3,13 +3,18 @@ from south.utils import datetime_utils as datetime
 from south.db import db
 from south.v2 import SchemaMigration
 
+from .import (get_custom_user_model_for_migrations,
+              custom_user_frozen_models)
+
+USER_MODEL = get_custom_user_model_for_migrations()
+
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'UserSocialAuth'
         db.create_table('social_auth_usersocialauth', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='social_auth', to=orm['auth.User'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='social_auth', to=orm[USER_MODEL])),
             ('provider', self.gf('django.db.models.fields.CharField')(max_length=32)),
             ('uid', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('extra_data', self.gf('social.apps.django_app.default.fields.JSONField')(default='{}')),
@@ -143,5 +148,6 @@ class Migration(SchemaMigration):
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'social_auth'", 'to': u"orm['auth.User']"})
         }
     }
+    models.update(custom_user_frozen_models(USER_MODEL))
 
     complete_apps = ['default']
