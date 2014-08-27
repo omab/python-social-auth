@@ -7,7 +7,7 @@ def mail_validation(backend, details, is_new=False, *args, **kwargs):
     requires_validation = backend.REQUIRES_EMAIL_VALIDATION or \
                           backend.setting('FORCE_EMAIL_VALIDATION', False)
     send_validation = details.get('email') and \
-                      (is_new or backend.settings('PASSWORDLESS', False))
+                      (is_new or backend.setting('PASSWORDLESS', False))
     if requires_validation and send_validation:
         data = backend.strategy.request_data()
         if 'verification_code' in data:
