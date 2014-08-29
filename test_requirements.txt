@@ -1,0 +1,4 @@
+mock==1.0.1
+freeze==0.8.0
+sure==1.2.7
+httpretty==0.8.3

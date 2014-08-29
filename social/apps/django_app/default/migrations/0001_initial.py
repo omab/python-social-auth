@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
+import django
+from django.db import models
+from django.db import migrations
+
 import social.apps.django_app.default.fields
 from django.conf import settings
 import social.storage.django_orm
