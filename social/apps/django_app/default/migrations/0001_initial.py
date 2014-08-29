@@ -2,13 +2,13 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import social.apps.django_app.default.fields
 from django.conf import settings
+
 import social.storage.django_orm
+import social.apps.django_app.default.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
@@ -17,7 +17,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Association',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, primary_key=True,
+                                        auto_created=True, verbose_name='ID')),
                 ('server_url', models.CharField(max_length=255)),
                 ('handle', models.CharField(max_length=255)),
                 ('secret', models.CharField(max_length=255)),
@@ -28,12 +29,16 @@ class Migration(migrations.Migration):
             options={
                 'db_table': 'social_auth_association',
             },
-            bases=(models.Model, social.storage.django_orm.DjangoAssociationMixin),
+            bases=(
+                models.Model,
+                social.storage.django_orm.DjangoAssociationMixin
+            ),
         ),
         migrations.CreateModel(
             name='Code',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, primary_key=True,
+                                        auto_created=True, verbose_name='ID')),
                 ('email', models.EmailField(max_length=75)),
                 ('code', models.CharField(db_index=True, max_length=32)),
                 ('verified', models.BooleanField(default=False)),
@@ -50,7 +55,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Nonce',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, primary_key=True,
+                                        auto_created=True, verbose_name='ID')),
                 ('server_url', models.CharField(max_length=255)),
                 ('timestamp', models.IntegerField()),
                 ('salt', models.CharField(max_length=65)),
@@ -63,10 +69,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserSocialAuth',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
+                ('id', models.AutoField(serialize=False, primary_key=True,
+                                        auto_created=True, verbose_name='ID')),
                 ('provider', models.CharField(max_length=32)),
                 ('uid', models.CharField(max_length=255)),
-                ('extra_data', social.apps.django_app.default.fields.JSONField(default='{}')),
+                ('extra_data',
+                 social.apps.django_app.default.fields.JSONField(default='{}')
+                ),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
