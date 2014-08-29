@@ -138,7 +138,7 @@ class OpenIdConnectTestMixin(object):
         })
         return settings
 
-    def parse_nonce_and_return_access_token_body(self, request, _url, headers):
+    def access_token_body(self, request, _url, headers):
         """
         Get the nonce from the request parameters, add it to the id_token, and
         return the complete response.
@@ -146,6 +146,24 @@ class OpenIdConnectTestMixin(object):
         nonce = parse_qs(request.body).get('nonce')
         body = self.prepare_access_token_body(nonce=nonce)
         return 200, headers, body
+
+    def get_id_token(self, client_key=None, expiration_datetime=None,
+                     issue_datetime=None, nonce=None, issuer=None):
+        """
+        Return the id_token to be added to the access token body.
+        """
+
+        id_token = {
+            'iss': issuer,
+            'nonce': nonce,
+            'aud': client_key,
+            'azp': client_key,
+            'exp': expiration_datetime,
+            'iat': issue_datetime,
+            'sub': '1234'
+        }
+
+        return id_token
 
     def prepare_access_token_body(self, client_key=None, client_secret=None,
                                   expiration_datetime=None,
@@ -171,15 +189,10 @@ class OpenIdConnectTestMixin(object):
         issue_datetime = issue_datetime or now
         nonce = nonce or 'a-nonce'
         issuer = issuer or self.issuer
-        id_token = {
-            'iss': issuer,
-            'nonce': nonce,
-            'aud': client_key,
-            'azp': client_key,
-            'exp': timegm(expiration_datetime.utctimetuple()),
-            'iat': timegm(issue_datetime.utctimetuple()),
-            'sub': '1234',
-        }
+        id_token = self.get_id_token(
+            client_key, timegm(expiration_datetime.utctimetuple()),
+            timegm(issue_datetime.utctimetuple()), nonce, issuer)
+
         body['id_token'] = jwt.encode(id_token, client_secret).decode('utf-8')
         return json.dumps(body)
 

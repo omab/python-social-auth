@@ -275,7 +275,3 @@ class GoogleOpenIdConnectTest(OpenIdConnectTestMixin, GoogleOAuth2Test):
     user_data_url = \
         'https://www.googleapis.com/plus/v1/people/me/openIdConnect'
     issuer = "accounts.google.com"
-
-    def setUp(self):
-        GoogleOAuth2Test.setUp(self)
-        self.access_token_body = self.parse_nonce_and_return_access_token_body
