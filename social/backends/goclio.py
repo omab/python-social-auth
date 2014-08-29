@@ -1,7 +1,3 @@
-"""
-Angel OAuth2 backend, docs at:
-    http://psa.matiasaguirre.net/docs/backends/angel.html
-"""
 from social.backends.oauth import BaseOAuth2
 
 
@@ -15,12 +11,11 @@ class GoClioOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from GoClio account"""
-        account = response.get('account', {})
         user = response.get('user', {})
-
         username = user.get('id', None)
         email = user.get('email', None)
-        first_name, last_name = (user.get('first_name', None), user.get('last_name', None))
+        first_name, last_name = (user.get('first_name', None),
+                                 user.get('last_name', None))
         fullname = '%s %s' % (first_name, last_name)
 
         return {'username': username,
@@ -31,9 +26,10 @@ class GoClioOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        return self.get_json('https://app.goclio.com/api/v2/users/who_am_i', params={
-            'access_token': access_token
-        })
+        return self.get_json(
+            'https://app.goclio.com/api/v2/users/who_am_i',
+            params={'access_token': access_token}
+        )
 
     def get_user_id(self, details, response):
         return response.get('user', {}).get('id')
