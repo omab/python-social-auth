@@ -9,7 +9,7 @@ from django.contrib.auth import logout as auth_logout, login
 from social.backends.oauth import BaseOAuth1, BaseOAuth2
 from social.backends.google import GooglePlusAuth
 from social.backends.utils import load_backends
-from social.apps.django_app.utils import psa
+from social.apps.django_app.utils import strategy
 
 from example.app.decorators import render_to
 
@@ -57,7 +57,7 @@ def require_email(request):
     return context(email_required=True, backend=backend)
 
 
-@psa('social:complete')
+@strategy('social:complete')
 def ajax_auth(request, backend):
     if isinstance(request.backend, BaseOAuth1):
         token = {
