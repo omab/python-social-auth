@@ -16,7 +16,6 @@ class SpotifyOAuth2(BaseOAuth2):
     ACCESS_TOKEN_URL = 'https://accounts.spotify.com/api/token'
     ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
-    STATE_PARAMETER = False
 
     def auth_headers(self):
         return {
