@@ -52,7 +52,7 @@ class BaseGoogleAuth(object):
 
 class BaseGoogleOAuth2API(BaseGoogleAuth):
     def get_scope(self):
-        """Return list with needed access scope"""
+        """Return list with needed access scope""" 
         scope = self.setting('SCOPE', [])
         if not self.setting('IGNORE_DEFAULT_SCOPE', False):
             if self.setting('USE_DEPRECATED_API', False):
