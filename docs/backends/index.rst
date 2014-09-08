@@ -81,6 +81,7 @@ Social backends
    mailru
    mapmyfitness
    mendeley
+   mineid
    mixcloud
    moves
    odnoklassnikiru

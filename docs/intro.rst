@@ -57,6 +57,7 @@ or extend current one):
     * Live_ OAuth2
     * Livejournal_ OpenId
     * Mailru_ OAuth2
+    * MineID_ OAuth2
     * Mixcloud_ OAuth2
     * `Mozilla Persona`_
     * Odnoklassniki_ OAuth2 and Application Auth
@@ -135,6 +136,7 @@ section.
 .. _Live: https://www.live.com
 .. _Livejournal: http://livejournal.com
 .. _Mailru: https://mail.ru
+.. _MineID: https://www.mineid.org
 .. _Mixcloud: https://www.mixcloud.com
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
