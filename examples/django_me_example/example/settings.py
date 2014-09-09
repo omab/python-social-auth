@@ -211,6 +211,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.user.user_details'
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 try:
     from example.local_settings import *
 except ImportError:
