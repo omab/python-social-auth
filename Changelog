@@ -1,3 +1,477 @@
+2014-09-11 v0.2.0
+=================
+
+  * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.0
+
+  * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
+    Restore @strategy decorator with warning message
+
+  * 2014-09-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Added commets detailing pipeline functionality. Refs #361
+
+  * 2014-08-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable state parameter for angel.co and spotify.com backends. Fixes #367
+
+  * 2014-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-08-29 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-08-27 Gianluca Pacchiella <gianluca.pacchiella@ktln2.org>
+    Fix typo
+
+  * 2014-08-27 Clinton Blackburn <clinton.blackburn@gmail.com>
+    Updated OpenId Connect Test Mixin
+
+  * 2014-08-25 Matt Luongo <mhluongo@gmail.com>
+    Use a more flexible South user migration approach.
+
+  * 2014-08-21 Matt Luongo <mhluongo@gmail.com>
+    Remove South from mandatory requirements.
+
+  * 2014-08-21 Matt Luongo <mhluongo@gmail.com>
+    Split up the Django 1.7+ & South migrations.
+
+  * 2014-08-21 Max Nanis <max@maxnanis.com>
+    Small grammatical edit
+
+  * 2014-08-19 Martey Dodoo <martey@marteydodoo.com>
+    Fix repository links in thanks document.
+
+  * 2014-08-18 Parker Phinney <parker.phinney@gmail.com>
+    changed default behavior of SESSION_EXPIRATION setting
+
+  * 2014-08-18 Ross Crawford-d'Heureuse <ross@lawpal.com>
+    added goclio
+
+  * 2014-08-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Link/img change
+
+  * 2014-08-16 Matías Aguirre <matiasaguirre@gmail.com>
+    RTD badge
+
+  * 2014-08-16 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-08-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Support passwordless schema on mail validation pipeline
+
+  * 2014-08-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix backend reference. Fixes #350
+
+  * 2014-08-12 = <=>
+    Add pushbullet backends
+
+  * 2014-08-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix disconnect buttons styles
+
+  * 2014-08-09 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and fixed tests. Refs #348
+
+  * 2014-08-08 Clinton Blackburn <clinton.blackburn@gmail.com>
+    Added Open ID Connect base backend
+
+  * 2014-08-08 Josh Probst <jprobst21@gmail.com>
+    numeric index for format
+
+  * 2014-08-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix user syncdb. Refs #342
+
+  * 2014-08-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify moves backend code and add documentation. Refs #307
+
+  * 2014-08-05 Vadym Petrychenko <darthwade@users.noreply.github.com>
+    Update vk.rst
+
+  * 2014-08-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Landscape conf
+
+  * 2014-08-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Support redirect_state in OAuth1 backends too (enable twitter by default).
+    Refs #338
+
+  * 2014-08-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable DropboxOAuth2 on example app
+
+  * 2014-07-29 Chris Lamb <chris@chris-lamb.co.uk>
+    Also populate Strava name from 'lastname' attribute:
+
+  * 2014-07-29 Chris Lamb <chris@chris-lamb.co.uk>
+    Correct reference to 'firstname' when populating forenames from Strava.
+
+  * 2014-07-29 Chris Lamb <chris@chris-lamb.co.uk>
+    Correct Stava scoping/permissions example.
+
+  * 2014-07-28 Chris Martin <ch.martin@gmail.com>
+    Clean up language in social/tests/README.rst
+
+  * 2014-07-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Docs about writing custom pipeline functions
+
+  * 2014-07-24 Matt Luongo <mhluongo@gmail.com>
+    Fix an import issue in the Django migrations.
+
+  * 2014-07-24 Matt Luongo <mhluongo@gmail.com>
+    List test requirements.
+
+  * 2014-07-24 Matt Luongo <mhluongo@gmail.com>
+    Support South and Django 1.7+ migrations.
+
+  * 2014-07-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Github for teams backend. Refs #329
+
+  * 2014-07-16 Nick Sandford <nick@sandford.id.au>
+    Fixed #327 -- Changed access token method on backend.
+
+  * 2014-07-15 David Grant <seizethedave@gmail.com>
+    Slight retouch to spelling and wordage.
+
+  * 2014-07-15 David Grant <seizethedave@gmail.com>
+    Minor typo.
+
+  * 2014-07-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix FK field descriptor for admin queries. Closes #322
+
+  * 2014-07-07 Matt Luongo <mhluongo@gmail.com>
+    Use South instead of Django 1.7 migrations.
+
+  * 2014-07-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Simple makefile for local tasks
+
+  * 2014-07-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Document django session migration script when moving from
+    django-social-auth to python-social-auth. Refs #320
+
+  * 2014-07-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Make user-agent setting available for all backends. Refs #317
+
+  * 2014-07-04 Harz-FEAR <hartzfear@gmail.com>
+    fix for AssertionError in pyramid
+
+  * 2014-07-01 Ondrej Slinták <ondrowan@gmail.com>
+    Added Django 1.7 migrations
+
+  * 2014-07-01 davidhubbard <davidhubbard@users.noreply.github.com>
+    fix PR #317
+
+  * 2014-07-01 davidhubbard <davidhubbard@users.noreply.github.com>
+    override request() to fix "429 Too Many Requests"
+
+  * 2014-06-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Tox runner with pyenv support
+
+  * 2014-06-24 Martey Dodoo <martey@marteydodoo.com>
+    Update link to Django example in documentation.
+
+  * 2014-06-22 Roman Levin <romanlevin@gmail.com>
+    Add note about access_type in docs
+
+  * 2014-06-22 Avi Alkalay <avi@unix.sh>
+    user first_date doesn't belong here
+
+  * 2014-06-21 Avi Alkalay <avi@unix.sh>
+    The Moves app backend
+
+  * 2014-06-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Initial work towards OpenIdConnect. Refs #300. Refs #284
+
+  * 2014-06-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Useful debug pipeling function
+
+  * 2014-06-18 Gabriel Le Breton <lebreton.gabriel@gmail.com>
+    text should not go into code block
+
+  * 2014-06-18 Nikolaev Andrey <frey.dev@yandex.ru>
+    It was impossible to change the version API Vkotnakte
+
+  * 2014-06-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Improve django example application look
+
+  * 2014-06-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix key access on instagram backend
+
+  * 2014-06-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Integrate flask app and flask mongoengine app
+
+  * 2014-06-14 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-06-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix docstring
+
+  * 2014-06-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Move common fields to base class in sqlalchemy ORMs.
+
+  * 2014-06-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Use mongoengin ORM in django me app
+
+  * 2014-06-12 Matías Aguirre <matiasaguirre@gmail.com>
+    QQ backend
+
+  * 2014-06-09 Josh Hawn <jlhawn@berkeley.edu>
+    Update docker backend with Docker Hub endpoints
+
+  * 2014-06-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Add missing module
+
+  * 2014-06-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Set user backend reference in django app
+
+  * 2014-06-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Update tests
+
+  * 2014-06-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Version change (no backward compatible change)
+
+  * 2014-05-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Refactor backend/strategy to avoid circular dependency
+
+  * 2014-06-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Support MergeDict and MultiDict in partial cleanup. Refs #291
+
+2014-06-07 v0.1.26
+==================
+
+  * 2014-06-07 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.26
+
+  * 2014-06-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix google-plus scope, support server-side flow
+
+2014-06-07 v0.1.25
+==================
+
+  * 2014-06-07 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.25
+
+  * 2014-06-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Support deprecated and new Google API. Refs #292. Refs #285
+
+  * 2014-06-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix pipeline example
+
+  * 2014-06-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Document steam player data saving
+
+  * 2014-05-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove eclipse settings from PR merge
+
+  * 2014-05-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Document google scopes deprecation. Refs #285
+
+  * 2014-05-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix title underline
+
+  * 2014-05-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Make request parameter optional. Refs #286
+
+  * 2014-05-26 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-05-24 Devin Sevilla <devin.sevilla@rd.io>
+    Rdio API methods use POST
+
+  * 2014-05-22 Michael Godshall <michaelgodshall@gmail.com>
+    Fixed Django 1.7 admin
+
+  * 2014-05-20 Hector Zhao <bzhao@mozilla.com>
+    avoid updating default settings
+
+  * 2014-05-17 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.0-dev
+
+2014-05-17 v0.1.24
+==================
+
+  * 2014-05-17 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.1.24
+
+  * 2014-05-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Example for ajax auth. Refs #272, #238
+
+  * 2014-05-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Circumvent recursive import issue in admin. Fixes #269
+
+  * 2014-05-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Update google scopes, remove the soon to be deprecated ones. Fixes #273
+
+  * 2014-05-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix title underline in docs
+
+  * 2014-05-17 Ryan Choi <ryan.choi@gmail.com>
+    remove mashery stuff from oauth; constrain it to beats
+
+  * 2014-05-17 Ryan Choi <ryan.choi@gmail.com>
+    oauth for beats
+
+  * 2014-05-15 Jason Sanford <jasonsanford@gmail.com>
+    Add links.
+
+  * 2014-05-15 Ryan Choi <ryan.choi@gmail.com>
+    remove commented code for spotify
+
+  * 2014-05-15 Ryan Choi <ryan.choi@gmail.com>
+    spotify oauth
+
+  * 2014-05-15 Jason Sanford <jasonsanford@gmail.com>
+    Python 2.6-friendly string formatting.
+
+  * 2014-05-15 Jason Sanford <jasonsanford@gmail.com>
+    Document MapMyFitness
+
+  * 2014-05-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Change priority for new user redirect location
+
+  * 2014-05-15 Jason Sanford <jasonsanford@gmail.com>
+    Test MapMyFitness backend
+
+  * 2014-05-14 Jason Sanford <jasonsanford@gmail.com>
+    Get started with MapMyFitness OAuth2
+
+  * 2014-05-13 Matías Aguirre <matiasaguirre@gmail.com>
+    MongoEngine ORM support for flask applications
+
+  * 2014-05-13 swmerko <matteo.ercolani@gmail.com>
+    from http API to https API
+
+  * 2014-05-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unused import
+
+  * 2014-05-10 Mark Lee <python-social-auth@lazymalevolence.com>
+    Replace references to python-oauth2 with references to requests-oauthlib
+
+  * 2014-05-08 Smamaxs <smamaxs@gmail.com>
+    get email on login
+
+  * 2014-05-07 Marno Krahmer <marno.krahmer@xing.com>
+    Change the authorization url for the xing api
+
+  * 2014-05-06 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and docs about Facebook Graph 2.0 backends
+
+  * 2014-05-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Settings to override default scope/attrs and docs about them. Refs #258
+
+  * 2014-05-06 Daniel Ryan <dryan@dryan.com>
+    added new backend classes for Facebook that use the Open Graph 2.0
+    endpoints
+
+  * 2014-05-01 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and logic simplification
+
+  * 2014-05-01 Kyle Richelhoff <kyle@loginradius.com>
+    Added LoginRadius backend.
+
+  * 2014-04-30 momamene <momamene@gmail.com>
+    Add Kakao backend
+
+  * 2014-04-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Update amazon docs, drop outdate details about bug. Fixes #260
+
+  * 2014-04-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Disable redirect_state in strava backend. Fixes #259
+
+  * 2014-04-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Allow overrideable values for AX schema attrs and SReg attributes in
+    OpenId. Fixes #258
+
+  * 2014-04-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Refactor fullname, first name and last name generation. Fixes #240
+
+  * 2014-04-23 Serg Baburin <serg.baburin@gmail.com>
+    Using https as required by the API.
+
+  * 2014-04-19 Your Name <maxime.ernoult@mines-paristech.fr>
+    User model fields accessors clashes issue solved
+
+  * 2014-04-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Switch VK OpenAPI to session intead of cookies.
+
+  * 2014-04-14 David Blado <dblado@gmail.com>
+    linkedin now requires redirect uris to be verified:
+    https://developer.linkedin.com/blog/register-your-oauth-2-redirect-urls
+
+  * 2014-04-14 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-04-14 Hannes Ljungberg <hannes@5monkeys.se>
+    Add Twitch backend
+
+  * 2014-04-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unused parameters from pipeline prototypes
+
+  * 2014-04-08 Alexander Chernigov <aleksandr.chernigov@gmail.com>
+    Handle properly refusing when entering via twitter
+
+  * 2014-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove doc about deprecated setting. Refs #241
+
+  * 2014-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Option for open id providers to specify the username key in the values
+
+  * 2014-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Include strava backend in the index
+
+  * 2014-04-02 (cdep) illabout <cdep.illabout@gmail.com>
+    Fix small spelling mistake.
+
+  * 2014-04-02 Joe Hura <dev@creatingtrouble.com>
+    Add support for Vimeo OAuth 2 as part of Vimeo API v3
+
+  * 2014-04-01 Krishan Gupta <bkgupta@gmail.com>
+    Update settings.rst
+
+  * 2014-04-01 Damien <damien@dam.io>
+    Incorrect syntax given in the documention
+
+  * 2014-04-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix use-case snippet
+
+  * 2014-04-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Switch custom redirect state to off in mendeley OAuth2. Closes #234
+
+  * 2014-04-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable Last.fm in example applications
+
+  * 2014-04-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Last.fm docs
+
+  * 2014-04-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Refactor Last.fm backend (simplify code)
+
+  * 2014-03-26 root <root@djmarkov.lab>
+    Added backend for Last.Fm. There is probably an easier way to implement
+    this.
+
+  * 2014-03-28 Matías Aguirre <matiasaguirre@gmail.com>
+    Make exception raise optional with setting. Add tests and docs
+
+  * 2014-03-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Stop tox on first error
+
+  * 2014-03-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Avoid passing multiple arguments to disconnect partial pipeline
+
+  * 2014-03-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Improve partial session cleaner code. Refs #231
+
+  * 2014-03-27 Piotr Czesław Kalmus <piotr.kalmus@syncano.com>
+    login with bitbucket account, error when any verified email is set
+
+  * 2014-03-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Link docker docs in backends index
+
+  * 2014-03-27 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-03-25 Fernando <fermayo@gmail.com>
+    initial version of docker backend
+
+  * 2014-03-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Flag dev version
+
 2014-03-26 v0.1.23
 ==================
 
