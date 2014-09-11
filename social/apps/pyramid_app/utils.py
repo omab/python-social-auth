@@ -1,3 +1,5 @@
+import warnings
+
 from functools import wraps
 
 from pyramid.threadlocal import get_current_registry
@@ -69,3 +71,8 @@ def backends(request, user):
             user, get_helper('AUTHENTICATION_BACKENDS'), storage
         )
     }
+
+
+def strategy(*args, **kwargs):
+    warnings.warn('@strategy decorator is deprecated, use @psa instead')
+    return psa(*args, **kwargs)

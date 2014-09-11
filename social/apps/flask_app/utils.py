@@ -1,3 +1,5 @@
+import warnings
+
 from functools import wraps
 
 from flask import current_app, url_for, g
@@ -44,3 +46,8 @@ def psa(redirect_uri=None):
             return func(backend, *args, **kwargs)
         return wrapper
     return decorator
+
+
+def strategy(*args, **kwargs):
+    warnings.warn('@strategy decorator is deprecated, use @psa instead')
+    return psa(*args, **kwargs)

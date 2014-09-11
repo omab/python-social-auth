@@ -1,3 +1,5 @@
+import warnings
+
 from functools import wraps
 
 from django.conf import settings
@@ -66,3 +68,8 @@ class BackendWrapper(object):
 
     def get_user(self, user_id):
         return Strategy(storage=Storage).get_user(user_id)
+
+
+def strategy(*args, **kwargs):
+    warnings.warn('@strategy decorator is deprecated, use @psa instead')
+    return psa(*args, **kwargs)

@@ -1,6 +1,8 @@
-import web
+import warnings
 
 from functools import wraps
+
+import web
 
 from social.utils import setting_name, module_member
 from social.backends.utils import get_backend, user_backends_data
@@ -60,3 +62,8 @@ def login_redirect():
         'REDIRECT_FIELD_VALUE': value,
         'REDIRECT_QUERYSTRING': value and ('next=' + value) or ''
     }
+
+
+def strategy(*args, **kwargs):
+    warnings.warn('@strategy decorator is deprecated, use @psa instead')
+    return psa(*args, **kwargs)

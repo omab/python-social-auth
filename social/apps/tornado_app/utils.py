@@ -1,3 +1,5 @@
+import warnings
+
 from functools import wraps
 
 from social.utils import setting_name
@@ -40,3 +42,8 @@ def psa(redirect_uri=None):
             return func(self, backend, *args, **kwargs)
         return wrapper
     return decorator
+
+
+def strategy(*args, **kwargs):
+    warnings.warn('@strategy decorator is deprecated, use @psa instead')
+    return psa(*args, **kwargs)

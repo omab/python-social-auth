@@ -1,6 +1,7 @@
-import cherrypy
-
+import warnings
 from functools import wraps
+
+import cherrypy
 
 from social.utils import setting_name, module_member
 from social.strategies.utils import get_strategy
@@ -43,3 +44,8 @@ def backends(user):
     Will return the output of social.backends.utils.user_backends_data."""
     return user_backends_data(user, get_helper('AUTHENTICATION_BACKENDS'),
                               module_member(get_helper('STORAGE')))
+
+
+def strategy(*args, **kwargs):
+    warnings.warn('@strategy decorator is deprecated, use @psa instead')
+    return psa(*args, **kwargs)
