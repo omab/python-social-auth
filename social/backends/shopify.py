@@ -32,7 +32,7 @@ class ShopifyOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Use the shopify store name as the username"""
         return {
-            'username': six.text_type(response.get('shop', ''), 'utf-8')
+            'username': six.text_type(response.get('shop', ''))
                                 .replace('.myshopify.com', '')
         }
 
