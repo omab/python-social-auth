@@ -13,5 +13,5 @@ class User(Base):
     password = Column(String(128), nullable=True)
 
 
-if __name__ == '__main__':
+def user_syncdb():
     Base.metadata.create_all(engine)

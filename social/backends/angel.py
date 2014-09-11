@@ -11,7 +11,6 @@ class AngelOAuth2(BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     ACCESS_TOKEN_URL = 'https://angel.co/api/oauth/token/'
     REDIRECT_STATE = False
-    STATE_PARAMETER = False
 
     def get_user_details(self, response):
         """Return user details from Angel account"""

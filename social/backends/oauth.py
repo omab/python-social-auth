@@ -28,6 +28,8 @@ class OAuthAuth(BaseAuth):
     ACCESS_TOKEN_METHOD = 'GET'
     REVOKE_TOKEN_URL = None
     REVOKE_TOKEN_METHOD = 'POST'
+    REDIRECT_STATE = False
+    STATE_PARAMETER = False
 
     def extra_data(self, user, uid, response, details=None):
         """Return access_token and extra defined names to store in
@@ -35,6 +37,59 @@ class OAuthAuth(BaseAuth):
         data = super(OAuthAuth, self).extra_data(user, uid, response, details)
         data['access_token'] = response.get('access_token', '')
         return data
+
+    def state_token(self):
+        """Generate csrf token to include as state parameter."""
+        return self.strategy.random_string(32)
+
+    def get_or_create_state(self):
+        if self.STATE_PARAMETER or self.REDIRECT_STATE:
+            # Store state in session for further request validation. The state
+            # value is passed as state parameter (as specified in OAuth2 spec),
+            # but also added to redirect, that way we can still verify the
+            # request if the provider doesn't implement the state parameter.
+            # Reuse token if any.
+            name = self.name + '_state'
+            state = self.strategy.session_get(name)
+            if state is None:
+                state = self.state_token()
+                self.strategy.session_set(name, state)
+        else:
+            state = None
+        return state
+
+    def get_session_state(self):
+        return self.strategy.session_get(self.name + '_state')
+
+    def get_request_state(self):
+        request_state = self.data.get('state') or \
+                        self.data.get('redirect_state')
+        if request_state and isinstance(request_state, list):
+            request_state = request_state[0]
+        return request_state
+
+    def validate_state(self):
+        """Validate state value. Raises exception on error, returns state
+        value if valid."""
+        if not self.STATE_PARAMETER and not self.REDIRECT_STATE:
+            return None
+        state = self.get_session_state()
+        request_state = self.get_request_state()
+        if not request_state:
+            raise AuthMissingParameter(self, 'state')
+        elif not state:
+            raise AuthStateMissing(self, 'state')
+        elif not request_state == state:
+            raise AuthStateForbidden(self)
+        else:
+            return state
+
+    def get_redirect_uri(self, state=None):
+        """Build redirect with redirect_state parameter."""
+        uri = self.redirect_uri
+        if self.REDIRECT_STATE and state:
+            uri = url_add_parameters(uri, {'redirect_state': state})
+        return uri
 
     def get_scope(self):
         """Return list with needed access scope"""
@@ -109,6 +164,7 @@ class BaseOAuth1(OAuthAuth):
         """Return user, might be logged in"""
         # Multiple unauthorized tokens are supported (see #521)
         self.process_error(self.data)
+        self.validate_state()
         token = self.get_unauthorized_token()
         try:
             access_token = self.access_token(token)
@@ -169,12 +225,14 @@ class BaseOAuth1(OAuthAuth):
         # decoding='utf-8' produces errors with python-requests on Python3
         # since the final URL will be of type bytes
         decoding = None if six.PY3 else 'utf-8'
-        response = self.request(self.REQUEST_TOKEN_URL,
-                                params=params,
-                                auth=OAuth1(key, secret,
-                                            callback_uri=self.redirect_uri,
-                                            decoding=decoding),
-                                method=self.REQUEST_TOKEN_METHOD)
+        state = self.get_or_create_state()
+        response = self.request(
+            self.REQUEST_TOKEN_URL,
+            params=params,
+            auth=OAuth1(key, secret, callback_uri=self.get_redirect_uri(state),
+                        decoding=decoding),
+            method=self.REQUEST_TOKEN_METHOD
+        )
         content = response.content
         if response.encoding or response.apparent_encoding:
             content = content.decode(response.encoding or
@@ -192,7 +250,8 @@ class BaseOAuth1(OAuthAuth):
         params[self.OAUTH_TOKEN_PARAMETER_NAME] = token.get(
             self.OAUTH_TOKEN_PARAMETER_NAME
         )
-        params[self.REDIRECT_URI_PARAMETER_NAME] = self.redirect_uri
+        state = self.get_or_create_state()
+        params[self.REDIRECT_URI_PARAMETER_NAME] = self.get_redirect_uri(state)
         return self.AUTHORIZATION_URL + '?' + urlencode(params)
 
     def oauth_auth(self, token=None, oauth_verifier=None,
@@ -203,10 +262,11 @@ class BaseOAuth1(OAuthAuth):
         # decoding='utf-8' produces errors with python-requests on Python3
         # since the final URL will be of type bytes
         decoding = None if six.PY3 else 'utf-8'
+        state = self.get_or_create_state()
         return OAuth1(key, secret,
                       resource_owner_key=token.get('oauth_token'),
                       resource_owner_secret=token.get('oauth_token_secret'),
-                      callback_uri=self.redirect_uri,
+                      callback_uri=self.get_redirect_uri(state),
                       verifier=oauth_verifier,
                       signature_type=signature_type,
                       decoding=decoding)
@@ -241,17 +301,6 @@ class BaseOAuth2(OAuthAuth):
     REDIRECT_STATE = True
     STATE_PARAMETER = True
 
-    def state_token(self):
-        """Generate csrf token to include as state parameter."""
-        return self.strategy.random_string(32)
-
-    def get_redirect_uri(self, state=None):
-        """Build redirect with redirect_state parameter."""
-        uri = self.redirect_uri
-        if self.REDIRECT_STATE and state:
-            uri = url_add_parameters(uri, {'redirect_state': state})
-        return uri
-
     def auth_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
         params = {
@@ -266,20 +315,7 @@ class BaseOAuth2(OAuthAuth):
 
     def auth_url(self):
         """Return redirect url"""
-        if self.STATE_PARAMETER or self.REDIRECT_STATE:
-            # Store state in session for further request validation. The state
-            # value is passed as state parameter (as specified in OAuth2 spec),
-            # but also added to redirect, that way we can still verify the
-            # request if the provider doesn't implement the state parameter.
-            # Reuse token if any.
-            name = self.name + '_state'
-            state = self.strategy.session_get(name)
-            if state is None:
-                state = self.state_token()
-                self.strategy.session_set(name, state)
-        else:
-            state = None
-
+        state = self.get_or_create_state()
         params = self.auth_params(state)
         params.update(self.get_scope_argument())
         params.update(self.auth_extra_arguments())
@@ -289,26 +325,6 @@ class BaseOAuth2(OAuthAuth):
             # providers value exactly.
             params = unquote(params)
         return self.AUTHORIZATION_URL + '?' + params
-
-    def validate_state(self):
-        """Validate state value. Raises exception on error, returns state
-        value if valid."""
-        if not self.STATE_PARAMETER and not self.REDIRECT_STATE:
-            return None
-        state = self.strategy.session_get(self.name + '_state')
-        request_state = self.data.get('state') or \
-                        self.data.get('redirect_state')
-        if request_state and isinstance(request_state, list):
-            request_state = request_state[0]
-
-        if not request_state:
-            raise AuthMissingParameter(self, 'state')
-        elif not state:
-            raise AuthStateMissing(self, 'state')
-        elif not request_state == state:
-            raise AuthStateForbidden(self)
-        else:
-            return state
 
     def auth_complete_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
@@ -338,11 +354,12 @@ class BaseOAuth2(OAuthAuth):
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
+        state = self.validate_state()
         self.process_error(self.data)
         try:
             response = self.request_access_token(
                 self.ACCESS_TOKEN_URL,
-                data=self.auth_complete_params(self.validate_state()),
+                data=self.auth_complete_params(state),
                 headers=self.auth_headers(),
                 method=self.ACCESS_TOKEN_METHOD
             )

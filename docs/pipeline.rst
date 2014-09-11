@@ -30,16 +30,50 @@ user instances and gathers basic data from providers.
 The default pipeline is composed by::
 
     (
+        # Get the information we can about the user and return it in a simple
+        # format to create the user instance later. On some cases the details are
+        # already part of the auth response from the provider, but sometimes this
+        # could hit a provider API.
         'social.pipeline.social_auth.social_details',
+
+        # Get the social uid from whichever service we're authing thru. The uid is
+        # the unique identifier of the given user in the provider.
         'social.pipeline.social_auth.social_uid',
+
+        # Verifies that the current auth process is valid within the current
+        # project, this is were emails and domains whitelists are applied (if
+        # defined).
         'social.pipeline.social_auth.auth_allowed',
+
+        # Checks if the current social-account is already associated in the site.
         'social.pipeline.social_auth.social_user',
+
+        # Make up a username for this person, appends a random string at the end if
+        # there's any collision.
         'social.pipeline.user.get_username',
+
+        # Send a validation email to the user to verify its email address.
+        # Disabled by default.
+        # 'social.pipeline.mail.mail_validation',
+
+        # Associates the current social details with another user account with
+        # a similar email address. Disabled by default.
+        # 'social.pipeline.social_auth.associate_by_email',
+
+        # Create a user account if we haven't found one yet.
         'social.pipeline.user.create_user',
+
+        # Create the record that associated the social account with this user.
         'social.pipeline.social_auth.associate_user',
+
+        # Populate the extra_data field in the social record with the values
+        # specified by settings (and the default ones like access_token, etc).
         'social.pipeline.social_auth.load_extra_data',
+
+        # Update the user record with any changed info from the auth service.
         'social.pipeline.user.user_details'
     )
+
 
 It's possible to override it by defining the setting ``SOCIAL_AUTH_PIPELINE``,
 for example a pipeline that won't create users, just accept already registered
@@ -98,9 +132,18 @@ password in your pipeline function. Check *Partial Pipeline* below.
 In order to override the disconnection pipeline, just define the setting::
 
     SOCIAL_AUTH_DISCONNECT_PIPELINE = (
+        # Verifies that the social association can be disconnected from the current
+        # user (ensure that the user login mechanism is not compromised by this
+        # disconnection).
         'social.pipeline.disconnect.allowed_to_disconnect',
+
+        # Collects the social associations to disconnect.
         'social.pipeline.disconnect.get_entries',
+
+        # Revoke any access_token when possible.
         'social.pipeline.disconnect.revoke_tokens',
+
+        # Removes the social associations.
         'social.pipeline.disconnect.disconnect'
     )
 
@@ -177,6 +220,125 @@ defined::
 
 Or individually by defining the setting per backend basis like
 ``SOCIAL_AUTH_TWITTER_FORCE_EMAIL_VALIDATION = True``.
+
+
+Extending the Pipeline
+======================
+
+The main purpose of the pipeline (either creation or deletion pipelines), is to
+allow extensibility for developers, you can jump in the middle of it, do
+changes to the data, create other models instances, ask users for data, or even
+halt the whole process.
+
+Extending the pipeline implies:
+
+    1. Writing a function
+    2. Locate it in a accessible path (accessible in the way that it can be
+       imported)
+    3. Override the default pipeline definition with one that includes your
+       function.
+
+Writing the function is quite simple. Depending on the place you locate it will
+determine the arguments it will receive, for example, adding your function
+after ``social.pipeline.user.create_user`` ensures that you get the user
+instance (created or already existent) instead of a ``None`` value.
+
+The pipeline functions will get quite a lot of arguments, ranging from the
+backend in use, different model instances, server requests and provider
+responses. To enumerate a few:
+
+``strategy``
+    The current strategy instance.
+
+``backend``
+    The current backend instance.
+
+``uid``
+    User ID in the provider, this ``uid`` should identify the user in the
+    current provider.
+
+``response = {} or object()``
+    The server user-details response, it depends on the protocol in use (and
+    sometimes the provider implementation of such protocol), but usually it's
+    just a ``dict`` with the user profile details in such provider. Lots of
+    information related to the user is provider here, sometimes the ``scope``
+    will increase the amount of information in this response on OAuth
+    providers.
+
+``details = {}``
+    Basic user details generated by the backend, used to create/update the user
+    model details (this ``dict`` will contain values like ``username``,
+    ``email``, ``first_name``, ``last_name`` and ``fullname``).
+
+``user = None``
+    The user instance (or ``None`` if it wasn't created or retrieved from the
+    database yet).
+
+``social = None``
+    This is the associated ``UserSocialAuth`` instance for the given user (or
+    ``None`` if it wasn't created or retrieved from the DB yet).
+
+Usually when writing your custom pipeline function, you just want to get some
+values from the ``response`` parameter. But you can do even more, like call
+other APIs endpoints to retrieve even more details about the user, store them
+on some other place, etc.
+
+Here's an example of a simple pipeline function that will create a ``Profile``
+class related to the current user, this profile will store some simple details
+returned by the provider (``Facebook`` in this example). The usual Facebook
+``response`` looks like this::
+
+    {
+        'username': 'foobar',
+        'access_token': 'CAAD...',
+        'first_name': 'Foo',
+        'last_name': 'Bar',
+        'verified': True,
+        'name': 'Foo Bar',
+        'locale': 'en_US',
+        'gender': 'male',
+        'expires': '5183999',
+        'email': 'foo@bar.com',
+        'updated_time': '2014-01-14T15:58:35+0000',
+        'link': 'https://www.facebook.com/foobar',
+        'timezone': -3,
+        'id': '100000126636010'
+    }
+
+Let's say we are interested in storing the user profile link, the gender and
+the timezone in our ``Profile`` model::
+
+    def save_profile(backend, user, response, *args, **kwargs):
+        if backend.name == 'facebook':
+            profile = user.get_profile()
+            if profile is None:
+                profile = Profile(user_id=user.id)
+            profile.gender = response.get('gender')
+            profile.link = response.get('link')
+            profile.timezone = response.get('timezone')
+            profile.save()
+
+Now all that's needed is to tell ``python-social-auth`` to use this function in
+the pipeline, since it needs the user instance, it needs to be put after
+``create_user`` function::
+
+    SOCIAL_AUTH_PIPELINE = (
+        'social.pipeline.social_auth.social_details',
+        'social.pipeline.social_auth.social_uid',
+        'social.pipeline.social_auth.auth_allowed',
+        'social.pipeline.social_auth.social_user',
+        'social.pipeline.user.get_username',
+        'social.pipeline.user.create_user',
+        'import.path.to.save_profile',  # <--- set the import-path to the function
+        'social.pipeline.social_auth.associate_user',
+        'social.pipeline.social_auth.load_extra_data',
+        'social.pipeline.user.user_details'
+    )
+
+If the return value of the function is a ``dict``, the values will be merged
+into the next pipeline function parameters, so, for instance, if you want the
+``profile`` instance to be available to the next function, all that it needs to
+do is return ``{'profile': profile}``.
 
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _example applications: https://github.com/omab/python-social-auth/tree/master/examples

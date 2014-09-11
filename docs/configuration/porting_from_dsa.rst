@@ -106,12 +106,40 @@ changes. Examples of the new import paths::
 Session
 -------
 
-Django stores the last authentication backend used in the user session, this
-can cause import troubles when porting since the old import paths aren't valid
-anymore. Sadly so far the only solution is to clean the sessions content, that
-means to force the user to login again.
+Django stores the last authentication backend used in the user session as an
+import path, this can cause import troubles when porting since the old import
+paths aren't valid anymore. Some solutions to this problem are:
+
+1. Clean the session and force the users to login again in your site
+
+2. Run a migration script that will update the authentication backend session
+   value for each session in your database. This implies figuring out the new
+   import path for each backend you have configured, which is the value used in
+   ``AUTHENTICATION_BACKENDS`` setting.
+
+   `@tomgruner`_ created a Gist here_ that updates the value just for Facebook
+   backend. A ``template`` for this script would look like this::
+
+    from django.contrib.sessions.models import Session
+
+    BACKENDS = {
+        'social_auth.backends.facebook.FacebookBackend': 'social.backends.facebook.FacebookOAuth2'
+    }
+
+    for sess in Session.objects.iterator():
+        session_dict = sess.get_decoded()
+
+        if '_auth_user_backend' in session_dict.keys():
+            # Change old backend import path from new backend import path
+            if session_dict['_auth_user_backend'].startswith('social_auth'):
+                session_dict['_auth_user_backend'] = BACKENDS[session_dict['_auth_user_backend']]
+                new_sess = Session.objects.save(sess.session_key, session_dict, sess.expire_date)
+                print 'New session saved {}'.format(new_sess.pk)
+
 
 .. _django-social-auth: https://github.com/omab/django-social-auth
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _example app: https://github.com/omab/python-social-auth/blob/master/examples/django_example/example/urls.py#L17
 .. _Facebook OAuth2 backend: https://github.com/omab/python-social-auth/blob/master/social/backends/facebook.py#L29
+.. _@tomgruner: https://github.com/tomgruner
+.. _here: https://gist.github.com/tomgruner/5ce8bb1f4c55d17b5b25

@@ -31,11 +31,11 @@ def disconnect(request, backend, association_id=None):
 
 
 def _do_login(backend, user, social_user):
-    user.backend = '{}.{}'.format(backend.__module__,
+    user.backend = '{0}.{1}'.format(backend.__module__,
                                   backend.__class__.__name__)
     login(backend.strategy.request, user)
-    if backend.setting('SESSION_EXPIRATION', True):
-        # Set session expiration date if present and not disabled
+    if backend.setting('SESSION_EXPIRATION', False):
+        # Set session expiration date if present and enabled
         # by setting. Use last social-auth instance for current
         # provider, users can associate several accounts with
         # a same provider.

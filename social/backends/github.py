@@ -13,6 +13,7 @@ class GithubOAuth2(BaseOAuth2):
     name = 'github'
     AUTHORIZATION_URL = 'https://github.com/login/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token'
+    ACCESS_TOKEN_METHOD = 'POST'
     SCOPE_SEPARATOR = ','
     EXTRA_DATA = [
         ('id', 'id'),
@@ -49,31 +50,18 @@ class GithubOAuth2(BaseOAuth2):
         return self.get_json(url, params={'access_token': access_token})
 
 
-class GithubOrganizationOAuth2(GithubOAuth2):
-    """Github OAuth2 authentication backend for organizations"""
-    name = 'github-org'
-
-    def get_user_details(self, response):
-        """Return user details from Github account"""
-        fullname, first_name, last_name = self.get_user_names(
-            response.get('name')
-        )
-        return {'username': response.get('login'),
-                'email': response.get('email') or '',
-                'fullname': fullname,
-                'first_name': first_name,
-                'last_name': last_name}
+class GithubMemberOAuth2(GithubOAuth2):
+    no_member_string = ''
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        user_data = super(GithubOrganizationOAuth2, self).user_data(
+        user_data = super(GithubMemberOAuth2, self).user_data(
             access_token, *args, **kwargs
         )
-        url = 'https://api.github.com/orgs/{org}/members/{username}'\
-                    .format(org=self.setting('NAME'),
-                            username=user_data.get('login'))
         try:
-            self.request(url, params={'access_token': access_token})
+            self.request(self.member_url(user_data), params={
+                'access_token': access_token
+            })
         except HTTPError as err:
             # if the user is a member of the organization, response code
             # will be 204, see http://bit.ly/ZS6vFl
@@ -81,3 +69,29 @@ class GithubOrganizationOAuth2(GithubOAuth2):
                 raise AuthFailed(self,
                                  'User doesn\'t belong to the organization')
         return user_data
+
+    def member_url(self, user_data):
+        raise NotImplementedError('Implement in subclass')
+
+
+class GithubOrganizationOAuth2(GithubMemberOAuth2):
+    """Github OAuth2 authentication backend for organizations"""
+    name = 'github-org'
+    no_member_string = 'User doesn\'t belong to the organization'
+
+    def member_url(self, user_data):
+        return 'https://api.github.com/orgs/{org}/members/{username}'\
+                    .format(org=self.setting('NAME'),
+                            username=user_data.get('login'))
+
+
+
+class GithubTeamOAuth2(GithubMemberOAuth2):
+    """Github OAuth2 authentication backend for teams"""
+    name = 'github-team'
+    no_member_string = 'User doesn\'t belong to the team'
+
+    def member_url(self, user_data):
+        return 'https://api.github.com/teams/{team_id}/members/{username}'\
+                    .format(team_id=self.setting('ID'),
+                            username=user_data.get('login'))

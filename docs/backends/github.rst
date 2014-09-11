@@ -33,4 +33,21 @@ Be sure to define the organization name using the setting::
 This name will be used to check that the user really belongs to the given
 organization and discard it in case he's not part of it.
 
+
+Github for Teams
+----------------
+
+Similar to ``Github for Organizations``, there's a Github for Teams backend,
+use the backend ``GithubTeamOAuth2``. The settings are the same than
+the basic backend, but the names must be::
+
+    SOCIAL_AUTH_GITHUB_TEAM_*
+
+Be sure to define the ``Team Id`` using the setting::
+
+      SOCIAL_AUTH_GITHUB_TEAM_ID = ''
+
+This ``id`` will be used to check that the user really belongs to the given
+team and discard it in case he's not part of it.
+
 .. _GitHub Developers: https://github.com/settings/applications/new
