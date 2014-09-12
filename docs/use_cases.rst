@@ -116,7 +116,8 @@ code follows Django conventions, but versions for others frameworks can be
 implemented easily)::
 
     from django.contrib.auth import login
-    from social.apps.django_app.utils import strategy
+
+    from social.apps.django_app.utils import psa
 
     # Define an URL entry to point to this view, call it passing the
     # access_token parameter like ?access_token=<token>. The URL entry must
@@ -125,11 +126,12 @@ implemented easily)::
     #   url(r'^register-by-token/(?P<backend>[^/]+)/$',
     #       'register_by_access_token')
 
-    @strategy('social:complete')
+    @psa('social:complete')
     def register_by_access_token(request, backend):
-        # This view expects an access_token GET parameter
+        # This view expects an access_token GET parameter, if it's needed,
+        # request.backend and request.strategy will be loaded with the current
+        # backend and strategy.
         token = request.GET.get('access_token')
-        backend = request.strategy.backend
         user = backend.do_auth(request.GET.get('access_token'))
         if user:
             login(request, user)
