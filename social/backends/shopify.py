@@ -32,9 +32,21 @@ class ShopifyOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Use the shopify store name as the username"""
         return {
-            'username': six.text_type(response.get('shop', ''), 'utf-8')
+            'username': six.text_type(response.get('shop', ''))
                                 .replace('.myshopify.com', '')
         }
+
+
+    def extra_data(self, user, uid, response, details=None):
+        """Return access_token and extra defined names to store in
+        extra_data field"""
+        data = super(BaseOAuth2, self).extra_data(user, uid, response, details)
+        session = self.shopifyAPI.Session(self.data.get('shop').strip())
+        # Get, and store the permanent token
+        token = session.request_token(data["access_token"].dicts[1])
+        data["access_token"] = token
+
+        return dict(data)
 
     def auth_url(self):
         key, secret = self.get_key_and_secret()
@@ -43,8 +55,9 @@ class ShopifyOAuth2(BaseOAuth2):
         state = self.state_token()
         self.strategy.session_set(self.name + '_state', state)
         redirect_uri = self.get_redirect_uri(state)
-        return self.shopifyAPI.Session.create_permission_url(
-            self.data.get('shop').strip(),
+        session = self.shopifyAPI.Session(self.data.get('shop').strip())
+
+        return session.create_permission_url(
             scope=scope,
             redirect_uri=redirect_uri
         )
@@ -82,3 +95,4 @@ class ShopifyOAuth2(BaseOAuth2):
             }
         })
         return self.strategy.authenticate(*args, **kwargs)
+
