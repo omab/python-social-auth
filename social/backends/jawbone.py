@@ -51,3 +51,24 @@ class JawboneOAuth2(BaseOAuth2):
                     error
                 ))
         return super(JawboneOAuth2, self).process_error(data)
+
+    def auth_complete(self, *args, **kwargs):
+        """Completes loging process, must return user instance"""
+        self.process_error(self.data)
+        try:
+            response = self.request_access_token(
+                self.ACCESS_TOKEN_URL,
+                params=self.auth_complete_params(self.validate_state()),
+                headers=self.auth_headers(),
+                method=self.ACCESS_TOKEN_METHOD
+            )
+        except HTTPError as err:
+            if err.response.status_code == 400:
+                raise AuthCanceled(self)
+            else:
+                raise
+        except KeyError:
+            raise AuthUnknownError(self)
+        self.process_error(response)
+        return self.do_auth(response['access_token'], response=response,
+                            *args, **kwargs)
