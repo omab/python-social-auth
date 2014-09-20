@@ -36,6 +36,12 @@ Also ensure to define the MongoEngine_ storage setting::
 Database
 --------
 
+(For Django 1.7 and higher) sync database to create needed models::
+
+    ./manage.py makemigrations
+
+
+
 Sync database to create needed models::
 
     ./manage.py syncdb

@@ -232,6 +232,8 @@ SOCIAL_AUTH_PIPELINE = (
     #'social.pipeline.debug.debug'
 )
 
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
 # SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['first_name', 'last_name', 'email',
 #                                         'username']
 
