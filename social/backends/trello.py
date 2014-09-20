@@ -38,3 +38,10 @@ class TrelloOAuth(BaseOAuth1):
             return self.get_json(url, auth=self.oauth_auth(access_token))
         except ValueError:
             return None
+
+    def auth_extra_arguments(self):
+        return {
+            'name': self.setting('APP_NAME', ''),
+            # trello default expiration is '30days'
+            'expiration': self.setting('EXPIRATION', 'never')
+        }
