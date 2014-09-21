@@ -188,6 +188,19 @@ Or::
     $ cd python-social-auth
     $ sudo python setup.py install
 
+    
+Upgrading
+---------
+
+Django with South
+~~~~~~~~~~~~~~~~~
+
+Upgrading from 0.1 to 0.2 is likely to cause problems trying to apply a migration when the tables 
+already exist. In this case a fake migration needs to be applied::
+
+    $ python manage.py migrate --fake default
+
+
 Support
 ---------------------
 
