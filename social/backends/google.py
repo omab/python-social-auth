@@ -55,12 +55,10 @@ class BaseGoogleOAuth2API(BaseGoogleAuth):
         """Return list with needed access scope"""
         scope = self.setting('SCOPE', [])
         if not self.setting('IGNORE_DEFAULT_SCOPE', False):
-            default_scope = []
             if self.setting('USE_DEPRECATED_API', False):
-                default_scope = self.DEPRECATED_DEFAULT_SCOPE
+                scope = self.DEPRECATED_DEFAULT_SCOPE
             else:
-                default_scope = self.DEFAULT_SCOPE
-            scope += default_scope or []
+                scope = self.DEFAULT_SCOPE
         return scope
 
     def user_data(self, access_token, *args, **kwargs):
