@@ -60,7 +60,7 @@ class BaseGoogleOAuth2API(BaseGoogleAuth):
                 default_scope = self.DEPRECATED_DEFAULT_SCOPE
             else:
                 default_scope = self.DEFAULT_SCOPE
-            scope += default_scope or []
+            scope = scope + (default_scope or [])
         return scope
 
     def user_data(self, access_token, *args, **kwargs):
