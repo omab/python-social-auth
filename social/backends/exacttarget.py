@@ -23,6 +23,30 @@ class ExactTargetOAuth2(BaseOAuth2):
             user['username'] = user['email']
         return user
 
+    def get_user_id(self, details, response):
+        """
+        Create a user ID from the ET user ID. Uses details rather than the
+        default response, as only the token is available in response. details
+        is much richer:
+            {
+                'expiresIn': 1200,
+                'username': 'example@example.com',
+                'refreshToken': '1234567890abcdef',
+                'internalOauthToken': 'jwttoken.......',
+                'oauthToken': 'yetanothertoken',
+                'id': 123456,
+                'culture': 'en-US',
+                'timezone': {
+                    'shortName': 'CST',
+                    'offset': -6.0,
+                    'dst': False,
+                    'longName': '(GMT-06:00) Central Time (No Daylight Saving)'
+                },
+                'email': 'example@example.com'
+            }
+        """
+        return '{0}'.format(details.get('id'))
+
     def uses_redirect(self):
         return False
 
