@@ -1,19 +1,24 @@
+from django.conf import settings
 from django.contrib.auth import login, REDIRECT_FIELD_NAME
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.views.decorators.http import require_POST
 
+from social.utils import setting_name
 from social.actions import do_auth, do_complete, do_disconnect
 from social.apps.django_app.utils import psa
 
 
-@psa('social:complete')
+NAMESPACE = getattr(settings, setting_name('URL_NAMESPACE'), None) or 'social'
+
+
+@psa('{0}:complete'.format(NAMESPACE))
 def auth(request, backend):
     return do_auth(request.backend, redirect_name=REDIRECT_FIELD_NAME)
 
 
 @csrf_exempt
-@psa('social:complete')
+@psa('{0}:complete'.format(NAMESPACE))
 def complete(request, backend, *args, **kwargs):
     """Authentication complete view"""
     return do_complete(request.backend, _do_login, request.user,
