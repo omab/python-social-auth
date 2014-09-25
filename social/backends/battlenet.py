@@ -1,17 +1,16 @@
 from social.backends.oauth import BaseOAuth2
 
+
 class BattleNetOAuth2(BaseOAuth2):
     """ battle.net Oauth2 backend"""
     name = 'battlenet-oauth2'
+    ID_KEY = 'accountId'
     REDIRECT_STATE = False
     AUTHORIZATION_URL = 'https://eu.battle.net/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://eu.battle.net/oauth/token'
     ACCESS_TOKEN_METHOD = 'POST'
-    # REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
     REVOKE_TOKEN_METHOD = 'GET'
-    DEFAULT_SCOPE = ['wow.profile', ]
-    ID_KEY = 'accountId'
-
+    DEFAULT_SCOPE = ['wow.profile']
     EXTRA_DATA = [
         ('refresh_token', 'refresh_token', True),
         ('expires_in', 'expires'),
@@ -20,27 +19,26 @@ class BattleNetOAuth2(BaseOAuth2):
 
     def get_characters(self, access_token):
         """
-        fetches the character list from the battle.net API.
-        :param access_token: the access token for the user which character list is fetched
-        :return: list of characters or empty list if the request fails.
+        Fetches the character list from the battle.net API. Returns list of
+        characters or empty list if the request fails.
         """
         params = {'access_token': access_token}
         if self.setting('API_LOCALE'):
             params['locale'] = self.setting('API_LOCALE')
-        response = self.get_json('https://eu.api.battle.net/wow/user/characters', params=params)
+
+        response = self.get_json(
+            'https://eu.api.battle.net/wow/user/characters',
+            params=params
+        )
         return response.get('characters') or []
 
     def get_user_details(self, response):
         """ Return user details from Battle.net account """
-        return {
-            'battletag': response.get('battletag')
-        }
+        return {'battletag': response.get('battletag')}
 
     def user_data(self, access_token, *args, **kwargs):
         """ Loads user data from service """
-        user_data = self.get_json(
+        return self.get_json(
             'https://eu.api.battle.net/account/user/battletag',
             params={'access_token': access_token}
         )
-        print("user_data:", user_data)
-        return user_data

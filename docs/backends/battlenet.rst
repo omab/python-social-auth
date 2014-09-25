@@ -19,12 +19,12 @@ enable ``python-social-auth`` support follow this steps:
         ...
     )
 
-Note: The API returns an accountId which will be used as identifier for the user.
-If you want to allow the user to choose a username from his own characters, some
-further steps are required, see the use cases part of the documentation.
+Note: The API returns an accountId which will be used as identifier for the
+user.  If you want to allow the user to choose a username from his own
+characters, some further steps are required, see the use cases part of the
+documentation.
 
 Further documentation at `Developer Guide`_.
 
 .. _Battlenet Developer Portal: https://dev.battle.net/
 .. _Developer Guide: https://dev.battle.net/docs/read/oauth
-

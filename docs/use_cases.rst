@@ -207,19 +207,16 @@ accomplish that behavior, there are two ways to do it.
    backend with ``user.social_auth.get(provider='facebook-custom')`` and use
    the ``access_token`` in it.
 
-.. _python-social-auth: https://github.com/omab/python-social-auth
-.. _People API endpoint: https://developers.google.com/+/api/latest/people/list
 
+Enable a user to choose a username from his World of Warcraft characters
+------------------------------------------------------------------------
 
-Login to battle.net and enable a user to choose a username from his World of Warcraft characters
-------------------------------------------------------------------------------------------------
+If you want to register new users on your site via battle.net, you can enable
+these users to choose a username from their own World-of-Warcraft characters.
+To do this, use the ``battlenet-oauth2`` backend along with a small form to
+choose the username.
 
-If you want to register new users on your site via battle.net, you can enable these users to
-choose a username from their own World-of-Warcraft characters. To do this, use the 
-``battlenet-oauth2`` backend along with a small form to choose the username. 
-
-The form is rendered
-via a partial pipeline item like this::
+The form is rendered via a partial pipeline item like this::
 
     @partial
     def pick_character_name(backend, details, response, is_new=False, *args, **kwargs):
@@ -231,17 +228,18 @@ via a partial pipeline item like this::
                 # request to the same URL (/complete/battlenet-oauth2/). In this
                 # example we expect the user option under the key:
                 #   character_name
-                # you have to filter the result list according to your needs. In this 
-                # case, only guild members are allowed to sign up.
-
-                char_list = [c['name'] for c in backend.get_characters(response.get('access_token'))
-                             if 'guild' in c and c['guild'] == '<guild name>']  # ToDo: make guild name a parameter
+                # you have to filter the result list according to your needs.
+                # In this example, only guild members are allowed to sign up.
+                char_list = [
+                    c['name'] for c in backend.get_characters(response.get('access_token'))
+                        if 'guild' in c and c['guild'] == '<guild name>'
+                ]
                 return render_to_response('pick_character_form.html', {'charlist': char_list, })
             else:
                 # The user selected a character name
                 return {'username': data.get('character_name')}
 
-after that, add your partial to the pipeline::
+Don't forget to add the partial to the pipeline::
 
     SOCIAL_AUTH_PIPELINE = (
         'social.pipeline.social_auth.social_details',
@@ -256,4 +254,9 @@ after that, add your partial to the pipeline::
         'social.pipeline.user.user_details',
     )
 
-It needs to be somewhere before create_user because the partial will change the username according to the users choice.
+It needs to be somewhere before create_user because the partial will change the
+username according to the users choice.
+
+
+.. _python-social-auth: https://github.com/omab/python-social-auth
+.. _People API endpoint: https://developers.google.com/+/api/latest/people/list
