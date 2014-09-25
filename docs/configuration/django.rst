@@ -82,6 +82,10 @@ Add URLs entries::
         ...
     )
 
+In case you need a custom namespace, this setting is also needed::
+
+    SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
 
 Template Context Processors
 ---------------------------
