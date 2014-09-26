@@ -27,7 +27,9 @@ class SocialAuthExceptionMiddleware(object):
             return
 
         if isinstance(exception, SocialAuthBaseException):
-            backend_name = request.backend.name
+            backend = getattr(request, 'backend', None)
+            backend_name = getattr(backend, 'name', 'unknown-backend')
+
             message = self.get_message(request, exception)
             url = self.get_redirect_uri(request, exception)
             try:
