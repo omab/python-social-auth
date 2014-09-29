@@ -77,6 +77,7 @@ or current ones extended):
     * Google_ OAuth1, OAuth2 and OpenId
     * Instagram_ OAuth2
     * Jawbone_ OAuth2 https://jawbone.com/up/developer/authentication
+    * Kakao_ OAuth2 https://developer.kakao.com
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
