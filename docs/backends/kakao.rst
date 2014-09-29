@@ -14,4 +14,4 @@ Kakao uses OAuth v2 for Authentication.
 
       SOCIAL_AUTH_KAKAO_SCOPE = [...]
 
-.. _Kakao API: https://developers.kakao.com/
+.. _Kakao API: https://developers.kakao.com/docs/restapi
