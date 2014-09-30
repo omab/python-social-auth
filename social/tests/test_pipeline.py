@@ -188,3 +188,55 @@ class MultipleAccountsWithSameEmailTest(BaseActionTest):
         user2.email = 'foo@bar.com'
         self.do_login.when.called_with(after_complete_checks=False)\
             .should.throw(AuthException)
+
+class UserPersistsInPartialPipeline(BaseActionTest):
+    def test_user_persists_in_partial_pipeline_kwargs(self):
+        user = User(username='foobar1')
+        user.email = 'foo@bar.com'
+
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_PIPELINE': (
+                'social.pipeline.social_auth.social_details',
+                'social.pipeline.social_auth.social_uid',
+                'social.pipeline.social_auth.associate_by_email',
+                'social.tests.pipeline.set_user_from_kwargs'
+            )
+        })
+
+        redirect = self.do_login(after_complete_checks=False)
+
+        # Handle the partial pipeline
+        self.strategy.session_set('attribute', 'testing')
+
+        data = self.strategy.session_pop('partial_pipeline')
+
+        idx, backend, xargs, xkwargs = self.strategy.partial_from_session(data)
+
+        self.backend.continue_pipeline(pipeline_index=idx,
+                                              *xargs, **xkwargs)
+
+
+    def test_user_persists_in_partial_pipeline(self):
+        user = User(username='foobar1')
+        user.email = 'foo@bar.com'
+
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_PIPELINE': (
+                'social.pipeline.social_auth.social_details',
+                'social.pipeline.social_auth.social_uid',
+                'social.pipeline.social_auth.associate_by_email',
+                'social.tests.pipeline.set_user_from_args'
+            )
+        })
+
+        redirect = self.do_login(after_complete_checks=False)
+
+        # Handle the partial pipeline
+        self.strategy.session_set('attribute', 'testing')
+
+        data = self.strategy.session_pop('partial_pipeline')
+
+        idx, backend, xargs, xkwargs = self.strategy.partial_from_session(data)
+
+        self.backend.continue_pipeline(pipeline_index=idx,
+                                              *xargs, **xkwargs)

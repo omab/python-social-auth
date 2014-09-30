@@ -22,24 +22,25 @@ def partial_to_session(strategy, next, backend, request=None, *args, **kwargs):
             'uid': social.uid
         } or None
     }
-    clean_kwargs.update(kwargs)
+    
+    kwargs.update(clean_kwargs)
 
     # Clean any MergeDict data type from the values
-    kwargs = {}
-    for name, value in clean_kwargs.items():
+    new_kwargs = {}
+    for name, value in kwargs.items():
         # Check for class name to avoid importing Django MergeDict or
         # Werkzeug MultiDict
         if isinstance(value, dict) or \
            value.__class__.__name__ in ('MergeDict', 'MultiDict'):
             value = dict(value)
         if isinstance(value, SERIALIZABLE_TYPES):
-            kwargs[name] = strategy.to_session_value(value)
+            new_kwargs[name] = strategy.to_session_value(value)
 
     return {
         'next': next,
         'backend': backend.name,
         'args': tuple(map(strategy.to_session_value, args)),
-        'kwargs': kwargs
+        'kwargs': new_kwargs
     }
 
 
