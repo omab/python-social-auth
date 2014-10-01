@@ -19,7 +19,7 @@ manager.add_command('shell', Shell(make_context=lambda: {
 @manager.command
 def syncdb():
     from flask_example.models import user
-    from social.apps.flask_app import models
+    from social.apps.flask_app.default import models
     db.drop_all()
     db.create_all()
 
