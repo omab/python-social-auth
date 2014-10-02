@@ -33,6 +33,9 @@ class UserSocialAuth(models.Model, DjangoUserMixin):
     uid = models.CharField(max_length=UID_LENGTH)
     extra_data = JSONField()
 
+    def __str__(self):
+        return str(self.user)
+
     class Meta:
         """Meta data"""
         unique_together = ('provider', 'uid')
