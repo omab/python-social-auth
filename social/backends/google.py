@@ -84,7 +84,8 @@ class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
     REVOKE_TOKEN_METHOD = 'GET'
-    DEFAULT_SCOPE = ['email', 'profile']
+    # The order of the default scope is important
+    DEFAULT_SCOPE = ['openid', 'email', 'profile']
     DEPRECATED_DEFAULT_SCOPE = [
         'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/userinfo.profile'
