@@ -6,4 +6,5 @@ To enable this app:
     * In urls.py include url('', include('social.apps.django_app.urls'))
 """
 
-default_app_config = 'social.apps.django_app.default.apps.PythonSocialAuthConfig'
+default_app_config = \
+    'social.apps.django_app.default.config.PythonSocialAuthConfig'
