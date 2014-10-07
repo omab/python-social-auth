@@ -19,23 +19,23 @@ class SteamOpenIdTest(OpenIdTest):
     discovery_body = ''.join([
       '<?xml version="1.0" encoding="UTF-8"?>',
       '<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)">',
-        '<XRD>',
-          '<Service priority="0">',
-             '<Type>http://specs.openid.net/auth/2.0/server</Type>',
-             '<URI>https://steamcommunity.com/openid/login</URI>',
-          '</Service>',
-        '</XRD>',
+      '<XRD>',
+      '<Service priority="0">',
+      '<Type>http://specs.openid.net/auth/2.0/server</Type>',
+      '<URI>https://steamcommunity.com/openid/login</URI>',
+      '</Service>',
+      '</XRD>',
       '</xrds:XRDS>'
     ])
     user_discovery_body = ''.join([
       '<?xml version="1.0" encoding="UTF-8"?>',
-        '<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)">',
-          '<XRD>',
-            '<Service priority="0">',
-              '<Type>http://specs.openid.net/auth/2.0/signon</Type>		',
-              '<URI>https://steamcommunity.com/openid/login</URI>',
-            '</Service>',
-          '</XRD>',
+      '<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)">',
+      '<XRD>',
+      '<Service priority="0">',
+      '<Type>http://specs.openid.net/auth/2.0/signon</Type>		',
+      '<URI>https://steamcommunity.com/openid/login</URI>',
+      '</Service>',
+      '</XRD>',
       '</xrds:XRDS>'
     ])
     server_response = urlencode({
@@ -47,8 +47,8 @@ class SteamOpenIdTest(OpenIdTest):
         'openid.identity': 'https://steamcommunity.com/openid/id/123',
         'openid.return_to': 'http://myapp.com/complete/steam/?'
                             'janrain_nonce=' + JANRAIN_NONCE,
-        'openid.response_nonce': JANRAIN_NONCE +
-                                 'oD4UZ3w9chOAiQXk0AqDipqFYRA=',
+        'openid.response_nonce':
+            JANRAIN_NONCE + 'oD4UZ3w9chOAiQXk0AqDipqFYRA=',
         'openid.assoc_handle': '1234567890',
         'openid.signed': 'signed,op_endpoint,claimed_id,identity,return_to,'
                          'response_nonce,assoc_handle',
@@ -116,8 +116,8 @@ class SteamOpenIdMissingSteamIdTest(SteamOpenIdTest):
         'openid.identity': 'https://steamcommunity.com/openid/BROKEN',
         'openid.return_to': 'http://myapp.com/complete/steam/?'
                             'janrain_nonce=' + JANRAIN_NONCE,
-        'openid.response_nonce': JANRAIN_NONCE +
-                                 'oD4UZ3w9chOAiQXk0AqDipqFYRA=',
+        'openid.response_nonce':
+            JANRAIN_NONCE + 'oD4UZ3w9chOAiQXk0AqDipqFYRA=',
         'openid.assoc_handle': '1234567890',
         'openid.signed': 'signed,op_endpoint,claimed_id,identity,return_to,'
                          'response_nonce,assoc_handle',
@@ -126,8 +126,10 @@ class SteamOpenIdMissingSteamIdTest(SteamOpenIdTest):
 
     def test_login(self):
         self._login_setup(user_url='https://steamcommunity.com/openid/BROKEN')
-        self.do_login.when.called_with().should.throw(AuthFailed)
+        with self.assertRaises(AuthFailed):
+            self.do_login()
 
     def test_partial_pipeline(self):
         self._login_setup(user_url='https://steamcommunity.com/openid/BROKEN')
-        self.do_partial_pipeline.when.called_with().should.throw(AuthFailed)
+        with self.assertRaises(AuthFailed):
+            self.do_partial_pipeline()

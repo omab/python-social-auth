@@ -1,7 +1,5 @@
 import json
 
-from sure import expect
-
 from social.exceptions import AuthException
 
 from social.tests.models import TestUserSocialAuth, TestStorage, User
@@ -70,7 +68,8 @@ class UnknownErrorOnLoginTest(BaseActionTest):
         super(UnknownErrorOnLoginTest, self).setUp()
 
     def test_unknown_error(self):
-        self.do_login.when.called_with().should.throw(UnknownError)
+        with self.assertRaises(UnknownError):
+            self.do_login()
 
 
 class EmailAsUsernameTest(BaseActionTest):
@@ -167,8 +166,8 @@ class RepeatedUsernameTest(BaseActionTest):
     def test_random_username(self):
         User(username='foobar')
         self.do_login(after_complete_checks=False)
-        expect(self.strategy.session_get('username').startswith('foobar')) \
-                .to.equal(True)
+        self.assertTrue(self.strategy.session_get('username')
+                                     .startswith('foobar'))
 
 
 class AssociateByEmailTest(BaseActionTest):
@@ -176,8 +175,8 @@ class AssociateByEmailTest(BaseActionTest):
         user = User(username='foobar1')
         user.email = 'foo@bar.com'
         self.do_login(after_complete_checks=False)
-        expect(self.strategy.session_get('username').startswith('foobar')) \
-                .to.equal(True)
+        self.assertTrue(self.strategy.session_get('username')
+                                     .startswith('foobar'))
 
 
 class MultipleAccountsWithSameEmailTest(BaseActionTest):
@@ -186,8 +185,9 @@ class MultipleAccountsWithSameEmailTest(BaseActionTest):
         user2 = User(username='foobar2')
         user1.email = 'foo@bar.com'
         user2.email = 'foo@bar.com'
-        self.do_login.when.called_with(after_complete_checks=False)\
-            .should.throw(AuthException)
+        with self.assertRaises(AuthException):
+            self.do_login(after_complete_checks=False)
+
 
 class UserPersistsInPartialPipeline(BaseActionTest):
     def test_user_persists_in_partial_pipeline_kwargs(self):
@@ -203,7 +203,7 @@ class UserPersistsInPartialPipeline(BaseActionTest):
             )
         })
 
-        redirect = self.do_login(after_complete_checks=False)
+        self.do_login(after_complete_checks=False)
 
         # Handle the partial pipeline
         self.strategy.session_set('attribute', 'testing')
@@ -214,7 +214,6 @@ class UserPersistsInPartialPipeline(BaseActionTest):
 
         self.backend.continue_pipeline(pipeline_index=idx,
                                               *xargs, **xkwargs)
-
 
     def test_user_persists_in_partial_pipeline(self):
         user = User(username='foobar1')
@@ -229,7 +228,7 @@ class UserPersistsInPartialPipeline(BaseActionTest):
             )
         })
 
-        redirect = self.do_login(after_complete_checks=False)
+        self.do_login(after_complete_checks=False)
 
         # Handle the partial pipeline
         self.strategy.session_set('attribute', 'testing')

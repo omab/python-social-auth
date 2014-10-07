@@ -1,6 +1,5 @@
 import requests
 
-from sure import expect
 from httpretty import HTTPretty
 
 from social.utils import parse_qs
@@ -40,7 +39,7 @@ class BaseLegacyTest(BaseBackendTest):
             content_type='application/x-www-form-urlencoded'
         )
         response = requests.get(start_url)
-        expect(response.text).to.equal(self.form.format(self.complete_url))
+        self.assertEqual(response.text, self.form.format(self.complete_url))
         response = requests.post(
             self.complete_url,
             data=parse_qs(self.response_body)

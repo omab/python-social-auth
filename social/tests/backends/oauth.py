@@ -1,6 +1,5 @@
 import requests
 
-from sure import expect
 from httpretty import HTTPretty
 
 from social.p3 import urlparse
@@ -75,8 +74,8 @@ class BaseOAuthTest(BaseBackendTest):
         start_url = self.backend.start().url
         target_url = self.auth_handlers(start_url)
         response = requests.get(start_url)
-        expect(response.url).to.equal(target_url)
-        expect(response.text).to.equal('foobar')
+        self.assertEqual(response.url, target_url)
+        self.assertEqual(response.text, 'foobar')
         self.strategy.set_request_data(parse_qs(urlparse(target_url).query),
                                        self.backend)
         return self.backend.complete()

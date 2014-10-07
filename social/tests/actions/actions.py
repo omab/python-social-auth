@@ -1,8 +1,7 @@
 import json
 import requests
-import unittest
+import unittest2 as unittest
 
-from sure import expect
 from httpretty import HTTPretty
 
 from social.utils import parse_qs, module_member
@@ -107,8 +106,8 @@ class BaseActionTest(unittest.TestCase):
                                body='foobar')
 
         response = requests.get(start_url)
-        expect(response.url).to.equal(location_url)
-        expect(response.text).to.equal('foobar')
+        self.assertEqual(response.url, location_url)
+        self.assertEqual(response.text, 'foobar')
 
         HTTPretty.register_uri(HTTPretty.POST,
                                uri=self.backend.ACCESS_TOKEN_URL,
@@ -129,10 +128,9 @@ class BaseActionTest(unittest.TestCase):
         redirect = do_complete(self.backend, user=self.user, login=_login)
 
         if after_complete_checks:
-            expect(self.strategy.session_get('username')).to.equal(
-                expected_username or self.expected_username
-            )
-            expect(redirect.url).to.equal(self.login_redirect_url)
+            self.assertEqual(self.strategy.session_get('username'),
+                             expected_username or self.expected_username)
+            self.assertEqual(redirect.url, self.login_redirect_url)
         return redirect
 
     def do_login_with_partial_pipeline(self, before_complete=None):
@@ -174,8 +172,8 @@ class BaseActionTest(unittest.TestCase):
                                body='foobar')
 
         response = requests.get(start_url)
-        expect(response.url).to.equal(location_url)
-        expect(response.text).to.equal('foobar')
+        self.assertEqual(response.url, location_url)
+        self.assertEqual(response.text, 'foobar')
 
         HTTPretty.register_uri(HTTPretty.GET,
                                uri=self.backend.ACCESS_TOKEN_URL,
@@ -194,7 +192,7 @@ class BaseActionTest(unittest.TestCase):
 
         redirect = do_complete(self.backend, user=self.user, login=_login)
         url = self.strategy.build_absolute_uri('/password')
-        expect(redirect.url).to.equal(url)
+        self.assertEqual(redirect.url, url)
         HTTPretty.register_uri(HTTPretty.GET, redirect.url, status=200,
                                body='foobar')
         HTTPretty.register_uri(HTTPretty.POST, redirect.url, status=200)
@@ -203,13 +201,12 @@ class BaseActionTest(unittest.TestCase):
         requests.get(url)
         requests.post(url, data={'password': password})
         data = parse_qs(HTTPretty.last_request.body)
-        expect(data['password']).to.equal(password)
+        self.assertEqual(data['password'], password)
         self.strategy.session_set('password', data['password'])
 
         if before_complete:
             before_complete()
         redirect = do_complete(self.backend, user=self.user, login=_login)
-        expect(self.strategy.session_get('username')).to.equal(
-            self.expected_username
-        )
-        expect(redirect.url).to.equal(self.login_redirect_url)
+        self.assertEqual(self.strategy.session_get('username'),
+                         self.expected_username)
+        self.assertEqual(redirect.url, self.login_redirect_url)

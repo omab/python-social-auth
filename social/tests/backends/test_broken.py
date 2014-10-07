@@ -1,4 +1,4 @@
-import unittest
+import unittest2 as unittest
 
 from social.backends.base import BaseAuth
 
@@ -15,25 +15,21 @@ class BrokenBackendTest(unittest.TestCase):
         self.backend = None
 
     def test_auth_url(self):
-        self.backend.auth_url.when.called_with().should.throw(
-            NotImplementedError,
-            'Implement in subclass'
-        )
+        with self.assertRaisesRegexp(NotImplementedError,
+                                     'Implement in subclass'):
+            self.backend.auth_url()
 
     def test_auth_html(self):
-        self.backend.auth_html.when.called_with().should.throw(
-            NotImplementedError,
-            'Implement in subclass'
-        )
+        with self.assertRaisesRegexp(NotImplementedError,
+                                     'Implement in subclass'):
+            self.backend.auth_html()
 
     def test_auth_complete(self):
-        self.backend.auth_complete.when.called_with().should.throw(
-            NotImplementedError,
-            'Implement in subclass'
-        )
+        with self.assertRaisesRegexp(NotImplementedError,
+                                     'Implement in subclass'):
+            self.backend.auth_complete()
 
     def test_get_user_details(self):
-        self.backend.get_user_details.when.called_with(None).should.throw(
-            NotImplementedError,
-            'Implement in subclass'
-        )
+        with self.assertRaisesRegexp(NotImplementedError,
+                                     'Implement in subclass'):
+            self.backend.get_user_details(None)

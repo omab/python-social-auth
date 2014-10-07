@@ -1,5 +1,3 @@
-from sure import expect
-
 from social.tests.models import User
 from social.tests.actions.actions import BaseActionTest
 
@@ -17,13 +15,13 @@ class LoginActionTest(BaseActionTest):
         })
         self.strategy.set_request_data({'foo': '1', 'bar': '2'}, self.backend)
         self.do_login()
-        expect(self.strategy.session_get('foo')).to.equal('1')
-        expect(self.strategy.session_get('bar')).to.equal('2')
+        self.assertEqual(self.strategy.session_get('foo'), '1')
+        self.assertEqual(self.strategy.session_get('bar'), '2')
 
     def test_redirect_value(self):
         self.strategy.set_request_data({'next': '/after-login'}, self.backend)
         redirect = self.do_login(after_complete_checks=False)
-        expect(redirect.url).to.equal('/after-login')
+        self.assertEqual(redirect.url, '/after-login')
 
     def test_login_with_invalid_partial_pipeline(self):
         def before_complete():
@@ -37,7 +35,7 @@ class LoginActionTest(BaseActionTest):
             'SOCIAL_AUTH_NEW_USER_REDIRECT_URL': '/new-user'
         })
         redirect = self.do_login(after_complete_checks=False)
-        expect(redirect.url).to.equal('/new-user')
+        self.assertEqual(redirect.url, '/new-user')
 
     def test_inactive_user(self):
         self.strategy.set_settings({
@@ -45,7 +43,7 @@ class LoginActionTest(BaseActionTest):
         })
         User.set_active(False)
         redirect = self.do_login(after_complete_checks=False)
-        expect(redirect.url).to.equal('/inactive')
+        self.assertEqual(redirect.url, '/inactive')
 
     def test_invalid_user(self):
         self.strategy.set_settings({
@@ -64,4 +62,4 @@ class LoginActionTest(BaseActionTest):
             )
         })
         redirect = self.do_login(after_complete_checks=False)
-        expect(redirect.url).to.equal('/error')
+        self.assertEqual(redirect.url, '/error')

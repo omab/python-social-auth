@@ -1,5 +1,4 @@
-import unittest
-from sure import expect
+import unittest2 as unittest
 
 from social.tests.models import TestStorage
 from social.tests.strategy import TestStrategy
@@ -25,11 +24,11 @@ class LoadBackendsTest(BaseBackendUtilsTest):
         ), force_load=True)
         keys = list(loaded_backends.keys())
         keys.sort()
-        expect(keys).to.equal(['facebook', 'flickr', 'github'])
+        self.assertEqual(keys, ['facebook', 'flickr', 'github'])
 
         backends = ()
         loaded_backends = load_backends(backends, force_load=True)
-        expect(len(list(loaded_backends.keys()))).to.equal(0)
+        self.assertEqual(len(list(loaded_backends.keys())), 0)
 
 
 class GetBackendTest(BaseBackendUtilsTest):
@@ -39,13 +38,12 @@ class GetBackendTest(BaseBackendUtilsTest):
             'social.backends.facebook.FacebookOAuth2',
             'social.backends.flickr.FlickrOAuth'
         ), 'github')
-        expect(backend).to.equal(GithubOAuth2)
+        self.assertEqual(backend, GithubOAuth2)
 
     def test_get_missing_backend(self):
-        get_backend.when.called_with((
-            'social.backends.github.GithubOAuth2',
-            'social.backends.facebook.FacebookOAuth2',
-            'social.backends.flickr.FlickrOAuth'
-        ), 'foobar').should.throw(
-            MissingBackend, 'Missing backend "foobar" entry'
-        )
+        with self.assertRaisesRegexp(MissingBackend,
+                                     'Missing backend "foobar" entry'):
+            get_backend(('social.backends.github.GithubOAuth2',
+                         'social.backends.facebook.FacebookOAuth2',
+                         'social.backends.flickr.FlickrOAuth'),
+                        'foobar')

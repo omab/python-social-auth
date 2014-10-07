@@ -2,7 +2,6 @@ import json
 import datetime
 import time
 
-from sure import expect
 from httpretty import HTTPretty
 
 from social.actions import do_disconnect
@@ -65,7 +64,7 @@ class DummyOAuth2Test(OAuth2Test):
 
     def test_tokens(self):
         user = self.do_login()
-        expect(user.social[0].tokens).to.equal('foobar')
+        self.assertEqual(user.social[0].tokens, 'foobar')
 
     def test_revoke_token(self):
         self.strategy.set_settings({
@@ -91,7 +90,8 @@ class WhitelistEmailsTest(DummyOAuth2Test):
         self.strategy.set_settings({
             'SOCIAL_AUTH_WHITELISTED_EMAILS': ['foo2@bar.com']
         })
-        self.do_login.when.called_with().should.throw(AuthForbidden)
+        with self.assertRaises(AuthForbidden):
+            self.do_login()
 
 
 class WhitelistDomainsTest(DummyOAuth2Test):
@@ -105,7 +105,8 @@ class WhitelistDomainsTest(DummyOAuth2Test):
         self.strategy.set_settings({
             'SOCIAL_AUTH_WHITELISTED_EMAILS': ['bar2.com']
         })
-        self.do_login.when.called_with().should.throw(AuthForbidden)
+        with self.assertRaises(AuthForbidden):
+            self.do_login()
 
 
 DELTA = datetime.timedelta(days=1)
@@ -127,4 +128,4 @@ class ExpirationTimeTest(DummyOAuth2Test):
         user = self.do_login()
         social = user.social[0]
         expiration = social.expiration_datetime()
-        expect(expiration <= DELTA).to.equal(True)
+        self.assertEqual(expiration <= DELTA, True)

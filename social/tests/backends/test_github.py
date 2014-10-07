@@ -140,12 +140,13 @@ class GithubOrganizationOAuth2FailTest(GithubOAuth2Test):
 
     def test_login(self):
         self.strategy.set_settings({'SOCIAL_AUTH_GITHUB_ORG_NAME': 'foobar'})
-        self.do_login.when.called_with().should.throw(AuthFailed)
+        with self.assertRaises(AuthFailed):
+            self.do_login()
 
     def test_partial_pipeline(self):
         self.strategy.set_settings({'SOCIAL_AUTH_GITHUB_ORG_NAME': 'foobar'})
-        self.do_partial_pipeline.when.called_with().should.throw(AuthFailed)
-
+        with self.assertRaises(AuthFailed):
+            self.do_partial_pipeline()
 
 
 class GithubTeamOAuth2Test(GithubOAuth2Test):
@@ -181,8 +182,10 @@ class GithubTeamOAuth2FailTest(GithubOAuth2Test):
 
     def test_login(self):
         self.strategy.set_settings({'SOCIAL_AUTH_GITHUB_TEAM_ID': '123'})
-        self.do_login.when.called_with().should.throw(AuthFailed)
+        with self.assertRaises(AuthFailed):
+            self.do_login()
 
     def test_partial_pipeline(self):
         self.strategy.set_settings({'SOCIAL_AUTH_GITHUB_TEAM_ID': '123'})
-        self.do_partial_pipeline.when.called_with().should.throw(AuthFailed)
+        with self.assertRaises(AuthFailed):
+            self.do_partial_pipeline()

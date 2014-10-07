@@ -1,5 +1,4 @@
-import unittest
-from sure import expect
+import unittest2 as unittest
 
 from social.exceptions import SocialAuthBaseException, WrongBackend, \
                               AuthFailed, AuthTokenError, \
@@ -20,7 +19,7 @@ class BaseExceptionTestCase(unittest.TestCase):
         try:
             raise self.exception
         except SocialAuthBaseException as err:
-            expect(str(err)).to.equal(self.expected_message)
+            self.assertEqual(str(err), self.expected_message)
 
 
 class WrongBackendTest(BaseExceptionTestCase):

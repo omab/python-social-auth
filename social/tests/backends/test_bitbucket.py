@@ -1,4 +1,5 @@
 import json
+
 from httpretty import HTTPretty
 
 from social.p3 import urlencode
@@ -64,12 +65,12 @@ class BitbucketOAuth1FailTest(BitbucketOAuth1Test):
         self.strategy.set_settings({
             'SOCIAL_AUTH_BITBUCKET_VERIFIED_EMAILS_ONLY': True
         })
-        super(BitbucketOAuth1FailTest, self).test_login \
-            .when.called_with().should.throw(AuthForbidden)
+        with self.assertRaises(AuthForbidden):
+            super(BitbucketOAuth1FailTest, self).test_login()
 
     def test_partial_pipeline(self):
         self.strategy.set_settings({
             'SOCIAL_AUTH_BITBUCKET_VERIFIED_EMAILS_ONLY': True
         })
-        super(BitbucketOAuth1FailTest, self).test_partial_pipeline \
-            .when.called_with().should.throw(AuthForbidden)
+        with self.assertRaises(AuthForbidden):
+            super(BitbucketOAuth1FailTest, self).test_partial_pipeline()
