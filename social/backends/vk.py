@@ -85,6 +85,9 @@ class VKOAuth2(BaseOAuth2):
         ('expires_in', 'expires')
     ]
 
+    def get_user_id(self, details, response):
+        return response['uid']
+
     def get_user_details(self, response):
         """Return user details from VK.com account"""
         fullname, first_name, last_name = self.get_user_names(
@@ -97,7 +100,7 @@ class VKOAuth2(BaseOAuth2):
                 'first_name': first_name,
                 'last_name': last_name}
 
-    def user_data(self, access_token, response, *args, **kwargs):
+    def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         request_data = ['first_name', 'last_name', 'screen_name', 'nickname',
                         'photo'] + self.setting('EXTRA_DATA', [])
@@ -106,7 +109,6 @@ class VKOAuth2(BaseOAuth2):
         data = vk_api(self, 'users.get', {
             'access_token': access_token,
             'fields': fields,
-            'uids': response.get('user_id')
         })
 
         if data.get('error'):
