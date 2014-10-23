@@ -36,13 +36,21 @@ class GithubOAuth2(BaseOAuth2):
         data = self._user_data(access_token)
         if not data.get('email'):
             try:
-                email = self._user_data(access_token, '/emails')[0]
-            except (HTTPError, IndexError, ValueError, TypeError):
-                email = ''
+                emails = self._user_data(access_token, '/emails')
+            except (HTTPError, ValueError, TypeError):
+                emails = []
 
-            if isinstance(email, dict):
-                email = email.get('email', '')
-            data['email'] = email
+            if emails:
+                email = emails[0]
+                primary_emails = [e for e in emails
+                                    if not isinstance(e, dict) or
+                                       e.get('primary')]
+
+                if primary_emails:
+                    email = primary_emails[0]
+                if isinstance(email, dict):
+                    email = email.get('email', '')
+                data['email'] = email
         return data
 
     def _user_data(self, access_token, path=None):
@@ -83,7 +91,6 @@ class GithubOrganizationOAuth2(GithubMemberOAuth2):
         return 'https://api.github.com/orgs/{org}/members/{username}'\
                     .format(org=self.setting('NAME'),
                             username=user_data.get('login'))
-
 
 
 class GithubTeamOAuth2(GithubMemberOAuth2):
