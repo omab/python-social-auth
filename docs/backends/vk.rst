@@ -38,7 +38,7 @@ To support OAuth2 authentication for VK.com applications:
 
 - Fill ``Application ID`` and ``Application Secret`` settings::
 
-    SOCIAL_AUTH_VK_APP_ID = ''
+    SOCIAL_AUTH_VK_APP_KEY = ''
     SOCIAL_AUTH_VK_APP_SECRET = ''
 
 - Fill ``user_mode``::
