@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('extra_data', social.apps.django_app.default.fields.JSONField(
                     default=b'{}')),
                 ('user', models.ForeignKey(
-                    related_name=b'social_auth', to=settings.AUTH_USER_MODEL)),
+                    related_name='social_auth', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'db_table': 'social_auth_usersocialauth',
