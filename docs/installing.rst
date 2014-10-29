@@ -4,7 +4,7 @@ Installation
 Dependencies
 ------------
 
-Dependencies that **must** be meet to use the application:
+Dependencies that **must** be met to use the application:
 
 - OpenId_ support depends on python-openid_
 
