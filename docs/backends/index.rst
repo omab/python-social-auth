@@ -50,6 +50,7 @@ Social backends
    angel
    aol
    appsfuel
+   battlenet
    beats
    behance
    belgium_eid
