@@ -1,3 +1,156 @@
+2014-11-01 HEAD (unreleased)
+============================
+
+  * 2014-11-01 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-11-01 John Lynn <jlynn@hearsaycorp.com>
+    Fix typo for AUTH_USER_MODEL
+
+  * 2014-11-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Set no-cache on views
+
+  * 2014-11-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Rename tokens to access_token. Refs #430
+
+  * 2014-11-01 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-11-01 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 + basic docs. Refs #412
+
+  * 2014-11-01 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-10-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Link missing doc
+
+  * 2014-10-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix use case snippet
+
+  * 2014-10-29 Alex Parij <paris.alex@gmail.com>
+    Update base.py
+
+  * 2014-10-29 Mitchel Humpherys <mitch.special@gmail.com>
+    use correct tense for `to meet'
+
+  * 2014-10-26 John Lynn <jlynn@hearsaycorp.com>
+    Fix custom user model migrations for Django 1.7
+
+  * 2014-10-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Pick github primary email first. Fixes #413
+
+  * 2014-10-16 Christopher Grebs <cg@webshox.org>
+    Fix migration issue on python 3
+
+  * 2014-10-12 SilentSokolov <silentsokolov@gmail.com>
+    Fix does not match the number of arguments (for vk and ok backend)
+
+  * 2014-10-08 Michal Karzyński <bitbucket@karzyn.com>
+    Salesforce OAuth2 support
+
+  * 2014-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and module rename
+
+  * 2014-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Travisci update
+
+  * 2014-10-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable pypy and replace sugar with unittest2. Refs #410
+
+  * 2014-10-07 Omer Katz <omer.drow@gmail.com>
+    Added Python 3.4 and PyPy to the build matrix.
+
+  * 2014-10-04 micahhausler <micah.hausler@ambition.com>
+    Added Django 1.7 App Config
+
+  * 2014-10-02 micahhausler <micah.hausler@ambition.com>
+    Switched list_display order for UserSocialAuth
+
+  * 2014-10-02 micahhausler <micah.hausler@ambition.com>
+    Added string method to UserSocialAuth model
+
+  * 2014-10-03 Daniel Holmes <daniel.holmes@djcentric.com>
+    Use new GoogleOAuth2 Spec
+
+  * 2014-10-01 Laban <lmwangi@gmail.com>
+    Incorrect import path for db model
+
+  * 2014-09-30 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-09-30 Matías Aguirre <matiasaguirre@gmail.com>
+    Convert docstring to comments, PEP8
+
+  * 2014-09-29 Lee Jaeyoung <jaeyoung@monodiary.net>
+    Apply more detailed address for kakao
+
+  * 2014-09-29 Lee Jaeyoung <jaeyoung@monodiary.net>
+    Add Kakao to README.rst
+
+  * 2014-09-28 David Zerrenner <dazer017@gmail.com>
+    Added some legal stuff
+
+  * 2014-09-27 Aarni Koskela <akx@iki.fi>
+    Recreate migration with Django 1.7 final and re-PEP8.
+
+  * 2014-09-26 Matías Aguirre <matiasaguirre@gmail.com>
+    Use getattr to get current backend from request
+
+  * 2014-09-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Doc about custom url namespace. Refs #399
+
+  * 2014-09-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Configurable django views namespace. Refs #399
+
+  * 2014-09-25 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and more
+
+  * 2014-09-24 Vera Mazhuga <vera@axiacore.com>
+    master  add SCOPE_SEPARATOR to DisqusOAuth2
+
+  * 2014-09-24 dzerrenner <dazer017@gmail.com>
+    added a backend for Battle.net Oauth2 auth
+
+  * 2014-09-23 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-09-23 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-09-23 David Henderson <david.henderson@triggeredmessaging.com>
+    Removed prefix, added example of details object.
+
+  * 2014-09-23 David Henderson <david.henderson@triggeredmessaging.com>
+    No good reason to skip a class
+
+  * 2014-09-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Don't update a setting value. Refs #378. Refs #377
+
+  * 2014-09-21 Tim Savage <tim.savage@poweredbypenguins.org>
+    Update installing.rst
+
+  * 2014-09-21 Tim Savage <tim.savage@poweredbypenguins.org>
+    Update README.rst
+
+  * 2014-09-18 Matías Aguirre <matiasaguirre@gmail.com>
+    Print arguments in the debug pipeline
+
+  * 2014-09-16 Stefan Kröner <sk-github@kanen.at>
+    Allow more Trello settings
+
+  * 2014-09-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Add debug pipeline to example app
+
+  * 2014-09-12 Matías Aguirre <matiasaguirre@gmail.com>
+    Update snippet
+
+  * 2014-09-12 David Henderson <david.henderson@triggeredmessaging.com>
+    Updated to use latest api wrapper
+
+  * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
+    Flag dev version
+
 2014-09-11 v0.2.1
 =================
 
@@ -13,11 +166,28 @@
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     Flag dev version
 
+2014-09-11 v0.2.0
+=================
+
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     v0.2.0
 
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     Restore @strategy decorator with warning message
+
+  * 2014-09-09 Tsung Hung <hungmasterj@gmail.com>
+    updated the docs to add migrations for 1.7 while updated a constant so the
+    warning message does not appear when running command line
+
+  * 2014-09-09 Tsung Hung <hungmasterj@gmail.com>
+    updated the docs to add migrations for 1.7 while updated a constant so the
+    warning message does not appear when running command line
+
+  * 2014-09-07 Amol Kher <markhelo@gmail.com>
+    Jawbone needs params instead of data as requests
+
+  * 2014-09-07 Caio Ariede <caio.ariede@gmail.com>
+    Support for MineID.org
 
   * 2014-09-03 Matías Aguirre <matiasaguirre@gmail.com>
     Added commets detailing pipeline functionality. Refs #361
@@ -131,6 +301,15 @@
   * 2014-07-24 Matt Luongo <mhluongo@gmail.com>
     Support South and Django 1.7+ migrations.
 
+  * 2014-07-23 Mike Anderson <manderson@twitter.com>
+    remove debugger
+
+  * 2014-07-23 Mike Anderson <manderson@twitter.com>
+    tests for two failing cases, include all kwargs in partial pipeline session
+
+  * 2014-07-22 Mike Anderson <manderson@twitter.com>
+    Don't overwrite clean_kwargs with kwargs
+
   * 2014-07-19 Matías Aguirre <matiasaguirre@gmail.com>
     Github for teams backend. Refs #329
 
@@ -173,6 +352,16 @@
 
   * 2014-06-30 Matías Aguirre <matiasaguirre@gmail.com>
     Tox runner with pyenv support
+
+  * 2014-06-26 David Henderson <david.henderson@triggeredmessaging.com>
+    Reinstated get_user_id override - so that we can pull from the details
+    rather than the response
+
+  * 2014-06-25 Antony Seedhouse <a@synotna.org>
+    Update django_orm.py
+
+  * 2014-06-25 Antony Seedhouse <a@synotna.org>
+    Update django_orm.py
 
   * 2014-06-24 Martey Dodoo <martey@marteydodoo.com>
     Update link to Django example in documentation.
