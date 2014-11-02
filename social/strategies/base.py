@@ -34,10 +34,6 @@ class BaseStrategy(object):
     ALLOWED_CHARS = 'abcdefghijklmnopqrstuvwxyz' \
                     'ABCDEFGHIJKLMNOPQRSTUVWXYZ' \
                     '0123456789'
-    # well-known serializable types
-    SERIALIZABLE_TYPES = (dict, list, tuple, set, bool, type(None)) + \
-                         six.integer_types + six.string_types + \
-                         (six.text_type, six.binary_type,)
     DEFAULT_TEMPLATE_STRATEGY = BaseTemplateStrategy
 
     def __init__(self, storage=None, tpl=None):
