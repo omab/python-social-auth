@@ -11,6 +11,7 @@ user_model = getattr(settings, setting_name('USER_MODEL'), None) or \
              getattr(settings, 'AUTH_USER_MODEL', None) or \
              'auth.User'
 
+
 class Migration(migrations.Migration):
 
     dependencies = [
