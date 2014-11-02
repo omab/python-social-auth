@@ -5,7 +5,8 @@ from social.backends.oauth import BaseOAuth2
 class SalesforceOAuth2(BaseOAuth2):
     """Salesforce OAuth2 authentication backend"""
     name = 'salesforce-oauth2'
-    AUTHORIZATION_URL = 'https://login.salesforce.com/services/oauth2/authorize'
+    AUTHORIZATION_URL = \
+        'https://login.salesforce.com/services/oauth2/authorize'
     ACCESS_TOKEN_URL = 'https://login.salesforce.com/services/oauth2/token'
     REVOKE_TOKEN_URL = 'https://login.salesforce.com/services/oauth2/revoke'
     ACCESS_TOKEN_METHOD = 'POST'
@@ -17,7 +18,7 @@ class SalesforceOAuth2(BaseOAuth2):
         ('issued_at', 'issued_at'),
         ('signature', 'signature'),
         ('refresh_token', 'refresh_token'),
-        ]
+    ]
 
     def get_user_details(self, response):
         """Return user details from a Salesforce account"""
@@ -32,9 +33,7 @@ class SalesforceOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         user_id_url = kwargs.get('response').get('id')
-        url = user_id_url + '?' + urlencode({
-            'access_token': access_token
-        })
+        url = user_id_url + '?' + urlencode({'access_token': access_token})
         try:
             return self.get_json(url)
         except ValueError:
