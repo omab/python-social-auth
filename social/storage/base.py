@@ -3,6 +3,8 @@ import re
 import time
 import base64
 import uuid
+import warnings
+
 from datetime import datetime, timedelta
 
 import six
@@ -34,9 +36,14 @@ class UserMixin(object):
             return Backend(strategy=strategy)
 
     @property
-    def tokens(self):
+    def access_token(self):
         """Return access_token stored in extra_data or None"""
         return self.extra_data.get('access_token')
+
+    @property
+    def tokens(self):
+        warnings.warn('tokens is deprecated, use access_token instead')
+        return self.access_token
 
     def refresh_token(self, strategy, *args, **kwargs):
         token = self.extra_data.get('refresh_token') or \

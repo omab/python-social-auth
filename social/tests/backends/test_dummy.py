@@ -64,7 +64,7 @@ class DummyOAuth2Test(OAuth2Test):
 
     def test_tokens(self):
         user = self.do_login()
-        self.assertEqual(user.social[0].tokens, 'foobar')
+        self.assertEqual(user.social[0].access_token, 'foobar')
 
     def test_revoke_token(self):
         self.strategy.set_settings({
