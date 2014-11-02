@@ -136,7 +136,7 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
         return params
 
     def auth_complete(self, *args, **kwargs):
-        if 'access_token' in self.data and not 'code' in self.data:
+        if 'access_token' in self.data and 'code' not in self.data:
             raise AuthMissingParameter(self, 'access_token or code')
 
         # Token won't be available in plain server-side workflow

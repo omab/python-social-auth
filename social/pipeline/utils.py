@@ -22,7 +22,7 @@ def partial_to_session(strategy, next, backend, request=None, *args, **kwargs):
             'uid': social.uid
         } or None
     }
-    
+
     kwargs.update(clean_kwargs)
 
     # Clean any MergeDict data type from the values

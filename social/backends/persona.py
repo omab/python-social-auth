@@ -35,7 +35,7 @@ class PersonaAuth(BaseAuth):
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
-        if not 'assertion' in self.data:
+        if 'assertion' not in self.data:
             raise AuthMissingParameter(self, 'assertion')
 
         response = self.get_json('https://browserid.org/verify', data={

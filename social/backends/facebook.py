@@ -129,7 +129,7 @@ class FacebookAppOAuth2(FacebookOAuth2):
         if 'signed_request' in self.data:
             key, secret = self.get_key_and_secret()
             response = self.load_signed_request(self.data['signed_request'])
-            if not 'user_id' in response and not 'oauth_token' in response:
+            if 'user_id' not in response and 'oauth_token' not in response:
                 raise AuthException(self)
 
             if response is not None:

@@ -2,8 +2,6 @@ import time
 import random
 import hashlib
 
-import six
-
 from social.utils import setting_name, module_member
 from social.store import OpenIdStore, OpenIdSessionWrapper
 from social.pipeline import DEFAULT_AUTH_PIPELINE, DEFAULT_DISCONNECT_PIPELINE

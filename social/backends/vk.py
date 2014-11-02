@@ -190,9 +190,9 @@ def vk_api(backend, method, data):
     """
     # We need to perform server-side call if no access_token
     data['v'] = backend.setting('API_VERSION', '3.0')
-    if not 'access_token' in data:
+    if 'access_token' not in data:
         key, secret = backend.get_key_and_secret()
-        if not 'api_id' in data:
+        if 'api_id' not in data:
             data['api_id'] = key
 
         data['method'] = method

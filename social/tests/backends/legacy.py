@@ -14,9 +14,8 @@ class BaseLegacyTest(BaseBackendTest):
         super(BaseLegacyTest, self).setUp()
         self.strategy.set_settings({
             'SOCIAL_AUTH_{0}_FORM_URL'.format(self.name):
-                self.strategy.build_absolute_uri(
-                    '/login/{0}'.format(self.backend.name)
-                )
+                self.strategy.build_absolute_uri('/login/{0}'.format(
+                    self.backend.name))
         })
 
     def extra_settings(self):
