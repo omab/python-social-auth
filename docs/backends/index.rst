@@ -96,6 +96,7 @@ Social backends
    readability
    reddit
    runkeeper
+   salesforce
    shopify
    skyrock
    soundcloud
