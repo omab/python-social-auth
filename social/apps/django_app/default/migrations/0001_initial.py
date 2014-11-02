@@ -8,7 +8,7 @@ import social.storage.django_orm
 from social.utils import setting_name
 
 user_model = getattr(settings, setting_name('USER_MODEL'), None) or \
-             getattr(settings, 'AUTH_USER_MODE', None) or \
+             getattr(settings, 'AUTH_USER_MODEL', None) or \
              'auth.User'
 
 class Migration(migrations.Migration):
