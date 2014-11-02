@@ -188,9 +188,8 @@ class AssociationMixin(object):
         kwargs = {'server_url': server_url}
         if handle is not None:
             kwargs['handle'] = handle
-        return sorted([
-            (assoc.id, cls.openid_association(assoc))
-                for assoc in cls.get(**kwargs)
+        return sorted([(assoc.id, cls.openid_association(assoc))
+            for assoc in cls.get(**kwargs)
         ], key=lambda x: x[1].issued, reverse=True)
 
     @classmethod
