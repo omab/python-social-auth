@@ -258,5 +258,43 @@ It needs to be somewhere before create_user because the partial will change the
 username according to the users choice.
 
 
+Re-prompt Google OAuth2 users to refresh the ``refresh_token``
+--------------------------------------------------------------
+
+A ``refresh_token`` also expire, a ``refresh_token`` can be lost, but they can
+also be refreshed (or re-fetched) if you ask to Google the right way. In order
+to do so, set this setting::
+
+    SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
+        'access_type': 'offline',
+        'approval_prompt': 'auto'
+    }
+
+Then link the users to ``/login/google-oauth2?approval_prompt=force``. If you
+want to refresh the ``refresh_token`` only on those users that don't  have it,
+do it with a pipeline function::
+
+    def redirect_if_no_refresh_token(backend, response, social, *args, **kwargs):
+        if backend.name == 'google-oauth2' and social and \
+           response.get('refresh_token') is None and \
+           social.extra_data.get('refresh_token') is None:
+            return redirect('/login/google-oauth2?approval_prompt=force')
+
+Set this pipeline after ``social_user``::
+
+    SOCIAL_AUTH_PIPELINE = (
+        'social.pipeline.social_auth.social_details',
+        'social.pipeline.social_auth.social_uid',
+        'social.pipeline.social_auth.auth_allowed',
+        'social.pipeline.social_auth.social_user',
+        'import.path.to.redirect_if_no_refresh_token',
+        'social.pipeline.user.get_username',
+        'social.pipeline.user.create_user',
+        'social.pipeline.social_auth.associate_user',
+        'social.pipeline.social_auth.load_extra_data',
+        'social.pipeline.user.user_details',
+    )
+
+
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _People API endpoint: https://developers.google.com/+/api/latest/people/list
