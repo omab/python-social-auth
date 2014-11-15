@@ -185,8 +185,9 @@ email address you can get it from the session under the key ``email_validation_a
 In order to send the validation python-social-auth_ needs a function that will
 take care of it, this function is defined by the developer with the setting
 ``SOCIAL_AUTH_EMAIL_VALIDATION_FUNCTION``. It should be an import path. This
-function should take two arguments ``strategy`` and ``code``.  ``code`` is
-a model instance used to validate the email address, it contains three fields:
+function should take three arguments ``strategy``, ``backend`` and ``code``.
+``code`` is a model instance used to validate the email address, it contains
+three fields:
 
 ``code = '...'``
     Holds an ``uuid.uuid4()`` value and it's the code used to identify the
