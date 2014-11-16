@@ -78,7 +78,7 @@ or current ones extended):
     * Instagram_ OAuth2
     * Jawbone_ OAuth2 https://jawbone.com/up/developer/authentication
     * Kakao_ OAuth2 https://developer.kakao.com
-    * `Khan Academy`_ OAuth1 https://github.com/Khan/khan-api/wiki/Khan-Academy-API-Authentication
+    * `Khan Academy`_ https://github.com/Khan/khan-api/wiki/Khan-Academy-API-Authentication OAuth1
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
