@@ -78,7 +78,7 @@ or current ones extended):
     * Instagram_ OAuth2
     * Jawbone_ OAuth2 https://jawbone.com/up/developer/authentication
     * Kakao_ OAuth2 https://developer.kakao.com
-    * `Khan Academy`_ https://github.com/Khan/khan-api/wiki/Khan-Academy-API-Authentication OAuth1
+    * `Khan Academy`_ OAuth1
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
@@ -249,6 +249,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Linkedin: https://www.linkedin.com
 .. _Live: https://live.com
 .. _Livejournal: http://livejournal.com
+.. _Khan Academy: https://github.com/Khan/khan-api/wiki/Khan-Academy-API-Authentication
 .. _Mailru: https://mail.ru
 .. _MapMyFitness: http://www.mapmyfitness.com/
 .. _Mixcloud: https://www.mixcloud.com

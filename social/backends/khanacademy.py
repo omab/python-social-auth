@@ -7,7 +7,7 @@ from social.backends.oauth import BaseOAuth1
 
 
 class KhanAcademyOAuth1(BaseOAuth1):
-    name = 'khanacademy-oauth'
+    name = 'khanacademy-oauth1'
     ID_KEY = 'user_id'
     AUTHORIZATION_URL = 'https://www.khanacademy.org/api/auth'
     REQUEST_TOKEN_URL = 'https://www.khanacademy.org/api/auth/request_token'
