@@ -1,6 +1,6 @@
 """
 Khan Academy OAuth backend, docs at:
-    http://psa.matiasaguirre.net/docs/backends/facebook.html
+    https://github.com/Khan/khan-api/wiki/Khan-Academy-API-Authentication
 """
 import six
 
@@ -84,7 +84,7 @@ class KhanAcademyOAuth1(BrowserBasedOAuth1):
 
     Note that we don't use the AUTHORIZATION_URL.
 
-    AUTHORIZATION_URL requires the following arguments:
+    REQUEST_TOKEN_URL requires the following arguments:
     oauth_consumer_key - Your app's consumer key
     oauth_nonce - Random 64-bit, unsigned number encoded as an ASCII string
         in decimal format. The nonce/timestamp pair should always be unique.
