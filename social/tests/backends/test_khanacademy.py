@@ -5,7 +5,7 @@ from social.p3 import urlencode
 from social.tests.backends.oauth import OAuth1Test
 
 
-class KhanAcademyOAuth2Test(OAuth1Test):
+class KhanAcademyOAuth1Test(OAuth1Test):
     backend_path = 'social.backends.khanacademy.KhanAcademyOAuth1'
     user_data_url = 'https://www.khanacademy.org/api/v1/user'
     expected_username = 'foo@bar.com'
