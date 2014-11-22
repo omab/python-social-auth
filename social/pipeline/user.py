@@ -73,19 +73,20 @@ def user_details(strategy, details, user=None, *args, **kwargs):
     """Update user details using data from provider."""
     if user:
         changed = False  # flag to track changes
-        protected = strategy.setting('PROTECTED_USER_FIELDS', [])
-        keep = ('username', 'id', 'pk') + tuple(protected)
+        protected = ('username', 'id', 'pk') + \
+                    tuple(strategy.setting('PROTECTED_USER_FIELDS', []))
 
+        # Update user model attributes with the new data sent by the current
+        # provider. Update on some attributes is disabled by default, for
+        # example username and id fields. It's also possible to disable update
+        # on fields defined in SOCIAL_AUTH_PROTECTED_FIELDS.
         for name, value in details.items():
-            # do not update username, it was already generated
-            # do not update configured fields if user already existed
-            if name not in keep and hasattr(user, name):
-                if value and value != getattr(user, name, None):
-                    try:
-                        setattr(user, name, value)
-                        changed = True
-                    except AttributeError:
-                        pass
+            if not hasattr(user, name):
+                continue
+            current_value = getattr(user, name, None)
+            if not current_value or name not in protected:
+                changed |= current_value != value
+                setattr(user, name, value)
 
         if changed:
             strategy.storage.user.changed(user)
