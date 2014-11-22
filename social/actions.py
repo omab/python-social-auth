@@ -39,7 +39,6 @@ def do_complete(backend, login, user=None, redirect_name='next',
     else:
         user = backend.complete(user=user, *args, **kwargs)
 
-
     # pop redirect value before the session is trashed on login(), but after
     # the pipeline so that the pipeline can change the redirect if needed
     redirect_value = backend.strategy.session_get(redirect_name, '') or \
