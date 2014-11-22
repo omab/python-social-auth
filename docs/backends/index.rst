@@ -74,6 +74,7 @@ Social backends
    instagram
    jawbone
    kakao
+   khanacademy
    lastfm
    linkedin
    livejournal
