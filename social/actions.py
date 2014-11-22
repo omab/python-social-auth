@@ -27,10 +27,7 @@ def do_auth(backend, redirect_name='next'):
 
 def do_complete(backend, login, user=None, redirect_name='next',
                 *args, **kwargs):
-    # pop redirect value before the session is trashed on login()
     data = backend.strategy.request_data()
-    redirect_value = backend.strategy.session_get(redirect_name, '') or \
-                     data.get(redirect_name, '')
 
     is_authenticated = user_is_authenticated(user)
     user = is_authenticated and user or None
@@ -41,6 +38,12 @@ def do_complete(backend, login, user=None, redirect_name='next',
         user = backend.continue_pipeline(*xargs, **xkwargs)
     else:
         user = backend.complete(user=user, *args, **kwargs)
+
+
+    # pop redirect value before the session is trashed on login(), but after
+    # the pipeline so that the pipeline can change the redirect if needed
+    redirect_value = backend.strategy.session_get(redirect_name, '') or \
+                     data.get(redirect_name, '')
 
     user_model = backend.strategy.storage.user.user_model()
     if user and not isinstance(user, user_model):
