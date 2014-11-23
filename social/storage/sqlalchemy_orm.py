@@ -3,10 +3,11 @@ import base64
 import six
 import json
 
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.types import PickleType, Text
-from sqlalchemy import Column, Integer, String
 from sqlalchemy.schema import UniqueConstraint
+from sqlalchemy.ext.declarative import declared_attr
 
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
                                 CodeMixin, BaseStorage

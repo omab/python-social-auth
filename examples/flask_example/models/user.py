@@ -1,16 +1,23 @@
+from sqlalchemy import Column, String, Integer, Boolean
+from sqlalchemy.ext.declarative import declarative_base
+
 from flask.ext.login import UserMixin
 
-from flask_example import db
+from flask_example import db_session
 
 
-class User(db.Model, UserMixin):
+Base = declarative_base()
+Base.query = db_session.query_property()
+
+
+class User(Base, UserMixin):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(200))
-    password = db.Column(db.String(200), default='')
-    name = db.Column(db.String(100))
-    email = db.Column(db.String(200))
-    active = db.Column(db.Boolean, default=True)
+    id = Column(Integer, primary_key=True)
+    username = Column(String(200))
+    password = Column(String(200), default='')
+    name = Column(String(100))
+    email = Column(String(200))
+    active = Column(Boolean, default=True)
 
     def is_active(self):
         return self.active

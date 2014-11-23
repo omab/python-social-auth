@@ -1,7 +1,9 @@
 import sys
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+
 from flask import Flask, g
-from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext import login
 
 sys.path.append('../..')
@@ -20,9 +22,12 @@ except ImportError:
     pass
 
 # DB
-db = SQLAlchemy(app)
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+db_session = scoped_session(Session)
+
 app.register_blueprint(social_auth)
-init_social(app, db)
+init_social(app, db_session)
 
 login_manager = login.LoginManager()
 login_manager.login_view = 'main'
@@ -49,12 +54,12 @@ def global_user():
 @app.teardown_appcontext
 def commit_on_success(error=None):
     if error is None:
-        db.session.commit()
+        db_session.commit()
 
 
 @app.teardown_request
 def shutdown_session(exception=None):
-    db.session.remove()
+    db_session.remove()
 
 
 @app.context_processor
