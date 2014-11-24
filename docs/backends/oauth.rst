@@ -2,8 +2,8 @@ OAuth
 =====
 
 OAuth_ communication demands a set of keys exchange to validate the client
-authenticity prior to user approbation. Twitter, Facebook and Orkut
-facilitates these keys by application registration, Google works the same,
+authenticity prior to user approbation. Twitter, and Facebook facilitates
+these keys by application registration, Google works the same,
 but provides the option for unregistered applications.
 
 Check next sections for details.
