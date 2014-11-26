@@ -105,6 +105,8 @@ class KhanAcademyOAuth1(BrowserBasedOAuth1):
     REDIRECT_URI_PARAMETER_NAME = 'oauth_callback'
     USER_DATA_URL = 'https://www.khanacademy.org/api/v1/user'
 
+    EXTRA_DATA = [('user_id', 'user_id')]
+
     def get_user_details(self, response):
         """Return user details from Khan Academy account"""
         return {
