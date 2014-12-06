@@ -95,6 +95,7 @@ class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
         ('expires_in', 'expires'),
         ('token_type', 'token_type', True)
     ]
+    PROFILE_URL_PREFIX = 'mailto:'
 
     def revoke_token_params(self, token, uid):
         return {'token': token}
