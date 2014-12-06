@@ -13,6 +13,7 @@ class BaseAuth(object):
     EXTRA_DATA = None
     REQUIRES_EMAIL_VALIDATION = False
     SEND_USER_AGENT = False
+    PROFILE_URL_PREFIX = None  # profile url prefix
 
     def __init__(self, strategy=None, redirect_uri=None):
         self.strategy = strategy
@@ -233,3 +234,9 @@ class BaseAuth(object):
         service provider. Must return (key, secret), order *must* be respected.
         """
         return self.setting('KEY'), self.setting('SECRET')
+
+    def get_profile_url(self, uid):
+        """Return social profile url with given UID"""
+        profile_url = getattr(self, 'PROFILE_URL_PREFIX', None)
+        if profile_url:
+            return u'{}{}'.format(profile_url, uid)

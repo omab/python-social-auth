@@ -29,6 +29,19 @@
         </div>
       {% endif %}
 
+      <div class="social-profile">
+        {% for sublist in available_backends|social_backends %}
+          <div class="row">
+            {% for name, backend in sublist %}
+              {% associated backend %}
+              {% if association %}
+                <a href="{{ association.get_profile_url }}" target="_blank">Profile {{ backend|backend_name }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
       <div class="social">
         {% for sublist in available_backends|social_backends %}
           <div class="row">

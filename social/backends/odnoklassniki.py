@@ -19,6 +19,7 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
     ACCESS_TOKEN_URL = 'http://api.odnoklassniki.ru/oauth/token.do'
     EXTRA_DATA = [('refresh_token', 'refresh_token'),
                   ('expires_in', 'expires')]
+    PROFILE_URL_PREFIX = 'http://odnoklassniki.ru/profile/'
 
     def get_user_details(self, response):
         """Return user details from Odnoklassniki request"""
@@ -48,6 +49,7 @@ class OdnoklassnikiApp(BaseAuth):
     """Odnoklassniki iframe app authentication backend"""
     name = 'odnoklassniki-app'
     ID_KEY = 'uid'
+    PROFILE_URL_PREFIX = 'http://odnoklassniki.ru/profile/'
 
     def extra_data(self, user, uid, response, details):
         return dict([(key, value) for key, value in response.items()
