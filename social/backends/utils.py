@@ -1,7 +1,12 @@
-from collections import OrderedDict
 from social.exceptions import MissingBackend
 from social.backends.base import BaseAuth
 from social.utils import module_member, user_is_authenticated
+
+try:
+    from collections import OrderedDict
+except ImportError:
+    # python < 2.7 compatibility
+    from ordereddict import OrderedDict
 
 
 # Cache for discovered backends.
