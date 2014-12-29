@@ -262,7 +262,7 @@ Miscellaneous settings
 ``SOCIAL_AUTH_SESSION_EXPIRATION = False``
     By default, user session expiration time will be set by your web
     framework (in Django, for example, it is set with
-    SOCIAL_AUTH_SESSION_EXPIRATION). Some providers return the time that the
+    `SESSION_COOKIE_AGE`_). Some providers return the time that the
     access token will live, which is stored in ``UserSocialAuth.extra_data``
     under the key ``expires``. Changing this setting to True will override your
     web framework's session length setting and set user session lengths to
@@ -303,3 +303,4 @@ using POST.
 .. _OAuth: http://oauth.net/
 .. _passwordless authentication mechanism: https://medium.com/@ninjudd/passwords-are-obsolete-9ed56d483eb
 .. _psa-passwordless: https://github.com/omab/psa-passwordless
+.. _SESSION_COOKIE_AGE: https://docs.djangoproject.com/en/1.7/ref/settings/#std:setting-SESSION_COOKIE_AGE
