@@ -100,6 +100,7 @@ Social backends
    salesforce
    shopify
    skyrock
+   slack
    soundcloud
    spotify
    suse

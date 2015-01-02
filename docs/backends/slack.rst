@@ -1,11 +1,11 @@
 Slack
-======
+=====
 
 Slack
 
-- Register a new application at `https://api.slack.com/applications`_, set the callback URL to
-  ``http://example.com/complete/slack/`` replacing ``example.com`` with your
-  domain.
+- Register a new application at `https://api.slack.com/applications`_, set the
+  callback URL to ``http://example.com/complete/slack/`` replacing
+  ``example.com`` with your domain.
 
 - Fill ``Client ID`` and ``Client Secret`` values in the settings::
 
@@ -16,4 +16,4 @@ Slack
 
       SOCIAL_AUTH_SLACK_SCOPE = [...]
 
-      See auth scopes at https://api.slack.com/docs/oauth
+  See auth scopes at https://api.slack.com/docs/oauth
