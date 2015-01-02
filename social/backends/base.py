@@ -209,7 +209,7 @@ class BaseAuth(object):
 
     def request(self, url, method='GET', *args, **kwargs):
         kwargs.setdefault('headers', {})
-        if not self.setting('VERIFY_SSL') == None:
+        if self.setting('VERIFY_SSL') is not None:
             kwargs.setdefault('verify', self.setting('VERIFY_SSL'))
         kwargs.setdefault('timeout', self.setting('REQUESTS_TIMEOUT') or
                                      self.setting('URLOPEN_TIMEOUT'))
