@@ -133,24 +133,7 @@ whitelists can be applied too, check the whitelists_ settings for details.
 Orkut
 -----
 
-Orkut offers per application keys named ``Consumer Key`` and ``Consumer Secret``.
-To enable Orkut these two keys are needed.
-
-Check `Google support`_ and `Orkut API`_ for details on getting keys.
-
-- fill ``Consumer Key`` and ``Consumer Secret`` values::
-
-      SOCIAL_AUTH_ORKUT_KEY = ''
-      SOCIAL_AUTH_ORKUT_SECRET = ''
-
-- add any needed extra data to::
-
-      SOCIAL_AUTH_ORKUT_EXTRA_DATA = [...]
-
-- configure extra scopes in::
-
-      SOCIAL_AUTH_ORKUT_SCOPE = [...]
-
+As of September 30, 2014, Orkut has been `shut down`_.
 
 User identification
 -------------------
@@ -214,14 +197,13 @@ supporting them you can default to the old values by defining this setting::
     SOCIAL_AUTH_GOOGLE_PLUS_USE_DEPRECATED_API = True
 
 .. _Google support: http://www.google.com/support/a/bin/answer.py?hl=en&answer=162105
-.. _Orkut API:  http://code.google.com/apis/orkut/docs/rest/developers_guide_protocol.html#Authenticating
 .. _Google OpenID: http://code.google.com/apis/accounts/docs/OpenID.html
 .. _Google OAuth: http://code.google.com/apis/accounts/docs/OAuth.html
 .. _Google OAuth2: http://code.google.com/apis/accounts/docs/OAuth2.html
 .. _OAuth2 Registering: http://code.google.com/apis/accounts/docs/OAuth2.html#Registering
 .. _OAuth2 draft: http://tools.ietf.org/html/draft-ietf-oauth-v2-10
 .. _OAuth reference: http://code.google.com/apis/accounts/docs/OAuth_ref.html#SigningOAuth
-.. _Orkut OAuth:  http://code.google.com/apis/orkut/docs/rest/developers_guide_protocol.html#Authenticating
+.. _shut down: https://support.google.com/orkut/?csw=1#Authenticating
 .. _Google Data Protocol Directory: http://code.google.com/apis/gdata/docs/directory.html
 .. _whitelists: ../configuration/settings.html#whitelists
 .. _Google+ Sign In: https://developers.google.com/+/web/signin/
