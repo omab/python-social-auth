@@ -269,7 +269,7 @@ class OpenIdConnectAssociation(object):
         self.assoc_type = assoc_type  # as state
 
 
-class OpenIdConnectAuth(BaseOAuth2):
+class BaseOpenIdConnectAuth(BaseOAuth2):
     """
     Base class for Open ID Connect backends.
 
@@ -281,6 +281,20 @@ class OpenIdConnectAuth(BaseOAuth2):
     # Set after access_token is retrieved
     id_token = None
 
+    def request_access_token(self, *args, **kwargs):
+        """
+        Retrieve the access token. Also, validate the id_token and
+        store it (temporarily).
+        """
+        response = self.get_json(*args, **kwargs)
+        self.id_token = self.validate_and_return_id_token(response['id_token'])
+        return response
+
+    def validate_and_return_id_token(self, id_token):
+        raise NotImplementedError
+
+
+class OpenIdConnectAuth(BaseOpenIdConnectAuth):
     def auth_params(self, state=None):
         """Return extra arguments needed on auth process."""
         params = super(OpenIdConnectAuth, self).auth_params(state)
@@ -356,12 +370,3 @@ class OpenIdConnectAuth(BaseOAuth2):
         else:
             raise AuthTokenError(self, 'Incorrect id_token: nonce')
         return id_token
-
-    def request_access_token(self, *args, **kwargs):
-        """
-        Retrieve the access token. Also, validate the id_token and
-        store it (temporarily).
-        """
-        response = self.get_json(*args, **kwargs)
-        self.id_token = self.validate_and_return_id_token(response['id_token'])
-        return response
