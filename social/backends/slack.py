@@ -51,10 +51,17 @@ class SlackOAuth2(BaseOAuth2):
             'user': auth_test.get("user_id")
         })
 
-        # Inject the team data
-        out = data["user"].copy()
-        out["team_id"] = auth_test.get("team_id")
-        out["team"] = auth_test.get("team")
-        out["team_url"] = auth_test.get("url")
+        # Capture the user data, if available based on the scope
+        if data.get("user"):
+            out = data["user"].copy()
+            # inject the team data
+            out["team_id"] = auth_test.get("team_id")
+            out["team"] = auth_test.get("team")
+            out["team_url"] = auth_test.get("url")
+        else:
+            out = data.copy()
+            # make the data consistent with the above
+            out["id"] = out["user_id"]
+            del out["user_id"]
 
         return out
