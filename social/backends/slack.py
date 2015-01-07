@@ -60,8 +60,6 @@ class SlackOAuth2(BaseOAuth2):
             out["team_url"] = auth_test.get("url")
         else:
             out = data.copy()
-            # make the data consistent with the above
-            out["id"] = out["user_id"]
-            del out["user_id"]
+            out.update(auth_test)
 
         return out
