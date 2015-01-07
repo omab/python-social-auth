@@ -26,7 +26,7 @@ class SlackOAuth2(BaseOAuth2):
 
         # Build the username with the team $username@$team_url
         # Necessary to get unique names for all of slack
-        match = re.search("//([^.]+)\.slack\.com", response["team_url"])
+        match = re.search("//([^.]+)\.slack\.com", response["url"])
         username = "%s@%s" % (response.get("name"), match.group(1))
 
         return {'username': username,
@@ -51,15 +51,15 @@ class SlackOAuth2(BaseOAuth2):
             'user': auth_test.get("user_id")
         })
 
-        # Capture the user data, if available based on the scope
         if data.get("user"):
-            out = data["user"].copy()
-            # inject the team data
-            out["team_id"] = auth_test.get("team_id")
-            out["team"] = auth_test.get("team")
-            out["team_url"] = auth_test.get("url")
+            # Capture the user data, if available based on the scope
+            out = data["user"]
         else:
-            out = data.copy()
-            out.update(auth_test)
+            # Otherwise, grab whatever is available
+            out = data
+
+        # inject the auth/team data. Most notably so we can get the slack url,
+        # for creating unique usernames
+        out.update(auth_test)
 
         return out
