@@ -27,14 +27,17 @@ class SlackOAuth2(BaseOAuth2):
         # Build the username with the team $username@$team_url
         # Necessary to get unique names for all of slack
         match = re.search("//([^.]+)\.slack\.com", response["url"])
-        username = "%s@%s" % (response.get("name"), match.group(1))
+        username = "%s@%s" % (response.get("user"), match.group(1))
 
-        return {'username': username,
-                'email': response["profile"].get('email', ''),
+        out = {'username': username}
+        if response.get("profile"):
+            out.update({
+                'email': response["profile"].get("email"),
                 'fullname': response["profile"].get("real_name"),
                 'first_name': response["profile"].get("first_name"),
                 'last_name': response["profile"].get("last_name")
-                }
+            })
+        return out
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
@@ -44,22 +47,21 @@ class SlackOAuth2(BaseOAuth2):
         auth_test = self.get_json('https://slack.com/api/auth.test', params={
             'token': access_token
         })
+        out = auth_test
+        del out["ok"]
 
         # https://api.slack.com/methods/users.info
-        data = self.get_json('https://slack.com/api/users.info', params={
+        user_info = self.get_json('https://slack.com/api/users.info', params={
             'token': access_token,
             'user': auth_test.get("user_id")
         })
 
-        if data.get("user"):
+        if user_info.get("user"):
             # Capture the user data, if available based on the scope
-            out = data["user"]
-        else:
-            # Otherwise, grab whatever is available
-            out = data
+            out.update(user_info["user"])
 
-        # inject the auth/team data. Most notably so we can get the slack url,
-        # for creating unique usernames
-        out.update(auth_test)
+        # Clean up user_id vs id
+        out["id"] = out["user_id"]
+        del out["user_id"]
 
         return out
