@@ -27,7 +27,8 @@ class TornadoStrategy(BaseStrategy):
         return self.request_handler.settings[name]
 
     def request_data(self, merge=True):
-        return self.request.arguments.copy()
+        # Multiple valued arguments not supported yet
+        return {key: val[0] for key, val in self.request.arguments.iteritems()}
 
     def request_host(self):
         return self.request.host
@@ -39,7 +40,7 @@ class TornadoStrategy(BaseStrategy):
         self.request_handler.write(content)
 
     def session_get(self, name, default=None):
-        return self.request_handler.get_secure_cookie(name, value=default)
+        return self.request_handler.get_secure_cookie(name) or default
 
     def session_set(self, name, value):
         self.request_handler.set_secure_cookie(name, str(value))
