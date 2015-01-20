@@ -95,4 +95,8 @@ class Migration(migrations.Migration):
             name='code',
             unique_together=set([('email', 'code')]),
         ),
+        migrations.AlterUniqueTogether(
+            name='nonce',
+            unique_together=set([('server_url', 'timestamp', 'salt')]),
+        ),
     ]
