@@ -2,6 +2,7 @@ import re
 import sys
 import unicodedata
 import collections
+from django.core.urlresolvers import reverse, NoReverseMatch
 import six
 
 import social
@@ -179,11 +180,26 @@ def is_url(value):
             value.startswith('/'))
 
 
+def pattern_url(value):
+    try:
+        return reverse(value)
+    except NoReverseMatch:
+        pass
+
+
 def setting_url(backend, *names):
+    url_patterns_enabled = backend.setting('URL_PATTERNS_ENABLED')
     for name in names:
         if is_url(name):
             return name
-        else:
-            value = backend.setting(name)
+        if url_patterns_enabled:
+            value = pattern_url(name)
+            if is_url(value):
+                return value
+        value = backend.setting(name)
+        if is_url(value):
+            return value
+        elif url_patterns_enabled:
+            value = pattern_url(value)
             if is_url(value):
                 return value
