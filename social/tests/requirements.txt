@@ -5,3 +5,4 @@ nose>=1.2.1
 requests>=1.1.0
 PyJWT==0.2.1
 unittest2==0.5.1
+ordereddict==1.1

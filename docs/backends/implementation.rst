@@ -37,6 +37,8 @@ First, lets check the common attributes for all backend types.
     data (which should be a ``dict`` instance) and ``alias`` is the name to
     store it on ``extra_data``.
 
+``PROFILE_URL_PREFIX = None``
+    Url prefix for build social profile url. On default return PROFILE_URL_PREFIX + UID or None.
 
 OAuth
 -----
@@ -135,6 +137,7 @@ Example code::
             ('id', 'id'),
             ('expires', 'expires')
         ]
+        PROFILE_URL_PREFIX = 'https://github.com/'
 
         def get_user_details(self, response):
             """Return user details from Github account"""

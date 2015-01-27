@@ -16,6 +16,7 @@ class VKontakteOpenAPI(BaseAuth):
     """VK.COM OpenAPI authentication backend"""
     name = 'vk-openapi'
     ID_KEY = 'id'
+    PROFILE_URL_PREFIX = 'http://vk.com/id'
 
     def get_user_details(self, response):
         """Return user details from VK.com request"""
@@ -84,6 +85,7 @@ class VKOAuth2(BaseOAuth2):
         ('id', 'id'),
         ('expires_in', 'expires')
     ]
+    PROFILE_URL_PREFIX = 'http://vk.com/id'
 
     def get_user_id(self, details, response):
         return response['uid']

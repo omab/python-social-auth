@@ -94,6 +94,12 @@ class UserMixin(object):
                 self.extra_data = extra_data
             return True
 
+    def get_profile_url(self):
+        """Return social profile url"""
+        backend = self.get_backend_instance()
+        if backend:
+            return backend.get_profile_url(self.uid)
+
     @classmethod
     def clean_username(cls, value):
         """Clean username removing any unsupported character"""
