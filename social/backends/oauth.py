@@ -4,7 +4,7 @@ from requests import HTTPError
 from requests_oauthlib import OAuth1
 from oauthlib.oauth1 import SIGNATURE_TYPE_AUTH_HEADER
 
-from social.p3 import urlencode, unquote
+from social.p3 import urlencode, unquote, quote_plus
 from social.utils import url_add_parameters, parse_qs
 from social.exceptions import AuthFailed, AuthCanceled, AuthUnknownError, \
                               AuthMissingParameter, AuthStateMissing, \
@@ -319,12 +319,16 @@ class BaseOAuth2(OAuthAuth):
         params = self.auth_params(state)
         params.update(self.get_scope_argument())
         params.update(self.auth_extra_arguments())
-        params = urlencode(params)
-        if not self.REDIRECT_STATE:
-            # redirect_uri matching is strictly enforced, so match the
-            # providers value exactly.
-            params = unquote(params)
-        return self.AUTHORIZATION_URL + '?' + params
+
+        urlencoded_params = []
+
+        for key, value in params.items():
+            # redirect_uri is strictly enforced if there is no redirect state
+            if key != 'redirect_uri' or self.REDIRECT_STATE:
+                value = quote_plus(value)
+            urlencoded_params.append('%s=%s' % (quote_plus(key), value))
+
+        return self.AUTHORIZATION_URL + '?' + '&'.join(urlencoded_params)
 
     def auth_complete_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
