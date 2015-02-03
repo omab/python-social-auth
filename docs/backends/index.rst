@@ -86,6 +86,7 @@ Social backends
    mineid
    mixcloud
    moves
+   nationbuilder
    odnoklassnikiru
    openstreetmap
    persona
