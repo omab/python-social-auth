@@ -59,7 +59,7 @@ class BaseOAuthTest(BaseBackendTest):
                                status=200,
                                body='foobar')
         HTTPretty.register_uri(self._method(self.backend.ACCESS_TOKEN_METHOD),
-                               uri=self.backend.ACCESS_TOKEN_URL,
+                               uri=self.backend.access_token_url(),
                                status=self.access_token_status,
                                body=self.access_token_body or '',
                                content_type='text/json')
@@ -107,8 +107,7 @@ class OAuth2Test(BaseOAuthTest):
     def do_refresh_token(self):
         self.do_login()
         HTTPretty.register_uri(self._method(self.backend.REFRESH_TOKEN_METHOD),
-                               self.backend.REFRESH_TOKEN_URL or
-                               self.backend.ACCESS_TOKEN_URL,
+                               self.backend.refresh_token_url(),
                                status=200,
                                body=self.refresh_token_body)
         user = list(User.cache.values())[0]

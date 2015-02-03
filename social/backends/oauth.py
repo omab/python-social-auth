@@ -20,14 +20,20 @@ class OAuthAuth(BaseAuth):
     name (all uppercase) plus _EXTRA_DATA.
 
     access_token is always stored.
+
+    URLs settings:
+        AUTHORIZATION_URL       Authorization service url
+        ACCESS_TOKEN_URL        Access token URL
     """
-    SCOPE_PARAMETER_NAME = 'scope'
-    DEFAULT_SCOPE = None
-    SCOPE_SEPARATOR = ' '
-    ID_KEY = 'id'
+    AUTHORIZATION_URL = ''
+    ACCESS_TOKEN_URL = ''
     ACCESS_TOKEN_METHOD = 'GET'
     REVOKE_TOKEN_URL = None
     REVOKE_TOKEN_METHOD = 'POST'
+    ID_KEY = 'id'
+    SCOPE_PARAMETER_NAME = 'scope'
+    DEFAULT_SCOPE = None
+    SCOPE_SEPARATOR = ' '
     REDIRECT_STATE = False
     STATE_PARAMETER = False
 
@@ -109,6 +115,12 @@ class OAuthAuth(BaseAuth):
         """Loads user data from service. Implement in subclass"""
         return {}
 
+    def authorization_url(self):
+        return self.AUTHORIZATION_URL
+
+    def access_token_url(self):
+        return self.ACCESS_TOKEN_URL
+
     def revoke_token_url(self, token, uid):
         return self.REVOKE_TOKEN_URL
 
@@ -137,16 +149,14 @@ class BaseOAuth1(OAuthAuth):
     """Consumer based mechanism OAuth authentication, fill the needed
     parameters to communicate properly with authentication service.
 
-        AUTHORIZATION_URL       Authorization service url
+    URLs settings:
         REQUEST_TOKEN_URL       Request token URL
-        ACCESS_TOKEN_URL        Access token URL
+
     """
-    AUTHORIZATION_URL = ''
     REQUEST_TOKEN_URL = ''
     REQUEST_TOKEN_METHOD = 'GET'
     OAUTH_TOKEN_PARAMETER_NAME = 'oauth_token'
     REDIRECT_URI_PARAMETER_NAME = 'redirect_uri'
-    ACCESS_TOKEN_URL = ''
     UNATHORIZED_TOKEN_SUFIX = 'unauthorized_token_name'
 
     def auth_url(self):
@@ -252,7 +262,7 @@ class BaseOAuth1(OAuthAuth):
         )
         state = self.get_or_create_state()
         params[self.REDIRECT_URI_PARAMETER_NAME] = self.get_redirect_uri(state)
-        return self.AUTHORIZATION_URL + '?' + urlencode(params)
+        return '{0}?{1}'.format(self.authorization_url(), urlencode(params))
 
     def oauth_auth(self, token=None, oauth_verifier=None,
                    signature_type=SIGNATURE_TYPE_AUTH_HEADER):
@@ -278,7 +288,7 @@ class BaseOAuth1(OAuthAuth):
 
     def access_token(self, token):
         """Return request for access token value"""
-        return self.get_querystring(self.ACCESS_TOKEN_URL,
+        return self.get_querystring(self.access_token_url(),
                                     auth=self.oauth_auth(token),
                                     method=self.ACCESS_TOKEN_METHOD)
 
@@ -288,13 +298,7 @@ class BaseOAuth2(OAuthAuth):
 
     OAuth2 draft details at:
         http://tools.ietf.org/html/draft-ietf-oauth-v2-10
-
-    Attributes:
-        AUTHORIZATION_URL       Authorization service url
-        ACCESS_TOKEN_URL        Token URL
     """
-    AUTHORIZATION_URL = None
-    ACCESS_TOKEN_URL = None
     REFRESH_TOKEN_URL = None
     REFRESH_TOKEN_METHOD = 'POST'
     RESPONSE_TYPE = 'code'
@@ -404,12 +408,6 @@ class BaseOAuth2(OAuthAuth):
                         key: params}
         request = self.request(url, **request_args)
         return self.process_refresh_token_response(request, *args, **kwargs)
-
-    def authorization_url(self):
-        return self.AUTHORIZATION_URL
-
-    def access_token_url(self):
-        return self.ACCESS_TOKEN_URL
 
     def refresh_token_url(self):
         return self.REFRESH_TOKEN_URL or self.access_token_url()
