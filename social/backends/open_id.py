@@ -96,6 +96,7 @@ class OpenIdAuth(BaseAuth):
         fullname = values.get('fullname') or ''
         first_name = values.get('first_name') or ''
         last_name = values.get('last_name') or ''
+        email = values.get('email') or ''
 
         if not fullname and first_name and last_name:
             fullname = first_name + ' ' + last_name
@@ -109,7 +110,8 @@ class OpenIdAuth(BaseAuth):
         values.update({'fullname': fullname, 'first_name': first_name,
                        'last_name': last_name,
                        'username': values.get(username_key) or
-                                   (first_name.title() + last_name.title())})
+                                   (first_name.title() + last_name.title()),
+                       'email': email})
         return values
 
     def extra_data(self, user, uid, response, details):
