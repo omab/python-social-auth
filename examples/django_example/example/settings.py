@@ -229,7 +229,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.debug.debug',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details',
-    #'social.pipeline.debug.debug'
+    'social.pipeline.debug.debug'
 )
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
