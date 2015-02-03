@@ -159,6 +159,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.mendeley.MendeleyOAuth2',
     'social.backends.mineid.MineIDOAuth2',
     'social.backends.mixcloud.MixcloudOAuth2',
+    'social.backends.nationbuilder.NationBuilderOAuth2',
     'social.backends.odnoklassniki.OdnoklassnikiOAuth2',
     'social.backends.open_id.OpenIdAuth',
     'social.backends.openstreetmap.OpenStreetMapOAuth',

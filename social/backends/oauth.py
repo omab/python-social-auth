@@ -324,7 +324,7 @@ class BaseOAuth2(OAuthAuth):
             # redirect_uri matching is strictly enforced, so match the
             # providers value exactly.
             params = unquote(params)
-        return self.AUTHORIZATION_URL + '?' + params
+        return '{0}?{1}'.format(self.authorization_url(), params)
 
     def auth_complete_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
@@ -358,7 +358,7 @@ class BaseOAuth2(OAuthAuth):
         self.process_error(self.data)
         try:
             response = self.request_access_token(
-                self.ACCESS_TOKEN_URL,
+                self.access_token_url(),
                 data=self.auth_complete_params(state),
                 headers=self.auth_headers(),
                 method=self.ACCESS_TOKEN_METHOD
@@ -396,7 +396,7 @@ class BaseOAuth2(OAuthAuth):
 
     def refresh_token(self, token, *args, **kwargs):
         params = self.refresh_token_params(token, *args, **kwargs)
-        url = self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL
+        url = self.refresh_token_url()
         method = self.REFRESH_TOKEN_METHOD
         key = 'params' if method == 'GET' else 'data'
         request_args = {'headers': self.auth_headers(),
@@ -404,3 +404,12 @@ class BaseOAuth2(OAuthAuth):
                         key: params}
         request = self.request(url, **request_args)
         return self.process_refresh_token_response(request, *args, **kwargs)
+
+    def authorization_url(self):
+        return self.AUTHORIZATION_URL
+
+    def access_token_url(self):
+        return self.ACCESS_TOKEN_URL
+
+    def refresh_token_url(self):
+        return self.REFRESH_TOKEN_URL or self.access_token_url()
