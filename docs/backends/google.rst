@@ -6,6 +6,11 @@ This section describes how to setup the different services provided by Google.
 Google OAuth
 ------------
 
+.. attention:: **Google OAuth deprecation**
+   Important: OAuth 1.0 was officially deprecated on April 20, 2012, and will be
+   shut down on April 20, 2015. We encourage you to migrate to any of the other
+   protocols.
+
 Google provides ``Consumer Key`` and ``Consumer Secret`` keys to registered
 applications, but also allows unregistered application to use their authorization
 system with, but beware that this method will display a security banner to the
@@ -59,68 +64,71 @@ done by their Javascript which thens calls a defined handler to complete the
 auth process.
 
 * To enable the backend create an application using the `Google console`_ and
-  fill the key settings::
+  following the steps from the `official guide`_.
+
+* Fill in the key settings looking inside the Google console the subsection
+  ``Credentials`` inside ``API & auth``::
+
+    AUTHENTICATION_BACKENDS = (
+        ...
+        'social.backends.google.GooglePlusAuth',
+    )
 
     SOCIAL_AUTH_GOOGLE_PLUS_KEY = '...'
     SOCIAL_AUTH_GOOGLE_PLUS_SECRET = '...'
 
-* Add their button snippet to your template::
+  ``SOCIAL_AUTH_GOOGLE_PLUS_KEY`` corresponds to the variable ``CLIENT ID``.
+  ``SOCIAL_AUTH_GOOGLE_PLUS_SECRET`` corresponds to the variable
+  ``CLIENT SECRET``.
+
+* Create a new Django view and in its template add the Google+ Sign-In button::
 
     <div id="signinButton">
-        <span class="g-signin" data-scope="{{ plus_scope }}"
-                               data-clientid="{{ plus_id }}"
-                               data-redirecturi="postmessage"
-                               data-accesstype="offline"
-                               data-cookiepolicy="single_host_origin"
-                               data-callback="signInCallback">
+        <span id="signinButton">
+            <span
+                class="g-signin"
+                data-callback="signInCallback"
+                data-clientid="{{ plus_id }}"
+                data-cookiepolicy="single_host_origin"
+                data-requestvisibleactions="http://schemas.google.com/AddActivity"
+                data-scope="https://www.googleapis.com/auth/plus.login">
+            </span>
         </span>
     </div>
 
-  ``signInCallback`` is the name of your Javascript callback function.
-
-* The scope can be generated doing::
-
-    from social.backends.google import GooglePlusAuth
-    plus_scope = ' '.join(GooglePlusAuth.DEFAULT_SCOPE)
-
-  Or get the value from settings if it was overridden. ``plus_id`` is the value
-  from ``SOCIAL_AUTH_GOOGLE_PLUS_KEY``.
-
-* Add the Javascript snippet::
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        (function () {
-            var po = document.createElement('script');
-            po.type = 'text/javascript';
-            po.async = true;
-            po.src = 'https://plus.google.com/js/client:plusone.js?onload=start';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(po, s);
-        })();
-    </script>
-
-* Define your Javascript callback function::
-
-    <script type="text/javascript">
-        var signInCallback = function (result) {
-            if (result['error']) {
-                alert('An error happened:', result['error']);
-            } else {
-                $('#code').attr('value', result['code']);
-                $('#at').attr('value', result['access_token']);
-                $('#google-plus').submit();
-            }
-        };
-    </script>
-
-  In the example above the values needed to complete the auth process are
-  posted using a form like this but this is just a simple example::
-
-    <form id="google-plus" method="post" action="{% url 'social:complete' "google-plus" %}">{% csrf_token %}
+    <form id="google-plus" method="post" action="{% url 'social:complete' "google-plus" %}">
+        {% csrf_token %}
         <input id="at" type="hidden" name="access_token" value="" />
         <input id="code" type="hidden" name="code" value="" />
     </form>
+
+  ``plus_id`` is the value from ``SOCIAL_AUTH_GOOGLE_PLUS_KEY``.
+  ``signInCallback`` is the name of your Javascript callback function.
+
+* Add the Javascript snippet in the same template as above::
+
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript">
+    (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/client:plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+    })();
+    </script>
+
+* And define your Javascript callback function::
+
+    <script type="text/javascript">
+    var signInCallback = function (result) {
+        if (result['error']) {
+            alert('An error happened:', result['error']);
+        } else {
+            $('#code').attr('value', result['code']);
+            $('#at').attr('value', result['access_token']);
+            $('#google-plus').submit();
+        }
+    };
+    </script>
 
 
 Google OpenId
@@ -208,5 +216,6 @@ supporting them you can default to the old values by defining this setting::
 .. _whitelists: ../configuration/settings.html#whitelists
 .. _Google+ Sign In: https://developers.google.com/+/web/signin/
 .. _Google console: https://code.google.com/apis/console
+.. _official guide: https://developers.google.com/+/web/signin/#step_1_create_a_client_id_and_client_secret
 .. _Sept 1, 2014: https://developers.google.com/+/api/auth-migration#timetable
 .. _e3525187: https://github.com/omab/python-social-auth/commit/e35251878a88954cecf8e575eca27c63164b9f67
