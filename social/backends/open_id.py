@@ -1,7 +1,7 @@
 import datetime
 from calendar import timegm
 
-from jwt import DecodeError, ExpiredSignature, decode as jwt_decode
+from jwt import InvalidTokenError, decode as jwt_decode
 
 from openid.consumer.consumer import Consumer, SUCCESS, CANCEL, FAILURE
 from openid.consumer.discover import DiscoveryFailure
@@ -327,23 +327,14 @@ class OpenIdConnectAuth(BaseOAuth2):
         try:
             # Decode the JWT and raise an error if the secret is invalid or
             # the response has expired.
-            id_token = jwt_decode(id_token, decryption_key)
-        except (DecodeError, ExpiredSignature) as de:
+            id_token = jwt_decode(id_token, decryption_key, audience=client_id, issuer=self.ID_TOKEN_ISSUER)
+        except InvalidTokenError as de:
             raise AuthTokenError(self, de)
-
-        # Verify the issuer of the id_token is correct
-        if id_token['iss'] != self.ID_TOKEN_ISSUER:
-            raise AuthTokenError(self, 'Incorrect id_token: iss')
 
         # Verify the token was issued in the last 10 minutes
         utc_timestamp = timegm(datetime.datetime.utcnow().utctimetuple())
         if id_token['iat'] < (utc_timestamp - 600):
             raise AuthTokenError(self, 'Incorrect id_token: iat')
-
-        # Verify this client is the correct recipient of the id_token
-        aud = id_token.get('aud')
-        if aud != client_id:
-            raise AuthTokenError(self, 'Incorrect id_token: aud')
 
         # Validate the nonce to ensure the request was not modified
         nonce = id_token.get('nonce')

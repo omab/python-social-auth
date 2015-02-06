@@ -3,4 +3,4 @@ requests>=1.1.0
 oauthlib>=0.3.8
 requests-oauthlib>=0.3.0,<0.3.2
 six>=1.2.0
-PyJWT==0.2.1
+PyJWT==0.4.1
