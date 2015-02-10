@@ -64,6 +64,9 @@ URLs options
 These URLs are used on different steps of the auth process, some for successful
 results and others for error situations.
 
+``SOCIAL_AUTH_URL_PATTERNS_ENABLED = False``
+    Enables url patterns in the url settings below.
+
 ``SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in/'``
     Used to redirect the user once the auth process ended successfully. The
     value of ``?next=/foo`` is used if it was present
