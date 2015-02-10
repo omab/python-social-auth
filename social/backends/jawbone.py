@@ -52,6 +52,15 @@ class JawboneOAuth2(BaseOAuth2):
                 ))
         return super(JawboneOAuth2, self).process_error(data)
 
+    def auth_complete_params(self, state=None):
+        client_id, client_secret = self.get_key_and_secret()
+        return {
+            'grant_type': 'authorization_code',  # request auth code
+            'code': self.data.get('code', ''),  # server response code
+            'client_id': client_id,
+            'client_secret': client_secret,
+        }
+
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         self.process_error(self.data)
