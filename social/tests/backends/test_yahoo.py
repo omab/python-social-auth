@@ -1,4 +1,5 @@
 import json
+import requests
 from httpretty import HTTPretty
 
 from social.p3 import urlencode
@@ -41,7 +42,19 @@ class YahooOAuth1Test(OAuth1Test):
             'isConnected': False,
             'profileUrl': 'http://profile.yahoo.com/a-guid',
             'guid': 'a-guid',
-            'nickname': 'foobar'
+            'nickname': 'foobar',
+            'emails': [{
+                'handle': 'foobar@yahoo.com',
+                'id': 1,
+                'primary': True,
+                'type': 'HOME',
+            },
+            {
+                'handle': 'foobar@email.com',
+                'id': 2,
+                'type': 'HOME',
+            }],
+            
         }
     })
 
@@ -56,3 +69,14 @@ class YahooOAuth1Test(OAuth1Test):
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
+        
+    def test_get_user_details(self):
+        HTTPretty.register_uri(
+            HTTPretty.GET,
+            self.user_data_url,
+            status=200,
+            body=self.user_data_body
+        )
+        response = requests.get(self.user_data_url)
+        user_details=self.backend.get_user_details(response.json()['profile'])
+        self.assertEqual(user_details['email'], 'foobar@yahoo.com')

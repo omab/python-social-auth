@@ -34,7 +34,7 @@ class YahooOAuth(BaseOAuth1):
         )
         emails = [email for email in response.get('emails', [])
                         if email.get('handle')]
-        emails.sort(key=lambda e: e.get('primary', False))
+        emails.sort(key=lambda e: e.get('primary', False), reverse=True)
         return {'username': response.get('nickname'),
                 'email': emails[0]['handle'] if emails else '',
                 'fullname': fullname,
