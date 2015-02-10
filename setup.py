@@ -46,7 +46,7 @@ def get_packages():
     return packages
 
 
-requires = ['requests>=1.1.0', 'oauthlib>=0.3.8', 'six>=1.2.0', 'PyJWT>=0.2.1']
+requires = ['requests>=1.1.0', 'oauthlib>=0.3.8', 'six>=1.2.0', 'PyJWT==0.4.1']
 if PY3:
     requires += ['python3-openid>=3.0.1',
                  'requests-oauthlib>=0.3.0,<0.3.2']
