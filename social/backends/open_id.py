@@ -329,9 +329,10 @@ class OpenIdConnectAuth(BaseOAuth2):
         try:
             # Decode the JWT and raise an error if the secret is invalid or
             # the response has expired.
-            id_token = jwt_decode(id_token, decryption_key, audience=client_id, issuer=self.ID_TOKEN_ISSUER)
-        except InvalidTokenError as de:
-            raise AuthTokenError(self, de)
+            id_token = jwt_decode(id_token, decryption_key, audience=client_id,
+                                  issuer=self.ID_TOKEN_ISSUER)
+        except InvalidTokenError as err:
+            raise AuthTokenError(self, err)
 
         # Verify the token was issued in the last 10 minutes
         utc_timestamp = timegm(datetime.datetime.utcnow().utctimetuple())

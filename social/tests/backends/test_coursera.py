@@ -5,7 +5,8 @@ from social.tests.backends.oauth import OAuth2Test
 
 class CourseraOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.coursera.CourseraOAuth2'
-    user_data_url = 'https://api.coursera.org/api/externalBasicProfiles.v1?q=me'
+    user_data_url = \
+        'https://api.coursera.org/api/externalBasicProfiles.v1?q=me'
     expected_username = '560e7ed2076e0d589e88bd74b6aad4b7'
     access_token_body = json.dumps({
         'access_token': 'foobar',

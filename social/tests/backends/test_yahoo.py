@@ -48,13 +48,11 @@ class YahooOAuth1Test(OAuth1Test):
                 'id': 1,
                 'primary': True,
                 'type': 'HOME',
-            },
-            {
+            }, {
                 'handle': 'foobar@email.com',
                 'id': 2,
                 'type': 'HOME',
             }],
-            
         }
     })
 
@@ -69,7 +67,7 @@ class YahooOAuth1Test(OAuth1Test):
 
     def test_partial_pipeline(self):
         self.do_partial_pipeline()
-        
+
     def test_get_user_details(self):
         HTTPretty.register_uri(
             HTTPretty.GET,
@@ -78,5 +76,7 @@ class YahooOAuth1Test(OAuth1Test):
             body=self.user_data_body
         )
         response = requests.get(self.user_data_url)
-        user_details=self.backend.get_user_details(response.json()['profile'])
+        user_details = self.backend.get_user_details(
+            response.json()['profile']
+        )
         self.assertEqual(user_details['email'], 'foobar@yahoo.com')
