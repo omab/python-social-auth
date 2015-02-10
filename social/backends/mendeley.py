@@ -12,13 +12,13 @@ class MendeleyMixin(object):
                   ('bio', 'bio')]
 
     def get_user_id(self, details, response):
-        return response['main']['profile_id']
+        return response['id']
 
     def get_user_details(self, response):
         """Return user details from Mendeley account"""
-        profile_id = response['main']['profile_id']
-        name = response['main']['name']
-        bio = response['main']['bio']
+        profile_id = response['id']
+        name = response['display_name']
+        bio = response['link']
         return {'profile_id': profile_id,
                 'name': name,
                 'bio': bio}
@@ -26,7 +26,7 @@ class MendeleyMixin(object):
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
         values = self.get_user_data(access_token)
-        values.update(values['main'])
+        values.update(values)
         return values
 
     def get_user_data(self, access_token):
@@ -62,6 +62,6 @@ class MendeleyOAuth2(MendeleyMixin, BaseOAuth2):
     def get_user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         return self.get_json(
-            'https://api-oauth2.mendeley.com/oapi/profiles/info/me/',
+            'https://api.mendeley.com/profiles/me/',
             headers={'Authorization': 'Bearer {0}'.format(access_token)}
         )
