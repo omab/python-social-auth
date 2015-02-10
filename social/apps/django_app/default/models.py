@@ -71,6 +71,7 @@ class Nonce(models.Model, DjangoNonceMixin):
     salt = models.CharField(max_length=65)
 
     class Meta:
+        unique_together = ('server_url', 'timestamp', 'salt')
         db_table = 'social_auth_nonce'
 
 
