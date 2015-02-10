@@ -26,33 +26,39 @@ class SlackOAuth2(BaseOAuth2):
         """Return user details from Slack account"""
         # Build the username with the team $username@$team_url
         # Necessary to get unique names for all of slack
-        match = re.search(r'//([^.]+)\.slack\.com', response['team_url'])
-        username = '{0}@{1}'.format(response.get('name'), match.group(1))
-        return {
-            'username': username,
-            'email': response['profile'].get('email', ''),
-            'fullname': response['profile'].get('real_name'),
-            'first_name': response['profile'].get('first_name'),
-            'last_name': response['profile'].get('last_name')
-        }
+        match = re.search(r'//([^.]+)\.slack\.com', response['url'])
+        username = '{0}@{1}'.format(response.get("user"), match.group(1))
+
+        out = {'username': username}
+        if 'profile' in response:
+            out.update({
+                'email': response['profile'].get('email'),
+                'fullname': response['profile'].get('real_name'),
+                'first_name': response['profile'].get('first_name'),
+                'last_name': response['profile'].get('last_name')
+            })
+        return out
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         # Has to be two calls, because the users.info requires a username,
-        # And we want the team information
-        # https://api.slack.com/methods/auth.test
+        # And we want the team information. Check auth.test details at:
+        #   https://api.slack.com/methods/auth.test
         auth_test = self.get_json('https://slack.com/api/auth.test', params={
             'token': access_token
         })
 
         # https://api.slack.com/methods/users.info
-        data = self.get_json('https://slack.com/api/users.info', params={
+        user_info = self.get_json('https://slack.com/api/users.info', params={
             'token': access_token,
             'user': auth_test.get('user_id')
         })
-        # Inject the team data
-        out = data['user'].copy()
-        out['team_id'] = auth_test.get('team_id')
-        out['team'] = auth_test.get('team')
-        out['team_url'] = auth_test.get('url')
-        return out
+        if user_info.get('user'):
+            # Capture the user data, if available based on the scope
+            auth_test.update(user_info['user'])
+
+        # Clean up user_id vs id
+        auth_test['id'] = auth_test['user_id']
+        auth_test.pop('ok', None)
+        auth_test.pop('user_id', None)
+        return auth_test
