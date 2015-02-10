@@ -80,6 +80,7 @@ or current ones extended):
     * Jawbone_ OAuth2 https://jawbone.com/up/developer/authentication
     * Kakao_ OAuth2 https://developer.kakao.com
     * `Khan Academy`_ OAuth1
+    * Launchpad_ OpenId
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
@@ -247,6 +248,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Github: https://github.com
 .. _Google: http://google.com
 .. _Instagram: https://instagram.com
+.. _LaunchPad: https://help.launchpad.net/YourAccount/OpenID
 .. _Linkedin: https://www.linkedin.com
 .. _Live: https://live.com
 .. _Livejournal: http://livejournal.com
