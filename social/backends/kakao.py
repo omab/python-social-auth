@@ -18,8 +18,6 @@ class KakaoOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from Kakao account"""
         nickname = response['properties']['nickname']
-        thumbnail_image = response['properties']['thumbnail_image']
-        profile_image = response['properties']['profile_image']
         return {
             'username': nickname,
             'email': '',

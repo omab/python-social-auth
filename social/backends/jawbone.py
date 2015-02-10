@@ -2,6 +2,7 @@
 Jawbone OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/jawbone.html
 """
+from requests import HTTPError
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthCanceled, AuthUnknownError
 
