@@ -61,6 +61,7 @@ or current ones extended):
     * Bitbucket_ OAuth1
     * Box_ OAuth2
     * Clef_ OAuth2
+    * Coursera_ OAuth2
     * Dailymotion_ OAuth2
     * Disqus_ OAuth2
     * Douban_ OAuth1 and OAuth2
@@ -189,14 +190,14 @@ Or::
     $ cd python-social-auth
     $ sudo python setup.py install
 
-    
+
 Upgrading
 ---------
 
 Django with South
 ~~~~~~~~~~~~~~~~~
 
-Upgrading from 0.1 to 0.2 is likely to cause problems trying to apply a migration when the tables 
+Upgrading from 0.1 to 0.2 is likely to cause problems trying to apply a migration when the tables
 already exist. In this case a fake migration needs to be applied::
 
     $ python manage.py migrate --fake default
@@ -232,6 +233,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Bitbucket: https://bitbucket.org
 .. _Box: https://www.box.com
 .. _Clef: https://getclef.com/
+.. _Coursera: https://www.coursera.org/
 .. _Dailymotion: https://dailymotion.com
 .. _Disqus: https://disqus.com
 .. _Douban: http://www.douban.com
