@@ -20,7 +20,7 @@ class QiitaOAuth2(BaseOAuth2):
     EXTRA_DATA = [
         ('description', 'description'),
         ('facebook_id', 'facebook_id'),
-        ('followees_count', 'followers_count'),
+        ('followees_count', 'followees_count'),
         ('followers_count', 'followers_count'),
         ('github_login_name', 'github_login_name'),
         ('id', 'id'),
