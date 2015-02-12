@@ -13,6 +13,11 @@ from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthException, AuthCanceled, AuthUnknownError, \
                               AuthMissingParameter
 
+import hmac
+import hashlib
+
+def hmac_sha256(key, msg):
+    return hmac.new(key, msg, digestmod=hashlib.sha256).hexdigest()
 
 class FacebookOAuth2(BaseOAuth2):
     """Facebook OAuth2 authentication backend"""
@@ -46,6 +51,11 @@ class FacebookOAuth2(BaseOAuth2):
         """Loads user data from service"""
         params = self.setting('PROFILE_EXTRA_PARAMS', {})
         params['access_token'] = access_token
+
+        if self.setting('APPSECRET_PROOF', True):
+            _, secret = self.get_key_and_secret()
+            params['appsecret_proof'] = hmac_sha256(secret, access_token);
+
         return self.get_json(self.USER_DATA_URL, params=params)
 
     def process_error(self, data):
