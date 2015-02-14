@@ -36,7 +36,7 @@ class DjangoStrategy(BaseStrategy):
         if not self.request:
             return {}
         if merge:
-            data = self.request.GET
+            data = self.request.GET.copy()
             data.update(self.request.POST)
         elif self.request.method == 'POST':
             data = self.request.POST
