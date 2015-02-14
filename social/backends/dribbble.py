@@ -28,7 +28,7 @@ class DribbbleOAuth2(BaseOAuth2):
         ('followings_count', 'followings_count'),
         ('likes_count', 'likes_count'),
         ('likes_received_count', 'likes_received_count'),
-        ('projects_count', 'projects_count')
+        ('projects_count', 'projects_count'),
         ('rebounds_received_count', 'rebounds_received_count'),
         ('shots_count', 'shots_count'),
         ('teams_count', 'teams_count'),
