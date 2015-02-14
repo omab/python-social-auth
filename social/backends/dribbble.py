@@ -1,6 +1,7 @@
 """
 Dribbble OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/dribbble.html
+    http://developer.dribbble.com/v1/oauth/
 """
 
 from social.backends.oauth import BaseOAuth2
