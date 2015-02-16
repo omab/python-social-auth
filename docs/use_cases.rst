@@ -287,7 +287,7 @@ Set this pipeline after ``social_user``::
         'social.pipeline.social_auth.social_uid',
         'social.pipeline.social_auth.auth_allowed',
         'social.pipeline.social_auth.social_user',
-        'import.path.to.redirect_if_no_refresh_token',
+        'path.to.redirect_if_no_refresh_token',
         'social.pipeline.user.get_username',
         'social.pipeline.user.create_user',
         'social.pipeline.social_auth.associate_user',
