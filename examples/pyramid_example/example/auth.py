@@ -5,8 +5,8 @@ from social.apps.pyramid_app.utils import backends
 from example.models import DBSession, User
 
 
-def login_user(strategy, user):
-    strategy.request.session['user_id'] = user.id
+def login_user(strategy, user, user_social_auth):
+    strategy.strategy.session_set('user_id', user.id)
 
 
 def login_required(request):
