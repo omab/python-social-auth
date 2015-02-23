@@ -330,7 +330,7 @@ the pipeline, since it needs the user instance, it needs to be put after
         'social.pipeline.social_auth.social_user',
         'social.pipeline.user.get_username',
         'social.pipeline.user.create_user',
-        'import.path.to.save_profile',  # <--- set the import-path to the function
+        'path.to.save_profile',  # <--- set the path to the function
         'social.pipeline.social_auth.associate_user',
         'social.pipeline.social_auth.load_extra_data',
         'social.pipeline.user.user_details'
