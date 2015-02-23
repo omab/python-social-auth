@@ -1,0 +1,31 @@
+"""
+Zotero OAuth1 backends, docs at:
+    http://psa.matiasaguirre.net/docs/backends/zotero.html
+"""
+from requests import HTTPError
+
+from social.backends.oauth import BaseOAuth2, BaseOAuth1
+from social.exceptions import AuthMissingParameter, AuthCanceled
+import ipdb
+
+
+class ZoteroOAuth(BaseOAuth1):
+
+    """Zotero OAuth authorization mechanism"""
+    name = 'zotero'
+    AUTHORIZATION_URL = 'https://www.zotero.org/oauth/authorize'
+    REQUEST_TOKEN_URL = 'https://www.zotero.org/oauth/request'
+    ACCESS_TOKEN_URL = 'https://www.zotero.org/oauth/access'
+
+    def get_user_id(self, details, response):
+        """
+        Return user unique id provided by service. For Ubuntu One
+        the nickname should be original.
+        """
+        return details['userID']
+
+    def get_user_details(self, response):
+        """Return user details from Zotero API account"""
+        access_token = response.get('access_token', dict())
+        return {'username': access_token.get('username', ''),
+                'userID': access_token.get('userID', '')}
