@@ -121,6 +121,7 @@ or current ones extended):
     * Yahoo_ OpenId and OAuth1
     * Yammer_ OAuth2
     * Yandex_ OAuth1, OAuth2 and OpenId
+    * Zotero_ OAuth1
 
 
 User data
@@ -304,3 +305,4 @@ check `django-social-auth LICENSE`_ for details:
 .. _six: http://pythonhosted.org/six/
 .. _requests: http://docs.python-requests.org/en/latest/
 .. _PixelPin: http://pixelpin.co.uk
+.. _Zotero: http://www.zotero.org/
