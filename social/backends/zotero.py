@@ -22,6 +22,8 @@ class ZoteroOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Zotero API account"""
-        access_token = response.get('access_token', dict())
-        return {'username': access_token.get('username', ''),
-                'userID': access_token.get('userID', '')}
+        access_token = response.get('access_token', {})
+        return {
+            'username': access_token.get('username', ''),
+            'userID': access_token.get('userID', '')
+        }
