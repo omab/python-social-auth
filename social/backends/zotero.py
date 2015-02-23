@@ -2,11 +2,7 @@
 Zotero OAuth1 backends, docs at:
     http://psa.matiasaguirre.net/docs/backends/zotero.html
 """
-from requests import HTTPError
-
-from social.backends.oauth import BaseOAuth2, BaseOAuth1
-from social.exceptions import AuthMissingParameter, AuthCanceled
-import ipdb
+from social.backends.oauth import BaseOAuth1
 
 
 class ZoteroOAuth(BaseOAuth1):
