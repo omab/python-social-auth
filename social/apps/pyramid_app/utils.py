@@ -1,3 +1,5 @@
+import warnings
+
 from functools import wraps
 
 from pyramid.threadlocal import get_current_registry
@@ -5,7 +7,7 @@ from pyramid.httpexceptions import HTTPNotFound, HTTPForbidden
 
 from social.utils import setting_name, module_member
 from social.strategies.utils import get_strategy
-from social.backends.utils import user_backends_data
+from social.backends.utils import get_backend, user_backends_data
 
 
 DEFAULTS = {
@@ -19,14 +21,21 @@ def get_helper(name):
     return settings.get(setting_name(name), DEFAULTS.get(name, None))
 
 
-def load_strategy(*args, **kwargs):
+def load_strategy(request):
+    return get_strategy(
+        get_helper('STRATEGY'),
+        get_helper('STORAGE'),
+        request
+    )
+
+
+def load_backend(strategy, name, redirect_uri):
     backends = get_helper('AUTHENTICATION_BACKENDS')
-    strategy = get_helper('STRATEGY')
-    storage = get_helper('STORAGE')
-    return get_strategy(backends, strategy, storage, *args, **kwargs)
+    Backend = get_backend(backends, name)
+    return Backend(strategy=strategy, redirect_uri=redirect_uri)
 
 
-def strategy(redirect_uri=None):
+def psa(redirect_uri=None):
     def decorator(func):
         @wraps(func)
         def wrapper(request, *args, **kwargs):
@@ -37,10 +46,9 @@ def strategy(redirect_uri=None):
             uri = redirect_uri
             if uri and not uri.startswith('/'):
                 uri = request.route_url(uri, backend=backend)
-            request.strategy = load_strategy(
-                backend=backend, redirect_uri=uri, request=request,
-                *args, **kwargs
-            )
+
+            request.strategy = load_strategy(request)
+            request.backend = load_backend(request.strategy, backend, uri)
             return func(request, *args, **kwargs)
         return wrapper
     return decorator
@@ -50,7 +58,7 @@ def login_required(func):
     @wraps(func)
     def wrapper(request, *args, **kwargs):
         is_logged_in = module_member(
-            request.strategy.setting('LOGGEDIN_FUNCTION')
+            request.backend.setting('LOGGEDIN_FUNCTION')
         )
         if not is_logged_in(request):
             raise HTTPForbidden('Not authorized user')
@@ -67,3 +75,8 @@ def backends(request, user):
             user, get_helper('AUTHENTICATION_BACKENDS'), storage
         )
     }
+
+
+def strategy(*args, **kwargs):
+    warnings.warn('@strategy decorator is deprecated, use @psa instead')
+    return psa(*args, **kwargs)

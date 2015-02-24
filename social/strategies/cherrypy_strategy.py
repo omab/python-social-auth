@@ -17,9 +17,7 @@ class CherryPyJinja2TemplateStrategy(BaseTemplateStrategy):
 
 
 class CherryPyStrategy(BaseStrategy):
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault('tpl', CherryPyJinja2TemplateStrategy)
-        return super(CherryPyStrategy, self).__init__(*args, **kwargs)
+    DEFAULT_TEMPLATE_STRATEGY = CherryPyJinja2TemplateStrategy
 
     def get_setting(self, name):
         return cherrypy.config[name]
@@ -42,11 +40,11 @@ class CherryPyStrategy(BaseStrategy):
     def html(self, content):
         return content
 
-    def authenticate(self, *args, **kwargs):
+    def authenticate(self, backend, *args, **kwargs):
         kwargs['strategy'] = self
         kwargs['storage'] = self.storage
-        kwargs['backend'] = self.backend
-        return self.backend.authenticate(*args, **kwargs)
+        kwargs['backend'] = backend
+        return backend.authenticate(*args, **kwargs)
 
     def session_get(self, name, default=None):
         return cherrypy.session.get(name, default)

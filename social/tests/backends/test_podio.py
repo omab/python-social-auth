@@ -26,15 +26,16 @@ class PodioOAuth2Test(OAuth2Test):
             'timezone': 'Europe/Copenhagen',
             'mail': 'foo@bar.com',
             'mails': [
-                {'disabled': False,
-                 'mail': 'foobar@example.com',
-                 'primary': False,
-                 'verified': True
-                 },
-                {'disabled': False,
-                 'mail': 'foo@bar.com',
-                 'primary': True,
-                 'verified': True
+                {
+                    'disabled': False,
+                    'mail': 'foobar@example.com',
+                    'primary': False,
+                    'verified': True
+                }, {
+                    'disabled': False,
+                    'mail': 'foo@bar.com',
+                    'primary': True,
+                    'verified': True
                 }
             ],
             # more properties ...

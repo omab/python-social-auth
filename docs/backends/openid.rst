@@ -28,5 +28,19 @@ is to avoid replacing old (needed) values when they don't form part of current
 response. If not present, then this check is avoided and the value will replace
 any data.
 
+Username
+--------
+
+The OpenId_ backend will check for a ``username`` key in the values returned by
+the server, but default to ``first-name`` + ``last-name`` if that key is
+missing. It's possible to indicate the username key in the values If the
+username is under a different key with a setting, but backends should have
+defined a default value. For example::
+
+    SOCIAL_AUTH_FEDORA_USERNAME_KEY = 'nickname'
+
+This setting indicates that the username should be populated by the
+``nickname`` value in the Fedora OpenId_ provider.
+
 .. _OpenId: http://openid.net/
 .. _OAuth: http://oauth.net/

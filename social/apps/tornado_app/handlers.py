@@ -1,6 +1,6 @@
 from tornado.web import RequestHandler
 
-from social.apps.tornado_app.utils import strategy
+from social.apps.tornado_app.utils import psa
 from social.actions import do_auth, do_complete, do_disconnect
 
 
@@ -11,7 +11,7 @@ class BaseHandler(RequestHandler):
     def get_current_user(self):
         user_id = self.user_id()
         if user_id:
-            return self.strategy.get_user(int(user_id))
+            return self.backend.strategy.get_user(int(user_id))
 
     def login_user(self, user):
         self.set_secure_cookie('user_id', str(user.id))
@@ -24,9 +24,9 @@ class AuthHandler(BaseHandler):
     def post(self, backend):
         self._auth(backend)
 
-    @strategy('complete')
+    @psa('complete')
     def _auth(self, backend):
-        do_auth(self.strategy)
+        do_auth(self.backend)
 
 
 class CompleteHandler(BaseHandler):
@@ -36,11 +36,13 @@ class CompleteHandler(BaseHandler):
     def post(self, backend):
         self._complete(backend)
 
-    @strategy('complete')
+    @psa('complete')
     def _complete(self, backend):
-        do_complete(self.strategy,
-                    login=lambda strategy, user: self.login_user(user),
-                    user=self.get_current_user())
+        do_complete(
+            self.backend,
+            login=lambda backend, user, social_user: self.login_user(user),
+            user=self.get_current_user()
+        )
 
 
 class DisconnectHandler(BaseHandler):

@@ -1,14 +1,15 @@
 import six
 import random
-import unittest
-
-from sure import expect
+import unittest2 as unittest
 
 from social.strategies.base import BaseStrategy
 from social.storage.base import UserMixin, NonceMixin, AssociationMixin, \
                                 CodeMixin, BaseStorage
 
 from social.tests.models import User
+
+
+NOT_IMPLEMENTED_MSG = 'Implement in subclass'
 
 
 class BrokenUser(UserMixin):
@@ -41,6 +42,7 @@ class BrokenStorage(BaseStorage):
 
 
 class BrokenUserTests(unittest.TestCase):
+
     def setUp(self):
         self.user = BrokenUser
 
@@ -48,43 +50,36 @@ class BrokenUserTests(unittest.TestCase):
         self.user = None
 
     def test_get_username(self):
-        self.user.get_username.when.called_with(User('foobar')).should.throw(
-            NotImplementedError, 'Implement in subclass'
-        )
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.user.get_username(User('foobar'))
 
     def test_user_model(self):
-        self.user.user_model.when.called_with().should.throw(
-            NotImplementedError, 'Implement in subclass'
-        )
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.user.user_model()
 
     def test_username_max_length(self):
-        self.user.username_max_length.when.called_with().should.throw(
-            NotImplementedError, 'Implement in subclass'
-        )
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.user.username_max_length()
 
     def test_get_user(self):
-        self.user.get_user.when.called_with(1).should.throw(
-            NotImplementedError, 'Implement in subclass'
-        )
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.user.get_user(1)
 
     def test_get_social_auth(self):
-        self.user.get_social_auth.when.called_with('foo', 1).should.throw(
-            NotImplementedError, 'Implement in subclass'
-        )
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.user.get_social_auth('foo', 1)
 
     def test_get_social_auth_for_user(self):
-        self.user.get_social_auth_for_user.when.called_with(User('foobar')) \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.user.get_social_auth_for_user(User('foobar'))
 
     def test_create_social_auth(self):
-        self.user.create_social_auth.when \
-            .called_with(User('foobar'), 1, 'foo') \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.user.create_social_auth(User('foobar'), 1, 'foo')
 
     def test_disconnect(self):
-        self.user.disconnect\
-            .when.called_with(BrokenUser())\
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.user.disconnect(BrokenUser())
 
 
 class BrokenAssociationTests(unittest.TestCase):
@@ -95,17 +90,16 @@ class BrokenAssociationTests(unittest.TestCase):
         self.association = None
 
     def test_store(self):
-        self.association.store.when \
-            .called_with('http://foobar.com', BrokenAssociation()) \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.association.store('http://foobar.com', BrokenAssociation())
 
     def test_get(self):
-        self.association.get.when.called_with() \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.association.get()
 
     def test_remove(self):
-        self.association.remove.when.called_with([1, 2, 3]) \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.association.remove([1, 2, 3])
 
 
 class BrokenNonceTests(unittest.TestCase):
@@ -116,9 +110,8 @@ class BrokenNonceTests(unittest.TestCase):
         self.nonce = None
 
     def test_use(self):
-        self.nonce.use.when \
-            .called_with('http://foobar.com', 1364951922, 'foobar123') \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.nonce.use('http://foobar.com', 1364951922, 'foobar123')
 
 
 class BrokenCodeTest(unittest.TestCase):
@@ -129,9 +122,8 @@ class BrokenCodeTest(unittest.TestCase):
         self.code = None
 
     def test_get_code(self):
-        self.code.get_code.when \
-            .called_with('foobar') \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.code.get_code('foobar')
 
 
 class BrokenStrategyTests(unittest.TestCase):
@@ -142,73 +134,61 @@ class BrokenStrategyTests(unittest.TestCase):
         self.strategy = None
 
     def test_redirect(self):
-        self.strategy.redirect.when \
-            .called_with('http://foobar.com') \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.redirect('http://foobar.com')
 
     def test_get_setting(self):
-        self.strategy.get_setting.when \
-            .called_with('foobar') \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.get_setting('foobar')
 
     def test_html(self):
-        self.strategy.html.when \
-            .called_with('<p>foobar</p>') \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.html('<p>foobar</p>')
 
     def test_request_data(self):
-        self.strategy.request_data.when \
-            .called_with() \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.request_data()
 
     def test_request_host(self):
-        self.strategy.request_host.when \
-            .called_with() \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.request_host()
 
     def test_session_get(self):
-        self.strategy.session_get.when \
-            .called_with('foobar') \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.session_get('foobar')
 
     def test_session_set(self):
-        self.strategy.session_set.when \
-            .called_with('foobar', 123) \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.session_set('foobar', 123)
 
     def test_session_pop(self):
-        self.strategy.session_pop.when \
-            .called_with('foobar') \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.session_pop('foobar')
 
     def test_build_absolute_uri(self):
-        self.strategy.build_absolute_uri.when \
-            .called_with('/foobar') \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.build_absolute_uri('/foobar')
 
     def test_render_html_with_tpl(self):
-        self.strategy.render_html.when \
-            .called_with('foobar.html', context={}) \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.render_html('foobar.html', context={})
 
     def test_render_html_with_html(self):
-        self.strategy.render_html.when \
-            .called_with(html='<p>foobar</p>', context={}) \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.render_html(html='<p>foobar</p>', context={})
 
     def test_render_html_with_none(self):
-        self.strategy.render_html.when \
-            .called_with() \
-            .should.throw(ValueError, 'Missing template or html parameters')
+        with self.assertRaisesRegexp(ValueError,
+                                     'Missing template or html parameters'):
+            self.strategy.render_html()
 
     def test_is_integrity_error(self):
-        self.strategy.storage.is_integrity_error.when \
-            .called_with(None) \
-            .should.throw(NotImplementedError, 'Implement in subclass')
+        with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
+            self.strategy.storage.is_integrity_error(None)
 
     def test_random_string(self):
-        expect(isinstance(self.strategy.random_string(), six.string_types)) \
-                .to.equal(True)
+        self.assertTrue(isinstance(self.strategy.random_string(),
+                                   six.string_types))
 
     def test_random_string_without_systemrandom(self):
         def SystemRandom():
@@ -218,6 +198,5 @@ class BrokenStrategyTests(unittest.TestCase):
         random.SystemRandom = SystemRandom
 
         strategy = BrokenStrategyWithSettings(storage=BrokenStorage)
-        expect(isinstance(strategy.random_string(), six.string_types)) \
-                .to.equal(True)
+        self.assertTrue(isinstance(strategy.random_string(), six.string_types))
         random.SystemRandom = orig_random

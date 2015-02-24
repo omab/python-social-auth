@@ -1,5 +1,6 @@
-from social.utils import module_member, user_is_authenticated
+from social.exceptions import MissingBackend
 from social.backends.base import BaseAuth
+from social.utils import module_member, user_is_authenticated
 
 
 # Cache for discovered backends.
@@ -51,7 +52,7 @@ def get_backend(backends, name):
         try:
             return BACKENDSCACHE[name]
         except KeyError:
-            return None
+            raise MissingBackend(name)
 
 
 def user_backends_data(user, backends, storage):

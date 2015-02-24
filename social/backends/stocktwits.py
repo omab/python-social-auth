@@ -20,14 +20,12 @@ class StocktwitsOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Stocktwits account"""
-        try:
-            first_name, last_name = response['user']['name'].split(' ', 1)
-        except:
-            first_name = response['user']['name']
-            last_name = ''
+        fullname, first_name, last_name = self.get_user_names(
+            response['user']['name']
+        )
         return {'username': response['user']['username'],
                 'email': '',  # not supplied
-                'fullname': response['user']['name'],
+                'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name}
 

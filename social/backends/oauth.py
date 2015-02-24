@@ -20,14 +20,22 @@ class OAuthAuth(BaseAuth):
     name (all uppercase) plus _EXTRA_DATA.
 
     access_token is always stored.
+
+    URLs settings:
+        AUTHORIZATION_URL       Authorization service url
+        ACCESS_TOKEN_URL        Access token URL
     """
-    SCOPE_PARAMETER_NAME = 'scope'
-    DEFAULT_SCOPE = None
-    SCOPE_SEPARATOR = ' '
-    ID_KEY = 'id'
+    AUTHORIZATION_URL = ''
+    ACCESS_TOKEN_URL = ''
     ACCESS_TOKEN_METHOD = 'GET'
     REVOKE_TOKEN_URL = None
     REVOKE_TOKEN_METHOD = 'POST'
+    ID_KEY = 'id'
+    SCOPE_PARAMETER_NAME = 'scope'
+    DEFAULT_SCOPE = None
+    SCOPE_SEPARATOR = ' '
+    REDIRECT_STATE = False
+    STATE_PARAMETER = False
 
     def extra_data(self, user, uid, response, details=None):
         """Return access_token and extra defined names to store in
@@ -36,10 +44,65 @@ class OAuthAuth(BaseAuth):
         data['access_token'] = response.get('access_token', '')
         return data
 
+    def state_token(self):
+        """Generate csrf token to include as state parameter."""
+        return self.strategy.random_string(32)
+
+    def get_or_create_state(self):
+        if self.STATE_PARAMETER or self.REDIRECT_STATE:
+            # Store state in session for further request validation. The state
+            # value is passed as state parameter (as specified in OAuth2 spec),
+            # but also added to redirect, that way we can still verify the
+            # request if the provider doesn't implement the state parameter.
+            # Reuse token if any.
+            name = self.name + '_state'
+            state = self.strategy.session_get(name)
+            if state is None:
+                state = self.state_token()
+                self.strategy.session_set(name, state)
+        else:
+            state = None
+        return state
+
+    def get_session_state(self):
+        return self.strategy.session_get(self.name + '_state')
+
+    def get_request_state(self):
+        request_state = self.data.get('state') or \
+                        self.data.get('redirect_state')
+        if request_state and isinstance(request_state, list):
+            request_state = request_state[0]
+        return request_state
+
+    def validate_state(self):
+        """Validate state value. Raises exception on error, returns state
+        value if valid."""
+        if not self.STATE_PARAMETER and not self.REDIRECT_STATE:
+            return None
+        state = self.get_session_state()
+        request_state = self.get_request_state()
+        if not request_state:
+            raise AuthMissingParameter(self, 'state')
+        elif not state:
+            raise AuthStateMissing(self, 'state')
+        elif not request_state == state:
+            raise AuthStateForbidden(self)
+        else:
+            return state
+
+    def get_redirect_uri(self, state=None):
+        """Build redirect with redirect_state parameter."""
+        uri = self.redirect_uri
+        if self.REDIRECT_STATE and state:
+            uri = url_add_parameters(uri, {'redirect_state': state})
+        return uri
+
     def get_scope(self):
         """Return list with needed access scope"""
-        return (self.DEFAULT_SCOPE or []) + \
-               self.setting('SCOPE', [])
+        scope = self.setting('SCOPE', [])
+        if not self.setting('IGNORE_DEFAULT_SCOPE', False):
+            scope = scope + (self.DEFAULT_SCOPE or [])
+        return scope
 
     def get_scope_argument(self):
         param = {}
@@ -51,6 +114,12 @@ class OAuthAuth(BaseAuth):
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service. Implement in subclass"""
         return {}
+
+    def authorization_url(self):
+        return self.AUTHORIZATION_URL
+
+    def access_token_url(self):
+        return self.ACCESS_TOKEN_URL
 
     def revoke_token_url(self, token, uid):
         return self.REVOKE_TOKEN_URL
@@ -80,16 +149,14 @@ class BaseOAuth1(OAuthAuth):
     """Consumer based mechanism OAuth authentication, fill the needed
     parameters to communicate properly with authentication service.
 
-        AUTHORIZATION_URL       Authorization service url
+    URLs settings:
         REQUEST_TOKEN_URL       Request token URL
-        ACCESS_TOKEN_URL        Access token URL
+
     """
-    AUTHORIZATION_URL = ''
     REQUEST_TOKEN_URL = ''
     REQUEST_TOKEN_METHOD = 'GET'
     OAUTH_TOKEN_PARAMETER_NAME = 'oauth_token'
     REDIRECT_URI_PARAMETER_NAME = 'redirect_uri'
-    ACCESS_TOKEN_URL = ''
     UNATHORIZED_TOKEN_SUFIX = 'unauthorized_token_name'
 
     def auth_url(self):
@@ -107,6 +174,7 @@ class BaseOAuth1(OAuthAuth):
         """Return user, might be logged in"""
         # Multiple unauthorized tokens are supported (see #521)
         self.process_error(self.data)
+        self.validate_state()
         token = self.get_unauthorized_token()
         try:
             access_token = self.access_token(token)
@@ -167,12 +235,14 @@ class BaseOAuth1(OAuthAuth):
         # decoding='utf-8' produces errors with python-requests on Python3
         # since the final URL will be of type bytes
         decoding = None if six.PY3 else 'utf-8'
-        response = self.request(self.REQUEST_TOKEN_URL,
-                                params=params,
-                                auth=OAuth1(key, secret,
-                                            callback_uri=self.redirect_uri,
-                                            decoding=decoding),
-                                method=self.REQUEST_TOKEN_METHOD)
+        state = self.get_or_create_state()
+        response = self.request(
+            self.REQUEST_TOKEN_URL,
+            params=params,
+            auth=OAuth1(key, secret, callback_uri=self.get_redirect_uri(state),
+                        decoding=decoding),
+            method=self.REQUEST_TOKEN_METHOD
+        )
         content = response.content
         if response.encoding or response.apparent_encoding:
             content = content.decode(response.encoding or
@@ -190,8 +260,9 @@ class BaseOAuth1(OAuthAuth):
         params[self.OAUTH_TOKEN_PARAMETER_NAME] = token.get(
             self.OAUTH_TOKEN_PARAMETER_NAME
         )
-        params[self.REDIRECT_URI_PARAMETER_NAME] = self.redirect_uri
-        return self.AUTHORIZATION_URL + '?' + urlencode(params)
+        state = self.get_or_create_state()
+        params[self.REDIRECT_URI_PARAMETER_NAME] = self.get_redirect_uri(state)
+        return '{0}?{1}'.format(self.authorization_url(), urlencode(params))
 
     def oauth_auth(self, token=None, oauth_verifier=None,
                    signature_type=SIGNATURE_TYPE_AUTH_HEADER):
@@ -201,10 +272,11 @@ class BaseOAuth1(OAuthAuth):
         # decoding='utf-8' produces errors with python-requests on Python3
         # since the final URL will be of type bytes
         decoding = None if six.PY3 else 'utf-8'
+        state = self.get_or_create_state()
         return OAuth1(key, secret,
                       resource_owner_key=token.get('oauth_token'),
                       resource_owner_secret=token.get('oauth_token_secret'),
-                      callback_uri=self.redirect_uri,
+                      callback_uri=self.get_redirect_uri(state),
                       verifier=oauth_verifier,
                       signature_type=signature_type,
                       decoding=decoding)
@@ -216,7 +288,7 @@ class BaseOAuth1(OAuthAuth):
 
     def access_token(self, token):
         """Return request for access token value"""
-        return self.get_querystring(self.ACCESS_TOKEN_URL,
+        return self.get_querystring(self.access_token_url(),
                                     auth=self.oauth_auth(token),
                                     method=self.ACCESS_TOKEN_METHOD)
 
@@ -226,29 +298,12 @@ class BaseOAuth2(OAuthAuth):
 
     OAuth2 draft details at:
         http://tools.ietf.org/html/draft-ietf-oauth-v2-10
-
-    Attributes:
-        AUTHORIZATION_URL       Authorization service url
-        ACCESS_TOKEN_URL        Token URL
     """
-    AUTHORIZATION_URL = None
-    ACCESS_TOKEN_URL = None
     REFRESH_TOKEN_URL = None
     REFRESH_TOKEN_METHOD = 'POST'
     RESPONSE_TYPE = 'code'
     REDIRECT_STATE = True
     STATE_PARAMETER = True
-
-    def state_token(self):
-        """Generate csrf token to include as state parameter."""
-        return self.strategy.random_string(32)
-
-    def get_redirect_uri(self, state=None):
-        """Build redirect with redirect_state parameter."""
-        uri = self.redirect_uri
-        if self.REDIRECT_STATE and state:
-            uri = url_add_parameters(uri, {'redirect_state': state})
-        return uri
 
     def auth_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
@@ -264,20 +319,7 @@ class BaseOAuth2(OAuthAuth):
 
     def auth_url(self):
         """Return redirect url"""
-        if self.STATE_PARAMETER or self.REDIRECT_STATE:
-            # Store state in session for further request validation. The state
-            # value is passed as state parameter (as specified in OAuth2 spec),
-            # but also added to redirect, that way we can still verify the
-            # request if the provider doesn't implement the state parameter.
-            # Reuse token if any.
-            name = self.name + '_state'
-            state = self.strategy.session_get(name)
-            if state is None:
-                state = self.state_token()
-                self.strategy.session_set(name, state)
-        else:
-            state = None
-
+        state = self.get_or_create_state()
         params = self.auth_params(state)
         params.update(self.get_scope_argument())
         params.update(self.auth_extra_arguments())
@@ -286,27 +328,7 @@ class BaseOAuth2(OAuthAuth):
             # redirect_uri matching is strictly enforced, so match the
             # providers value exactly.
             params = unquote(params)
-        return self.AUTHORIZATION_URL + '?' + params
-
-    def validate_state(self):
-        """Validate state value. Raises exception on error, returns state
-        value if valid."""
-        if not self.STATE_PARAMETER and not self.REDIRECT_STATE:
-            return None
-        state = self.strategy.session_get(self.name + '_state')
-        request_state = self.data.get('state') or \
-                        self.data.get('redirect_state')
-        if request_state and isinstance(request_state, list):
-            request_state = request_state[0]
-
-        if not request_state:
-            raise AuthMissingParameter(self, 'state')
-        elif not state:
-            raise AuthStateMissing(self, 'state')
-        elif not request_state == state:
-            raise AuthStateForbidden(self)
-        else:
-            return state
+        return '{0}?{1}'.format(self.authorization_url(), params)
 
     def auth_complete_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
@@ -336,11 +358,12 @@ class BaseOAuth2(OAuthAuth):
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
+        state = self.validate_state()
         self.process_error(self.data)
         try:
             response = self.request_access_token(
-                self.ACCESS_TOKEN_URL,
-                data=self.auth_complete_params(self.validate_state()),
+                self.access_token_url(),
+                data=self.auth_complete_params(state),
                 headers=self.auth_headers(),
                 method=self.ACCESS_TOKEN_METHOD
             )
@@ -377,7 +400,7 @@ class BaseOAuth2(OAuthAuth):
 
     def refresh_token(self, token, *args, **kwargs):
         params = self.refresh_token_params(token, *args, **kwargs)
-        url = self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL
+        url = self.refresh_token_url()
         method = self.REFRESH_TOKEN_METHOD
         key = 'params' if method == 'GET' else 'data'
         request_args = {'headers': self.auth_headers(),
@@ -385,3 +408,6 @@ class BaseOAuth2(OAuthAuth):
                         key: params}
         request = self.request(url, **request_args)
         return self.process_refresh_token_response(request, *args, **kwargs)
+
+    def refresh_token_url(self):
+        return self.REFRESH_TOKEN_URL or self.access_token_url()

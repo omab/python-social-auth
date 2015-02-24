@@ -6,6 +6,7 @@ VK.com OpenAPI, OAuth2 and Iframe application OAuth2 backends, docs at:
 from time import time
 from hashlib import md5
 
+from social.utils import parse_qs
 from social.backends.base import BaseAuth
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthTokenRevoked, AuthException
@@ -19,14 +20,16 @@ class VKontakteOpenAPI(BaseAuth):
     def get_user_details(self, response):
         """Return user details from VK.com request"""
         nickname = response.get('nickname') or ''
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=response.get('first_name', [''])[0],
+            last_name=response.get('last_name', [''])[0]
+        )
         return {
             'username': response['id'] if len(nickname) == 0 else nickname,
             'email': '',
-            'fullname': '',
-            'first_name': response.get('first_name')[0]
-                                if 'first_name' in response else '',
-            'last_name': response.get('last_name')[0]
-                                if 'last_name' in response else ''
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name
         }
 
     def user_data(self, access_token, *args, **kwargs):
@@ -44,25 +47,24 @@ class VKontakteOpenAPI(BaseAuth):
     def auth_complete(self, *args, **kwargs):
         """Performs check of authentication in VKontakte, returns User if
         succeeded"""
-        app_cookie = 'vk_app_' + self.setting('APP_ID')
-
-        if not 'id' in self.data or not self.strategy.cookie_get(app_cookie):
+        session_value = self.strategy.session_get(
+            'vk_app_' + self.setting('APP_ID')
+        )
+        if 'id' not in self.data or not session_value:
             raise ValueError('VK.com authentication is not completed')
 
-        key, secret = self.get_key_and_secret()
-        cookie_dict = dict(item.split('=') for item in
-                               self.strategy.cookie_get(app_cookie).split('&'))
-        check_str = ''.join(item + '=' + cookie_dict[item]
+        mapping = parse_qs(session_value)
+        check_str = ''.join(item + '=' + mapping[item]
                                 for item in ['expire', 'mid', 'secret', 'sid'])
 
+        key, secret = self.get_key_and_secret()
         hash = md5((check_str + secret).encode('utf-8')).hexdigest()
+        if hash != mapping['sig'] or int(mapping['expire']) < time():
+            raise ValueError('VK.com authentication failed: Invalid Hash')
 
-        if hash != cookie_dict['sig'] or int(cookie_dict['expire']) < time():
-            raise ValueError('VK.com authentication failed: invalid hash')
-        else:
-            kwargs.update({'backend': self,
-                           'response': self.user_data(cookie_dict['mid'])})
-            return self.strategy.authenticate(*args, **kwargs)
+        kwargs.update({'backend': self,
+                       'response': self.user_data(mapping['mid'])})
+        return self.strategy.authenticate(*args, **kwargs)
 
     def uses_redirect(self):
         """VK.com does not require visiting server url in order
@@ -83,14 +85,22 @@ class VKOAuth2(BaseOAuth2):
         ('expires_in', 'expires')
     ]
 
+    def get_user_id(self, details, response):
+        return response['uid']
+
     def get_user_details(self, response):
         """Return user details from VK.com account"""
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=response.get('first_name'),
+            last_name=response.get('last_name')
+        )
         return {'username': response.get('screen_name'),
-                'email': '',
-                'first_name': response.get('first_name'),
-                'last_name': response.get('last_name')}
+                'email': response.get('email', ''),
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
-    def user_data(self, access_token, response, *args, **kwargs):
+    def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         request_data = ['first_name', 'last_name', 'screen_name', 'nickname',
                         'photo'] + self.setting('EXTRA_DATA', [])
@@ -99,7 +109,6 @@ class VKOAuth2(BaseOAuth2):
         data = vk_api(self, 'users.get', {
             'access_token': access_token,
             'fields': fields,
-            'uids': response.get('user_id')
         })
 
         if data.get('error'):
@@ -164,7 +173,7 @@ class VKAppOAuth2(VKOAuth2):
         auth_data = {
             'auth': self,
             'backend': self,
-            'request': self.strategy.request,
+            'request': self.strategy.request_data(),
             'response': {
                 'user_id': user_id,
             }
@@ -180,12 +189,10 @@ def vk_api(backend, method, data):
         http://goo.gl/yLcaa
     """
     # We need to perform server-side call if no access_token
-    if not 'access_token' in data:
-        if not 'v' in data:
-            data['v'] = '3.0'
-
+    data['v'] = backend.setting('API_VERSION', '3.0')
+    if 'access_token' not in data:
         key, secret = backend.get_key_and_secret()
-        if not 'api_id' in data:
+        if 'api_id' not in data:
             data['api_id'] = key
 
         data['method'] = method

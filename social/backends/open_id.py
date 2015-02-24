@@ -1,11 +1,18 @@
+import datetime
+from calendar import timegm
+
+from jwt import InvalidTokenError, decode as jwt_decode
+
 from openid.consumer.consumer import Consumer, SUCCESS, CANCEL, FAILURE
 from openid.consumer.discover import DiscoveryFailure
 from openid.extensions import sreg, ax, pape
 
 from social.utils import url_add_parameters
 from social.exceptions import AuthException, AuthFailed, AuthCanceled, \
-                              AuthUnknownError, AuthMissingParameter
+                              AuthUnknownError, AuthMissingParameter, \
+                              AuthTokenError
 from social.backends.base import BaseAuth
+from social.backends.oauth import BaseOAuth2
 
 
 # OpenID configuration
@@ -36,10 +43,20 @@ class OpenIdAuth(BaseAuth):
     """Generic OpenID authentication backend"""
     name = 'openid'
     URL = None
+    USERNAME_KEY = 'username'
 
     def get_user_id(self, details, response):
         """Return user unique id provided by service"""
         return response.identity_url
+
+    def get_ax_attributes(self):
+        attrs = self.setting('AX_SCHEMA_ATTRS', [])
+        if attrs and self.setting('IGNORE_DEFAULT_AX_ATTRS', True):
+            return attrs
+        return attrs + AX_SCHEMA_ATTRS + OLD_AX_ATTRS
+
+    def get_sreg_attributes(self):
+        return self.setting('SREG_ATTR') or SREG_ATTR
 
     def values_from_response(self, response, sreg_names=None, ax_names=None):
         """Return values from SimpleRegistration response or
@@ -72,14 +89,14 @@ class OpenIdAuth(BaseAuth):
                   'first_name': '', 'last_name': ''}
         # update values using SimpleRegistration or AttributeExchange
         # values
-        values.update(self.values_from_response(response,
-                                                SREG_ATTR,
-                                                OLD_AX_ATTRS +
-                                                AX_SCHEMA_ATTRS))
+        values.update(self.values_from_response(
+            response, self.get_sreg_attributes(), self.get_ax_attributes()
+        ))
 
         fullname = values.get('fullname') or ''
         first_name = values.get('first_name') or ''
         last_name = values.get('last_name') or ''
+        email = values.get('email') or ''
 
         if not fullname and first_name and last_name:
             fullname = first_name + ' ' + last_name
@@ -89,10 +106,12 @@ class OpenIdAuth(BaseAuth):
             except ValueError:
                 last_name = fullname
 
+        username_key = self.setting('USERNAME_KEY') or self.USERNAME_KEY
         values.update({'fullname': fullname, 'first_name': first_name,
                        'last_name': last_name,
-                       'username': values.get('username') or
-                                   (first_name.title() + last_name.title())})
+                       'username': values.get(username_key) or
+                                   (first_name.title() + last_name.title()),
+                       'email': email})
         return values
 
     def extra_data(self, user, uid, response, details):
@@ -172,12 +191,12 @@ class OpenIdAuth(BaseAuth):
         if request.endpoint.supportsType(ax.AXMessage.ns_uri):
             fetch_request = ax.FetchRequest()
             # Mark all attributes as required, Google ignores optional ones
-            for attr, alias in (AX_SCHEMA_ATTRS + OLD_AX_ATTRS):
+            for attr, alias in self.get_ax_attributes():
                 fetch_request.add(ax.AttrInfo(attr, alias=alias,
                                               required=True))
         else:
             fetch_request = sreg.SRegRequest(
-                optional=list(dict(SREG_ATTR).keys())
+                optional=list(dict(self.get_sreg_attributes()).keys())
             )
         request.addExtension(fetch_request)
 
@@ -207,11 +226,11 @@ class OpenIdAuth(BaseAuth):
     def consumer(self):
         """Create an OpenID Consumer object for the given Django request."""
         if not hasattr(self, '_consumer'):
-            self._consumer = Consumer(
-                self.strategy.openid_session_dict(SESSION_NAME),
-                self.strategy.openid_store()
-            )
+            self._consumer = self.create_consumer(self.strategy.openid_store())
         return self._consumer
+
+    def create_consumer(self, store=None):
+        return Consumer(self.strategy.openid_session_dict(SESSION_NAME), store)
 
     def uses_redirect(self):
         """Return true if openid request will be handled with redirect or
@@ -239,3 +258,104 @@ class OpenIdAuth(BaseAuth):
             return self.data[OPENID_ID_FIELD]
         else:
             raise AuthMissingParameter(self, OPENID_ID_FIELD)
+
+
+class OpenIdConnectAssociation(object):
+    """ Use Association model to save the nonce by force. """
+
+    def __init__(self, handle, secret='', issued=0, lifetime=0, assoc_type=''):
+        self.handle = handle  # as nonce
+        self.secret = secret.encode()  # not use
+        self.issued = issued  # not use
+        self.lifetime = lifetime  # not use
+        self.assoc_type = assoc_type  # as state
+
+
+class OpenIdConnectAuth(BaseOAuth2):
+    """
+    Base class for Open ID Connect backends.
+
+    Currently only the code response type is supported.
+    """
+    ID_TOKEN_ISSUER = None
+    DEFAULT_SCOPE = ['openid']
+    EXTRA_DATA = ['id_token', 'refresh_token', ('sub', 'id')]
+    # Set after access_token is retrieved
+    id_token = None
+
+    def auth_params(self, state=None):
+        """Return extra arguments needed on auth process."""
+        params = super(OpenIdConnectAuth, self).auth_params(state)
+        params['nonce'] = self.get_and_store_nonce(
+            self.AUTHORIZATION_URL, state
+        )
+        return params
+
+    def auth_complete_params(self, state=None):
+        params = super(OpenIdConnectAuth, self).auth_complete_params(state)
+        # Add a nonce to the request so that to help counter CSRF
+        params['nonce'] = self.get_and_store_nonce(
+            self.ACCESS_TOKEN_URL, state
+        )
+        return params
+
+    def get_and_store_nonce(self, url, state):
+        # Create a nonce
+        nonce = self.strategy.random_string(64)
+        # Store the nonce
+        association = OpenIdConnectAssociation(nonce, assoc_type=state)
+        self.strategy.storage.association.store(url, association)
+        return nonce
+
+    def get_nonce(self, nonce):
+        try:
+            return self.strategy.storage.association.get(
+                server_url=self.ACCESS_TOKEN_URL,
+                handle=nonce
+            )[0]
+        except IndexError:
+            pass
+
+    def remove_nonce(self, nonce_id):
+        self.strategy.storage.association.remove([nonce_id])
+
+    def validate_and_return_id_token(self, id_token):
+        """
+        Validates the id_token according to the steps at
+        http://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation.
+        """
+        client_id, _client_secret = self.get_key_and_secret()
+        decryption_key = self.setting('ID_TOKEN_DECRYPTION_KEY')
+        try:
+            # Decode the JWT and raise an error if the secret is invalid or
+            # the response has expired.
+            id_token = jwt_decode(id_token, decryption_key, audience=client_id,
+                                  issuer=self.ID_TOKEN_ISSUER)
+        except InvalidTokenError as err:
+            raise AuthTokenError(self, err)
+
+        # Verify the token was issued in the last 10 minutes
+        utc_timestamp = timegm(datetime.datetime.utcnow().utctimetuple())
+        if id_token['iat'] < (utc_timestamp - 600):
+            raise AuthTokenError(self, 'Incorrect id_token: iat')
+
+        # Validate the nonce to ensure the request was not modified
+        nonce = id_token.get('nonce')
+        if not nonce:
+            raise AuthTokenError(self, 'Incorrect id_token: nonce')
+
+        nonce_obj = self.get_nonce(nonce)
+        if nonce_obj:
+            self.remove_nonce(nonce_obj.id)
+        else:
+            raise AuthTokenError(self, 'Incorrect id_token: nonce')
+        return id_token
+
+    def request_access_token(self, *args, **kwargs):
+        """
+        Retrieve the access token. Also, validate the id_token and
+        store it (temporarily).
+        """
+        response = self.get_json(*args, **kwargs)
+        self.id_token = self.validate_and_return_id_token(response['id_token'])
+        return response

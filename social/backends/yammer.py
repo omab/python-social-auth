@@ -20,15 +20,17 @@ class YammerOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         username = response['user']['name']
-        first_name = response['user']['first_name']
-        last_name = response['user']['last_name']
-        full_name = response['user']['full_name']
+        fullname, first_name, last_name = self.get_user_names(
+            fullname=response['user']['full_name'],
+            first_name=response['user']['first_name'],
+            last_name=response['user']['last_name']
+        )
         email = response['user']['contact']['email_addresses'][0]['address']
         mugshot_url = response['user']['mugshot_url']
         return {
             'username': username,
             'email': email,
-            'fullname': full_name,
+            'fullname': fullname,
             'first_name': first_name,
             'last_name': last_name,
             'picture_url': mugshot_url

@@ -39,5 +39,6 @@ local_settings.py
 sessions/
 _build/
 fabfile.py
+changelog.sh
 
 .DS_Store

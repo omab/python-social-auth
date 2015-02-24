@@ -22,12 +22,17 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Odnoklassniki request"""
+        fullname, first_name, last_name = self.get_user_names(
+            fullname=unquote(response['name']),
+            first_name=unquote(response['first_name']),
+            last_name=unquote(response['last_name'])
+        )
         return {
             'username': response['uid'],
             'email': '',
-            'fullname': unquote(response['name']),
-            'first_name': unquote(response['first_name']),
-            'last_name': unquote(response['last_name'])
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name
         }
 
     def user_data(self, access_token, *args, **kwargs):
@@ -49,15 +54,20 @@ class OdnoklassnikiApp(BaseAuth):
                             if key in response['extra_data_list']])
 
     def get_user_details(self, response):
+        fullname, first_name, last_name = self.get_user_names(
+            fullname=unquote(response['name']),
+            first_name=unquote(response['first_name']),
+            last_name=unquote(response['last_name'])
+        )
         return {
             'username': response['uid'],
             'email': '',
-            'fullname': unquote(response['name']),
-            'first_name': unquote(response['first_name']),
-            'last_name': unquote(response['last_name'])
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name
         }
 
-    def auth_complete(self, request, user, *args, **kwargs):
+    def auth_complete(self, *args, **kwargs):
         self.verify_auth_sig()
         response = self.get_response()
         fields = ('uid', 'first_name', 'last_name', 'name') + \

@@ -10,4 +10,10 @@ Configurable settings:
 
     SOCIAL_AUTH_STEAM_API_KEY = key
 
+
+- To save ``player`` data provided by Steam into ``extra_data``::
+
+    SOCIAL_AUTH_STEAM_EXTRA_DATA = ['player']
+
+
 .. _Steam Dev: http://steamcommunity.com/dev/apikey

@@ -1,4 +1,3 @@
-# import json
 import datetime
 
 from httpretty import HTTPretty
@@ -17,13 +16,13 @@ class LiveJournalOpenIdTest(OpenIdTest):
     expected_username = 'foobar'
     discovery_body = ''.join([
       '<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)">',
-        '<XRD>',
-          '<Service priority="0">',
-            '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
-            '<URI>http://www.livejournal.com/openid/server.bml</URI>',
-            '<LocalID>http://foobar.livejournal.com/</LocalID>',
-          '</Service>',
-        '</XRD>',
+      '<XRD>',
+      '<Service priority="0">',
+      '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
+      '<URI>http://www.livejournal.com/openid/server.bml</URI>',
+      '<LocalID>http://foobar.livejournal.com/</LocalID>',
+      '</Service>',
+      '</XRD>',
       '</xrds:XRDS>'
     ])
     server_response = urlencode({
@@ -83,17 +82,18 @@ class LiveJournalOpenIdTest(OpenIdTest):
         )
 
     def test_login(self):
-        self.strategy.set_request_data({'openid_lj_user': 'foobar'})
+        self.strategy.set_request_data({'openid_lj_user': 'foobar'},
+                                       self.backend)
         self._setup_handlers()
         self.do_login()
 
     def test_partial_pipeline(self):
-        self.strategy.set_request_data({'openid_lj_user': 'foobar'})
+        self.strategy.set_request_data({'openid_lj_user': 'foobar'},
+                                       self.backend)
         self._setup_handlers()
         self.do_partial_pipeline()
 
     def test_failed_login(self):
         self._setup_handlers()
-        self.do_login.when.called_with().should.throw(
-            AuthMissingParameter
-        )
+        with self.assertRaises(AuthMissingParameter):
+            self.do_login()

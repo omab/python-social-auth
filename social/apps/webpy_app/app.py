@@ -1,7 +1,7 @@
 import web
 
 from social.actions import do_auth, do_complete, do_disconnect
-from social.apps.webpy_app.utils import strategy
+from social.apps.webpy_app.utils import psa, load_strategy
 
 
 urls = (
@@ -16,6 +16,7 @@ class BaseViewClass(object):
     def __init__(self, *args, **kwargs):
         self.session = web.web_session
         method = web.ctx.method == 'POST' and 'post' or 'get'
+        self.strategy = load_strategy()
         self.data = web.input(_method=method)
         super(BaseViewClass, self).__init__(*args, **kwargs)
 
@@ -41,9 +42,9 @@ class auth(BaseViewClass):
     def POST(self, backend):
         return self._auth(backend)
 
-    @strategy('/complete/%(backend)s/')
+    @psa('/complete/%(backend)s/')
     def _auth(self, backend):
-        return do_auth(self.strategy)
+        return do_auth(self.backend)
 
 
 class complete(BaseViewClass):
@@ -53,17 +54,19 @@ class complete(BaseViewClass):
     def POST(self, backend, *args, **kwargs):
         return self._complete(backend, *args, **kwargs)
 
-    @strategy('/complete/%(backend)s/')
+    @psa('/complete/%(backend)s/')
     def _complete(self, backend, *args, **kwargs):
-        return do_complete(self.strategy,
-                           login=lambda strat, user: self.login_user(user),
-                           user=self.get_current_user(), *args, **kwargs)
+        return do_complete(
+            self.backend,
+            login=lambda backend, user, social_user: self.login_user(user),
+            user=self.get_current_user(), *args, **kwargs
+        )
 
 
 class disconnect(BaseViewClass):
-    @strategy()
+    @psa()
     def POST(self, backend, association_id=None):
-        return do_disconnect(self.strategy, self.get_current_user(),
+        return do_disconnect(self.backend, self.get_current_user(),
                              association_id)
 
 

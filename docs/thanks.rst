@@ -111,8 +111,8 @@ let me know and I'll update the list):
   * sbassi_
 
 
-.. _python-social-auth: https:https://github.com/https://github.com/github.comhttps://github.com/omabhttps://github.com/python-social-auth
-.. _django-social-auth: https:https://github.com/https://github.com/github.comhttps://github.com/omabhttps://github.com/django-social-auth
+.. _python-social-auth: https://github.com/omab/python-social-auth
+.. _django-social-auth: https://github.com/omab/django-social-auth
 .. _kjoconnor: https://github.com/kjoconnor
 .. _krvss: https://github.com/krvss
 .. _estebistec: https://github.com/estebistec

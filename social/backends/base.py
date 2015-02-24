@@ -1,6 +1,6 @@
 from requests import request, ConnectionError
 
-from social.utils import module_member, parse_qs
+from social.utils import module_member, parse_qs, user_agent
 from social.exceptions import AuthFailed
 
 
@@ -12,8 +12,9 @@ class BaseAuth(object):
     ID_KEY = None
     EXTRA_DATA = None
     REQUIRES_EMAIL_VALIDATION = False
+    SEND_USER_AGENT = False
 
-    def __init__(self, strategy=None, redirect_uri=None, *args, **kwargs):
+    def __init__(self, strategy=None, redirect_uri=None):
         self.strategy = strategy
         self.redirect_uri = redirect_uri
         self.data = {}
@@ -26,6 +27,17 @@ class BaseAuth(object):
     def setting(self, name, default=None):
         """Return setting value from strategy"""
         return self.strategy.setting(name, default=default, backend=self)
+
+    def start(self):
+        # Clean any partial pipeline info before starting the process
+        self.strategy.clean_partial_pipeline()
+        if self.uses_redirect():
+            return self.strategy.redirect(self.auth_url())
+        else:
+            return self.strategy.html(self.auth_html())
+
+    def complete(self, *args, **kwargs):
+        return self.auth_complete(*args, **kwargs)
 
     def auth_url(self):
         """Must return redirect URL to auth provider"""
@@ -82,7 +94,7 @@ class BaseAuth(object):
         pipeline = self.strategy.get_disconnect_pipeline()
         if 'pipeline_index' in kwargs:
             pipeline = pipeline[kwargs['pipeline_index']:]
-        kwargs['name'] = self.strategy.backend.name
+        kwargs['name'] = self.name
         kwargs['user_storage'] = self.strategy.storage.user
         return self.run_pipeline(pipeline, *args, **kwargs)
 
@@ -90,7 +102,7 @@ class BaseAuth(object):
         out = kwargs.copy()
         out.setdefault('strategy', self.strategy)
         out.setdefault('backend', out.pop(self.name, None) or self)
-        out.setdefault('request', self.strategy.request)
+        out.setdefault('request', self.strategy.request_data())
 
         for idx, name in enumerate(pipeline):
             out['pipeline_index'] = pipeline_index + idx
@@ -150,6 +162,20 @@ class BaseAuth(object):
         """
         raise NotImplementedError('Implement in subclass')
 
+    def get_user_names(self, fullname='', first_name='', last_name=''):
+        # Avoid None values
+        fullname = fullname or ''
+        first_name = first_name or ''
+        last_name = last_name or ''
+        if fullname and not (first_name or last_name):
+            try:
+                first_name, last_name = fullname.split(' ', 1)
+            except ValueError:
+                first_name = first_name or fullname or ''
+                last_name = last_name or ''
+        fullname = fullname or ' '.join((first_name, last_name))
+        return fullname.strip(), first_name.strip(), last_name.strip()
+
     def get_user(self, user_id):
         """
         Return user with given ID from the User model used by this backend.
@@ -161,8 +187,8 @@ class BaseAuth(object):
 
     def continue_pipeline(self, *args, **kwargs):
         """Continue previous halted pipeline"""
-        kwargs.update({'backend': self})
-        return self.strategy.authenticate(*args, **kwargs)
+        kwargs.update({'backend': self, 'strategy': self.strategy})
+        return self.authenticate(*args, **kwargs)
 
     def request_token_extra_arguments(self):
         """Return extra arguments needed on request-token process"""
@@ -171,7 +197,7 @@ class BaseAuth(object):
     def auth_extra_arguments(self):
         """Return extra arguments needed on auth process. The defaults can be
         overriden by GET parameters."""
-        extra_arguments = self.setting('AUTH_EXTRA_ARGUMENTS', {})
+        extra_arguments = self.setting('AUTH_EXTRA_ARGUMENTS', {}).copy()
         extra_arguments.update((key, self.data[key]) for key in extra_arguments
                                     if key in self.data)
         return extra_arguments
@@ -182,8 +208,15 @@ class BaseAuth(object):
         return True
 
     def request(self, url, method='GET', *args, **kwargs):
+        kwargs.setdefault('headers', {})
+        if self.setting('VERIFY_SSL') is not None:
+            kwargs.setdefault('verify', self.setting('VERIFY_SSL'))
         kwargs.setdefault('timeout', self.setting('REQUESTS_TIMEOUT') or
                                      self.setting('URLOPEN_TIMEOUT'))
+
+        if self.SEND_USER_AGENT and 'User-Agent' not in kwargs['headers']:
+            kwargs['headers']['User-Agent'] = user_agent()
+
         try:
             response = request(method, url, *args, **kwargs)
         except ConnectionError as err:

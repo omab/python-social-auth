@@ -2,6 +2,7 @@
 Jawbone OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/jawbone.html
 """
+from requests import HTTPError
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthCanceled, AuthUnknownError
 
@@ -19,10 +20,13 @@ class JawboneOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from Jawbone account"""
         data = response['data']
-        first_name = data.get('first', '')
-        last_name = data.get('last', '')
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=data.get('first', ''),
+            last_name=data.get('last', '')
+        )
         return {
             'username': first_name + ' ' + last_name,
+            'fullname': fullname,
             'first_name': first_name,
             'last_name': last_name,
             'dob': data.get('dob', ''),
@@ -48,3 +52,33 @@ class JawboneOAuth2(BaseOAuth2):
                     error
                 ))
         return super(JawboneOAuth2, self).process_error(data)
+
+    def auth_complete_params(self, state=None):
+        client_id, client_secret = self.get_key_and_secret()
+        return {
+            'grant_type': 'authorization_code',  # request auth code
+            'code': self.data.get('code', ''),  # server response code
+            'client_id': client_id,
+            'client_secret': client_secret,
+        }
+
+    def auth_complete(self, *args, **kwargs):
+        """Completes loging process, must return user instance"""
+        self.process_error(self.data)
+        try:
+            response = self.request_access_token(
+                self.ACCESS_TOKEN_URL,
+                params=self.auth_complete_params(self.validate_state()),
+                headers=self.auth_headers(),
+                method=self.ACCESS_TOKEN_METHOD
+            )
+        except HTTPError as err:
+            if err.response.status_code == 400:
+                raise AuthCanceled(self)
+            else:
+                raise
+        except KeyError:
+            raise AuthUnknownError(self)
+        self.process_error(response)
+        return self.do_auth(response['access_token'], response=response,
+                            *args, **kwargs)

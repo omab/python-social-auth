@@ -12,15 +12,25 @@ class InstagramOAuth2(BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
 
     def get_user_id(self, details, response):
-        return response['user']['id']
+        # Sometimes Instagram returns 'user', sometimes 'data', but API docs
+        # says 'data' http://instagram.com/developer/endpoints/users/#get_users
+        user = response.get('user') or response.get('data') or {}
+        return user.get('id')
 
     def get_user_details(self, response):
         """Return user details from Instagram account"""
-        username = response['user']['username']
-        fullname = response['user'].get('full_name', '')
-        email = response['user'].get('email', '')
+        # Sometimes Instagram returns 'user', sometimes 'data', but API docs
+        # says 'data' http://instagram.com/developer/endpoints/users/#get_users
+        user = response.get('user') or response.get('data') or {}
+        username = user['username']
+        email = user.get('email', '')
+        fullname, first_name, last_name = self.get_user_names(
+            user.get('full_name', '')
+        )
         return {'username': username,
-                'first_name': fullname,
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name,
                 'email': email}
 
     def user_data(self, access_token, *args, **kwargs):

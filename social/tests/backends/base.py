@@ -1,7 +1,6 @@
-import unittest
+import unittest2 as unittest
 import requests
 
-from sure import expect
 from httpretty import HTTPretty
 
 from social.utils import module_member, parse_qs
@@ -20,8 +19,9 @@ class BaseBackendTest(unittest.TestCase):
 
     def setUp(self):
         HTTPretty.enable()
-        self.backend = module_member(self.backend_path)
-        self.strategy = TestStrategy(self.backend, TestStorage)
+        Backend = module_member(self.backend_path)
+        self.strategy = TestStrategy(TestStorage)
+        self.backend = Backend(self.strategy, redirect_uri=self.complete_url)
         self.name = self.backend.name.upper().replace('-', '_')
         self.complete_url = self.strategy.build_absolute_uri(
             self.raw_complete_url.format(self.backend.name)
@@ -61,22 +61,22 @@ class BaseBackendTest(unittest.TestCase):
     def do_login(self):
         user = self.do_start()
         username = self.expected_username
-        expect(user.username).to.equal(username)
-        expect(self.strategy.session_get('username')).to.equal(username)
-        expect(self.strategy.get_user(user.id)).to.equal(user)
-        expect(self.strategy.backend.get_user(user.id)).to.equal(user)
+        self.assertEqual(user.username, username)
+        self.assertEqual(self.strategy.session_get('username'), username)
+        self.assertEqual(self.strategy.get_user(user.id), user)
+        self.assertEqual(self.backend.get_user(user.id), user)
         user_backends = user_backends_data(
             user,
             self.strategy.get_setting('SOCIAL_AUTH_AUTHENTICATION_BACKENDS'),
             self.strategy.storage
         )
-        expect(len(list(user_backends.keys()))).to.equal(3)
-        expect('associated' in user_backends).to.equal(True)
-        expect('not_associated' in user_backends).to.equal(True)
-        expect('backends' in user_backends).to.equal(True)
-        expect(len(user_backends['associated'])).to.equal(1)
-        expect(len(user_backends['not_associated'])).to.equal(1)
-        expect(len(user_backends['backends'])).to.equal(2)
+        self.assertEqual(len(list(user_backends.keys())), 3)
+        self.assertEqual('associated' in user_backends, True)
+        self.assertEqual('not_associated' in user_backends, True)
+        self.assertEqual('backends' in user_backends, True)
+        self.assertEqual(len(user_backends['associated']), 1)
+        self.assertEqual(len(user_backends['not_associated']), 1)
+        self.assertEqual(len(user_backends['backends']), 2)
         return user
 
     def pipeline_settings(self):
@@ -110,7 +110,7 @@ class BaseBackendTest(unittest.TestCase):
         requests.post(url, data={'password': password})
 
         data = parse_qs(HTTPretty.last_request.body)
-        expect(data['password']).to.equal(password)
+        self.assertEqual(data['password'], password)
         self.strategy.session_set('password', data['password'])
         return password
 
@@ -120,7 +120,7 @@ class BaseBackendTest(unittest.TestCase):
         requests.post(url, data={'slug': slug})
 
         data = parse_qs(HTTPretty.last_request.body)
-        expect(data['slug']).to.equal(slug)
+        self.assertEqual(data['slug'], slug)
         self.strategy.session_set('slug', data['slug'])
         return slug
 
@@ -128,28 +128,28 @@ class BaseBackendTest(unittest.TestCase):
         url = self.strategy.build_absolute_uri('/password')
         self.pipeline_settings()
         redirect = self.do_start()
-        expect(redirect.url).to.equal(url)
+        self.assertEqual(redirect.url, url)
         self.pipeline_handlers(url)
 
         password = self.pipeline_password_handling(url)
         data = self.strategy.session_pop('partial_pipeline')
         idx, backend, xargs, xkwargs = self.strategy.partial_from_session(data)
-        expect(backend).to.equal(self.backend.name)
-        redirect = self.strategy.continue_pipeline(pipeline_index=idx,
-                                                   *xargs, **xkwargs)
+        self.assertEqual(backend, self.backend.name)
+        redirect = self.backend.continue_pipeline(pipeline_index=idx,
+                                                  *xargs, **xkwargs)
 
         url = self.strategy.build_absolute_uri('/slug')
-        expect(redirect.url).to.equal(url)
+        self.assertEqual(redirect.url, url)
         self.pipeline_handlers(url)
         slug = self.pipeline_slug_handling(url)
 
         data = self.strategy.session_pop('partial_pipeline')
         idx, backend, xargs, xkwargs = self.strategy.partial_from_session(data)
-        expect(backend).to.equal(self.backend.name)
-        user = self.strategy.continue_pipeline(pipeline_index=idx,
-                                               *xargs, **xkwargs)
+        self.assertEqual(backend, self.backend.name)
+        user = self.backend.continue_pipeline(pipeline_index=idx,
+                                              *xargs, **xkwargs)
 
-        expect(user.username).to.equal(self.expected_username)
-        expect(user.slug).to.equal(slug)
-        expect(user.password).to.equal(password)
+        self.assertEqual(user.username, self.expected_username)
+        self.assertEqual(user.slug, slug)
+        self.assertEqual(user.password, password)
         return user

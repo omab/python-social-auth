@@ -36,6 +36,19 @@ Also ensure to define the MongoEngine_ storage setting::
 Database
 --------
 
+(For Django 1.7 and higher) sync database to create needed models::
+
+    ./manage.py makemigrations
+
+If you're still using South, you'll need override SOUTH_MIGRATION_MODULES_::
+
+    SOUTH_MIGRATION_MODULES = {
+        'default': 'social.apps.django_app.default.south_migrations'
+    }
+    
+Note that Django's app labels take the last part of the import, so
+in this case ``social.apps.django_app.default`` becomes ``default`` here.
+
 Sync database to create needed models::
 
     ./manage.py syncdb
@@ -58,11 +71,11 @@ setting::
         'django.contrib.auth.backends.ModelBackend',
     )
 
-  Take into account that backends **must** be defined in AUTHENTICATION_BACKENDS_
-  or Django won't pick them when trying to authenticate the user.
+Take into account that backends **must** be defined in AUTHENTICATION_BACKENDS_
+or Django won't pick them when trying to authenticate the user.
 
-  Don't miss ``django.contrib.auth.backends.ModelBackend`` if using ``django.contrib.auth``
-  application or users won't be able to login by username / password method.
+Don't miss ``django.contrib.auth.backends.ModelBackend`` if using ``django.contrib.auth``
+application or users won't be able to login by username / password method.
 
 
 URLs entries
@@ -75,6 +88,10 @@ Add URLs entries::
         url('', include('social.apps.django_app.urls', namespace='social'))
         ...
     )
+
+In case you need a custom namespace, this setting is also needed::
+
+    SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 
 Template Context Processors
@@ -164,9 +181,34 @@ The redirect destination will get two ``GET`` parameters:
     Backend name that was used, if it was a valid backend.
 
 
+Django Admin
+------------
+
+The default application (not the MongoEngine_ one) contains an ``admin.py``
+module that will be auto-discovered by the usual mechanism.
+
+But, by the nature of the application which depends on the existence of a user
+model, it's easy to fall in a recursive import ordering making the application
+fail to load. This happens because the admin module will build a set of fields
+to populate the ``search_fields`` property to search for related users in the
+administration UI, but this requires the user model to be retrieved which might
+not be defined at that time.
+
+To avoid this issue define the following setting to circumvent the import
+error::
+
+    SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['field1', 'field2']
+
+For example::
+
+    SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'email']
+
+The fields listed **must** be user models fields.
+
 .. _MongoEngine: http://mongoengine.org
 .. _MongoEngine Django integration: http://mongoengine-odm.readthedocs.org/en/latest/django.html
 .. _django-social-auth: https://github.com/omab/django-social-auth
 .. _Django built-in app: https://github.com/omab/python-social-auth/tree/master/social/apps/django_app
 .. _AUTHENTICATION_BACKENDS: http://docs.djangoproject.com/en/dev/ref/settings/?from=olddocs#authentication-backends
 .. _django@dc43fbc: https://github.com/django/django/commit/dc43fbc2f21c12e34e309d0e8a121020391aa03a
+.. _SOUTH_MIGRATION_MODULES: http://south.readthedocs.org/en/latest/settings.html#south-migration-modules

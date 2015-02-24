@@ -1,14 +1,9 @@
-from flask_example import app
-
-
-app.debug = True
+from os.path import dirname, abspath
 
 SECRET_KEY = 'random-secret-key'
 SESSION_COOKIE_NAME = 'psa_session'
-DEBUG = False
-from os.path import dirname, abspath
+DEBUG = True
 SQLALCHEMY_DATABASE_URI = 'sqlite:////%s/test.db' % dirname(abspath(__file__))
-
 DEBUG_TB_INTERCEPT_REDIRECTS = False
 SESSION_PROTECTION = 'strong'
 
@@ -48,9 +43,11 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.thisismyjam.ThisIsMyJamOAuth1',
     'social.backends.stocktwits.StocktwitsOAuth2',
     'social.backends.tripit.TripItOAuth',
+    'social.backends.clef.ClefOAuth2',
     'social.backends.twilio.TwilioAuth',
     'social.backends.xing.XingOAuth',
     'social.backends.yandex.YandexOAuth2',
     'social.backends.podio.PodioOAuth2',
     'social.backends.reddit.RedditOAuth2',
+    'social.backends.mineid.MineIDOAuth2',
 )

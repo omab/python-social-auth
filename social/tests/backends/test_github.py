@@ -140,8 +140,52 @@ class GithubOrganizationOAuth2FailTest(GithubOAuth2Test):
 
     def test_login(self):
         self.strategy.set_settings({'SOCIAL_AUTH_GITHUB_ORG_NAME': 'foobar'})
-        self.do_login.when.called_with().should.throw(AuthFailed)
+        with self.assertRaises(AuthFailed):
+            self.do_login()
 
     def test_partial_pipeline(self):
         self.strategy.set_settings({'SOCIAL_AUTH_GITHUB_ORG_NAME': 'foobar'})
-        self.do_partial_pipeline.when.called_with().should.throw(AuthFailed)
+        with self.assertRaises(AuthFailed):
+            self.do_partial_pipeline()
+
+
+class GithubTeamOAuth2Test(GithubOAuth2Test):
+    backend_path = 'social.backends.github.GithubTeamOAuth2'
+
+    def auth_handlers(self, start_url):
+        url = 'https://api.github.com/teams/123/members/foobar'
+        HTTPretty.register_uri(HTTPretty.GET, url, status=204, body='')
+        return super(GithubTeamOAuth2Test, self).auth_handlers(
+            start_url
+        )
+
+    def test_login(self):
+        self.strategy.set_settings({'SOCIAL_AUTH_GITHUB_TEAM_ID': '123'})
+        self.do_login()
+
+    def test_partial_pipeline(self):
+        self.strategy.set_settings({'SOCIAL_AUTH_GITHUB_TEAM_ID': '123'})
+        self.do_partial_pipeline()
+
+
+class GithubTeamOAuth2FailTest(GithubOAuth2Test):
+    backend_path = 'social.backends.github.GithubTeamOAuth2'
+
+    def auth_handlers(self, start_url):
+        url = 'https://api.github.com/teams/123/members/foobar'
+        HTTPretty.register_uri(HTTPretty.GET, url, status=404,
+                               body='{"message": "Not Found"}',
+                               content_type='application/json')
+        return super(GithubTeamOAuth2FailTest, self).auth_handlers(
+            start_url
+        )
+
+    def test_login(self):
+        self.strategy.set_settings({'SOCIAL_AUTH_GITHUB_TEAM_ID': '123'})
+        with self.assertRaises(AuthFailed):
+            self.do_login()
+
+    def test_partial_pipeline(self):
+        self.strategy.set_settings({'SOCIAL_AUTH_GITHUB_TEAM_ID': '123'})
+        with self.assertRaises(AuthFailed):
+            self.do_partial_pipeline()

@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from social.utils import setting_name
-from social.apps.webpy_app.utils import strategy, backends
+from social.apps.webpy_app.utils import psa, backends
 from social.apps.webpy_app import app as social_app
 
 import local_settings
@@ -49,10 +49,12 @@ web.config[setting_name('AUTHENTICATION_BACKENDS')] = (
     'social.backends.thisismyjam.ThisIsMyJamOAuth1',
     'social.backends.stocktwits.StocktwitsOAuth2',
     'social.backends.tripit.TripItOAuth',
+    'social.backends.clef.ClefOAuth2',
     'social.backends.twilio.TwilioAuth',
     'social.backends.xing.XingOAuth',
     'social.backends.yandex.YandexOAuth2',
     'social.backends.podio.PodioOAuth2',
+    'social.backends.mineid.MineIDOAuth2',
 )
 web.config[setting_name('LOGIN_REDIRECT_URL')] = '/done/'
 
@@ -73,7 +75,6 @@ class main(object):
 
 
 class done(social_app.BaseViewClass):
-    @strategy()
     def GET(self):
         user = self.get_current_user()
         return render.done(user=user, backends=backends(user))

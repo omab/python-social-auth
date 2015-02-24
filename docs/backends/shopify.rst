@@ -4,7 +4,7 @@ Shopify
 Shopify uses OAuth 2 for authentication.
 
 To use this backend, you must install the package ``shopify`` from the `Github
-project`_.
+project`_. Currently supports v2+
 
 - Register a new application at `Shopify Partners`_, and
 

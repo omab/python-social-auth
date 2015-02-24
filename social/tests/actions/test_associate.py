@@ -1,5 +1,4 @@
 import json
-from sure import expect
 
 from social.exceptions import AuthAlreadyAssociated
 
@@ -13,16 +12,17 @@ class AssociateActionTest(BaseActionTest):
     def setUp(self):
         super(AssociateActionTest, self).setUp()
         self.user = User(username='foobar', email='foo@bar.com')
+        self.backend.strategy.session_set('username', self.user.username)
 
     def test_associate(self):
         self.do_login()
-        expect(len(self.user.social)).to.equal(1)
-        expect(self.user.social[0].provider).to.equal('github')
+        self.assertTrue(len(self.user.social), 1)
+        self.assertEqual(self.user.social[0].provider, 'github')
 
     def test_associate_with_partial_pipeline(self):
         self.do_login_with_partial_pipeline()
-        expect(len(self.user.social)).to.equal(1)
-        expect(self.user.social[0].provider).to.equal('github')
+        self.assertEqual(len(self.user.social), 1)
+        self.assertEqual(self.user.social[0].provider, 'github')
 
 
 class MultipleAccountsTest(AssociateActionTest):
@@ -62,9 +62,9 @@ class MultipleAccountsTest(AssociateActionTest):
     def test_multiple_social_accounts(self):
         self.do_login()
         self.do_login(user_data_body=self.alternative_user_data_body)
-        expect(len(self.user.social)).to.equal(2)
-        expect(self.user.social[0].provider).to.equal('github')
-        expect(self.user.social[1].provider).to.equal('github')
+        self.assertEqual(len(self.user.social), 2)
+        self.assertEqual(self.user.social[0].provider, 'github')
+        self.assertEqual(self.user.social[1].provider, 'github')
 
 
 class AlreadyAssociatedErrorTest(BaseActionTest):
@@ -82,7 +82,6 @@ class AlreadyAssociatedErrorTest(BaseActionTest):
         self.user = self.user1
         self.do_login()
         self.user = User(username='foobar2', email='foo2@bar2.com')
-        self.do_login.when.called_with().should.throw(
-            AuthAlreadyAssociated,
-            'This github account is already in use.'
-        )
+        with self.assertRaisesRegexp(AuthAlreadyAssociated,
+                                     'This github account is already in use.'):
+            self.do_login()

@@ -4,6 +4,8 @@ import unicodedata
 import collections
 import six
 
+import social
+
 from social.p3 import urlparse, urlunparse, urlencode, \
                       parse_qs as battery_parse_qs
 
@@ -20,6 +22,11 @@ def module_member(name):
     mod, member = name.rsplit('.', 1)
     module = import_module(mod)
     return getattr(module, member)
+
+
+def user_agent():
+    """Builds a simple User-Agent string to send in requests"""
+    return 'python-social-auth-' + social.__version__
 
 
 def url_add_parameters(url, params):
@@ -48,18 +55,15 @@ def sanitize_redirect(host, redirect_to):
     and returns it, else returns None, similar as how's it done
     on django.contrib.auth.views.
     """
-    # Quick sanity check.
-    if not redirect_to or \
-       not isinstance(redirect_to, six.string_types) or \
-       getattr(redirect_to, 'decode', None) and \
-       not isinstance(redirect_to.decode(), six.string_types):
-        return None
-
-    # Heavier security check, don't allow redirection to a different host.
-    netloc = urlparse(redirect_to)[1]
-    if netloc and netloc != host:
-        return None
-    return redirect_to
+    if redirect_to:
+        try:
+            # Don't redirect to a different host
+            netloc = urlparse(redirect_to)[1] or host
+        except (TypeError, AttributeError):
+            pass
+        else:
+            if netloc == host:
+                return redirect_to
 
 
 def user_is_authenticated(user):
@@ -124,18 +128,20 @@ def drop_lists(value):
     return out
 
 
-def partial_pipeline_data(strategy, user, *args, **kwargs):
-    partial = strategy.session_get('partial_pipeline', None)
+def partial_pipeline_data(backend, user=None, *args, **kwargs):
+    partial = backend.strategy.session_get('partial_pipeline', None)
     if partial:
-        idx, backend, xargs, xkwargs = strategy.partial_from_session(partial)
-        if backend == strategy.backend.name:
+        idx, backend_name, xargs, xkwargs = \
+            backend.strategy.partial_from_session(partial)
+        if backend_name == backend.name:
             kwargs.setdefault('pipeline_index', idx)
-            kwargs.setdefault('user', user)
-            kwargs.setdefault('request', strategy.request)
+            if user:  # don't update user if it's None
+                kwargs.setdefault('user', user)
+            kwargs.setdefault('request', backend.strategy.request_data())
             xkwargs.update(kwargs)
             return xargs, xkwargs
         else:
-            strategy.clean_partial_pipeline()
+            backend.strategy.clean_partial_pipeline()
 
 
 def build_absolute_uri(host_url, path=None):
@@ -173,11 +179,11 @@ def is_url(value):
             value.startswith('/'))
 
 
-def setting_url(strategy, *names):
+def setting_url(backend, *names):
     for name in names:
         if is_url(name):
             return name
         else:
-            value = strategy.setting(name)
+            value = backend.setting(name)
             if is_url(value):
                 return value

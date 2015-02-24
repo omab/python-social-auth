@@ -19,38 +19,6 @@ enable ``python-social-auth`` support follow this steps:
         ...
     )
 
-
-Notes
------
-
-At the moment (May 29, 2013), Amazon API doesn't work properly, for example
-users are being redirected to URLs like::
-
-    https://www.amazon.com:80/ap/signin?...
-
-Which are invalid (``https`` over port 80?). The process works OK when removing
-the ``:80`` from those URLs, but this renders the service very unusable at the
-moment.
-
-User data returned by Amazon doesn't follow the documented format::
-
-    {
-        Request-Id: "02GGTU7CWMNFTV3KH3J6",
-        Profile: {
-            Name: "Foo Bar",
-            CustomerId: "amzn1.account.ABCDE1234",
-            PrimaryEmail: "foo@bar.com"
-        }
-    }
-
-Instead of::
-
-    {
-        "user_id": "amzn1.account.ABCDE1234",
-        "email": "foo@bar.com",
-        "name": "Foo Bar"
-    }
-
 Further documentation at `Website Developer Guide`_ and `Getting Started for Web`_.
 
 .. _Amazon App Console: http://login.amazon.com/manageApps

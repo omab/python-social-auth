@@ -1,7 +1,9 @@
 import json
+
 from httpretty import HTTPretty
 
 from social.p3 import urlencode
+from social.exceptions import AuthForbidden
 from social.tests.backends.oauth import OAuth1Test
 
 
@@ -46,4 +48,29 @@ class BitbucketOAuth1Test(OAuth1Test):
         self.do_login()
 
     def test_partial_pipeline(self):
+        HTTPretty.register_uri(HTTPretty.GET,
+                               'https://bitbucket.org/api/1.0/emails/',
+                               status=200, body=self.emails_body)
         self.do_partial_pipeline()
+
+
+class BitbucketOAuth1FailTest(BitbucketOAuth1Test):
+    emails_body = json.dumps([{
+        'active': False,
+        'email': 'foo@bar.com',
+        'primary': True
+    }])
+
+    def test_login(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_BITBUCKET_VERIFIED_EMAILS_ONLY': True
+        })
+        with self.assertRaises(AuthForbidden):
+            super(BitbucketOAuth1FailTest, self).test_login()
+
+    def test_partial_pipeline(self):
+        self.strategy.set_settings({
+            'SOCIAL_AUTH_BITBUCKET_VERIFIED_EMAILS_ONLY': True
+        })
+        with self.assertRaises(AuthForbidden):
+            super(BitbucketOAuth1FailTest, self).test_partial_pipeline()

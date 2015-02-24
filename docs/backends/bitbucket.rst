@@ -10,3 +10,17 @@ Bitbucket works similar to Twitter OAuth.
 
       SOCIAL_AUTH_BITBUCKET_KEY = ''
       SOCIAL_AUTH_BITBUCKET_SECRET = ''
+
+
+
+Settings
+--------
+
+Sometimes Bitbucket users don't have a verified email address, making it
+impossible to get the basic user information to continue the auth process.
+It's possible to avoid these users with this setting::
+
+    SOCIAL_AUTH_BITBUCKET_VERIFIED_EMAILS_ONLY = True
+
+By default the setting is set to ``False`` since it's possible for a project to
+gather this information by other methods.

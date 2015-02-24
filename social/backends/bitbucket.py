@@ -2,6 +2,7 @@
 Bitbucket OAuth1 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/bitbucket.html
 """
+from social.exceptions import AuthForbidden
 from social.backends.oauth import BaseOAuth1
 
 
@@ -22,12 +23,15 @@ class BitbucketOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Bitbucket account"""
-        return {'username': response.get('username'),
-                'email': response.get('email'),
-                'fullname': ' '.join((response.get('first_name'),
-                                      response.get('last_name'))),
-                'first_name': response.get('first_name'),
-                'last_name': response.get('last_name')}
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=response.get('first_name', ''),
+            last_name=response.get('last_name', '')
+        )
+        return {'username': response.get('username') or '',
+                'email': response.get('email') or '',
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token):
         """Return user data provided"""
@@ -37,11 +41,19 @@ class BitbucketOAuth(BaseOAuth1):
         # the top email
         emails = self.get_json('https://bitbucket.org/api/1.0/emails/',
                                auth=self.oauth_auth(access_token))
+        email = None
         for address in reversed(emails):
             if address['active']:
                 email = address['email']
                 if address['primary']:
                     break
-        return dict(self.get_json('https://bitbucket.org/api/1.0/users/' +
-                                  email)['user'],
-                    email=email)
+
+        if email:
+            return dict(self.get_json('https://bitbucket.org/api/1.0/users/' +
+                                      email)['user'],
+                        email=email)
+        elif self.setting('VERIFIED_EMAILS_ONLY', False):
+            raise AuthForbidden(self,
+                                'Bitbucket account has any verified email')
+        else:
+            return {}

@@ -123,15 +123,19 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.angel.AngelOAuth2',
     'social.backends.aol.AOLOpenId',
     'social.backends.appsfuel.AppsfuelOAuth2',
+    'social.backends.beats.BeatsOAuth2',
     'social.backends.behance.BehanceOAuth2',
     'social.backends.belgiumeid.BelgiumEIDOpenId',
     'social.backends.bitbucket.BitbucketOAuth',
     'social.backends.box.BoxOAuth2',
+    'social.backends.clef.ClefOAuth2',
     'social.backends.coinbase.CoinbaseOAuth2',
+    'social.backends.coursera.CourseraOAuth2',
     'social.backends.dailymotion.DailymotionOAuth2',
     'social.backends.disqus.DisqusOAuth2',
     'social.backends.douban.DoubanOAuth2',
     'social.backends.dropbox.DropboxOAuth',
+    'social.backends.dropbox.DropboxOAuth2',
     'social.backends.evernote.EvernoteSandboxOAuth',
     'social.backends.facebook.FacebookAppOAuth2',
     'social.backends.facebook.FacebookOAuth2',
@@ -144,6 +148,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'social.backends.google.GoogleOpenId',
     'social.backends.google.GooglePlusAuth',
+    'social.backends.google.GoogleOpenIdConnect',
     'social.backends.instagram.InstagramOAuth2',
     'social.backends.jawbone.JawboneOAuth2',
     'social.backends.linkedin.LinkedinOAuth',
@@ -153,11 +158,12 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.mailru.MailruOAuth2',
     'social.backends.mendeley.MendeleyOAuth',
     'social.backends.mendeley.MendeleyOAuth2',
+    'social.backends.mineid.MineIDOAuth2',
     'social.backends.mixcloud.MixcloudOAuth2',
+    'social.backends.nationbuilder.NationBuilderOAuth2',
     'social.backends.odnoklassniki.OdnoklassnikiOAuth2',
     'social.backends.open_id.OpenIdAuth',
     'social.backends.openstreetmap.OpenStreetMapOAuth',
-    'social.backends.orkut.OrkutOAuth',
     'social.backends.persona.PersonaAuth',
     'social.backends.podio.PodioOAuth2',
     'social.backends.rdio.RdioOAuth1',
@@ -167,6 +173,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.runkeeper.RunKeeperOAuth2',
     'social.backends.skyrock.SkyrockOAuth',
     'social.backends.soundcloud.SoundcloudOAuth2',
+    'social.backends.spotify.SpotifyOAuth2',
     'social.backends.stackoverflow.StackoverflowOAuth2',
     'social.backends.steam.SteamOpenId',
     'social.backends.stocktwits.StocktwitsOAuth2',
@@ -185,10 +192,15 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.yahoo.YahooOpenId',
     'social.backends.yammer.YammerOAuth2',
     'social.backends.yandex.YandexOAuth2',
+    'social.backends.vimeo.VimeoOAuth1',
+    'social.backends.lastfm.LastFmAuth',
+    'social.backends.moves.MovesOAuth2',
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+AUTH_USER_MODEL = 'app.CustomUser'
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/done/'
@@ -216,9 +228,16 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.mail.mail_validation',
     'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
+    'social.pipeline.debug.debug',
     'social.pipeline.social_auth.load_extra_data',
-    'social.pipeline.user.user_details'
+    'social.pipeline.user.user_details',
+    'social.pipeline.debug.debug'
 )
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+# SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['first_name', 'last_name', 'email',
+#                                         'username']
 
 try:
     from example.local_settings import *

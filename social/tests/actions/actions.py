@@ -1,8 +1,7 @@
 import json
 import requests
-import unittest
+import unittest2 as unittest
 
-from sure import expect
 from httpretty import HTTPretty
 
 from social.utils import parse_qs, module_member
@@ -55,14 +54,19 @@ class BaseActionTest(unittest.TestCase):
         }
     })
 
+    def __init__(self, *args, **kwargs):
+        self.strategy = None
+        super(BaseActionTest, self).__init__(*args, **kwargs)
+
     def setUp(self):
         HTTPretty.enable()
         User.reset_cache()
         TestUserSocialAuth.reset_cache()
         TestNonce.reset_cache()
         TestAssociation.reset_cache()
-        self.backend = module_member('social.backends.github.GithubOAuth2')
-        self.strategy = TestStrategy(self.backend, TestStorage)
+        Backend = module_member('social.backends.github.GithubOAuth2')
+        self.strategy = self.strategy or TestStrategy(TestStorage)
+        self.backend = Backend(self.strategy, redirect_uri='/complete/github')
         self.user = None
 
     def tearDown(self):
@@ -86,7 +90,7 @@ class BaseActionTest(unittest.TestCase):
                 'social.backends.github.GithubOAuth2',
             )
         })
-        start_url = do_auth(self.strategy).url
+        start_url = do_auth(self.backend).url
         target_url = self.strategy.build_absolute_uri(
             '/complete/github/?code=foobar'
         )
@@ -102,10 +106,10 @@ class BaseActionTest(unittest.TestCase):
                                body='foobar')
 
         response = requests.get(start_url)
-        expect(response.url).to.equal(location_url)
-        expect(response.text).to.equal('foobar')
+        self.assertEqual(response.url, location_url)
+        self.assertEqual(response.text, 'foobar')
 
-        HTTPretty.register_uri(HTTPretty.GET,
+        HTTPretty.register_uri(HTTPretty.POST,
                                uri=self.backend.ACCESS_TOKEN_URL,
                                status=200,
                                body=self.access_token_body or '',
@@ -116,18 +120,17 @@ class BaseActionTest(unittest.TestCase):
             HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
                                    body=user_data_body,
                                    content_type='text/json')
-        self.strategy.set_request_data(location_query)
-        redirect = do_complete(
-            self.strategy,
-            user=self.user,
-            login=lambda strategy, user: strategy.session_set('username',
-                                                              user.username)
-        )
+        self.strategy.set_request_data(location_query, self.backend)
+
+        def _login(backend, user, social_user):
+            backend.strategy.session_set('username', user.username)
+
+        redirect = do_complete(self.backend, user=self.user, login=_login)
+
         if after_complete_checks:
-            expect(self.strategy.session_get('username')).to.equal(
-                expected_username or self.expected_username
-            )
-            expect(redirect.url).to.equal(self.login_redirect_url)
+            self.assertEqual(self.strategy.session_get('username'),
+                             expected_username or self.expected_username)
+            self.assertEqual(redirect.url, self.login_redirect_url)
         return redirect
 
     def do_login_with_partial_pipeline(self, before_complete=None):
@@ -153,7 +156,7 @@ class BaseActionTest(unittest.TestCase):
                 'social.pipeline.user.user_details'
             )
         })
-        start_url = do_auth(self.strategy).url
+        start_url = do_auth(self.backend).url
         target_url = self.strategy.build_absolute_uri(
             '/complete/github/?code=foobar'
         )
@@ -169,8 +172,8 @@ class BaseActionTest(unittest.TestCase):
                                body='foobar')
 
         response = requests.get(start_url)
-        expect(response.url).to.equal(location_url)
-        expect(response.text).to.equal('foobar')
+        self.assertEqual(response.url, location_url)
+        self.assertEqual(response.text, 'foobar')
 
         HTTPretty.register_uri(HTTPretty.GET,
                                uri=self.backend.ACCESS_TOKEN_URL,
@@ -182,14 +185,14 @@ class BaseActionTest(unittest.TestCase):
             HTTPretty.register_uri(HTTPretty.GET, self.user_data_url,
                                    body=self.user_data_body or '',
                                    content_type='text/json')
-        self.strategy.set_request_data(location_query)
+        self.strategy.set_request_data(location_query, self.backend)
 
-        def _login(strategy, user):
-            strategy.session_set('username', user.username)
+        def _login(backend, user, social_user):
+            backend.strategy.session_set('username', user.username)
 
-        redirect = do_complete(self.strategy, user=self.user, login=_login)
+        redirect = do_complete(self.backend, user=self.user, login=_login)
         url = self.strategy.build_absolute_uri('/password')
-        expect(redirect.url).to.equal(url)
+        self.assertEqual(redirect.url, url)
         HTTPretty.register_uri(HTTPretty.GET, redirect.url, status=200,
                                body='foobar')
         HTTPretty.register_uri(HTTPretty.POST, redirect.url, status=200)
@@ -198,13 +201,12 @@ class BaseActionTest(unittest.TestCase):
         requests.get(url)
         requests.post(url, data={'password': password})
         data = parse_qs(HTTPretty.last_request.body)
-        expect(data['password']).to.equal(password)
+        self.assertEqual(data['password'], password)
         self.strategy.session_set('password', data['password'])
 
         if before_complete:
             before_complete()
-        redirect = do_complete(self.strategy, user=self.user, login=_login)
-        expect(self.strategy.session_get('username')).to.equal(
-            self.expected_username
-        )
-        expect(redirect.url).to.equal(self.login_redirect_url)
+        redirect = do_complete(self.backend, user=self.user, login=_login)
+        self.assertEqual(self.strategy.session_get('username'),
+                         self.expected_username)
+        self.assertEqual(redirect.url, self.login_redirect_url)

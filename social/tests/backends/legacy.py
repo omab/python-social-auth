@@ -1,6 +1,5 @@
 import requests
 
-from sure import expect
 from httpretty import HTTPretty
 
 from social.utils import parse_qs
@@ -15,9 +14,8 @@ class BaseLegacyTest(BaseBackendTest):
         super(BaseLegacyTest, self).setUp()
         self.strategy.set_settings({
             'SOCIAL_AUTH_{0}_FORM_URL'.format(self.name):
-                self.strategy.build_absolute_uri(
-                    '/login/{0}'.format(self.backend.name)
-                )
+                self.strategy.build_absolute_uri('/login/{0}'.format(
+                    self.backend.name))
         })
 
     def extra_settings(self):
@@ -25,7 +23,7 @@ class BaseLegacyTest(BaseBackendTest):
                     '/login/{0}'.format(self.backend.name)}
 
     def do_start(self):
-        start_url = self.strategy.build_absolute_uri(self.strategy.start().url)
+        start_url = self.strategy.build_absolute_uri(self.backend.start().url)
         HTTPretty.register_uri(
             HTTPretty.GET,
             start_url,
@@ -40,10 +38,10 @@ class BaseLegacyTest(BaseBackendTest):
             content_type='application/x-www-form-urlencoded'
         )
         response = requests.get(start_url)
-        expect(response.text).to.equal(self.form.format(self.complete_url))
+        self.assertEqual(response.text, self.form.format(self.complete_url))
         response = requests.post(
             self.complete_url,
             data=parse_qs(self.response_body)
         )
-        self.strategy.set_request_data(parse_qs(response.text))
-        return self.strategy.complete()
+        self.strategy.set_request_data(parse_qs(response.text), self.backend)
+        return self.backend.complete()

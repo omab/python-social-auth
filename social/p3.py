@@ -1,5 +1,6 @@
-import six
 # Python3 support, keep import hacks here
+
+import six
 
 if six.PY3:
     from urllib.parse import parse_qs, urlparse, urlunparse, quote, \
@@ -13,3 +14,7 @@ else:
     from urlparse import urlparse, urlunparse, urlsplit
     from urllib import urlencode, unquote, quote
     from StringIO import StringIO
+
+
+# Placate pyflakes
+parse_qs, urlparse, urlunparse, quote, urlsplit, urlencode, unquote, StringIO

@@ -16,5 +16,4 @@ class User(Base):
     email = Column(String(200))
     password = Column(String(200), default='')
     name = Column(String(100))
-    email = Column(String(200))
     active = Column(Boolean, default=True)

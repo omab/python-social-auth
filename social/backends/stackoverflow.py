@@ -20,15 +20,23 @@ class StackoverflowOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Stackoverflow account"""
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('display_name')
+        )
         return {'username': response.get('link').rsplit('/', 1)[-1],
-                'full_name': response.get('display_name')}
+                'full_name': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        return self.get_json('https://api.stackexchange.com/2.1/me',
-                             params={'site': 'stackoverflow',
-                                     'access_token': access_token,
-                                     'key': self.setting('API_KEY')}
+        return self.get_json(
+            'https://api.stackexchange.com/2.1/me',
+            params={
+                'site': 'stackoverflow',
+                'access_token': access_token,
+                'key': self.setting('API_KEY')
+            }
         )['items'][0]
 
     def request_access_token(self, *args, **kwargs):

@@ -4,7 +4,7 @@ Google OpenId, OAuth2, OAuth1, Google+ Sign-in backends, docs at:
 """
 from requests import HTTPError
 
-from social.backends.open_id import OpenIdAuth
+from social.backends.open_id import OpenIdAuth, OpenIdConnectAuth
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
 from social.exceptions import AuthMissingParameter, AuthCanceled
 
@@ -18,22 +18,61 @@ class BaseGoogleAuth(object):
             return details['email']
 
     def get_user_details(self, response):
-        """Return user details from Orkut account"""
-        email = response.get('email', '')
+        """Return user details from Google API account"""
+        if 'email' in response:
+            email = response['email']
+        elif 'emails' in response:
+            email = response['emails'][0]['value']
+        else:
+            email = ''
+
+        if isinstance(response.get('name'), dict):
+            names = response.get('name') or {}
+            name, given_name, family_name = (
+                response.get('displayName', ''),
+                names.get('givenName', ''),
+                names.get('familyName', '')
+            )
+        else:
+            name, given_name, family_name = (
+                response.get('name', ''),
+                response.get('given_name', ''),
+                response.get('family_name', '')
+            )
+
+        fullname, first_name, last_name = self.get_user_names(
+            name, given_name, family_name
+        )
         return {'username': email.split('@', 1)[0],
                 'email': email,
-                'fullname': response.get('name', ''),
-                'first_name': response.get('given_name', ''),
-                'last_name': response.get('family_name', '')}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
 
 class BaseGoogleOAuth2API(BaseGoogleAuth):
+    def get_scope(self):
+        """Return list with needed access scope"""
+        scope = self.setting('SCOPE', [])
+        if not self.setting('IGNORE_DEFAULT_SCOPE', False):
+            default_scope = []
+            if self.setting('USE_DEPRECATED_API', False):
+                default_scope = self.DEPRECATED_DEFAULT_SCOPE
+            else:
+                default_scope = self.DEFAULT_SCOPE
+            scope = scope + (default_scope or [])
+        return scope
+
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Google API"""
-        return self.get_json(
-            'https://www.googleapis.com/oauth2/v1/userinfo',
-            params={'access_token': access_token, 'alt': 'json'}
-        )
+        if self.setting('USE_DEPRECATED_API', False):
+            url = 'https://www.googleapis.com/oauth2/v1/userinfo'
+        else:
+            url = 'https://www.googleapis.com/plus/v1/people/me'
+        return self.get_json(url, params={
+            'access_token': access_token,
+            'alt': 'json'
+        })
 
 
 class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
@@ -45,8 +84,12 @@ class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
     REVOKE_TOKEN_METHOD = 'GET'
-    DEFAULT_SCOPE = ['https://www.googleapis.com/auth/userinfo.email',
-                     'https://www.googleapis.com/auth/userinfo.profile']
+    # The order of the default scope is important
+    DEFAULT_SCOPE = ['openid', 'email', 'profile']
+    DEPRECATED_DEFAULT_SCOPE = [
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile'
+    ]
     EXTRA_DATA = [
         ('refresh_token', 'refresh_token', True),
         ('expires_in', 'expires'),
@@ -64,13 +107,19 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
     name = 'google-plus'
     REDIRECT_STATE = False
     STATE_PARAMETER = False
+    AUTHORIZATION_URL = 'https://accounts.google.com/o/oauth2/auth'
     ACCESS_TOKEN_URL = 'https://accounts.google.com/o/oauth2/token'
     ACCESS_TOKEN_METHOD = 'POST'
     REVOKE_TOKEN_URL = 'https://accounts.google.com/o/oauth2/revoke'
     REVOKE_TOKEN_METHOD = 'GET'
-    DEFAULT_SCOPE = ['https://www.googleapis.com/auth/plus.login',
-                     'https://www.googleapis.com/auth/userinfo.email',
-                     'https://www.googleapis.com/auth/userinfo.profile']
+    DEFAULT_SCOPE = [
+        'https://www.googleapis.com/auth/plus.login',
+    ]
+    DEPRECATED_DEFAULT_SCOPE = [
+        'https://www.googleapis.com/auth/plus.login',
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile'
+    ]
     EXTRA_DATA = [
         ('id', 'user_id'),
         ('refresh_token', 'refresh_token', True),
@@ -81,18 +130,22 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
 
     def auth_complete_params(self, state=None):
         params = super(GooglePlusAuth, self).auth_complete_params(state)
-        params['redirect_uri'] = 'postmessage'
+        if self.data.get('access_token'):
+            # Don't add postmessage if this is plain server-side workflow
+            params['redirect_uri'] = 'postmessage'
         return params
 
     def auth_complete(self, *args, **kwargs):
-        token = self.data.get('access_token')
-        if not token:
-            raise AuthMissingParameter(self, 'access_token')
+        if 'access_token' in self.data and 'code' not in self.data:
+            raise AuthMissingParameter(self, 'access_token or code')
 
-        self.process_error(self.get_json(
-            'https://www.googleapis.com/oauth2/v1/tokeninfo',
-            params={'access_token': token}
-        ))
+        # Token won't be available in plain server-side workflow
+        token = self.data.get('access_token')
+        if token:
+            self.process_error(self.get_json(
+                'https://www.googleapis.com/oauth2/v1/tokeninfo',
+                params={'access_token': token}
+            ))
 
         try:
             response = self.request_access_token(
@@ -149,3 +202,15 @@ class GoogleOpenId(OpenIdAuth):
         http://axschema.org/contact/email
         """
         return details['email']
+
+
+class GoogleOpenIdConnect(GoogleOAuth2, OpenIdConnectAuth):
+    name = 'google-openidconnect'
+    ID_TOKEN_ISSUER = "accounts.google.com"
+
+    def user_data(self, access_token, *args, **kwargs):
+        """Return user data from Google API"""
+        return self.get_json(
+            'https://www.googleapis.com/plus/v1/people/me/openIdConnect',
+            params={'access_token': access_token, 'alt': 'json'}
+        )

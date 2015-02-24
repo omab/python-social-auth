@@ -12,11 +12,16 @@ class BaseRdio(OAuthAuth):
     ID_KEY = 'key'
 
     def get_user_details(self, response):
+        fullname, first_name, last_name = self.get_user_names(
+            fullname=response['displayName'],
+            first_name=response['firstName'],
+            last_name=response['lastName']
+        )
         return {
             'username': response['username'],
-            'first_name': response['firstName'],
-            'last_name': response['lastName'],
-            'fullname': response['displayName'],
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name
         }
 
 
@@ -60,7 +65,7 @@ class RdioOAuth2(BaseRdio, BaseOAuth2):
     ]
 
     def user_data(self, access_token, *args, **kwargs):
-        return self.get_json(RDIO_API, data={
+        return self.get_json(RDIO_API, method='POST', data={
             'method': 'currentUser',
             'extras': 'username,displayName,streamRegion',
             'access_token': access_token

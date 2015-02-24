@@ -4,7 +4,7 @@ Configuration
 Application setup
 -----------------
 
-Once the application was installed (check Installation_) define the following
+Once the application is installed (check Installation_) define the following
 settings to enable the application behavior. Also check the sections dedicated
 to each framework for detailed instructions.
 
@@ -97,7 +97,7 @@ User model
 ----------
 
 ``UserSocialAuth`` instances keep a reference to the ``User`` model of your
-project, since this is not know, the ``User`` model must be configured by
+project, since this is not known, the ``User`` model must be configured by
 a setting::
 
     SOCIAL_AUTH_USER_MODEL = 'foo.bar.User'
@@ -142,10 +142,6 @@ defaults to generating one if needed.
 An UUID is appended to usernames in case of collisions. Here are some settings
 to control usernames generation.
 
-``SOCIAL_AUTH_DEFAULT_USERNAME = 'foobar'``
-    Default value to use as username, can be a callable. An UUID will be
-    appended in case of duplicate entries.
-    
 ``SOCIAL_AUTH_UUID_LENGTH = 16``
     This controls the length of the UUID appended to usernames.
 
@@ -185,6 +181,24 @@ Also, you can send extra parameters on request token process by defining
 settings in the same way explained above but with this other suffix::
 
       <uppercase backend name>_REQUEST_TOKEN_EXTRA_ARGUMENTS = {...}
+
+Basic information is requested to the different providers in order to create
+a coherent user instance (with first and last name, email and full name), this
+could be too intrusive for some sites that want to ask users the minimum data
+possible. It's possible to override the default values requested by defining
+any of the following settings, for Open Id providers::
+
+    SOCIAL_AUTH_<BACKEND_NAME>_IGNORE_DEFAULT_AX_ATTRS = True
+    SOCIAL_AUTH_<BACKEND_NAME>_AX_SCHEMA_ATTRS = [
+        (schema, alias)
+    ]
+
+For OAuth backends::
+
+    SOCIAL_AUTH_<BACKEND_NAME>_IGNORE_DEFAULT_SCOPE = True
+    SOCIAL_AUTH_<BACKEND_NAME>_SCOPE = [
+        ...
+    ]
 
 
 Processing redirects and urlopen
@@ -245,11 +259,15 @@ Miscellaneous settings
     objects, such as ``email``. Set this to a list of fields you only want to
     set for newly created users and avoid updating on further logins.
 
-``SOCIAL_AUTH_SESSION_EXPIRATION = True``
-    Some providers return the time that the access token will live, the value is
-    stored in ``UserSocialAuth.extra_data`` under the key ``expires``. By default
-    the current user session is set to expire if this value is present, this
-    behavior can be disabled by setting.
+``SOCIAL_AUTH_SESSION_EXPIRATION = False``
+    By default, user session expiration time will be set by your web
+    framework (in Django, for example, it is set with
+    `SESSION_COOKIE_AGE`_). Some providers return the time that the
+    access token will live, which is stored in ``UserSocialAuth.extra_data``
+    under the key ``expires``. Changing this setting to True will override your
+    web framework's session length setting and set user session lengths to
+    match the ``expires`` value from the auth provider.
+
 
 ``SOCIAL_AUTH_OPENID_PAPE_MAX_AUTH_AGE = <int value>``
     Enable `OpenID PAPE`_ extension support by defining this setting.
@@ -261,6 +279,12 @@ Miscellaneous settings
 
     In this case ``foo`` field's value will be stored when user follows this
     link ``<a href="{% url socialauth_begin 'github' %}?foo=bar">...</a>``.
+
+``SOCIAL_AUTH_PASSWORDLESS = False``
+    When this setting is ``True`` and ``social.pipeline.mail.send_validation``
+    is enabled, it allows the implementation of a `passwordless authentication
+    mechanism`_. Example of this implementation can be found at
+    psa-passwordless_.
 
 
 Account disconnection
@@ -277,3 +301,6 @@ using POST.
 .. _Installation: ../installing.html
 .. _Backends: ../backends/index.html
 .. _OAuth: http://oauth.net/
+.. _passwordless authentication mechanism: https://medium.com/@ninjudd/passwords-are-obsolete-9ed56d483eb
+.. _psa-passwordless: https://github.com/omab/psa-passwordless
+.. _SESSION_COOKIE_AGE: https://docs.djangoproject.com/en/1.7/ref/settings/#std:setting-SESSION_COOKIE_AGE

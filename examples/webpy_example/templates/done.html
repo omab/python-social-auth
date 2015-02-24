@@ -4,13 +4,15 @@
 Logged in as {{ user.username }}!
 
 <p>Associated:</p>
-<ul>
-  {% for assoc in backends["associated"] %}
-    <li>
-      {{ assoc.provider }} (<a href="/disconnect/{{ assoc.provider }}/{{ assoc.id }}/" class="disconnect">Disconnect</a>)
-    </li>
-  {% endfor %}
-</ul>
+
+{% for assoc in backends["associated"] %}
+  <div>
+    {{ assoc.provider }}
+    <form action="/disconnect/{{ assoc.provider }}/{{ assoc.id }}/" method="post">
+      <button>Disconnect</button>
+    </form>
+  </div>
+{% endfor %}
 
 <p>Associate:</p>
 <ul>

@@ -19,12 +19,13 @@ class TestTemplateStrategy(BaseTemplateStrategy):
 
 
 class TestStrategy(BaseStrategy):
-    def __init__(self, *args, **kwargs):
+    DEFAULT_TEMPLATE_STRATEGY = TestTemplateStrategy
+
+    def __init__(self, storage, tpl=None):
         self._request_data = {}
         self._settings = {}
         self._session = {}
-        kwargs.setdefault('tpl', TestTemplateStrategy)
-        super(TestStrategy, self).__init__(*args, **kwargs)
+        super(TestStrategy, self).__init__(storage, tpl)
 
     def redirect(self, url):
         return Redirect(url)
@@ -71,8 +72,9 @@ class TestStrategy(BaseStrategy):
     def set_settings(self, values):
         self._settings.update(values)
 
-    def set_request_data(self, values):
+    def set_request_data(self, values, backend):
         self._request_data.update(values)
+        backend.data = self._request_data
 
     def remove_from_request_data(self, name):
         self._request_data.pop(name, None)

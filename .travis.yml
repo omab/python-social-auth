@@ -1,10 +1,19 @@
 language: python
+env:
+  global:
+    - TEST_REQUIREMENTS=social/tests/requirements.txt
 python:
   - "2.6"
   - "2.7"
-  - "3.3"
+  - "pypy"
+matrix:
+  include:
+    - python: "3.3"
+      env: TEST_REQUIREMENTS=social/tests/requirements-python3.txt
+    - python: "3.4"
+      env: TEST_REQUIREMENTS=social/tests/requirements-python3.txt
 install:
   - "python setup.py -q install"
-  - "pip install -r social/tests/requirements.txt --use-mirrors"
+  - "travis_retry pip install -r $TEST_REQUIREMENTS"
 script:
   - "nosetests --with-coverage --cover-package=social --where=social/tests"

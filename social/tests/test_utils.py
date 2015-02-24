@@ -1,8 +1,7 @@
 import sys
-import unittest
+import unittest2 as unittest
 
 from mock import Mock
-from sure import expect
 
 from social.utils import sanitize_redirect, user_is_authenticated, \
                          user_is_active, slugify, build_absolute_uri, \
@@ -14,82 +13,81 @@ PY3 = sys.version_info[0] == 3
 
 class SanitizeRedirectTest(unittest.TestCase):
     def test_none_redirect(self):
-        expect(sanitize_redirect('myapp.com', None)).to.equal(None)
+        self.assertEqual(sanitize_redirect('myapp.com', None), None)
 
     def test_empty_redirect(self):
-        expect(sanitize_redirect('myapp.com', '')).to.equal(None)
+        self.assertEqual(sanitize_redirect('myapp.com', ''), None)
 
     def test_dict_redirect(self):
-        expect(sanitize_redirect('myapp.com', {})).to.equal(None)
+        self.assertEqual(sanitize_redirect('myapp.com', {}), None)
 
     def test_invalid_redirect(self):
-        expect(sanitize_redirect('myapp.com',
-                                 {'foo': 'bar'})).to.equal(None)
+        self.assertEqual(sanitize_redirect('myapp.com', {'foo': 'bar'}), None)
 
     def test_wrong_path_redirect(self):
-        expect(sanitize_redirect(
-            'myapp.com',
-            'http://notmyapp.com/path/'
-        )).to.equal(None)
+        self.assertEqual(
+            sanitize_redirect('myapp.com', 'http://notmyapp.com/path/'),
+            None
+        )
 
     def test_valid_absolute_redirect(self):
-        expect(sanitize_redirect(
-            'myapp.com',
+        self.assertEqual(
+            sanitize_redirect('myapp.com', 'http://myapp.com/path/'),
             'http://myapp.com/path/'
-        )).to.equal('http://myapp.com/path/')
+        )
 
     def test_valid_relative_redirect(self):
-        expect(sanitize_redirect('myapp.com', '/path/')).to.equal('/path/')
+        self.assertEqual(sanitize_redirect('myapp.com', '/path/'), '/path/')
 
 
 class UserIsAuthenticatedTest(unittest.TestCase):
     def test_user_is_none(self):
-        expect(user_is_authenticated(None)).to.equal(False)
+        self.assertEqual(user_is_authenticated(None), False)
 
     def test_user_is_not_none(self):
-        expect(user_is_authenticated(object())).to.equal(True)
+        self.assertEqual(user_is_authenticated(object()), True)
 
     def test_user_has_is_authenticated(self):
         class User(object):
             is_authenticated = True
-        expect(user_is_authenticated(User())).to.equal(True)
+        self.assertEqual(user_is_authenticated(User()), True)
 
     def test_user_has_is_authenticated_callable(self):
         class User(object):
             def is_authenticated(self):
                 return True
-        expect(user_is_authenticated(User())).to.equal(True)
+        self.assertEqual(user_is_authenticated(User()), True)
 
 
 class UserIsActiveTest(unittest.TestCase):
     def test_user_is_none(self):
-        expect(user_is_active(None)).to.equal(False)
+        self.assertEqual(user_is_active(None), False)
 
     def test_user_is_not_none(self):
-        expect(user_is_active(object())).to.equal(True)
+        self.assertEqual(user_is_active(object()), True)
 
     def test_user_has_is_active(self):
         class User(object):
             is_active = True
-        expect(user_is_active(User())).to.equal(True)
+        self.assertEqual(user_is_active(User()), True)
 
     def test_user_has_is_active_callable(self):
         class User(object):
             def is_active(self):
                 return True
-        expect(user_is_active(User())).to.equal(True)
+        self.assertEqual(user_is_active(User()), True)
 
 
 class SlugifyTest(unittest.TestCase):
     def test_slugify_formats(self):
         if PY3:
-            expect(slugify('FooBar')).to.equal('foobar')
-            expect(slugify('Foo Bar')).to.equal('foo-bar')
-            expect(slugify('Foo (Bar)')).to.equal('foo-bar')
+            self.assertEqual(slugify('FooBar'), 'foobar')
+            self.assertEqual(slugify('Foo Bar'), 'foo-bar')
+            self.assertEqual(slugify('Foo (Bar)'), 'foo-bar')
         else:
-            expect(slugify('FooBar'.decode('utf-8'))).to.equal('foobar')
-            expect(slugify('Foo Bar'.decode('utf-8'))).to.equal('foo-bar')
-            expect(slugify('Foo (Bar)'.decode('utf-8'))).to.equal('foo-bar')
+            self.assertEqual(slugify('FooBar'.decode('utf-8')), 'foobar')
+            self.assertEqual(slugify('Foo Bar'.decode('utf-8')), 'foo-bar')
+            self.assertEqual(slugify('Foo (Bar)'.decode('utf-8')), 'foo-bar')
 
 
 class BuildAbsoluteURITest(unittest.TestCase):
@@ -100,50 +98,52 @@ class BuildAbsoluteURITest(unittest.TestCase):
         self.host = None
 
     def test_path_none(self):
-        expect(build_absolute_uri(self.host)).to.equal(self.host)
+        self.assertEqual(build_absolute_uri(self.host), self.host)
 
     def test_path_empty(self):
-        expect(build_absolute_uri(self.host, '')).to.equal(self.host)
+        self.assertEqual(build_absolute_uri(self.host, ''), self.host)
 
     def test_path_http(self):
-        expect(build_absolute_uri(self.host, 'http://barfoo.com')) \
-              .to.equal('http://barfoo.com')
+        self.assertEqual(build_absolute_uri(self.host, 'http://barfoo.com'),
+                         'http://barfoo.com')
 
     def test_path_https(self):
-        expect(build_absolute_uri(self.host, 'https://barfoo.com')) \
-              .to.equal('https://barfoo.com')
+        self.assertEqual(build_absolute_uri(self.host, 'https://barfoo.com'),
+                         'https://barfoo.com')
 
     def test_host_ends_with_slash_and_path_starts_with_slash(self):
-        expect(build_absolute_uri(self.host + '/', '/foo/bar')) \
-              .to.equal('http://foobar.com/foo/bar')
+        self.assertEqual(build_absolute_uri(self.host + '/', '/foo/bar'),
+                         'http://foobar.com/foo/bar')
 
     def test_absolute_uri(self):
-        expect(build_absolute_uri(self.host, '/foo/bar')) \
-              .to.equal('http://foobar.com/foo/bar')
+        self.assertEqual(build_absolute_uri(self.host, '/foo/bar'),
+                         'http://foobar.com/foo/bar')
 
 
 class PartialPipelineData(unittest.TestCase):
     def test_kwargs_included_in_result(self):
-        strategy = self._strategy()
-        kwargitem = ('foo', 'bar')
-        _, xkwargs = partial_pipeline_data(strategy, None,
-                                           *(), **dict([kwargitem]))
-        xkwargs.should.have.key(kwargitem[0]).being.equal(kwargitem[1])
+        backend = self._backend()
+        key, val = ('foo', 'bar')
+        _, xkwargs = partial_pipeline_data(backend, None,
+                                           *(), **dict([(key, val)]))
+        self.assertTrue(key in xkwargs)
+        self.assertEqual(xkwargs[key], val)
 
     def test_update_user(self):
         user = object()
-        strategy = self._strategy(session_kwargs={'user': None})
-        _, xkwargs = partial_pipeline_data(strategy, user)
-        xkwargs.should.have.key('user').being.equal(user)
+        backend = self._backend(session_kwargs={'user': None})
+        _, xkwargs = partial_pipeline_data(backend, user)
+        self.assertTrue('user' in xkwargs)
+        self.assertEqual(xkwargs['user'], user)
 
-    def _strategy(self, session_kwargs=None):
-        backend = Mock()
-        backend.name = 'mock-backend'
-
+    def _backend(self, session_kwargs=None):
         strategy = Mock()
         strategy.request = None
-        strategy.backend = backend
         strategy.session_get.return_value = object()
         strategy.partial_from_session.return_value = \
-            (0, backend.name, [], session_kwargs or {})
-        return strategy
+            (0, 'mock-backend', [], session_kwargs or {})
+
+        backend = Mock()
+        backend.name = 'mock-backend'
+        backend.strategy = strategy
+        return backend

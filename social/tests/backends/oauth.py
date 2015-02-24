@@ -1,10 +1,9 @@
 import requests
 
-from sure import expect
 from httpretty import HTTPretty
 
 from social.p3 import urlparse
-from social.utils import parse_qs
+from social.utils import parse_qs, url_add_parameters
 
 from social.tests.models import User
 from social.tests.backends.base import BaseBackendTest
@@ -29,15 +28,21 @@ class BaseOAuthTest(BaseBackendTest):
                 'POST': HTTPretty.POST}[method]
 
     def handle_state(self, start_url, target_url):
-        try:
-            if self.backend.STATE_PARAMETER or self.backend.REDIRECT_STATE:
-                query = parse_qs(urlparse(start_url).query)
-                target_url = target_url + ('?' in target_url and '&' or '?')
-                if 'state' in query or 'redirect_state' in query:
-                    name = 'state' in query and 'state' or 'redirect_state'
-                    target_url += '{0}={1}'.format(name, query[name])
-        except AttributeError:
-            pass
+        start_query = parse_qs(urlparse(start_url).query)
+        redirect_uri = start_query.get('redirect_uri')
+
+        if getattr(self.backend, 'STATE_PARAMETER', False):
+            if start_query.get('state'):
+                target_url = url_add_parameters(target_url, {
+                    'state': start_query['state']
+                })
+
+        if redirect_uri and getattr(self.backend, 'REDIRECT_STATE', False):
+            redirect_query = parse_qs(urlparse(redirect_uri).query)
+            if redirect_query.get('redirect_state'):
+                target_url = url_add_parameters(target_url, {
+                    'redirect_state': redirect_query['redirect_state']
+                })
         return target_url
 
     def auth_handlers(self, start_url):
@@ -54,7 +59,7 @@ class BaseOAuthTest(BaseBackendTest):
                                status=200,
                                body='foobar')
         HTTPretty.register_uri(self._method(self.backend.ACCESS_TOKEN_METHOD),
-                               uri=self.backend.ACCESS_TOKEN_URL,
+                               uri=self.backend.access_token_url(),
                                status=self.access_token_status,
                                body=self.access_token_body or '',
                                content_type='text/json')
@@ -66,13 +71,14 @@ class BaseOAuthTest(BaseBackendTest):
         return target_url
 
     def do_start(self):
-        start_url = self.strategy.start().url
+        start_url = self.backend.start().url
         target_url = self.auth_handlers(start_url)
         response = requests.get(start_url)
-        expect(response.url).to.equal(target_url)
-        expect(response.text).to.equal('foobar')
-        self.strategy.set_request_data(parse_qs(urlparse(target_url).query))
-        return self.strategy.complete()
+        self.assertEqual(response.url, target_url)
+        self.assertEqual(response.text, 'foobar')
+        self.strategy.set_request_data(parse_qs(urlparse(target_url).query),
+                                       self.backend)
+        return self.backend.complete()
 
 
 class OAuth1Test(BaseOAuthTest):
@@ -101,8 +107,7 @@ class OAuth2Test(BaseOAuthTest):
     def do_refresh_token(self):
         self.do_login()
         HTTPretty.register_uri(self._method(self.backend.REFRESH_TOKEN_METHOD),
-                               self.backend.REFRESH_TOKEN_URL or
-                               self.backend.ACCESS_TOKEN_URL,
+                               self.backend.refresh_token_url(),
                                status=200,
                                body=self.refresh_token_body)
         user = list(User.cache.values())[0]

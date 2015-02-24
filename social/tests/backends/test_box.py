@@ -1,7 +1,5 @@
 import json
 
-from sure import expect
-
 from social.tests.backends.oauth import OAuth2Test
 
 
@@ -66,6 +64,5 @@ class BoxOAuth2Test(OAuth2Test):
 
     def test_refresh_token(self):
         user, social = self.do_refresh_token()
-        expect(social.extra_data['access_token']).to.equal(
-            'T9cE5asGnuyYCCqIZFoWjFHvNbvVqHjl'
-        )
+        self.assertEqual(social.extra_data['access_token'],
+                         'T9cE5asGnuyYCCqIZFoWjFHvNbvVqHjl')

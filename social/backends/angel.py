@@ -11,15 +11,14 @@ class AngelOAuth2(BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     ACCESS_TOKEN_URL = 'https://angel.co/api/oauth/token/'
     REDIRECT_STATE = False
-    STATE_PARAMETER = False
 
     def get_user_details(self, response):
         """Return user details from Angel account"""
         username = response['angellist_url'].split('/')[-1]
-        first_name = response['name'].split(' ')[0]
-        last_name = response['name'].split(' ')[-1]
         email = response.get('email', '')
+        fullname, first_name, last_name = self.get_user_names(response['name'])
         return {'username': username,
+                'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name,
                 'email': email}

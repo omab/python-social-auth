@@ -3,6 +3,8 @@ import re
 import time
 import base64
 import uuid
+import warnings
+
 from datetime import datetime, timedelta
 
 import six
@@ -25,7 +27,7 @@ class UserMixin(object):
     def get_backend(self, strategy=None):
         strategy = strategy or get_current_strategy()
         if strategy:
-            return get_backend(strategy.backends, self.provider)
+            return get_backend(strategy.get_backends(), self.provider)
 
     def get_backend_instance(self, strategy=None):
         strategy = strategy or get_current_strategy()
@@ -34,9 +36,14 @@ class UserMixin(object):
             return Backend(strategy=strategy)
 
     @property
-    def tokens(self):
+    def access_token(self):
         """Return access_token stored in extra_data or None"""
         return self.extra_data.get('access_token')
+
+    @property
+    def tokens(self):
+        warnings.warn('tokens is deprecated, use access_token instead')
+        return self.access_token
 
     def refresh_token(self, strategy, *args, **kwargs):
         token = self.extra_data.get('refresh_token') or \
@@ -88,6 +95,11 @@ class UserMixin(object):
             return True
 
     @classmethod
+    def clean_username(cls, value):
+        """Clean username removing any unsupported character"""
+        return CLEAN_USERNAME_REGEX.sub('', value)
+
+    @classmethod
     def changed(cls, user):
         """The given user instance is ready to be saved"""
         raise NotImplementedError('Implement in subclass')
@@ -106,10 +118,6 @@ class UserMixin(object):
     def username_max_length(cls):
         """Return the max length for username"""
         raise NotImplementedError('Implement in subclass')
-
-    @classmethod
-    def clean_username(cls, value):
-        return CLEAN_USERNAME_REGEX.sub('', value)
 
     @classmethod
     def allowed_to_disconnect(cls, user, backend_name, association_id=None):
@@ -187,9 +195,8 @@ class AssociationMixin(object):
         kwargs = {'server_url': server_url}
         if handle is not None:
             kwargs['handle'] = handle
-        return sorted([
-            (assoc.id, cls.openid_association(assoc))
-                for assoc in cls.get(**kwargs)
+        return sorted([(assoc.id, cls.openid_association(assoc))
+            for assoc in cls.get(**kwargs)
         ], key=lambda x: x[1].issued, reverse=True)
 
     @classmethod

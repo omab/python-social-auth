@@ -17,6 +17,12 @@ class PyramidTemplateStrategy(BaseTemplateStrategy):
 
 
 class PyramidStrategy(BaseStrategy):
+    DEFAULT_TEMPLATE_STRATEGY = PyramidTemplateStrategy
+
+    def __init__(self, storage, request, tpl=None):
+        self.request = request
+        super(PyramidStrategy, self).__init__(storage, tpl)
+
     def redirect(self, url):
         """Return a response redirect to the given URL"""
         return HTTPFound(location=url)

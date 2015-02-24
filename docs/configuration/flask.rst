@@ -8,19 +8,23 @@ details on how to enable this application on Flask.
 Dependencies
 ------------
 
-The `Flask built-in app` depends on sqlalchemy_, there's no support for others
-ORMs yet but pull-requests are welcome.
+The `Flask built-in app` depends on sqlalchemy_, there's initial support for
+MongoEngine_ ORM too (check below for more details).
 
 
 Enabling the application
 ------------------------
 
-The application defines a `Flask Blueprint`_, which needs to be registered once
-the Flask app is configured::
+The applications define a `Flask Blueprint`_, which needs to be registered once
+the Flask app is configured by::
 
     from social.apps.flask_app.routes import social_auth
 
     app.register_blueprint(social_auth)
+
+For MongoEngine_ you need this setting::
+
+    SOCIAL_AUTH_STORAGE = 'social.apps.flask_app.me.models.FlaskStorage'
 
 
 Models Setup
@@ -31,7 +35,13 @@ because they need the reference to the current db instance and the User model
 used on your project (check *User model reference* below). Once the Flask app
 and the database are defined, call ``init_social`` to register the models::
 
-    from social.apps.flask_app.models import init_social
+    from social.apps.flask_app.default.models import init_social
+
+    init_social(app, db)
+
+For MongoEngine_::
+
+    from social.apps.flask_app.me.models import init_social
 
     init_social(app, db)
 
@@ -91,8 +101,34 @@ handlers to these::
             return {'user': None}
 
 
+Exceptions handling
+-------------------
+
+The Django application has a middleware (that fits in the framework
+architecture) to facilitate the different exceptions_ handling raised by
+python-social-auth_. The same can be accomplished (even on a simpler way) in
+Flask by defining an errorhandler_. For example the next code will redirect any
+social-auth exception to a ``/socialerror`` URL::
+
+    from social.exceptions import SocialAuthBaseException
+
+
+    @app.errorhandler(500)
+    def error_handler(error):
+        if isinstance(error, SocialAuthBaseException):
+            return redirect('/socialerror')
+
+
+Be sure to set your debug and test flags to ``False`` when testing this on your
+development environment, otherwise the exception will be raised and error
+handlers won't be called.
+
+
 .. _Flask Blueprint: http://flask.pocoo.org/docs/blueprints/
 .. _Flask-Login: https://github.com/maxcountryman/flask-login
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _Flask built-in app: https://github.com/omab/python-social-auth/tree/master/social/apps/flask_app
 .. _sqlalchemy: http://www.sqlalchemy.org/
+.. _exceptions: https://github.com/omab/python-social-auth/blob/master/social/exceptions.py
+.. _errorhandler: http://flask.pocoo.org/docs/api/#flask.Flask.errorhandler
+.. _MongoEngine: http://mongoengine.org

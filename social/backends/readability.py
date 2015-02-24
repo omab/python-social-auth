@@ -21,9 +21,14 @@ class ReadabilityOAuth(BaseOAuth1):
                   ('email_into_address', 'email_into_address')]
 
     def get_user_details(self, response):
+        fullname, first_name, last_name = self.get_user_names(
+            first_name=response['first_name'],
+            last_name=response['last_name']
+        )
         return {'username': response['username'],
-                'first_name': response['first_name'],
-                'last_name': response['last_name']}
+                'fullname': fullname,
+                'first_name': first_name,
+                'last_name': last_name}
 
     def user_data(self, access_token):
         return self.get_json(READABILITY_API + '/users/_current',

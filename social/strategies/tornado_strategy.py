@@ -16,16 +16,19 @@ class TornadoTemplateStrategy(BaseTemplateStrategy):
 
 
 class TornadoStrategy(BaseStrategy):
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault('tpl', TornadoTemplateStrategy)
-        self.request_handler = kwargs.get('request_handler')
-        super(TornadoStrategy, self).__init__(*args, **kwargs)
+    DEFAULT_TEMPLATE_STRATEGY = TornadoTemplateStrategy
+
+    def __init__(self, storage, request_handler, tpl=None):
+        self.request_handler = request_handler
+        self.request = self.request_handler.request
+        super(TornadoStrategy, self).__init__(storage, tpl)
 
     def get_setting(self, name):
         return self.request_handler.settings[name]
 
     def request_data(self, merge=True):
-        return self.request.arguments.copy()
+        # Multiple valued arguments not supported yet
+        return {key: val[0] for key, val in self.request.arguments.iteritems()}
 
     def request_host(self):
         return self.request.host
@@ -37,7 +40,7 @@ class TornadoStrategy(BaseStrategy):
         self.request_handler.write(content)
 
     def session_get(self, name, default=None):
-        return self.request_handler.get_secure_cookie(name, value=default)
+        return self.request_handler.get_secure_cookie(name) or default
 
     def session_set(self, name, value):
         self.request_handler.set_secure_cookie(name, str(value))

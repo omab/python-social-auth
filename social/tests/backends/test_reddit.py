@@ -1,7 +1,5 @@
 import json
 
-from sure import expect
-
 from social.tests.backends.oauth import OAuth2Test
 
 
@@ -58,4 +56,4 @@ class RedditOAuth2Test(OAuth2Test):
 
     def test_refresh_token(self):
         user, social = self.do_refresh_token()
-        expect(social.extra_data['access_token']).to.equal('foobar-new-token')
+        self.assertEqual(social.extra_data['access_token'], 'foobar-new-token')

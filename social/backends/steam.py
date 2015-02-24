@@ -34,6 +34,12 @@ class SteamOpenId(OpenIdAuth):
             details = {}
         return details
 
+    def consumer(self):
+        # Steam seems to support stateless mode only, ignore store
+        if not hasattr(self, '_consumer'):
+            self._consumer = self.create_consumer()
+        return self._consumer
+
     def _user_id(self, response):
         user_id = response.identity_url.rsplit('/', 1)[-1]
         if not user_id.isdigit():

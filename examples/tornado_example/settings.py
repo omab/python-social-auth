@@ -36,11 +36,13 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.thisismyjam.ThisIsMyJamOAuth1',
     'social.backends.stocktwits.StocktwitsOAuth2',
     'social.backends.tripit.TripItOAuth',
+    'social.backends.clef.ClefOAuth2',
     'social.backends.twilio.TwilioAuth',
     'social.backends.xing.XingOAuth',
     'social.backends.yandex.YandexOAuth2',
     'social.backends.podio.PodioOAuth2',
     'social.backends.reddit.RedditOAuth2',
+    'social.backends.mineid.MineIDOAuth2',
 )
 
 from local_settings import *

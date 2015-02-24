@@ -32,7 +32,7 @@ def long_description():
 def path_tokens(path):
     if not path:
         return []
-    head, tail = os.path.split(path)
+    head, tail = split(path)
     return path_tokens(head) + [tail]
 
 
@@ -46,7 +46,7 @@ def get_packages():
     return packages
 
 
-requires = ['requests>=1.1.0', 'oauthlib>=0.3.8', 'six>=1.2.0']
+requires = ['requests>=1.1.0', 'oauthlib>=0.3.8', 'six>=1.2.0', 'PyJWT==0.4.1']
 if PY3:
     requires += ['python3-openid>=3.0.1',
                  'requests-oauthlib>=0.3.0,<0.3.2']
@@ -63,7 +63,7 @@ setup(name='python-social-auth',
       keywords='django, flask, pyramid, webpy, openid, oauth, social auth',
       url='https://github.com/omab/python-social-auth',
       packages=get_packages(),
-      #package_data={'social': ['locale/*/LC_MESSAGES/*']},
+      # package_data={'social': ['locale/*/LC_MESSAGES/*']},
       long_description=long_description(),
       install_requires=requires,
       classifiers=['Development Status :: 4 - Beta',
@@ -75,5 +75,6 @@ setup(name='python-social-auth',
                    'Programming Language :: Python :: 2.6',
                    'Programming Language :: Python :: 2.7',
                    'Programming Language :: Python :: 3'],
+      tests_require=['sure>=1.2.5', 'httpretty>=0.8.0', 'mock>=1.0.1'],
       test_suite='social.tests',
       zip_safe=False)

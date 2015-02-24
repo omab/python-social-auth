@@ -1,6 +1,5 @@
 import requests
 
-from sure import expect
 from httpretty import HTTPretty
 
 from social.actions import do_disconnect
@@ -15,16 +14,15 @@ class DisconnectActionTest(BaseActionTest):
     def test_not_allowed_to_disconnect(self):
         self.do_login()
         user = User.get(self.expected_username)
-        do_disconnect.when.called_with(self.strategy, user).should.throw(
-            NotAllowedToDisconnect
-        )
+        with self.assertRaises(NotAllowedToDisconnect):
+            do_disconnect(self.backend, user)
 
     def test_disconnect(self):
         self.do_login()
         user = User.get(self.expected_username)
         user.password = 'password'
-        do_disconnect(self.strategy, user)
-        expect(len(user.social)).to.equal(0)
+        do_disconnect(self.backend, user)
+        self.assertEqual(len(user.social), 0)
 
     def test_disconnect_with_partial_pipeline(self):
         self.strategy.set_settings({
@@ -40,10 +38,10 @@ class DisconnectActionTest(BaseActionTest):
         })
         self.do_login()
         user = User.get(self.expected_username)
-        redirect = do_disconnect(self.strategy, user)
+        redirect = do_disconnect(self.backend, user)
 
         url = self.strategy.build_absolute_uri('/password')
-        expect(redirect.url).to.equal(url)
+        self.assertEqual(redirect.url, url)
         HTTPretty.register_uri(HTTPretty.GET, redirect.url, status=200,
                                body='foobar')
         HTTPretty.register_uri(HTTPretty.POST, redirect.url, status=200)
@@ -52,8 +50,8 @@ class DisconnectActionTest(BaseActionTest):
         requests.get(url)
         requests.post(url, data={'password': password})
         data = parse_qs(HTTPretty.last_request.body)
-        expect(data['password']).to.equal(password)
+        self.assertEqual(data['password'], password)
         self.strategy.session_set('password', data['password'])
 
-        redirect = do_disconnect(self.strategy, user)
-        expect(len(user.social)).to.equal(0)
+        redirect = do_disconnect(self.backend, user)
+        self.assertEqual(len(user.social), 0)

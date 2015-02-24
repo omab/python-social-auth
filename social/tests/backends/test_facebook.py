@@ -37,9 +37,9 @@ class FacebookOAuth2WrongUserDataTest(FacebookOAuth2Test):
     user_data_body = 'null'
 
     def test_login(self):
-        self.do_login.when.called_with().should.throw(AuthUnknownError)
+        with self.assertRaises(AuthUnknownError):
+            self.do_login()
 
     def test_partial_pipeline(self):
-        self.do_partial_pipeline.when.called_with().should.throw(
-            AuthUnknownError
-        )
+        with self.assertRaises(AuthUnknownError):
+            self.do_partial_pipeline()
