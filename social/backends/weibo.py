@@ -5,7 +5,7 @@ Weibo OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/weibo.html
 """
 from social.backends.oauth import BaseOAuth2
-import json
+
 
 class WeiboOAuth2(BaseOAuth2):
     """Weibo (of sina) OAuth authentication backend"""
