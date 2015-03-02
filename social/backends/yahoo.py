@@ -17,7 +17,7 @@ class YahooOpenId(OpenIdAuth):
 
 
 class YahooOAuth(BaseOAuth1):
-    """Yahoo OAuth authentication backend"""
+    """Yahoo OAuth authentication backend. DEPRECATED"""
     name = 'yahoo-oauth'
     ID_KEY = 'guid'
     AUTHORIZATION_URL = 'https://api.login.yahoo.com/oauth/v2/request_auth'
@@ -85,7 +85,10 @@ class YahooOAuth2(BaseOAuth2):
         return None, None, None
 
     def get_user_details(self, response):
-        """Return user details from Yahoo Profile"""
+        """
+            Return user details from Yahoo Profile.
+            To Get user email you need the profile private read permission.
+        """
         fullname, first_name, last_name = self.get_user_names(
             first_name=response.get('givenName'),
             last_name=response.get('familyName')
