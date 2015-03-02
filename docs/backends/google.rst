@@ -64,7 +64,7 @@ done by their Javascript which thens calls a defined handler to complete the
 auth process.
 
 * To enable the backend create an application using the `Google console`_ and
-  following the steps from the `official guide`_.
+  following the steps from the `official guide`_. Make sure to enable the Google+ API in the console.
 
 * Fill in the key settings looking inside the Google console the subsection
   ``Credentials`` inside ``API & auth``::
