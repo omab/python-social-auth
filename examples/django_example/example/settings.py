@@ -151,6 +151,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOpenIdConnect',
     'social.backends.instagram.InstagramOAuth2',
     'social.backends.jawbone.JawboneOAuth2',
+    'social.backends.kakao.KakaoOAuth2',
     'social.backends.linkedin.LinkedinOAuth',
     'social.backends.linkedin.LinkedinOAuth2',
     'social.backends.live.LiveOAuth2',
