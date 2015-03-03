@@ -11,6 +11,7 @@ class KakaoOAuth2(BaseOAuth2):
     AUTHORIZATION_URL = 'https://kauth.kakao.com/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://kauth.kakao.com/oauth/token'
     ACCESS_TOKEN_METHOD = 'POST'
+    REDIRECT_STATE = False
 
     def get_user_id(self, details, response):
         return response['id']
