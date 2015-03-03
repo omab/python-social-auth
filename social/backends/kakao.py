@@ -31,3 +31,10 @@ class KakaoOAuth2(BaseOAuth2):
         """Loads user data from service"""
         return self.get_json('https://kapi.kakao.com/v1/user/me',
                              params={'access_token': access_token})
+
+    def auth_complete_params(self, state=None):
+        return {
+            'grant_type': 'authorization_code',
+            'code': self.data.get('code', ''),
+            'client_id': self.get_key_and_secret()[0],
+        }
