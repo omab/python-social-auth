@@ -118,7 +118,7 @@ or current ones extended):
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
     * Xing_ OAuth1
-    * Yahoo_ OpenId and OAuth1
+    * Yahoo_ OpenId and OAuth2
     * Yammer_ OAuth2
     * Yandex_ OAuth1, OAuth2 and OpenId
     * Zotero_ OAuth1
