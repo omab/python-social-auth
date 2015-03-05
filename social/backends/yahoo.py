@@ -55,8 +55,8 @@ class YahooOAuth(BaseOAuth1):
 
     def _get_guid(self, access_token):
         """
-            Beause you have to provide GUID for every API request
-            it's also returned during one of OAuth calls
+        Beause you have to provide GUID for every API request it's also
+        returned during one of OAuth calls
         """
         return self.get_json(
             'https://social.yahooapis.com/v1/me/guid?format=json',
@@ -81,33 +81,37 @@ class YahooOAuth2(BaseOAuth2):
 
     def get_user_names(self, first_name, last_name):
         if first_name or last_name:
-            return " ".join((first_name, last_name)), first_name, last_name
+            return ' '.join((first_name, last_name)), first_name, last_name
         return None, None, None
 
     def get_user_details(self, response):
         """
-            Return user details from Yahoo Profile.
-            To Get user email you need the profile private read permission.
+        Return user details from Yahoo Profile.
+        To Get user email you need the profile private read permission.
         """
         fullname, first_name, last_name = self.get_user_names(
             first_name=response.get('givenName'),
             last_name=response.get('familyName')
         )
         emails = [email for email in response.get('emails', [])
-                        if email.get('handle')]
+                        if 'handle' in email]
         emails.sort(key=lambda e: e.get('primary', False), reverse=True)
-        return {'username': response.get('nickname'),
-                'email': emails[0]['handle'] if emails else response.get('guid', ''),
-                'fullname': fullname,
-                'first_name': first_name,
-                'last_name': last_name}
+        email = emails[0]['handle'] if emails else response.get('guid', '')
+        return {
+            'username': response.get('nickname'),
+            'email': email,
+            'fullname': fullname,
+            'first_name': first_name,
+            'last_name': last_name
+        }
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        url = 'https://social.yahooapis.com/v1/user/{0}/profile?format=json'.format(
-                kwargs['response']['xoauth_yahoo_guid'])
-        return self.get_json(url, headers={'Authorization': 'Bearer {0}'.format(
-            access_token)}, method='GET')['profile']
+        url = 'https://social.yahooapis.com/v1/user/{0}/profile?format=json' \
+                .format(kwargs['response']['xoauth_yahoo_guid'])
+        return self.get_json(url, headers={
+            'Authorization': 'Bearer {0}'.format(access_token)
+        }, method='GET')['profile']
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
@@ -143,10 +147,16 @@ class YahooOAuth2(BaseOAuth2):
         url = self.REFRESH_TOKEN_URL or self.ACCESS_TOKEN_URL
         method = self.REFRESH_TOKEN_METHOD
         key = 'params' if method == 'GET' else 'data'
-        request_args = {'headers': self.auth_headers(),
-                        'method': method,
-                        key: params}
-        request = self.request(url, auth=HTTPBasicAuth(*self.get_key_and_secret()), **request_args)
+        request_args = {
+            'headers': self.auth_headers(),
+            'method': method,
+            key: params
+        }
+        request = self.request(
+            url,
+            auth=HTTPBasicAuth(*self.get_key_and_secret()),
+            **request_args
+        )
         return self.process_refresh_token_response(request, *args, **kwargs)
 
     def auth_complete_params(self, state=None):
