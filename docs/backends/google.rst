@@ -104,6 +104,10 @@ auth process.
 
   ``plus_id`` is the value from ``SOCIAL_AUTH_GOOGLE_PLUS_KEY``.
   ``signInCallback`` is the name of your Javascript callback function.
+  If you would like to get user's email address and have it stored, then set
+  this value in `data-scope`::
+
+    data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email"
 
 * Add the Javascript snippet in the same template as above::
 
