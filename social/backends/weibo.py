@@ -14,6 +14,7 @@ class WeiboOAuth2(BaseOAuth2):
     AUTHORIZATION_URL = 'https://api.weibo.com/oauth2/authorize'
     REQUEST_TOKEN_URL = 'https://api.weibo.com/oauth2/request_token'
     ACCESS_TOKEN_URL = 'https://api.weibo.com/oauth2/access_token'
+    ACCESS_TOKEN_INFO_URL = 'https://api.weibo.com/oauth2/get_token_info'
     ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
     EXTRA_DATA = [
@@ -39,7 +40,28 @@ class WeiboOAuth2(BaseOAuth2):
                 'first_name': first_name,
                 'last_name': last_name}
 
+    def get_uid(self, access_token):
+        """ return uid by access_token"""
+
+        response = self.request(self.ACCESS_TOKEN_INFO_URL,
+                                method='POST',
+                                params={'access_token':access_token})
+
+        data = response.json()
+        return data['uid']
+
     def user_data(self, access_token, *args, **kwargs):
-        return self.get_json('https://api.weibo.com/2/users/show.json',
-                             params={'access_token': access_token,
-                                     'uid': kwargs['response']['uid']})
+        """ if use access_token for ajax auth, then would raise KeyError
+        because there is no uid in response, so must get uid.
+        """
+        if 'response' not in kwargs or 'uid' not in kwargs['response']:
+            uid = self.get_uid(access_token)
+            response = kwargs.setdefault('response', {})
+            response['uid'] = uid
+
+        response = self.get_json('https://api.weibo.com/2/users/show.json',
+                                params={'access_token': access_token,
+                                        'uid': kwargs['response']['uid']})
+
+        response['uid'] = kwargs['response']['uid']
+        return response
