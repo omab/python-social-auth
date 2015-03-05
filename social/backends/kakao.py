@@ -11,6 +11,7 @@ class KakaoOAuth2(BaseOAuth2):
     AUTHORIZATION_URL = 'https://kauth.kakao.com/oauth/authorize'
     ACCESS_TOKEN_URL = 'https://kauth.kakao.com/oauth/token'
     ACCESS_TOKEN_METHOD = 'POST'
+    REDIRECT_STATE = False
 
     def get_user_id(self, details, response):
         return response['id']
@@ -30,3 +31,10 @@ class KakaoOAuth2(BaseOAuth2):
         """Loads user data from service"""
         return self.get_json('https://kapi.kakao.com/v1/user/me',
                              params={'access_token': access_token})
+
+    def auth_complete_params(self, state=None):
+        return {
+            'grant_type': 'authorization_code',
+            'code': self.data.get('code', ''),
+            'client_id': self.get_key_and_secret()[0],
+        }
