@@ -39,7 +39,23 @@ class WeiboOAuth2(BaseOAuth2):
                 'first_name': first_name,
                 'last_name': last_name}
 
-    def user_data(self, access_token, *args, **kwargs):
-        return self.get_json('https://api.weibo.com/2/users/show.json',
-                             params={'access_token': access_token,
-                                     'uid': kwargs['response']['uid']})
+    def get_uid(self, access_token):
+        """Return uid by access_token"""
+        data = self.get_json(
+            'https://api.weibo.com/oauth2/get_token_info',
+            method='POST',
+            params={'access_token': access_token}
+        )
+        return data['uid']
+
+    def user_data(self, access_token, response=None, *args, **kwargs):
+        """Return user data"""
+        # If user id was not retrieved in the response, then get it directly
+        # from weibo get_token_info endpoint
+        uid = response and response.get('uid') or self.get_uid(access_token)
+        user_data = self.get_json(
+            'https://api.weibo.com/2/users/show.json',
+            params={'access_token': access_token, 'uid': uid}
+        )
+        user_data['uid'] = uid
+        return user_data
