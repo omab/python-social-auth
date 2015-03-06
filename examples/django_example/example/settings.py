@@ -136,6 +136,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.douban.DoubanOAuth2',
     'social.backends.dropbox.DropboxOAuth',
     'social.backends.dropbox.DropboxOAuth2',
+    'social.backends.eveonline.EVEOnlineOAuth2',
     'social.backends.evernote.EvernoteSandboxOAuth',
     'social.backends.facebook.FacebookAppOAuth2',
     'social.backends.facebook.FacebookOAuth2',
