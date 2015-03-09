@@ -40,5 +40,6 @@ sessions/
 _build/
 fabfile.py
 changelog.sh
+.idea/
 
 .DS_Store
