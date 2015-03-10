@@ -82,6 +82,7 @@ or extend current one):
     * Vimeo_ OAuth1
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
+    * Wunderlist_ OAuth2
     * Xing_ OAuth1
     * Yahoo_ OpenId and OAuth1
     * Yammer_ OAuth2
@@ -153,6 +154,7 @@ section.
 .. _Twitter: http://twitter.com
 .. _VK.com: http://vk.com
 .. _Weibo: http://weibo.com
+.. _Wunderlist: http://wunderlist.com
 .. _Xing: https://www.xing.com
 .. _Yahoo: http://yahoo.com
 .. _Yammer: https://www.yammer.com

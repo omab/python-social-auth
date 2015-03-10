@@ -180,6 +180,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.amazon.AmazonOAuth2',
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
+    'social.backends.wunderlist.WunderlistOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 

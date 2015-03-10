@@ -56,6 +56,7 @@ web.config[setting_name('AUTHENTICATION_BACKENDS')] = (
     'social.backends.yandex.YandexOAuth2',
     'social.backends.podio.PodioOAuth2',
     'social.backends.mineid.MineIDOAuth2',
+    'social.backends.wunderlist.WunderlistOAuth2',
 )
 web.config[setting_name('LOGIN_REDIRECT_URL')] = '/done/'
 

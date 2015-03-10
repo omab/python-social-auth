@@ -189,6 +189,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.twitter.TwitterOAuth',
     'social.backends.vk.VKOAuth2',
     'social.backends.weibo.WeiboOAuth2',
+    'social.backends.wunderlist.WunderlistOAuth2',
     'social.backends.xing.XingOAuth',
     'social.backends.yahoo.YahooOAuth',
     'social.backends.yahoo.YahooOpenId',
