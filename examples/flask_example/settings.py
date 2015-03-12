@@ -51,4 +51,5 @@ SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
     'social.backends.podio.PodioOAuth2',
     'social.backends.reddit.RedditOAuth2',
     'social.backends.mineid.MineIDOAuth2',
+    'social.backends.wunderlist.WunderlistOAuth2',
 )
