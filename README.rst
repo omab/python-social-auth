@@ -117,6 +117,7 @@ or current ones extended):
     * Twitter_ OAuth1
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
+    * Wunderlist_ OAuth2
     * Xing_ OAuth1
     * Yahoo_ OpenId and OAuth2
     * Yammer_ OAuth2
@@ -273,6 +274,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Twitter: http://twitter.com
 .. _VK.com: http://vk.com
 .. _Weibo: https://weibo.com
+.. _Wunderlist: https://wunderlist.com
 .. _Xing: https://www.xing.com
 .. _Yahoo: http://yahoo.com
 .. _Yammer: https://www.yammer.com
