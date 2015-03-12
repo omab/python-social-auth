@@ -1,6 +1,6 @@
 python-openid>=2.2
 requests>=1.1.0
 oauthlib>=0.3.8
-requests-oauthlib>=0.3.0
+requests-oauthlib>=0.3.1
 six>=1.2.0
 PyJWT==0.4.1
