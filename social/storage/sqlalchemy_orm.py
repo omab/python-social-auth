@@ -41,6 +41,7 @@ class SQLAlchemyMixin(object):
         cls._session().add(instance)
         if cls.COMMIT_SESSION:
             cls._session().commit()
+            cls._session().flush()
         return instance
 
     def save(self):
