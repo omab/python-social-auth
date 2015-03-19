@@ -103,6 +103,7 @@ class BaseAuth(object):
         out.setdefault('strategy', self.strategy)
         out.setdefault('backend', out.pop(self.name, None) or self)
         out.setdefault('request', self.strategy.request_data())
+        out.setdefault('details', {})
 
         for idx, name in enumerate(pipeline):
             out['pipeline_index'] = pipeline_index + idx
