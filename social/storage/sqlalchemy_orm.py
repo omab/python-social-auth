@@ -48,7 +48,6 @@ class SQLAlchemyMixin(object):
             cls._session().flush()
         except AssertionError:
             with transaction.manager as manager:
-                print "COMMIT 5"
                 manager.commit()
 
     def save(self):
