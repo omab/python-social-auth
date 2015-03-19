@@ -16,6 +16,7 @@ requires = [
     'pyramid_debugtoolbar',
     'zope.sqlalchemy',
     'waitress',
+    'pyramid_chameleon',
     ]
 
 setup(name='example',
