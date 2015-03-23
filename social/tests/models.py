@@ -124,6 +124,10 @@ class TestUserSocialAuth(UserMixin, BaseModel):
         return cls(user=user, provider=provider, uid=uid)
 
     @classmethod
+    def get_users_by_username(cls, username):
+        return [user for user in User.cache.values() if user.username == username]
+
+    @classmethod
     def get_users_by_email(cls, email):
         return [user for user in User.cache.values() if user.email == email]
 

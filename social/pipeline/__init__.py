@@ -20,6 +20,9 @@ DEFAULT_AUTH_PIPELINE = (
     # Make up a username for this person, appends a random string at the end if
     # there's any collision.
     'social.pipeline.user.get_username',
+    
+    # Get user if exists
+    'social.pipeline.user.get_user',
 
     # Send a validation email to the user to verify its email address.
     # 'social.pipeline.mail.mail_validation',

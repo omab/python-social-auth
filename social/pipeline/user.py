@@ -6,6 +6,17 @@ from social.utils import slugify, module_member
 USER_FIELDS = ['username', 'email']
 
 
+def get_user(strategy, details, user=None, *args, **kwargs):
+    if user:
+        return {}
+
+    if not user:
+        username = kwargs['username']
+        return {
+            'user': strategy.storage.user.get_users_by_username(username).first()
+        }
+
+
 def get_username(strategy, details, user=None, *args, **kwargs):
     if 'username' not in strategy.setting('USER_FIELDS', USER_FIELDS):
         return
@@ -39,17 +50,11 @@ def get_username(strategy, details, user=None, *args, **kwargs):
         else:
             username = uuid4().hex
 
-        short_username = username[:max_length - uuid_length]
         final_username = slug_func(clean_func(username[:max_length]))
 
-        # Generate a unique username for current user using username
-        # as base but adding a unique hash at the end. Original
-        # username is cut to avoid any field max_length.
-        while storage.user.user_exists(username=final_username):
-            username = short_username + uuid4().hex[:uuid_length]
-            final_username = slug_func(clean_func(username[:max_length]))
     else:
         final_username = storage.user.get_username(user)
+
     return {'username': final_username}
 
 
