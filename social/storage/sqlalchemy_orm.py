@@ -117,6 +117,10 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
         return cls.user_query().get(pk)
 
     @classmethod
+    def get_users_by_username(cls, username):
+        return cls.user_query().filter_by(username=username)
+
+    @classmethod
     def get_users_by_email(cls, email):
         return cls.user_query().filter_by(email=email)
 

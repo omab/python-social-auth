@@ -6,6 +6,17 @@ from social.utils import slugify, module_member
 USER_FIELDS = ['username', 'email']
 
 
+def get_user(strategy, details, user=None, *args, **kwargs):
+    if user:
+        return {}
+
+    if not user:
+        username = kwargs['username']
+        return {
+            'user': strategy.storage.user.get_users_by_username(username).first()
+        }
+
+
 def get_username(strategy, details, user=None, *args, **kwargs):
     if 'username' not in strategy.setting('USER_FIELDS', USER_FIELDS):
         return
