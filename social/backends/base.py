@@ -103,6 +103,7 @@ class BaseAuth(object):
         out.setdefault('strategy', self.strategy)
         out.setdefault('backend', out.pop(self.name, None) or self)
         out.setdefault('request', self.strategy.request_data())
+        out.setdefault('details', {})
 
         for idx, name in enumerate(pipeline):
             out['pipeline_index'] = pipeline_index + idx
@@ -209,6 +210,8 @@ class BaseAuth(object):
 
     def request(self, url, method='GET', *args, **kwargs):
         kwargs.setdefault('headers', {})
+        if self.setting('VERIFY_SSL') is not None:
+            kwargs.setdefault('verify', self.setting('VERIFY_SSL'))
         kwargs.setdefault('timeout', self.setting('REQUESTS_TIMEOUT') or
                                      self.setting('URLOPEN_TIMEOUT'))
 

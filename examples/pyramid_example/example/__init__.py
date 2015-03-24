@@ -20,6 +20,7 @@ def main(global_config, **settings):
     config = Configurator(settings=settings,
                           session_factory=session_factory,
                           autocommit=True)
+    config.include('pyramid_chameleon')
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_request_method('example.auth.get_user', 'user', reify=True)
     config.add_route('home', '/')

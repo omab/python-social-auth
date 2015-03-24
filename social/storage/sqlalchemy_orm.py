@@ -3,9 +3,11 @@ import base64
 import six
 import json
 
+import transaction
+
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.types import PickleType, Text
-from sqlalchemy import Column, Integer, String
 from sqlalchemy.schema import UniqueConstraint
 
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
@@ -22,8 +24,6 @@ class JSONType(PickleType):
 
 
 class SQLAlchemyMixin(object):
-    COMMIT_SESSION = True
-
     @classmethod
     def _session(cls):
         raise NotImplementedError('Implement in subclass')
@@ -39,9 +39,16 @@ class SQLAlchemyMixin(object):
     @classmethod
     def _save_instance(cls, instance):
         cls._session().add(instance)
-        if cls.COMMIT_SESSION:
-            cls._session().commit()
+        cls._flush()
         return instance
+
+    @classmethod
+    def _flush(cls):
+        try:
+            cls._session().flush()
+        except AssertionError:
+            with transaction.manager as manager:
+                manager.commit()
 
     def save(self):
         self._save_instance(self)
@@ -83,11 +90,7 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
     @classmethod
     def disconnect(cls, entry):
         cls._session().delete(entry)
-        try:
-            cls._session().commit()
-        except AssertionError:
-            import transaction
-            transaction.commit()
+        cls._flush()
 
     @classmethod
     def user_query(cls):
@@ -181,7 +184,7 @@ class SQLAlchemyAssociationMixin(SQLAlchemyMixin, AssociationMixin):
         except IndexError:
             assoc = cls(server_url=server_url,
                         handle=association.handle)
-        assoc.secret = base64.encodestring(association.secret)
+        assoc.secret = base64.encodestring(association.secret).decode()
         assoc.issued = association.issued
         assoc.lifetime = association.lifetime
         assoc.assoc_type = association.assoc_type

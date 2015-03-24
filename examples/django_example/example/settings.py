@@ -130,11 +130,13 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.box.BoxOAuth2',
     'social.backends.clef.ClefOAuth2',
     'social.backends.coinbase.CoinbaseOAuth2',
+    'social.backends.coursera.CourseraOAuth2',
     'social.backends.dailymotion.DailymotionOAuth2',
     'social.backends.disqus.DisqusOAuth2',
     'social.backends.douban.DoubanOAuth2',
     'social.backends.dropbox.DropboxOAuth',
     'social.backends.dropbox.DropboxOAuth2',
+    'social.backends.eveonline.EVEOnlineOAuth2',
     'social.backends.evernote.EvernoteSandboxOAuth',
     'social.backends.facebook.FacebookAppOAuth2',
     'social.backends.facebook.FacebookOAuth2',
@@ -150,6 +152,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOpenIdConnect',
     'social.backends.instagram.InstagramOAuth2',
     'social.backends.jawbone.JawboneOAuth2',
+    'social.backends.kakao.KakaoOAuth2',
     'social.backends.linkedin.LinkedinOAuth',
     'social.backends.linkedin.LinkedinOAuth2',
     'social.backends.live.LiveOAuth2',
@@ -159,10 +162,10 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.mendeley.MendeleyOAuth2',
     'social.backends.mineid.MineIDOAuth2',
     'social.backends.mixcloud.MixcloudOAuth2',
+    'social.backends.nationbuilder.NationBuilderOAuth2',
     'social.backends.odnoklassniki.OdnoklassnikiOAuth2',
     'social.backends.open_id.OpenIdAuth',
     'social.backends.openstreetmap.OpenStreetMapOAuth',
-    'social.backends.orkut.OrkutOAuth',
     'social.backends.persona.PersonaAuth',
     'social.backends.podio.PodioOAuth2',
     'social.backends.rdio.RdioOAuth1',
@@ -186,6 +189,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.twitter.TwitterOAuth',
     'social.backends.vk.VKOAuth2',
     'social.backends.weibo.WeiboOAuth2',
+    'social.backends.wunderlist.WunderlistOAuth2',
     'social.backends.xing.XingOAuth',
     'social.backends.yahoo.YahooOAuth',
     'social.backends.yahoo.YahooOpenId',
@@ -230,7 +234,7 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.debug.debug',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details',
-    #'social.pipeline.debug.debug'
+    'social.pipeline.debug.debug'
 )
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'

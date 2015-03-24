@@ -1,5 +1,244 @@
-2014-11-01 HEAD (unreleased)
-============================
+2015-02-23 v0.2.2
+=================
+
+  * 2015-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8/PyFlakes
+
+  * 2015-02-21 Motoki Naruse <motoki@naru.se>
+    login_user takes 3 parameters
+
+  * 2015-02-21 Motoki Naruse <motoki@naru.se>
+    Include template engine
+
+  * 2015-02-21 Motoki Naruse <motoki@naru.se>
+    Email column is duplicated
+
+  * 2015-02-18 Sergey Kozub <sergey.kozub@p9ft.com>
+    fix python3 handling of openid backend on sqlalchemy storage (use str
+    instead of bytes)
+
+  * 2015-02-16 Chris Lamb <chris@chris-lamb.co.uk>
+    Don't use "import" in example method paths docs to avoid confusion
+
+  * 2015-02-15 tell-k <ffk2005@gmail.com>
+    fixed bug.
+
+  * 2015-02-15 tell-k <ffk2005@gmail.com>
+    add document url.
+
+  * 2015-02-15 tell-k <ffk2005@gmail.com>
+    Add dribble backend.
+
+  * 2015-02-14 Alejandro Baronetti <baroale@gmail.com>
+    Fixed issue: GET dictionary is immutable. I am not using MergeDict because
+    it will be deprecated
+
+  * 2015-02-13 Chris Martin <ch.martin@gmail.com>
+    Include username in Reddit extra_data
+
+  * 2015-02-11 tell-k <ffk2005@gmail.com>
+    refs #512 fixed typo
+
+  * 2015-02-11 tell-k <ffk2005@gmail.com>
+    refs #512 fixed bug for py2.6
+
+  * 2015-02-11 tell-k <ffk2005@gmail.com>
+    add qiita backend
+
+  * 2015-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Pyflakes
+
+  * 2015-02-10 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2015-02-07 Alejandro Baronetti <baroale@gmail.com>
+    Fix: REQUEST has been deprecated in Django 1.7, so we need to merge
+    dictionaries
+
+  * 2015-02-06 Clinton Blackburn <clinton.blackburn@gmail.com>
+    Updated PyJWT Dependency
+
+  * 2015-02-06 Rafael Muñoz Cárdenas <rafael.munoz@deliveryhero.com>
+    Update Google documentation
+
+  * 2015-02-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Add test for nationbuilder backend
+
+  * 2015-02-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Move common code to base class
+
+  * 2015-02-03 Matías Aguirre <matiasaguirre@gmail.com>
+    NationBuilder backend
+
+  * 2015-02-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Define methods to customize urls in OAuth2 backends
+
+  * 2015-02-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Enable debug pipeline in example app
+
+  * 2015-02-03 Ian Wienand <iwienand@redhat.com>
+    Ensure email is not None
+
+  * 2015-02-02 Chris DeBlois <chris.deblois@globant.com>
+    updated mendeley oauth2 to use new api resource and also updated to grab
+    new profile_id, name and bio
+
+  * 2015-02-02 Ian Wienand <iwienand@redhat.com>
+    Add support for Launchpad OpenId
+
+  * 2015-01-30 rivf <rivfader3@gmail.com>
+    Fixed jawbone authentification
+
+  * 2015-01-27 Adam Babik <adam.babik@10clouds.com>
+    Added coursera backend to README
+
+  * 2015-01-27 Adam Babik <adam.babik@10clouds.com>
+    Docs for coursera backend
+
+  * 2015-01-23 Adam Babik <adam.babik@10clouds.com>
+    Added Coursera backend to django_example
+
+  * 2015-01-23 Adam Babik <adam.babik@10clouds.com>
+    Added backend for Coursera
+
+  * 2015-01-20 ayush <ayush@quettra.com>
+    Added nonce unique constraint
+
+  * 2015-01-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Patch tornado arguments/cookies getting. Refs #445. Refs #346
+
+  * 2015-01-10 Chris Barna <chris@unbrain.net>
+    Store Spotify's refresh_token.
+
+  * 2015-01-07 Nick Sullivan <nick@sullivanflock.com>
+    cleanly handle both a scope of 'identity' only and also fill in more data
+    if we have 'read' access
+
+  * 2015-01-07 Nick Sullivan <nick@sullivanflock.com>
+    properly handle data, so that it is more future proof, again. This time fix
+    issue with team_url
+
+  * 2015-01-07 Nick Sullivan <nick@sullivanflock.com>
+    update in a way that will be more future proof
+
+  * 2015-01-07 Nick Sullivan <nick@sullivanflock.com>
+    when scope is reduced, the response from slack is different, handle both
+
+  * 2015-01-05 Ben Davis <bendavis78@gmail.com>
+    Fixed extra_data field in django 1.7 initial migration
+
+  * 2015-01-02 Jun Wang <wj1918@hotmail.com>
+    Fix YahooOAuth get primary email sorting order
+
+  * 2015-01-02 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2015-01-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Link docs, apply PEP8, change quotes and code style
+
+  * 2015-01-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Change expression
+
+  * 2015-01-02 travoltino <romansoloha@gmail.com>
+    Update base.py
+
+  * 2014-12-29 Alex Muller <alex.muller@digital.cabinet-office.gov.uk>
+    Correct Django SESSION_COOKIE_AGE setting
+
+  * 2014-12-28 Nick Sullivan <nick@sullivanflock.com>
+    Documentation for slack backend
+
+  * 2014-12-28 Nick Sullivan <nick@sullivanflock.com>
+    Slack backend
+
+  * 2014-12-24 Alex Muller <alex.muller@digital.cabinet-office.gov.uk>
+    Update GitHub documentation
+
+  * 2014-11-27 James Potter <james.potter@gmail.com>
+    Update django.rst
+
+  * 2014-11-26 Sasha Golubev <erwerthg@gmail.com>
+    Added backend for professionali.ru
+
+  * 2014-11-24 Lukas Klein <lukas@productgang.com>
+    Removed Orkut backend
+
+  * 2014-11-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove Flask-SQLAlchemy dependency from example app
+
+  * 2014-11-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Simplify flask app initialization
+
+  * 2014-11-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Allow initial definition of protected attributes
+
+  * 2014-11-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Quick khan academy docs
+
+  * 2014-11-22 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-11-22 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2014-11-21 tschilling <schillingt@better-simple.com>
+    Allow the pipeline to change the redirect url. Moves the popping of the
+    redirect value from the session to after the pipe line executes.
+
+  * 2014-11-19 Seán Hayes <gasphynx@gmail.com>
+    Added support for Django's User.EMAIL_FIELD.
+
+  * 2014-11-18 Anna Warzecha <anna.warzecha@gmail.com>
+    Changed test name
+
+  * 2014-11-18 Anna Warzecha <anna.warzecha@gmail.com>
+    Fixed docs
+
+  * 2014-11-18 Anna Warzecha <anna.warzecha@gmail.com>
+    Khan Academy oauth support now fully working
+
+  * 2014-11-18 Anna Warzecha <anna.warzecha@gmail.com>
+    Struggling with Khan Academy again...
+
+  * 2014-11-16 Anna Warzecha <anna.warzecha@gmail.com>
+    Fix backend name formatting
+
+  * 2014-11-16 Anna Warzecha <anna.warzecha@gmail.com>
+    Fix readme
+
+  * 2014-11-16 Anna Warzecha <anna.warzecha@gmail.com>
+    Basic Khan Academy support
+
+  * 2014-11-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Avoid override of custom-usernames fields with plain generated username.
+    Refs #435
+
+  * 2014-11-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix docs. Refs #436
+
+  * 2014-11-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove x flag from .py file
+
+  * 2014-11-11 Matías Aguirre <matiasaguirre@gmail.com>
+    Example on how to re-prompt a google user to get the refresh_token
+
+  * 2014-11-07 Miguel Paolino <miguel.paolino@datakin.io>
+    Added zotero test, work in progress
+
+  * 2014-11-07 Miguel Paolino <miguel.paolino@datakin.io>
+    Udpated README to include the Zotero backend mention
+
+  * 2014-11-07 Miguel Paolino <miguel.paolino@datakin.io>
+    Fixed doc line
+
+  * 2014-11-07 Miguel Paolino <miguel.paolino@datakin.io>
+    Added Zotero OAuth1 backend
+
+  * 2014-11-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Pass request to pyramid strategy. Refs #390
+
+  * 2014-11-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Update changelog. Refs #421
 
   * 2014-11-01 Matías Aguirre <matiasaguirre@gmail.com>
     PEP8

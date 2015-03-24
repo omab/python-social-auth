@@ -61,6 +61,7 @@ or current ones extended):
     * Bitbucket_ OAuth1
     * Box_ OAuth2
     * Clef_ OAuth2
+    * Coursera_ OAuth2
     * Dailymotion_ OAuth2
     * Disqus_ OAuth2
     * Douban_ OAuth1 and OAuth2
@@ -79,6 +80,7 @@ or current ones extended):
     * Jawbone_ OAuth2 https://jawbone.com/up/developer/authentication
     * Kakao_ OAuth2 https://developer.kakao.com
     * `Khan Academy`_ OAuth1
+    * Launchpad_ OpenId
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
@@ -92,7 +94,6 @@ or current ones extended):
     * OpenId_
     * OpenStreetMap_ OAuth1 http://wiki.openstreetmap.org/wiki/OAuth
     * OpenSuse_ OpenId http://en.opensuse.org/openSUSE:Connect
-    * Orkut_ OAuth1
     * PixelPin_ OAuth2
     * Pocket_ OAuth2
     * Podio_ OAuth2
@@ -116,10 +117,12 @@ or current ones extended):
     * Twitter_ OAuth1
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
+    * Wunderlist_ OAuth2
     * Xing_ OAuth1
-    * Yahoo_ OpenId and OAuth1
+    * Yahoo_ OpenId and OAuth2
     * Yammer_ OAuth2
     * Yandex_ OAuth1, OAuth2 and OpenId
+    * Zotero_ OAuth1
 
 
 User data
@@ -190,14 +193,14 @@ Or::
     $ cd python-social-auth
     $ sudo python setup.py install
 
-    
+
 Upgrading
 ---------
 
 Django with South
 ~~~~~~~~~~~~~~~~~
 
-Upgrading from 0.1 to 0.2 is likely to cause problems trying to apply a migration when the tables 
+Upgrading from 0.1 to 0.2 is likely to cause problems trying to apply a migration when the tables
 already exist. In this case a fake migration needs to be applied::
 
     $ python manage.py migrate --fake default
@@ -233,6 +236,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Bitbucket: https://bitbucket.org
 .. _Box: https://www.box.com
 .. _Clef: https://getclef.com/
+.. _Coursera: https://www.coursera.org/
 .. _Dailymotion: https://dailymotion.com
 .. _Disqus: https://disqus.com
 .. _Douban: http://www.douban.com
@@ -246,6 +250,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Github: https://github.com
 .. _Google: http://google.com
 .. _Instagram: https://instagram.com
+.. _LaunchPad: https://help.launchpad.net/YourAccount/OpenID
 .. _Linkedin: https://www.linkedin.com
 .. _Live: https://live.com
 .. _Livejournal: http://livejournal.com
@@ -255,7 +260,6 @@ check `django-social-auth LICENSE`_ for details:
 .. _Mixcloud: https://www.mixcloud.com
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
-.. _Orkut: http://www.orkut.com
 .. _Pocket: http://getpocket.com
 .. _Podio: https://podio.com
 .. _Shopify: http://shopify.com
@@ -270,6 +274,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Twitter: http://twitter.com
 .. _VK.com: http://vk.com
 .. _Weibo: https://weibo.com
+.. _Wunderlist: https://wunderlist.com
 .. _Xing: https://www.xing.com
 .. _Yahoo: http://yahoo.com
 .. _Yammer: https://www.yammer.com
@@ -302,3 +307,4 @@ check `django-social-auth LICENSE`_ for details:
 .. _six: http://pythonhosted.org/six/
 .. _requests: http://docs.python-requests.org/en/latest/
 .. _PixelPin: http://pixelpin.co.uk
+.. _Zotero: http://www.zotero.org/

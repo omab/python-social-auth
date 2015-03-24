@@ -1,6 +1,3 @@
-import json
-import urllib
-
 from social.backends.oauth import BaseOAuth2
 
 

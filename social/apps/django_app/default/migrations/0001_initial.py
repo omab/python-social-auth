@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
                 ('provider', models.CharField(max_length=32)),
                 ('uid', models.CharField(max_length=255)),
                 ('extra_data', social.apps.django_app.default.fields.JSONField(
-                    default=b'{}')),
+                    default='{}')),
                 ('user', models.ForeignKey(
                     related_name='social_auth', to=user_model)),
             ],
@@ -94,5 +94,9 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='code',
             unique_together=set([('email', 'code')]),
+        ),
+        migrations.AlterUniqueTogether(
+            name='nonce',
+            unique_together=set([('server_url', 'timestamp', 'salt')]),
         ),
     ]

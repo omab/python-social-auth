@@ -20,6 +20,7 @@ class RedditOAuth2(BaseOAuth2):
     SEND_USER_AGENT = True
     EXTRA_DATA = [
         ('id', 'id'),
+        ('name', 'username'),
         ('link_karma', 'link_karma'),
         ('comment_karma', 'comment_karma'),
         ('refresh_token', 'refresh_token'),

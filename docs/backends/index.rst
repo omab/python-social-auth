@@ -74,6 +74,7 @@ Social backends
    instagram
    jawbone
    kakao
+   khanacademy
    lastfm
    linkedin
    livejournal
@@ -85,6 +86,7 @@ Social backends
    mineid
    mixcloud
    moves
+   nationbuilder
    odnoklassnikiru
    openstreetmap
    persona
@@ -99,6 +101,7 @@ Social backends
    salesforce
    shopify
    skyrock
+   slack
    soundcloud
    spotify
    suse
@@ -118,6 +121,7 @@ Social backends
    vimeo
    vk
    weibo
+   wunderlist
    xing
    yahoo
    yammer

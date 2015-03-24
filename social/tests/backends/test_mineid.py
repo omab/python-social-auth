@@ -1,8 +1,5 @@
 import json
 
-from social.p3 import urlencode
-from social.exceptions import AuthUnknownError
-
 from social.tests.backends.oauth import OAuth2Test
 
 

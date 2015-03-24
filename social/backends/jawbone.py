@@ -2,6 +2,7 @@
 Jawbone OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/jawbone.html
 """
+from requests import HTTPError
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthCanceled, AuthUnknownError
 
@@ -51,6 +52,15 @@ class JawboneOAuth2(BaseOAuth2):
                     error
                 ))
         return super(JawboneOAuth2, self).process_error(data)
+
+    def auth_complete_params(self, state=None):
+        client_id, client_secret = self.get_key_and_secret()
+        return {
+            'grant_type': 'authorization_code',  # request auth code
+            'code': self.data.get('code', ''),  # server response code
+            'client_id': client_id,
+            'client_secret': client_secret,
+        }
 
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""

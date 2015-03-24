@@ -54,8 +54,9 @@ class DjangoUserMixin(UserMixin):
 
     @classmethod
     def create_user(cls, *args, **kwargs):
-        if 'username' in kwargs:
-            kwargs[cls.username_field()] = kwargs.pop('username')
+        username_field = cls.username_field()
+        if 'username' in kwargs and username_field not in kwargs:
+            kwargs[username_field] = kwargs.pop('username')
         return cls.user_model().objects.create_user(*args, **kwargs)
 
     @classmethod
@@ -69,7 +70,9 @@ class DjangoUserMixin(UserMixin):
 
     @classmethod
     def get_users_by_email(cls, email):
-        return cls.user_model().objects.filter(email__iexact=email)
+        user_model = cls.user_model()
+        email_field = getattr(user_model, 'EMAIL_FIELD', 'email')
+        return user_model.objects.filter(**{email_field + '__iexact': email})
 
     @classmethod
     def get_social_auth(cls, provider, uid):

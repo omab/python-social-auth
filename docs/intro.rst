@@ -62,7 +62,6 @@ or extend current one):
     * `Mozilla Persona`_
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
-    * Orkut_ OAuth1
     * Podio_ OAuth2
     * Rdio_ OAuth1 and OAuth2
     * Readability_ OAuth1
@@ -83,6 +82,7 @@ or extend current one):
     * Vimeo_ OAuth1
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
+    * Wunderlist_ OAuth2
     * Xing_ OAuth1
     * Yahoo_ OpenId and OAuth1
     * Yammer_ OAuth2
@@ -140,7 +140,6 @@ section.
 .. _Mixcloud: https://www.mixcloud.com
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
-.. _Orkut: http://www.orkut.com
 .. _Podio: https://podio.com
 .. _Shopify: http://shopify.com
 .. _Skyrock: https://skyrock.com
@@ -155,6 +154,7 @@ section.
 .. _Twitter: http://twitter.com
 .. _VK.com: http://vk.com
 .. _Weibo: http://weibo.com
+.. _Wunderlist: http://wunderlist.com
 .. _Xing: https://www.xing.com
 .. _Yahoo: http://yahoo.com
 .. _Yammer: https://www.yammer.com

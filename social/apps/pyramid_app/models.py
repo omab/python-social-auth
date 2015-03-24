@@ -24,8 +24,6 @@ def init_social(config, Base, session):
     app_session = session
 
     class _AppSession(object):
-        COMMIT_SESSION = False
-
         @classmethod
         def _session(cls):
             return app_session

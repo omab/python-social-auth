@@ -2,8 +2,8 @@ from social.exceptions import AuthAlreadyAssociated, AuthException, \
                               AuthForbidden
 
 
-def social_details(backend, response, *args, **kwargs):
-    return {'details': backend.get_user_details(response)}
+def social_details(backend, details, response, *args, **kwargs):
+    return {'details': dict(backend.get_user_details(response), **details)}
 
 
 def social_uid(backend, details, response, *args, **kwargs):
