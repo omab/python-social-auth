@@ -330,7 +330,8 @@ class OpenIdConnectAuth(BaseOAuth2):
             # Decode the JWT and raise an error if the secret is invalid or
             # the response has expired.
             id_token = jwt_decode(id_token, decryption_key, audience=client_id,
-                                  issuer=self.ID_TOKEN_ISSUER)
+                                  issuer=self.ID_TOKEN_ISSUER,
+                                  algorithms=['HS256'])
         except InvalidTokenError as err:
             raise AuthTokenError(self, err)
 
