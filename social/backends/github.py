@@ -17,7 +17,8 @@ class GithubOAuth2(BaseOAuth2):
     SCOPE_SEPARATOR = ','
     EXTRA_DATA = [
         ('id', 'id'),
-        ('expires', 'expires')
+        ('expires', 'expires'),
+        ('login', 'login')
     ]
 
     def get_user_details(self, response):
