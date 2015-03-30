@@ -60,6 +60,7 @@ or extend current one):
     * MineID_ OAuth2
     * Mixcloud_ OAuth2
     * `Mozilla Persona`_
+    * NaszaKlasa_ OAuth2
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
     * Podio_ OAuth2
@@ -139,6 +140,7 @@ section.
 .. _MineID: https://www.mineid.org
 .. _Mixcloud: https://www.mixcloud.com
 .. _Mozilla Persona: http://www.mozilla.org/persona/
+.. _NaszaKlasa: https://developers.nk.pl/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
 .. _Podio: https://podio.com
 .. _Shopify: http://shopify.com
