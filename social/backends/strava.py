@@ -15,6 +15,7 @@ class StravaOAuth(BaseOAuth2):
     # http://example.com/complete/strava?redirect_state=xxx?code=xxx&state=xxx
     # Check issue #259 for details.
     REDIRECT_STATE = False
+    REVOKE_TOKEN_URL = 'https://www.strava.com/oauth/deauthorize'
 
     def get_user_id(self, details, response):
         return response['athlete']['id']
@@ -38,3 +39,8 @@ class StravaOAuth(BaseOAuth2):
         """Loads user data from service"""
         return self.get_json('https://www.strava.com/api/v3/athlete',
                              params={'access_token': access_token})
+
+    def revoke_token_params(self, token, uid):
+        params = super(StravaOAuth, self).revoke_token_params(token, uid)
+        params['access_token'] = token
+        return params
