@@ -1,9 +1,11 @@
-import json
-from urllib import urlencode, urlopen
+from urllib import urlencode
+
+import six
+
 from requests_oauthlib import OAuth1
 
 from social.backends.oauth import BaseOAuth2
-import six
+
 
 class NKOAuth2(BaseOAuth2):
     """NK OAuth authentication backend"""
@@ -20,10 +22,12 @@ class NKOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from NK account"""
         entry = response['entry']
-        return {'username': entry.get('displayName'),
-                'email': entry['emails'][0]['value'],
-                'first_name': entry.get('displayName').split(" ")[0],
-                'id':entry.get('id')}
+        return {
+            'username': entry.get('displayName'),
+            'email': entry['emails'][0]['value'],
+            'first_name': entry.get('displayName').split(' ')[0],
+            'id': entry.get('id')
+        }
 
     def auth_complete_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
@@ -33,7 +37,7 @@ class NKOAuth2(BaseOAuth2):
             'client_id': client_id,
             'client_secret': client_secret,
             'redirect_uri': self.get_redirect_uri(state),
-            'scope':self.get_scope_argument()
+            'scope': self.get_scope_argument()
         }
 
     def get_user_id(self, details, response):
