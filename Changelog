@@ -1,5 +1,128 @@
+2015-03-31 HEAD (unreleased)
+2015-03-31 v0.2.3
+=================
+
+  * 2015-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8. Refs #570
+
+  * 2015-03-30 Krzysztof Hoffmann <krzysiekpl@gmail.com>
+    Added NaszaKlasa OAuth2 support
+
+  * 2015-03-29 Buddy Lindsey, Jr. <buddylindsey@users.noreply.github.com>
+    Add revoke token ability to strava
+
+  * 2015-03-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Store github login in extra data by default. Refs #567
+
+  * 2015-03-25 Jun Wang <wj1918@hotmail.com>
+    set redirect_state to false for live oauth2
+
+  * 2015-03-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix backend, add quick docs. Refs #549
+
+  * 2015-03-25 Matías Aguirre <matiasaguirre@gmail.com>
+    Add rednose to python3 requirements too
+
+  * 2015-03-23 Jerome Lefeuvre <jerome.lefeuvre@gmail.com>
+    Add setup.cfg to configure flake8 and nosetests
+
+  * 2015-03-23 Jerome Lefeuvre <jerome.lefeuvre@gmail.com>
+    Add rednose for colored output log
+
+  * 2015-03-21 Andrei Petre <andreipetre@icloud.com>
+    Add missing migration for Django app
+
+  * 2015-03-19 José Padilla <jpadilla@webapplicate.com>
+    Specify algorithm for encoding and decoding
+
+  * 2015-03-19 José Padilla <jpadilla@webapplicate.com>
+    Require PyJWT>=1.0.0,<2.0.0
+
+  * 2015-03-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove debug print
+
+  * 2015-03-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Flush sqlalchemy session to get the object ids. Refs #390
+
+  * 2015-03-19 Johannes <johtso@gmail.com>
+    Start pipeline with default details arg
+
+  * 2015-03-19 Jerome Lefeuvre <jerome.lefeuvre@gmail.com>
+    Add `python_chameleon` to setup
+
+  * 2015-03-17 Matías Aguirre <matiasaguirre@gmail.com>
+    Ensure to flush the db session (needed for Pyramid + sqlalchemy). Refs #390
+
+  * 2015-03-12 Matt Howland <matt.howland@lab45.com>
+    Create vend.py
+
+  * 2015-03-12 Johannes <johtso@gmail.com>
+    Increase min request-oauthlib version to 0.3.1
+
+  * 2015-03-12 Adam Bogdał <adam@bogdal.pl>
+    Add wunderlist backend to the list
+
+  * 2015-03-11 Florian Eßer <f.esser@rwth-aachen.de>
+    Update index.html
+
+  * 2015-03-10 Adam Bogdał <adam@bogdal.pl>
+    Add wunderlist oauth2 backend
+
+  * 2015-03-07 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8, quotes and extra_data
+
+  * 2015-03-06 Florian Eßer <f.esser@rwth-aachen.de>
+    Add backend for EVE Online Single Sign-On (OAuth2)
+    https://developers.eveonline.com/resource/single-sign-on
+
+  * 2015-03-05 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and simplify code
+
+  * 2015-03-05 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2015-03-05 Rafael Muñoz Cárdenas <rafael.munoz@deliveryhero.com>
+    Add extra info on Google+ Sign-In doc
+
+  * 2015-03-03 dobestan <dobestan@gmail.com>
+    update Kakao OAuth2 backend : update auth process- Fixes #538
+
+  * 2015-03-03 dobestan <dobestan@gmail.com>
+    Enable KakaoOAuth2 on example app
+
+  * 2015-03-03 dobestan <dobestan@gmail.com>
+    Disable redirect_state in kakao backend. Fixes #538
+
+  * 2015-03-02 Tom Clancy <tclancy@gmail.com>
+    Update google.rst
+
+  * 2015-03-02 Hassek <tomas@onereceipt.me>
+    modified docs
+
+  * 2015-02-25 Hassek <tomas@onereceipt.me>
+    fixed refresh tokens for yahoo
+
+  * 2015-02-25 Hassek <tomas@onereceipt.me>
+    added OAuth2 support to yahoo. Also, removed OAuth1 since yahoo will not be
+    supporting it anymore
+
+  * 2015-02-24 Matías Aguirre <matiasaguirre@gmail.com>
+    Cleanup imports and hmac creation, fix python3 compatibility
+
+  * 2015-02-24 zz <zz.at.field@gmail.com>
+    Fix Issue #532, get UID when use access_token ajax auth in weibo backends.
+
+  * 2015-02-24 zz <zz.at.field@gmail.com>
+    Fix Issue #532, get UID when use access_token ajax auth in weibo backends.
+
+  * 2015-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix zotero tests
+
 2015-02-23 v0.2.2
 =================
+
+  * 2015-02-23 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.2
 
   * 2015-02-23 Matías Aguirre <matiasaguirre@gmail.com>
     PEP8/PyFlakes
@@ -35,6 +158,9 @@
 
   * 2015-02-13 Chris Martin <ch.martin@gmail.com>
     Include username in Reddit extra_data
+
+  * 2015-02-12 Eugene Agafonov <e.a.agafonov@gmail.com>
+    [facebook-oauth2] Verifying Graph API Calls with appsecret_proof
 
   * 2015-02-11 tell-k <ffk2005@gmail.com>
     refs #512 fixed typo
@@ -156,6 +282,9 @@
 
   * 2014-11-27 James Potter <james.potter@gmail.com>
     Update django.rst
+
+  * 2014-11-26 Anna Warzecha <anna.warzecha@gmail.com>
+    User ID is required to use any further requests
 
   * 2014-11-26 Sasha Golubev <erwerthg@gmail.com>
     Added backend for professionali.ru
