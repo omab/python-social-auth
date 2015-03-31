@@ -90,6 +90,7 @@ or current ones extended):
     * Mendeley_ OAuth1 http://mendeley.com
     * Mixcloud_ OAuth2
     * `Mozilla Persona`_
+    * NaszaKlasa_ OAuth2
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
     * OpenStreetMap_ OAuth1 http://wiki.openstreetmap.org/wiki/OAuth
@@ -259,6 +260,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _MapMyFitness: http://www.mapmyfitness.com/
 .. _Mixcloud: https://www.mixcloud.com
 .. _Mozilla Persona: http://www.mozilla.org/persona/
+.. _NaszaKlasa: https://developers.nk.pl/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
 .. _Pocket: http://getpocket.com
 .. _Podio: https://podio.com
