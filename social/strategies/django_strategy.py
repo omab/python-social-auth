@@ -5,6 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
 from django.shortcuts import redirect
 from django.template import TemplateDoesNotExist, RequestContext, loader
+from django.utils.encoding import force_text
+from django.utils.functional import Promise
 from django.utils.translation import get_language
 
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
@@ -29,7 +31,11 @@ class DjangoStrategy(BaseStrategy):
         super(DjangoStrategy, self).__init__(storage, tpl)
 
     def get_setting(self, name):
-        return getattr(settings, name)
+        value = getattr(settings, name)
+        # Force text on URL named settings that are instance of Promise
+        if name.endswith('_URL') and isinstance(value, Promise):
+            value = force_text(value)
+        return value
 
     def request_data(self, merge=True):
         if not self.request:
