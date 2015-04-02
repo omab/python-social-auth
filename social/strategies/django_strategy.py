@@ -5,7 +5,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
 from django.shortcuts import redirect
 from django.template import TemplateDoesNotExist, RequestContext, loader
-from django.utils.datastructures import MergeDict
 from django.utils.translation import get_language
 
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
@@ -106,8 +105,6 @@ class DjangoStrategy(BaseStrategy):
                 'pk': val.pk,
                 'ctype': ContentType.objects.get_for_model(val).pk
             }
-        if isinstance(val, MergeDict):
-            val = dict(val)
         return val
 
     def from_session_value(self, val):
