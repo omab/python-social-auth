@@ -2,11 +2,16 @@
 Google OpenId, OAuth2, OAuth1, Google+ Sign-in backends, docs at:
     http://psa.matiasaguirre.net/docs/backends/google.html
 """
+import datetime
+
+from calendar import timegm
 from requests import HTTPError
 
-from social.backends.open_id import OpenIdAuth, OpenIdConnectAuth
+from social.backends.open_id import OpenIdAuth, BaseOpenIdConnectAuth
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
-from social.exceptions import AuthMissingParameter, AuthCanceled
+from social.exceptions import AuthMissingParameter, AuthCanceled, AuthTokenError
+
+from jwt import DecodeError, decode as jwt_decode
 
 
 class BaseGoogleAuth(object):
@@ -204,9 +209,36 @@ class GoogleOpenId(OpenIdAuth):
         return details['email']
 
 
-class GoogleOpenIdConnect(GoogleOAuth2, OpenIdConnectAuth):
+class GoogleOpenIdConnect(GoogleOAuth2, BaseOpenIdConnectAuth):
     name = 'google-openidconnect'
     ID_TOKEN_ISSUER = "accounts.google.com"
+
+    def validate_and_return_id_token(self, id_token):
+        """
+        Validates the id_token according to the steps at
+        http://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation.
+        """
+        client_id, _client_secret = self.get_key_and_secret()
+        try:
+            # Skip the verification, not mandatory
+            # https://developers.google.com/accounts/docs/OpenIDConnect#obtainuserinfo
+            id_token = jwt_decode(id_token, verify=False)
+        except DecodeError as de:
+            raise AuthTokenError(self, de)
+
+        # Verify the issuer of the id_token is correct
+        if id_token['iss'] != self.ID_TOKEN_ISSUER:
+            raise AuthTokenError(self, 'Incorrect id_token: iss')
+
+        # Verify the token was issued in the last 10 minutes
+        utc_timestamp = timegm(datetime.datetime.utcnow().utctimetuple())
+        if id_token['iat'] < (utc_timestamp - 600):
+            raise AuthTokenError(self, 'Incorrect id_token: iat')
+
+        # Verify this client is the correct recipient of the id_token
+        aud = id_token.get('aud')
+        if aud != client_id:
+            raise AuthTokenError(self, 'Incorrect id_token: aud')
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data from Google API"""
