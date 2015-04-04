@@ -3,6 +3,7 @@ Pocket OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/pocket.html
 """
 from social.backends.base import BaseAuth
+from social.utils import handle_http_errors
 
 
 class PocketAuth(BaseAuth):
@@ -33,6 +34,7 @@ class PocketAuth(BaseAuth):
         bits = (self.AUTHORIZATION_URL, token, self.redirect_uri)
         return '%s?request_token=%s&redirect_uri=%s' % bits
 
+    @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         data = {
             'consumer_key': self.setting('POCKET_CONSUMER_KEY'),

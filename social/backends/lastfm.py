@@ -1,5 +1,6 @@
 import hashlib
 
+from social.utils import handle_http_errors
 from social.backends.base import BaseAuth
 
 
@@ -21,6 +22,7 @@ class LastFmAuth(BaseAuth):
     def auth_url(self):
         return self.AUTH_URL.format(api_key=self.setting('KEY'))
 
+    @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         """Completes login process, must return user instance"""
         key, secret = self.get_key_and_secret()

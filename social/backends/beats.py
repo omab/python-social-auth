@@ -4,9 +4,7 @@ Beats backend, docs at:
 """
 import base64
 
-from requests import HTTPError
-
-from social.exceptions import AuthCanceled, AuthUnknownError
+from social.utils import handle_http_errors
 from social.backends.oauth import BaseOAuth2
 
 
@@ -30,23 +28,16 @@ class BeatsOAuth2(BaseOAuth2):
             ))
         }
 
+    @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         self.process_error(self.data)
-        try:
-            response = self.request_access_token(
-                self.ACCESS_TOKEN_URL,
-                data=self.auth_complete_params(self.validate_state()),
-                headers=self.auth_headers(),
-                method=self.ACCESS_TOKEN_METHOD
-            )
-        except HTTPError as err:
-            if err.response.status_code == 400:
-                raise AuthCanceled(self)
-            else:
-                raise
-        except KeyError:
-            raise AuthUnknownError(self)
+        response = self.request_access_token(
+            self.ACCESS_TOKEN_URL,
+            data=self.auth_complete_params(self.validate_state()),
+            headers=self.auth_headers(),
+            method=self.ACCESS_TOKEN_METHOD
+        )
         self.process_error(response)
         # mashery wraps in jsonrpc
         if response.get('jsonrpc', None):

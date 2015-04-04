@@ -2,7 +2,7 @@
 Jawbone OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/jawbone.html
 """
-from requests import HTTPError
+from social.utils import handle_http_errors
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthCanceled, AuthUnknownError
 
@@ -62,23 +62,16 @@ class JawboneOAuth2(BaseOAuth2):
             'client_secret': client_secret,
         }
 
+    @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         self.process_error(self.data)
-        try:
-            response = self.request_access_token(
-                self.ACCESS_TOKEN_URL,
-                params=self.auth_complete_params(self.validate_state()),
-                headers=self.auth_headers(),
-                method=self.ACCESS_TOKEN_METHOD
-            )
-        except HTTPError as err:
-            if err.response.status_code == 400:
-                raise AuthCanceled(self)
-            else:
-                raise
-        except KeyError:
-            raise AuthUnknownError(self)
+        response = self.request_access_token(
+            self.ACCESS_TOKEN_URL,
+            params=self.auth_complete_params(self.validate_state()),
+            headers=self.auth_headers(),
+            method=self.ACCESS_TOKEN_METHOD
+        )
         self.process_error(response)
         return self.do_auth(response['access_token'], response=response,
                             *args, **kwargs)

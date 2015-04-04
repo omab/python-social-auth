@@ -2,11 +2,10 @@
 Google OpenId, OAuth2, OAuth1, Google+ Sign-in backends, docs at:
     http://psa.matiasaguirre.net/docs/backends/google.html
 """
-from requests import HTTPError
-
+from social.utils import handle_http_errors
 from social.backends.open_id import OpenIdAuth, OpenIdConnectAuth
 from social.backends.oauth import BaseOAuth2, BaseOAuth1
-from social.exceptions import AuthMissingParameter, AuthCanceled
+from social.exceptions import AuthMissingParameter
 
 
 class BaseGoogleAuth(object):
@@ -135,6 +134,7 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
             params['redirect_uri'] = 'postmessage'
         return params
 
+    @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         if 'access_token' in self.data and 'code' not in self.data:
             raise AuthMissingParameter(self, 'access_token or code')
@@ -147,18 +147,12 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
                 params={'access_token': token}
             ))
 
-        try:
-            response = self.request_access_token(
-                self.ACCESS_TOKEN_URL,
-                data=self.auth_complete_params(),
-                headers=self.auth_headers(),
-                method=self.ACCESS_TOKEN_METHOD
-            )
-        except HTTPError as err:
-            if err.response.status_code == 400:
-                raise AuthCanceled(self)
-            else:
-                raise
+        response = self.request_access_token(
+            self.ACCESS_TOKEN_URL,
+            data=self.auth_complete_params(),
+            headers=self.auth_headers(),
+            method=self.ACCESS_TOKEN_METHOD
+        )
         self.process_error(response)
         return self.do_auth(response['access_token'], response=response,
                             *args, **kwargs)

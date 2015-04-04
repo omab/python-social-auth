@@ -98,6 +98,12 @@ class AuthForbidden(AuthException):
         return 'Your credentials aren\'t allowed'
 
 
+class AuthUnreachableProvider(AuthException):
+    """Cannot reach the provider"""
+    def __str__(self):
+        return 'The authentication provider could not be reached'
+
+
 class InvalidEmail(AuthException):
     def __str__(self):
         return 'Email couldn\'t be validated'

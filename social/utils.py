@@ -2,10 +2,13 @@ import re
 import sys
 import unicodedata
 import collections
-import six
+import functools
 
+import six
+import requests
 import social
 
+from social.exceptions import AuthCanceled, AuthUnreachableProvider
 from social.p3 import urlparse, urlunparse, urlencode, \
                       parse_qs as battery_parse_qs
 
@@ -187,3 +190,18 @@ def setting_url(backend, *names):
             value = backend.setting(name)
             if is_url(value):
                 return value
+
+
+def handle_http_errors(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except requests.HTTPError as err:
+            if err.response.status_code == 400:
+                raise AuthCanceled(args[0])
+            elif err.response.status_code == 503:
+                raise AuthUnreachableProvider(args[0])
+            else:
+                raise
+    return wrapper

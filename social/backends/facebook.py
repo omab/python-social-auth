@@ -8,7 +8,7 @@ import json
 import base64
 import hashlib
 
-from social.utils import parse_qs, constant_time_compare
+from social.utils import parse_qs, constant_time_compare, handle_http_errors
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthException, AuthCanceled, AuthUnknownError, \
                               AuthMissingParameter
@@ -62,6 +62,7 @@ class FacebookOAuth2(BaseOAuth2):
             raise AuthCanceled(self, data.get('error_message') or
                                      data.get('error_code'))
 
+    @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         self.process_error(self.data)

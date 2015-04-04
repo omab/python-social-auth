@@ -1,11 +1,10 @@
 import six
 
-from requests import HTTPError
 from requests_oauthlib import OAuth1
 from oauthlib.oauth1 import SIGNATURE_TYPE_AUTH_HEADER
 
 from social.p3 import urlencode, unquote
-from social.utils import url_add_parameters, parse_qs
+from social.utils import url_add_parameters, parse_qs, handle_http_errors
 from social.exceptions import AuthFailed, AuthCanceled, AuthUnknownError, \
                               AuthMissingParameter, AuthStateMissing, \
                               AuthStateForbidden, AuthTokenError
@@ -170,21 +169,17 @@ class BaseOAuth1(OAuthAuth):
                 raise AuthCanceled(self, 'User refused the access')
             raise AuthUnknownError(self, 'Error was ' + data['oauth_problem'])
 
+    @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         """Return user, might be logged in"""
         # Multiple unauthorized tokens are supported (see #521)
         self.process_error(self.data)
         self.validate_state()
         token = self.get_unauthorized_token()
-        try:
-            access_token = self.access_token(token)
-        except HTTPError as err:
-            if err.response.status_code == 400:
-                raise AuthCanceled(self)
-            else:
-                raise
+        access_token = self.access_token(token)
         return self.do_auth(access_token, *args, **kwargs)
 
+    @handle_http_errors
     def do_auth(self, access_token, *args, **kwargs):
         """Finish the auth process once the access_token was retrieved"""
         if not isinstance(access_token, dict):
@@ -356,28 +351,22 @@ class BaseOAuth2(OAuthAuth):
         elif 'denied' in data:
             raise AuthCanceled(self, data['denied'])
 
+    @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         """Completes loging process, must return user instance"""
         state = self.validate_state()
         self.process_error(self.data)
-        try:
-            response = self.request_access_token(
-                self.access_token_url(),
-                data=self.auth_complete_params(state),
-                headers=self.auth_headers(),
-                method=self.ACCESS_TOKEN_METHOD
-            )
-        except HTTPError as err:
-            if err.response.status_code == 400:
-                raise AuthCanceled(self)
-            else:
-                raise
-        except KeyError:
-            raise AuthUnknownError(self)
+        response = self.request_access_token(
+            self.access_token_url(),
+            data=self.auth_complete_params(state),
+            headers=self.auth_headers(),
+            method=self.ACCESS_TOKEN_METHOD
+        )
         self.process_error(response)
         return self.do_auth(response['access_token'], response=response,
                             *args, **kwargs)
 
+    @handle_http_errors
     def do_auth(self, access_token, *args, **kwargs):
         """Finish the auth process once the access_token was retrieved"""
         data = self.user_data(access_token, *args, **kwargs)

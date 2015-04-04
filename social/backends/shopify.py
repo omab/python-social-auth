@@ -5,8 +5,7 @@ Shopify OAuth2 backend, docs at:
 import imp
 import six
 
-from requests import HTTPError
-
+from social.utils import handle_http_errors
 from social.backends.oauth import BaseOAuth2
 from social.exceptions import AuthFailed, AuthCanceled
 
@@ -61,6 +60,7 @@ class ShopifyOAuth2(BaseOAuth2):
             redirect_uri=redirect_uri
         )
 
+    @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         """Completes login process, must return user instance"""
         self.process_error(self.data)
@@ -73,11 +73,6 @@ class ShopifyOAuth2(BaseOAuth2):
             access_token = shopify_session.token
         except self.shopifyAPI.ValidationException:
             raise AuthCanceled(self)
-        except HTTPError as err:
-            if err.response.status_code == 400:
-                raise AuthCanceled(self)
-            else:
-                raise
         else:
             if not access_token:
                 raise AuthFailed(self, 'Authentication Failed')
