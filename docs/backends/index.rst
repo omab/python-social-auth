@@ -58,11 +58,14 @@ Social backends
    box
    clef
    coinbase
+   coursera
    dailymotion
    disqus
    docker
    douban
+   dribbble
    dropbox
+   eveonline
    evernote
    facebook
    fedora
@@ -76,6 +79,7 @@ Social backends
    kakao
    khanacademy
    lastfm
+   launchpad
    linkedin
    livejournal
    live
@@ -86,6 +90,7 @@ Social backends
    mineid
    mixcloud
    moves
+   naszaklasa
    nationbuilder
    odnoklassnikiru
    openstreetmap
@@ -93,6 +98,7 @@ Social backends
    pixelpin
    pocket
    podio
+   qiita
    qq
    rdio
    readability
@@ -126,3 +132,4 @@ Social backends
    xing
    yahoo
    yammer
+   zotero
