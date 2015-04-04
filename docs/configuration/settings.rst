@@ -255,9 +255,13 @@ Miscellaneous settings
 ----------------------
 
 ``SOCIAL_AUTH_PROTECTED_USER_FIELDS = ['email',]``
-    The `user_details` pipeline processor will set certain fields on user
-    objects, such as ``email``. Set this to a list of fields you only want to
-    set for newly created users and avoid updating on further logins.
+    During the pipeline process a ``dict`` named ``details`` will be populated
+    with the needed values to create the user instance, but it's also used to
+    update the user instance. Any value in it will be checked as an attribute
+    in the user instance (first by doing ``hasattr(user, name)``). Usually
+    there are attributes that cannot be updated (like ``username``, ``id``,
+    ``email``, etc.), those fields need to be *protect*. Set any field name that
+    requires *protection* in this setting, and it won't be updated.
 
 ``SOCIAL_AUTH_SESSION_EXPIRATION = False``
     By default, user session expiration time will be set by your web
@@ -267,7 +271,6 @@ Miscellaneous settings
     under the key ``expires``. Changing this setting to True will override your
     web framework's session length setting and set user session lengths to
     match the ``expires`` value from the auth provider.
-
 
 ``SOCIAL_AUTH_OPENID_PAPE_MAX_AUTH_AGE = <int value>``
     Enable `OpenID PAPE`_ extension support by defining this setting.
