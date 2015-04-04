@@ -8,13 +8,13 @@ except ImportError:
 
 urlpatterns = patterns('social.apps.django_app.views',
     # authentication / association
-    url(r'^login/(?P<backend>[^/]+)/$', 'auth',
+    url(r'^login/(?P<backend>[^/]+)/?$', 'auth',
         name='begin'),
-    url(r'^complete/(?P<backend>[^/]+)/$', 'complete',
+    url(r'^complete/(?P<backend>[^/]+)/?$', 'complete',
         name='complete'),
     # disconnection
-    url(r'^disconnect/(?P<backend>[^/]+)/$', 'disconnect',
+    url(r'^disconnect/(?P<backend>[^/]+)/?$', 'disconnect',
         name='disconnect'),
-    url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/$',
+    url(r'^disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/?$',
         'disconnect', name='disconnect_individual'),
 )
