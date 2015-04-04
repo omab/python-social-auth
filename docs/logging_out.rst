@@ -1,5 +1,5 @@
-Logging Out
-===========
+Disconnect and Logging Out
+==========================
 
 It's a common misconception that ``disconnect`` action is the same as logging
 the user out, but is far from it.
