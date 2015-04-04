@@ -3,7 +3,10 @@ import base64
 import six
 import json
 
-import transaction
+try:
+    import transaction
+except ImportError:
+    transaction = None
 
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.exc import IntegrityError
@@ -47,8 +50,11 @@ class SQLAlchemyMixin(object):
         try:
             cls._session().flush()
         except AssertionError:
-            with transaction.manager as manager:
-                manager.commit()
+            if transaction:
+                with transaction.manager as manager:
+                    manager.commit()
+            else:
+                cls._session().commit()
 
     def save(self):
         self._save_instance(self)

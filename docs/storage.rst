@@ -170,12 +170,14 @@ models references and implement the needed method::
             raise NotImplementedError('Implement in subclass')
 
 
-Sqlalchemy and Django mixins
+SQLAlchemy and Django mixins
 ----------------------------
 
-Currently there are partial implementations of mixins for `Sqlalchemy ORM`_ and
+Currently there are partial implementations of mixins for `SQLAlchemy ORM`_ and
 `Django ORM`_ with common code used later on current implemented applications.
 
+**When using `SQLAlchemy ORM`_ and ``ZopeTransactionExtension``, it's
+recommended to use the transaction_ application to handle them.**
 
 Models Examples
 ---------------
@@ -188,10 +190,11 @@ App`_, and `Webpy App`_ for examples of implementations.
 .. _NonceMixin: https://github.com/omab/python-social-auth/blob/master/social/storage/base.py#L149
 .. _AssociationMixin: https://github.com/omab/python-social-auth/blob/master/social/storage/base.py#L161
 .. _BaseStorage: https://github.com/omab/python-social-auth/blob/master/social/storage/base.py#L201
-.. _Sqlalchemy ORM: https://github.com/omab/python-social-auth/blob/master/social/storage/sqlalchemy_orm.py
+.. _SQLAlchemy ORM: https://github.com/omab/python-social-auth/blob/master/social/storage/sqlalchemy_orm.py
 .. _Django ORM: https://github.com/omab/python-social-auth/blob/master/social/storage/django_orm.py
 .. _Django App: https://github.com/omab/python-social-auth/blob/master/social/apps/django_app/default/models.py
 .. _Flask App: https://github.com/omab/python-social-auth/blob/master/social/apps/flask_app/models.py
 .. _Pyramid App: https://github.com/omab/python-social-auth/blob/master/social/apps/pyramid_app/models.py
 .. _Webpy App: https://github.com/omab/python-social-auth/blob/master/social/apps/webpy_app/models.py
 .. _pipeline docs: pipeline.html#email-validation
+.. _transaction: https://pypi.python.org/pypi/transaction
