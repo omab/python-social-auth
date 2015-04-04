@@ -3,6 +3,7 @@ import sys
 import unicodedata
 import collections
 import functools
+import logging
 
 import six
 import requests
@@ -14,6 +15,8 @@ from social.p3 import urlparse, urlunparse, urlencode, \
 
 
 SETTING_PREFIX = 'SOCIAL_AUTH'
+
+social_logger = logging.Logger('social')
 
 
 def import_module(name):
