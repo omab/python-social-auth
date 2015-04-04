@@ -115,7 +115,7 @@ class BaseAuth(object):
         self.strategy.clean_partial_pipeline()
         return out
 
-    def extra_data(self, user, uid, response, details):
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         """Return deafault extra data to store in extra_data field"""
         data = {}
         for entry in (self.EXTRA_DATA or []) + self.setting('EXTRA_DATA', []):

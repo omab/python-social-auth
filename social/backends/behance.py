@@ -30,10 +30,11 @@ class BehanceOAuth2(BaseOAuth2):
                 'last_name': last_name,
                 'email': ''}
 
-    def extra_data(self, user, uid, response, details):
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         # Pull up the embedded user attributes so they can be found as extra
         # data. See the example token response for possible attributes:
         # http://www.behance.net/dev/authentication#step-by-step
         data = response.copy()
         data.update(response['user'])
-        return super(BehanceOAuth2, self).extra_data(user, uid, data, details)
+        return super(BehanceOAuth2, self).extra_data(user, uid, data, details,
+                                                     *args, **kwargs)

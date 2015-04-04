@@ -36,11 +36,13 @@ class OAuthAuth(BaseAuth):
     REDIRECT_STATE = False
     STATE_PARAMETER = False
 
-    def extra_data(self, user, uid, response, details=None):
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         """Return access_token and extra defined names to store in
         extra_data field"""
-        data = super(OAuthAuth, self).extra_data(user, uid, response, details)
-        data['access_token'] = response.get('access_token', '')
+        data = super(OAuthAuth, self).extra_data(user, uid, response, details,
+                                                 *args, **kwargs)
+        data['access_token'] = response.get('access_token', '') or \
+                               kwargs.get('access_token')
         return data
 
     def state_token(self):

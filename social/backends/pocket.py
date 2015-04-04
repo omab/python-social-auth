@@ -21,7 +21,7 @@ class PocketAuth(BaseAuth):
     def get_user_details(self, response):
         return {'username': response['username']}
 
-    def extra_data(self, user, uid, response, details):
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         return response
 
     def auth_url(self):

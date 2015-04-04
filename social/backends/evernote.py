@@ -54,9 +54,9 @@ class EvernoteOAuth(BaseOAuth1):
             else:
                 raise
 
-    def extra_data(self, user, uid, response, details=None):
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         data = super(EvernoteOAuth, self).extra_data(user, uid, response,
-                                                     details)
+                                                     details, *args, **kwargs)
         # Evernote returns expiration timestamp in miliseconds, so it needs to
         # be normalized.
         if 'expires' in data:

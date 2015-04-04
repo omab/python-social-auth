@@ -83,5 +83,6 @@ def load_extra_data(backend, details, response, uid, user, *args, **kwargs):
     social = kwargs.get('social') or \
              backend.strategy.storage.user.get_social_auth(backend.name, uid)
     if social:
-        extra_data = backend.extra_data(user, uid, response, details)
+        extra_data = backend.extra_data(user, uid, response, details,
+                                        *args, **kwargs)
         social.set_extra_data(extra_data)

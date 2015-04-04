@@ -49,7 +49,7 @@ class OdnoklassnikiApp(BaseAuth):
     name = 'odnoklassniki-app'
     ID_KEY = 'uid'
 
-    def extra_data(self, user, uid, response, details):
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         return dict([(key, value) for key, value in response.items()
                             if key in response['extra_data_list']])
 

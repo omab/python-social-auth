@@ -74,7 +74,7 @@ class ExactTargetOAuth2(BaseOAuth2):
             raise AuthFailed(self, 'Authentication Failed')
         return self.do_auth(token, *args, **kwargs)
 
-    def extra_data(self, user, uid, response, details):
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         """Load extra details from the JWT token"""
         data = {
             'id': details.get('id'),

@@ -29,7 +29,7 @@ class PersonaAuth(BaseAuth):
                 'first_name': '',
                 'last_name': ''}
 
-    def extra_data(self, user, uid, response, details):
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         """Return users extra data"""
         return {'audience': response['audience'],
                 'issuer': response['issuer']}

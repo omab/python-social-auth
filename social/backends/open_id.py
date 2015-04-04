@@ -114,7 +114,7 @@ class OpenIdAuth(BaseAuth):
                        'email': email})
         return values
 
-    def extra_data(self, user, uid, response, details):
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         """Return defined extra data names to store in extra_data field.
         Settings will be inspected to get more values names that should be
         stored on extra_data field. Setting name is created from current
@@ -129,7 +129,7 @@ class OpenIdAuth(BaseAuth):
         ax_names = self.setting('AX_EXTRA_DATA')
         values = self.values_from_response(response, sreg_names, ax_names)
         from_details = super(OpenIdAuth, self).extra_data(
-            user, uid, {}, details
+            user, uid, {}, details, *args, **kwargs
         )
         values.update(from_details)
         return values
