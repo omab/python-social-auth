@@ -15,7 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='usersocialauth',
             name='user',
-            field=models.ForeignKey(related_name='social_auth', to=settings.AUTH_USER_MODEL),
-            preserve_default=True,
+            field=models.ForeignKey(related_name='social_auth', to=settings.AUTH_USER_MODEL)
         ),
     ]
