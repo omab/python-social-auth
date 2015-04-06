@@ -4,4 +4,8 @@ docs:
 site: docs
 	rsync -avkz site/ tarf:sites/psa/
 
-.PHONY: site docs
+publish:
+	python setup.py sdist bdist_wheel
+	twine upload dist/*
+
+.PHONY: site docs publish
