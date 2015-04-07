@@ -265,14 +265,23 @@ class BaseOAuth1(OAuthAuth):
                    signature_type=SIGNATURE_TYPE_AUTH_HEADER):
         key, secret = self.get_key_and_secret()
         oauth_verifier = oauth_verifier or self.data.get('oauth_verifier')
-        token = token or {}
+        if token:
+            resource_owner_key = token.get('oauth_token')
+            resource_owner_secret = token.get('oauth_token_secret')
+            if not resource_owner_key:
+                raise AuthTokenError(self, 'Missing oauth_token')
+            if not resource_owner_secret:
+                raise AuthTokenError(self, 'Missing oauth_token_secret')
+        else:
+            resource_owner_key = None
+            resource_owner_secret = None
         # decoding='utf-8' produces errors with python-requests on Python3
         # since the final URL will be of type bytes
         decoding = None if six.PY3 else 'utf-8'
         state = self.get_or_create_state()
         return OAuth1(key, secret,
-                      resource_owner_key=token.get('oauth_token'),
-                      resource_owner_secret=token.get('oauth_token_secret'),
+                      resource_owner_key=resource_owner_key,
+                      resource_owner_secret=resource_owner_secret,
                       callback_uri=self.get_redirect_uri(state),
                       verifier=oauth_verifier,
                       signature_type=signature_type,
