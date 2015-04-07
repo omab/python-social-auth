@@ -163,7 +163,7 @@ accomplish that behavior, there are two ways to do it.
         def get_scope(self):
             scope = super(CustomFacebookOAuth2, self).get_scope()
             if self.data.get('extrascope'):
-                scope += [('foo', 'bar')]
+                scope = scope + [('foo', 'bar')]
             return scope
 
 
@@ -174,6 +174,19 @@ accomplish that behavior, there are two ways to do it.
 
    Put this new backend in some place in your project and replace the original
    ``FacebookOAuth2`` in ``AUTHENTICATION_BACKENDS`` with this new version.
+
+   When overriding this method, take into account that the default output the
+   base class for ``get_scope()`` is the raw value from the settings (whatever
+   they are defined), doing this will actually update the value in your
+   settings for all the users::
+
+    scope = super(CustomFacebookOAuth2, self).get_scope()
+    scope += ['foo', 'bar']
+
+   Instead do it like this::
+
+    scope = super(CustomFacebookOAuth2, self).get_scope()
+    scope = scope + ['foo', 'bar']
 
 2. It's possible to do the same by defining a second backend which extends from
    the original but overrides the name, this will imply new URLs and also new
