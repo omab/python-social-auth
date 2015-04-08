@@ -19,11 +19,11 @@ class FacebookOAuth2(BaseOAuth2):
     name = 'facebook'
     RESPONSE_TYPE = None
     SCOPE_SEPARATOR = ','
-    AUTHORIZATION_URL = 'https://www.facebook.com/dialog/oauth'
-    ACCESS_TOKEN_URL = 'https://graph.facebook.com/oauth/access_token'
-    REVOKE_TOKEN_URL = 'https://graph.facebook.com/{uid}/permissions'
+    AUTHORIZATION_URL = 'https://www.facebook.com/v2.3/dialog/oauth'
+    ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.3/oauth/access_token'
+    REVOKE_TOKEN_URL = 'https://graph.facebook.com/v2.3/{uid}/permissions'
     REVOKE_TOKEN_METHOD = 'DELETE'
-    USER_DATA_URL = 'https://graph.facebook.com/me'
+    USER_DATA_URL = 'https://graph.facebook.com/v2.3/me'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires')
@@ -71,7 +71,7 @@ class FacebookOAuth2(BaseOAuth2):
         state = self.validate_state()
         key, secret = self.get_key_and_secret()
         url = self.ACCESS_TOKEN_URL
-        response = self.get_querystring(url, params={
+        response = self.get_json(url, params={
             'client_id': key,
             'redirect_uri': self.get_redirect_uri(state),
             'client_secret': secret,
