@@ -19,3 +19,5 @@ The EVE Single Sign-On (SSO) works similar to GitHub (OAuth2).
 - If you want to access EVE Online's CREST API, use::
 
       SOCIAL_AUTH_EVEONLINE_SCOPE = ['publicData']
+
+.. _EVE Developers: https://developers.eveonline.com/

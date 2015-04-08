@@ -3,9 +3,9 @@ Qiita
 
 Qiita
 
-- Register a new application at `https://qiita.com/settings/applications`_, set the
-  callback URL to ``http://example.com/complete/qiita/`` replacing
-  ``example.com`` with your domain.
+- Register a new application at Qiita_, set the callback URL to
+  ``http://example.com/complete/qiita/`` replacing ``example.com`` with your
+  domain.
 
 - Fill ``Client ID`` and ``Client Secret`` values in the settings::
 
@@ -16,4 +16,8 @@ Qiita
 
       SOCIAL_AUTH_QIITA_SCOPE = [...]
 
-  See auth scopes at https://qiita.com/api/v2/docs#スコープ
+  See auth scopes at `Qiita Scopes docs`_.
+
+
+.. _Qiita: https://qiita.com/settings/applications
+.. _Qiita Scopes docs: https://qiita.com/api/v2/docs#スコープ

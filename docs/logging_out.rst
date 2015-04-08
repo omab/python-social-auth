@@ -22,4 +22,4 @@ least one more social account associated, or a password, etc). This behavior
 can be overridden by changing the `Disconnection Pipeline`_.
 
 .. _logout_user(): https://github.com/maxcountryman/flask-login/blob/a96de342eae560deec008a02179f593c3799b3ba/flask_login.py#L718-L739
-.. _DISCONNECT_PIPELINE: pipeline.html#disconnection-pipeline
+.. _Disconnection Pipeline: pipeline.html#disconnection-pipeline

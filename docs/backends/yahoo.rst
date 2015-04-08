@@ -28,3 +28,6 @@ OAuth 2.0 workflow, useful if you are planning to use Yahoo's API.
 
       SOCIAL_AUTH_YAHOO_OAUTH2_KEY = ''
       SOCIAL_AUTH_YAHOO_OAUTH2_SECRET = ''
+
+
+.. _Yahoo Developer Center: https://developer.yahoo.com/

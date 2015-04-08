@@ -3,8 +3,8 @@ Dribbble
 
 Dribbble
 
-- Register a new application at `https://dribbble.com/account/applications/new`_, set the
-  callback URL to ``http://example.com/complete/dribbble/`` replacing
+- Register a new application at Dribbble_, set the callback URL
+  to ``http://example.com/complete/dribbble/`` replacing
   ``example.com`` with your domain.
 
 - Fill ``Client ID`` and ``Client Secret`` values in the settings::
@@ -16,5 +16,8 @@ Dribbble
 
       SOCIAL_AUTH_DRIBBBLE_SCOPE = [...]
 
-  See auth scopes at http://developer.dribbble.com/v1/oauth/
+  See auth scopes at `Dribbble Developer docs`_.
 
+
+.. _Dribbble: https://dribbble.com/account/applications/new
+.. _Dribbble Developer docs: http://developer.dribbble.com/v1/oauth/
