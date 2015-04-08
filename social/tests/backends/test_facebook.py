@@ -1,6 +1,5 @@
 import json
 
-from social.p3 import urlencode
 from social.exceptions import AuthUnknownError
 
 from social.tests.backends.oauth import OAuth2Test
@@ -8,9 +7,9 @@ from social.tests.backends.oauth import OAuth2Test
 
 class FacebookOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.facebook.FacebookOAuth2'
-    user_data_url = 'https://graph.facebook.com/me'
+    user_data_url = 'https://graph.facebook.com/v2.3/me'
     expected_username = 'foobar'
-    access_token_body = urlencode({
+    access_token_body = json.dumps({
         'access_token': 'foobar',
         'token_type': 'bearer'
     })
