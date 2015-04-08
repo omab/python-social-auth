@@ -19,7 +19,7 @@ Add the Spotify OAuth2 backend to your settings page::
 
 - Fill ``App Key`` and ``App Secret`` values in the settings::
 
-      SOCIAL_AUTH_SPOTIFY_OAUTH2_KEY = ''
-      SOCIAL_AUTH_SPOTIFY_OAUTH2_SECRET = ''
+      SOCIAL_AUTH_SPOTIFY_KEY = ''
+      SOCIAL_AUTH_SPOTIFY_SECRET = ''
 
 .. _Spotify Web API: https://developer.spotify.com/spotify-web-api
