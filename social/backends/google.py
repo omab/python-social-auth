@@ -73,6 +73,12 @@ class BaseGoogleOAuth2API(BaseGoogleAuth):
             'alt': 'json'
         })
 
+    def revoke_token_params(self, token, uid):
+        return {'token': token}
+
+    def revoke_token_headers(self, token, uid):
+        return {'Content-type': 'application/json'}
+
 
 class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
     """Google OAuth2 authentication backend"""
@@ -94,12 +100,6 @@ class GoogleOAuth2(BaseGoogleOAuth2API, BaseOAuth2):
         ('expires_in', 'expires'),
         ('token_type', 'token_type', True)
     ]
-
-    def revoke_token_params(self, token, uid):
-        return {'token': token}
-
-    def revoke_token_headers(self, token, uid):
-        return {'Content-type': 'application/json'}
 
 
 class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
