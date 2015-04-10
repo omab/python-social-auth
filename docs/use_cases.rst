@@ -144,6 +144,9 @@ will be done by AJAX. It doesn't return the user information, but that's
 something that can be extended and filled to suit the project where it's going
 to be used.
 
+This topic is well addressed in `A Rest API using Django and authentication
+with OAuth2 AND third parties!`_ wrote by `Félix Descôteaux`_.
+
 
 Multiple scopes per provider
 ----------------------------
@@ -311,3 +314,5 @@ Set this pipeline after ``social_user``::
 
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _People API endpoint: https://developers.google.com/+/api/latest/people/list
+.. _Félix Descôteaux: https://twitter.com/FelixDescoteaux
+.. _A Rest API using Django and authentication with OAuth2 AND third parties!: http://httplambda.com/a-rest-api-with-django-and-oauthw-authentication/
