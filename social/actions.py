@@ -74,7 +74,7 @@ def do_complete(backend, login, user=None, redirect_name='next',
                 url = setting_url(backend, redirect_value,
                                   'LOGIN_REDIRECT_URL')
         else:
-            if backend.setting('SOCIAL_AUTH_INACTIVE_USER_LOGIN', False):
+            if backend.setting('INACTIVE_USER_LOGIN', False):
                 social_user = user.social_user
                 login(backend, user, social_user)
             url = setting_url(backend, 'INACTIVE_USER_URL', 'LOGIN_ERROR_URL',
