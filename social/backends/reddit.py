@@ -29,9 +29,7 @@ class RedditOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Reddit account"""
-        return {'username': response.get('name'),
-                'email': '', 'fullname': '',
-                'first_name': '', 'last_name': ''}
+        return {'username': response.get('name')}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
