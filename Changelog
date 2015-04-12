@@ -1,6 +1,98 @@
-2015-03-31 HEAD (unreleased)
+2015-04-11 v0.2.4
+=================
+
+  * 2015-04-11 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix setting name (make it backend related). Refs #586
+
+  * 2015-04-10 Matías Aguirre <matiasaguirre@gmail.com>
+    Link to post about access-token based authentication
+
+  * 2015-04-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Move revoke methods to common class. Fixes #484
+
+  * 2015-04-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix settings names on spotify docs. Fixes #475
+
+  * 2015-04-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix links in docs
+
+  * 2015-04-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix Facebook test case after API version change. Refs #480
+
+  * 2015-04-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Update Facebook to API v2.3
+
+  * 2015-04-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix get_scope() override example
+
+  * 2015-04-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Raise error if token was passed but it's incomplete. Fixes #574
+
+  * 2015-04-06 Matías Aguirre <matiasaguirre@gmail.com>
+    Flag dev version
+
+  * 2015-04-06 Matt Robenolt <matt@ydekproductions.com>
+    Build a wheel, and upload with twine
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Log error messages. Fixes #507
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Pass all arguments to extra_data (save access token).
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Improve http error handling on auth_complete/do_auth. Fixes #304
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Update docs about SOCIAL_AUTH_PROTECTED_USER_FIELDS. Fixes #459
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Optional trailing slash on django apps. Fixes #505
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Improve deprecation notice on behance docs
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Add notice about behance broken api. Refs #530
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove unsupported attribute from alter field migration
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove hard limitations on PyJWT and requests-oauthlib versions. Fixes #531
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Change title
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Link backend docs
+
+  * 2015-04-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Add docs about disconnection and logging out difference. Fixes #568
+
+  * 2015-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Conditional import on transaction, update docs to mention it. Fixes #572
+
+  * 2015-04-03 Matías Aguirre <matiasaguirre@gmail.com>
+    Define a MANIFEST.in file. Fixes #578
+
+  * 2015-04-03 Lucas Roesler <roesler.lucas@gmail.com>
+    Allow inactive users to login
+
+  * 2015-04-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Update django/mongoengine example (similar to default one). Refs #576
+
+  * 2015-04-02 Matías Aguirre <matiasaguirre@gmail.com>
+    Add backward compatibility on django app initialization. Refs #550
+
+  * 2015-04-01 M.Yasoob Ullah Khalid ☺ <yasoob.khld@gmail.com>
+    Update LICENSE
+
 2015-03-31 v0.2.3
 =================
+
+  * 2015-03-31 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.3
 
   * 2015-03-31 Matías Aguirre <matiasaguirre@gmail.com>
     PEP8. Refs #570
@@ -52,6 +144,9 @@
 
   * 2015-03-17 Matías Aguirre <matiasaguirre@gmail.com>
     Ensure to flush the db session (needed for Pyramid + sqlalchemy). Refs #390
+
+  * 2015-03-12 DanielJDufour <daniel.j.dufour@gmail.com>
+    update for django 1.9
 
   * 2015-03-12 Matt Howland <matt.howland@lab45.com>
     Create vend.py
@@ -279,6 +374,10 @@
 
   * 2014-12-24 Alex Muller <alex.muller@digital.cabinet-office.gov.uk>
     Update GitHub documentation
+
+  * 2014-12-19 Frankie Robertson <frankie@robertson.name>
+    Fix #460: Call force_text on _URL settings to support reverse_lazy with
+    default session serializer
 
   * 2014-11-27 James Potter <james.potter@gmail.com>
     Update django.rst
