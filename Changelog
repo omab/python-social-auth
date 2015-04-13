@@ -1,5 +1,17 @@
+2015-04-13 v0.2.5
+=================
+
+  * 2015-04-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix wheel support. Refs #588
+
+  * 2015-04-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Add email to default list of protected userfields (popular demand)
+
 2015-04-11 v0.2.4
 =================
+
+  * 2015-04-11 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.4
 
   * 2015-04-11 Matías Aguirre <matiasaguirre@gmail.com>
     Fix setting name (make it backend related). Refs #586
@@ -618,7 +630,7 @@
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     Flag dev version
 
-2014-09-11 v0.2.1
+2015-09-11 v0.2.1
 =================
 
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
@@ -633,7 +645,7 @@
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     Flag dev version
 
-2014-09-11 v0.2.0
+2015-09-11 v0.2.0
 =================
 
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
