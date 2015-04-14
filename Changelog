@@ -1,5 +1,17 @@
+2015-04-14 v0.2.6
+=================
+
+  * 2015-04-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Include tests requirements files. Fixes #590
+
+  * 2015-04-13 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix publish task
+
 2015-04-13 v0.2.5
 =================
+
+  * 2015-04-13 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.5
 
   * 2015-04-13 Matías Aguirre <matiasaguirre@gmail.com>
     Fix wheel support. Refs #588
@@ -630,7 +642,7 @@
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     Flag dev version
 
-2015-09-11 v0.2.1
+2014-09-11 v0.2.1
 =================
 
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
@@ -645,7 +657,7 @@
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     Flag dev version
 
-2015-09-11 v0.2.0
+2014-09-11 v0.2.0
 =================
 
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
