@@ -67,7 +67,6 @@ setup(
     keywords='django, flask, pyramid, webpy, openid, oauth, social auth',
     url='https://github.com/omab/python-social-auth',
     packages=get_packages(),
-    # package_data={'social': ['locale/*/LC_MESSAGES/*']},
     long_description=long_description(),
     install_requires=requirements,
     classifiers=[
@@ -81,6 +80,10 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3'
     ],
+    package_data={
+        'social/tests': ['social/tests/*.txt']
+    },
+    include_package_data=True,
     tests_require=tests_requirements,
     test_suite='social.tests',
     zip_safe=False
