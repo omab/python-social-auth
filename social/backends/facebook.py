@@ -70,8 +70,7 @@ class FacebookOAuth2(BaseOAuth2):
             raise AuthMissingParameter(self, 'code')
         state = self.validate_state()
         key, secret = self.get_key_and_secret()
-        url = self.ACCESS_TOKEN_URL
-        response = self.get_json(url, params={
+        response = self.get_json(self.ACCESS_TOKEN_URL, params={
             'client_id': key,
             'redirect_uri': self.get_redirect_uri(state),
             'client_secret': secret,
