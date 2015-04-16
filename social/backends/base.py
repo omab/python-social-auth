@@ -191,10 +191,6 @@ class BaseAuth(object):
         kwargs.update({'backend': self, 'strategy': self.strategy})
         return self.authenticate(*args, **kwargs)
 
-    def request_token_extra_arguments(self):
-        """Return extra arguments needed on request-token process"""
-        return self.setting('REQUEST_TOKEN_EXTRA_ARGUMENTS', {})
-
     def auth_extra_arguments(self):
         """Return extra arguments needed on auth process. The defaults can be
         overriden by GET parameters."""

@@ -224,6 +224,10 @@ class BaseOAuth1(OAuthAuth):
         self.strategy.session_set(name, tokens)
         return token
 
+    def request_token_extra_arguments(self):
+        """Return extra arguments needed on request-token process"""
+        return self.setting('REQUEST_TOKEN_EXTRA_ARGUMENTS', {})
+
     def unauthorized_token(self):
         """Return request for unauthorized token (first stage)"""
         params = self.request_token_extra_arguments()
