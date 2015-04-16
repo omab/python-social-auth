@@ -45,7 +45,8 @@ def get_username(strategy, details, user=None, *args, **kwargs):
         # Generate a unique username for current user using username
         # as base but adding a unique hash at the end. Original
         # username is cut to avoid any field max_length.
-        while storage.user.user_exists(username=final_username):
+        # The final_username may be empty and will skip the loop.
+        while storage.user.user_exists(username=final_username) or not final_username:
             username = short_username + uuid4().hex[:uuid_length]
             final_username = slug_func(clean_func(username[:max_length]))
     else:
