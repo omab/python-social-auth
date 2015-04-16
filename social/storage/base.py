@@ -15,7 +15,7 @@ from social.backends.utils import get_backend
 from social.strategies.utils import get_current_strategy
 
 
-CLEAN_USERNAME_REGEX = re.compile(r'[^\w.@+-_]+', re.UNICODE)
+CLEAN_USERNAME_REGEX = re.compile(r'[^\w.@+_-]+', re.UNICODE)
 
 
 class UserMixin(object):
