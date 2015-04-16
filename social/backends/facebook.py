@@ -70,12 +70,19 @@ class FacebookOAuth2(BaseOAuth2):
             raise AuthMissingParameter(self, 'code')
         state = self.validate_state()
         key, secret = self.get_key_and_secret()
-        response = self.get_json(self.ACCESS_TOKEN_URL, params={
+        response = self.request(self.ACCESS_TOKEN_URL, params={
             'client_id': key,
             'redirect_uri': self.get_redirect_uri(state),
             'client_secret': secret,
             'code': self.data['code']
         })
+        # API v2.3 returns a JSON, according to the documents linked at issue
+        # #592, but it seems that this needs to be enabled(?), otherwise the
+        # usual querystring type response is returned.
+        try:
+            response = response.json()
+        except ValueError:
+            response = parse_qs(response.text)
         access_token = response['access_token']
         return self.do_auth(access_token, response, *args, **kwargs)
 
