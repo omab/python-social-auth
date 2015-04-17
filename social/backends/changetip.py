@@ -20,7 +20,7 @@ class ChangeTipOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        url = 'https://www.changetip.com/v2/me/?' + urlencode({
+        url = 'https://api.changetip.com/v2/me/?' + urlencode({
             'access_token': access_token
         })
         try:
