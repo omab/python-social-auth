@@ -1,5 +1,48 @@
+2015-04-19 v0.2.7
+=================
+
+  * 2015-04-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Don't send redirect_state to slack backend
+
+  * 2015-04-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix clean username regex. Fixes #594
+
+  * 2015-04-16 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and switch check order
+
+  * 2015-04-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Take into account that sometimes API v2.3 returns the old querystring
+    format. Fixes #592
+
+  * 2015-04-16 Matías Aguirre <matiasaguirre@gmail.com>
+    Move OAuth1 method out from the base class
+
+  * 2015-04-16 zz <zz.at.field@gmail.com>
+    Fix the final_username may be empty and will skip the loop.
+
+  * 2015-04-16 ys.chi <duguschi@gmail.com>
+    Alter email max length for Django app
+
+  * 2015-04-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove single-use var
+
+  * 2015-04-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Clean any pipeline remanents when starting the process. Refs #325
+
+  * 2015-04-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Flag dev version
+
+  * 2015-04-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Swtich Twitter API to POST (as it's documented)
+
+  * 2015-04-15 Christian Pedersen <chripede@gmail.com>
+    Append trailing slash in Django
+
 2015-04-14 v0.2.6
 =================
+
+  * 2015-04-14 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.6
 
   * 2015-04-14 Matías Aguirre <matiasaguirre@gmail.com>
     Include tests requirements files. Fixes #590
