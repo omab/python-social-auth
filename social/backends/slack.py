@@ -26,8 +26,10 @@ class SlackOAuth2(BaseOAuth2):
         """Return user details from Slack account"""
         # Build the username with the team $username@$team_url
         # Necessary to get unique names for all of slack
-        match = re.search(r'//([^.]+)\.slack\.com', response['url'])
-        username = '{0}@{1}'.format(response.get("user"), match.group(1))
+        username = response.get('user')
+        if self.setting('USERNAME_WITH_TEAM', True):
+            match = re.search(r'//([^.]+)\.slack\.com', response['url'])
+            username = '{0}@{1}'.format(username, match.group(1))
 
         out = {'username': username}
         if 'profile' in response:
