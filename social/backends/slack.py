@@ -15,7 +15,7 @@ class SlackOAuth2(BaseOAuth2):
     ACCESS_TOKEN_URL = 'https://slack.com/api/oauth.access'
     ACCESS_TOKEN_METHOD = 'POST'
     SCOPE_SEPARATOR = ','
-    REDIRECT_STATE = True
+    REDIRECT_STATE = False
     EXTRA_DATA = [
         ('id', 'id'),
         ('name', 'name'),
