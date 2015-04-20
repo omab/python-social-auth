@@ -16,7 +16,7 @@ class ChangeTipOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from ChangeTip account"""
         return {'username': response['username'],
-                'email': response['email'] or ''}
+                'email': response.get('email', '')}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
