@@ -1,6 +1,4 @@
 from social.backends.oauth import BaseOAuth2
-from urllib import urlencode, urlopen
-import json
 
 
 class ChangeTipOAuth2(BaseOAuth2):
@@ -15,15 +13,15 @@ class ChangeTipOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from ChangeTip account"""
-        return {'username': response['username'],
-                'email': response.get('email', '')}
+        return {
+            'username': response['username'],
+            'email': response.get('email', ''),
+            'first_name': '',
+            'last_name': '',
+        }
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        url = 'https://api.changetip.com/v2/me/?' + urlencode({
+        return self.get_json('https://api.changetip.com/v2/me/', params={
             'access_token': access_token
         })
-        try:
-            return json.load(urlopen(url))
-        except ValueError:
-            return None
