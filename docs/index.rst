@@ -9,7 +9,7 @@ The initial codebase is derived from django-social-auth_ with the idea of
 generalizing the process to suite the different frameworks around, providing
 the needed tools to bring support to new frameworks.
 
-django-social-auth_ itself was a product of modified code from from
+django-social-auth_ itself was a product of modified code from
 django-twitter-oauth_ and django-openid-auth_ projects.
 
 

@@ -93,7 +93,7 @@ or extend current one):
 User data
 *********
 
-Basic user data population, to allows custom fields values from providers
+Basic user data population, to allow custom fields values from providers
 response.
 
 

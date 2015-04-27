@@ -158,7 +158,7 @@ storage modules.
 When implementing this class it must inherits from BaseStorage_, add the needed
 models references and implement the needed method::
 
-    class StorageImlpementation(BaseStorage):
+    class StorageImplementation(BaseStorage):
         user = UserModel
         nonce = NonceModel
         association = AssociationModel
