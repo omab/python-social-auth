@@ -21,6 +21,9 @@ enable ``python-social-auth`` support follow this steps:
 
 Further documentation at `Website Developer Guide`_ and `Getting Started for Web`_.
 
+**Note:** This backend supports TLSv1 protocol since SSL will be deprecated
+          from May 25, 2015
+
 .. _Amazon App Console: http://login.amazon.com/manageApps
 .. _Website Developer Guide: https://images-na.ssl-images-amazon.com/images/G/01/lwa/dev/docs/website-developer-guide._TTH_.pdf
 .. _Getting Started for Web: http://login.amazon.com/website
