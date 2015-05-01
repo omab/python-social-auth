@@ -9,6 +9,9 @@ import six
 import requests
 import social
 
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.poolmanager import PoolManager
+
 from social.exceptions import AuthCanceled, AuthUnreachableProvider
 from social.p3 import urlparse, urlunparse, urlencode, \
                       parse_qs as battery_parse_qs
@@ -17,6 +20,30 @@ from social.p3 import urlparse, urlunparse, urlencode, \
 SETTING_PREFIX = 'SOCIAL_AUTH'
 
 social_logger = logging.Logger('social')
+
+
+class SSLHttpAdapter(HTTPAdapter):
+    """"
+    Transport adapter that allows to use any SSL protocol. Based on:
+    http://requests.rtfd.org/latest/user/advanced/#example-specific-ssl-version
+    """
+    def __init__(self, ssl_protocol):
+        self.ssl_protocol = ssl_protocol
+        super(SSLHttpAdapter, self).__init__()
+
+    def init_poolmanager(self, connections, maxsize, block=False):
+        self.poolmanager = PoolManager(
+            num_pools=connections,
+            maxsize=maxsize,
+            block=block,
+            ssl_version=self.ssl_protocol
+        )
+
+    @classmethod
+    def ssl_adapter_session(cls, ssl_protocol):
+        session = requests.Session()
+        session.mount('https://', SSLHttpAdapter(ssl_protocol))
+        return session
 
 
 def import_module(name):

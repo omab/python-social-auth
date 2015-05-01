@@ -1,6 +1,6 @@
 from requests import request, ConnectionError
 
-from social.utils import module_member, parse_qs, user_agent
+from social.utils import SSLHttpAdapter, module_member, parse_qs, user_agent
 from social.exceptions import AuthFailed
 
 
@@ -13,6 +13,7 @@ class BaseAuth(object):
     EXTRA_DATA = None
     REQUIRES_EMAIL_VALIDATION = False
     SEND_USER_AGENT = False
+    SSL_PROTOCOL = None
 
     def __init__(self, strategy=None, redirect_uri=None):
         self.strategy = strategy
@@ -210,12 +211,15 @@ class BaseAuth(object):
             kwargs.setdefault('verify', self.setting('VERIFY_SSL'))
         kwargs.setdefault('timeout', self.setting('REQUESTS_TIMEOUT') or
                                      self.setting('URLOPEN_TIMEOUT'))
-
         if self.SEND_USER_AGENT and 'User-Agent' not in kwargs['headers']:
             kwargs['headers']['User-Agent'] = user_agent()
 
         try:
-            response = request(method, url, *args, **kwargs)
+            if self.SSL_PROTOCOL:
+                session = SSLHttpAdapter.ssl_adapter_session(self.SSL_PROTOCOL)
+                response = session.request(method, url, *args, **kwargs)
+            else:
+                response = request(method, url, *args, **kwargs)
         except ConnectionError as err:
             raise AuthFailed(self, str(err))
         response.raise_for_status()
