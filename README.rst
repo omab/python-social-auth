@@ -89,6 +89,7 @@ or current ones extended):
     * MapMyFitness_ OAuth2
     * Mendeley_ OAuth1 http://mendeley.com
     * Mixcloud_ OAuth2
+    * Moves_ app OAuth2 https://dev.moves-app.com/docs/authentication
     * `Mozilla Persona`_
     * NaszaKlasa_ OAuth2
     * Odnoklassniki_ OAuth2 and Application Auth
