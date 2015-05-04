@@ -89,6 +89,7 @@ or current ones extended):
     * MapMyFitness_ OAuth2
     * Mendeley_ OAuth1 http://mendeley.com
     * Mixcloud_ OAuth2
+    * `Moves app`_ OAuth2 https://dev.moves-app.com/docs/authentication
     * `Mozilla Persona`_
     * NaszaKlasa_ OAuth2
     * Odnoklassniki_ OAuth2 and Application Auth
@@ -259,6 +260,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Mailru: https://mail.ru
 .. _MapMyFitness: http://www.mapmyfitness.com/
 .. _Mixcloud: https://www.mixcloud.com
+.. _Moves app: https://dev.moves-app.com/docs/
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _NaszaKlasa: https://developers.nk.pl/
 .. _Odnoklassniki: http://www.odnoklassniki.ru
