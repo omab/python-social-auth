@@ -1,8 +1,53 @@
+2015-05-02 v0.2.8
+=================
+
+  * 2015-05-02 Avi אבי Alkalay אלקלעי <avibrazil@gmail.com>
+    Fixed Moves link on list of providers
+
+  * 2015-05-02 Avi אבי Alkalay אלקלעי <avibrazil@gmail.com>
+    Added Moves to the list of providers
+
+  * 2015-05-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Add note about TLSv1 support in Amazon backend
+
+  * 2015-05-01 Matías Aguirre <matiasaguirre@gmail.com>
+    Support SSL protocol override, default Amazon to TLSv1. Fixes #603
+
+  * 2015-04-27 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix typos in docs (thanks to vsobolmaven)
+
+  * 2015-04-21 Matías Aguirre <matiasaguirre@gmail.com>
+    Make URLs trailing slash be configurable by setting. Refs #505
+
+  * 2015-04-20 Matías Aguirre <matiasaguirre@gmail.com>
+    Use get_json() helper
+
+  * 2015-04-20 Nick Sullivan <nick@sullivanflock.com>
+    Documentation for ChangeTip backend
+
+  * 2015-04-20 Nick Sullivan <nick@sullivanflock.com>
+    fail gracefully on missing email
+
+  * 2015-04-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Allow to remove team from username in slack backend
+
+  * 2015-04-19 Matías Aguirre <matiasaguirre@gmail.com>
+    Flag dev version
+
 2015-04-19 v0.2.7
 =================
 
   * 2015-04-19 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.7
+
+  * 2015-04-19 Matías Aguirre <matiasaguirre@gmail.com>
     Don't send redirect_state to slack backend
+
+  * 2015-04-17 Nick Sullivan <nick@sullivanflock.com>
+    use api domain for changetip request
+
+  * 2015-04-17 Nick Sullivan <nick@sullivanflock.com>
+    ChangeTip backend
 
   * 2015-04-16 Matías Aguirre <matiasaguirre@gmail.com>
     Fix clean username regex. Fixes #594
