@@ -28,7 +28,8 @@ class TornadoStrategy(BaseStrategy):
 
     def request_data(self, merge=True):
         # Multiple valued arguments not supported yet
-        return {key: val[0] for key, val in self.request.arguments.iteritems()}
+        return dict((key, val[0])
+                for key, val in self.request.arguments.iteritems())
 
     def request_host(self):
         return self.request.host
