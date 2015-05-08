@@ -6,7 +6,7 @@ from social.actions import do_disconnect
 from social.exceptions import NotAllowedToDisconnect
 from social.utils import parse_qs
 
-from social.tests.models import User
+from social.tests.models import User, TestUserSocialAuth
 from social.tests.actions.actions import BaseActionTest
 
 
@@ -23,6 +23,17 @@ class DisconnectActionTest(BaseActionTest):
         user.password = 'password'
         do_disconnect(self.backend, user)
         self.assertEqual(len(user.social), 0)
+
+    def test_disconnect_with_association_id(self):
+        self.do_login()
+        user = User.get(self.expected_username)
+        user.password = 'password'
+        association_id = user.social[0].id
+        second_usa = TestUserSocialAuth(user, user.social[0].provider, "uid2")
+        self.assertEqual(len(user.social), 2)
+        do_disconnect(self.backend, user, association_id)
+        self.assertEqual(len(user.social), 1)
+        self.assertEqual(user.social[0], second_usa)
 
     def test_disconnect_with_partial_pipeline(self):
         self.strategy.set_settings({

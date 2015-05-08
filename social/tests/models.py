@@ -117,7 +117,7 @@ class TestUserSocialAuth(UserMixin, BaseModel):
 
     @classmethod
     def get_social_auth_for_user(cls, user, provider=None, id=None):
-        return user.social
+        return [usa for usa in user.social if provider in (None, usa.provider) and id in (None, usa.id)]
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):
