@@ -90,6 +90,11 @@ def do_complete(backend, login, user=None, redirect_name='next',
         url += ('?' in url and '&' or '?') + \
                '{0}={1}'.format(redirect_name, redirect_value)
 
+    for parameter_name in backend.setting('LOGIN_REDIRECT_URL_PARAMETER', []):
+        parameter = backend.strategy.session_get(parameter_name)
+        if parameter:
+            url += ('?' in url and '&' or '?') + '{0}={1}'.format(parameter_name, quote(parameter))
+
     if backend.setting('SANITIZE_REDIRECTS', True):
         url = sanitize_redirect(backend.strategy.request_host(), url) or \
               backend.setting('LOGIN_REDIRECT_URL')
