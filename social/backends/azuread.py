@@ -57,9 +57,22 @@ class AzureADOAuth2(BaseOAuth2):
         
         return decoded_id_token
 
+    def auth_extra_arguments(self):
+        """Return extra arguments needed on auth process. The defaults can be
+        overriden by GET parameters."""
+        extra_arguments = {}
+        resource = self.setting('RESOURCE')
+        
+        if resource:
+            extra_arguments = {
+                'resource': resource
+            }
+        
+        return extra_arguments
+
     def extra_data(self, user, uid, response, details=None):
         """Return access_token and extra defined names to store in
         extra_data field"""
         data = super(BaseOAuth2, self).extra_data(user, uid, response, details)
+        data['resource'] = self.setting('RESOURCE')
         return data
-
