@@ -29,19 +29,6 @@ class AzureADOAuth2(BaseOAuth2):
         ('token_type', 'token_type')
     ]
 
-    def auth_extra_arguments(self):
-        """Return extra arguments needed on auth process. The defaults can be
-        overriden by GET parameters."""
-        extra_arguments = {}
-        resource = self.setting('SHAREPOINT_SITE')
-        
-        if resource:
-            extra_arguments = {
-                'resource': resource
-            }
-        
-        return extra_arguments
-
     def get_user_id(self, details, response):
         """Use upn as unique id"""
         return response.get('upn')
@@ -74,6 +61,5 @@ class AzureADOAuth2(BaseOAuth2):
         """Return access_token and extra defined names to store in
         extra_data field"""
         data = super(BaseOAuth2, self).extra_data(user, uid, response, details)
-        data['sharepoint_site'] = self.setting('SHAREPOINT_SITE')
         return data
 
