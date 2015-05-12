@@ -9,6 +9,7 @@ from social.exceptions import AuthException, AuthFailed, AuthCanceled, \
                               AuthTokenError
 from jwt import DecodeError, ExpiredSignature, decode as jwt_decode
 from social.backends.oauth import BaseOAuth2
+import requests
 import urllib
 
 class AzureADOAuth2(BaseOAuth2):
@@ -76,3 +77,19 @@ class AzureADOAuth2(BaseOAuth2):
         data = super(BaseOAuth2, self).extra_data(user, uid, response, details)
         data['resource'] = self.setting('RESOURCE')
         return data
+
+    def refresh_token_params(self, token, *args, **kwargs):
+        return {
+            'refresh_token': token,
+            'grant_type': 'refresh_token',
+            'resource': self.setting('RESOURCE')
+        }
+
+    def get_auth_token(self, token):
+        response = requests.get('https://graph.windows.net/me', headers={'Authorization': 'Bearer ' + token})
+
+        if response.status_code == 401:
+            new_token_response = self.refresh_token(token)
+            token = new_token_response['access_token']
+
+        return token
