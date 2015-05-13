@@ -10,6 +10,7 @@ from social.exceptions import AuthException, AuthFailed, AuthCanceled, \
 from jwt import DecodeError, ExpiredSignature, decode as jwt_decode
 from social.backends.oauth import BaseOAuth2
 import requests
+import time
 import urllib
 
 class AzureADOAuth2(BaseOAuth2):
@@ -25,6 +26,8 @@ class AzureADOAuth2(BaseOAuth2):
         ('id_token', 'id_token'),
         ('refresh_token', 'refresh_token'),
         ('expires_in', 'expires'),
+        ('expires_on', 'expires_on'),
+        ('not_before', 'not_before'),
         ('given_name', 'first_name'),
         ('family_name', 'last_name'),
         ('token_type', 'token_type')
@@ -85,11 +88,17 @@ class AzureADOAuth2(BaseOAuth2):
             'resource': self.setting('RESOURCE')
         }
 
-    def get_auth_token(self, token):
-        response = requests.get('https://graph.windows.net/me', headers={'Authorization': 'Bearer ' + token})
+    def get_auth_token(self, user_id):
+        """Return the access token for the given user, after ensuring that it has not expired, 
+        or refreshing it if so."""
+        user = self.get_user(user_id=user_id)
 
-        if response.status_code == 401:
-            new_token_response = self.refresh_token(token)
-            token = new_token_response['access_token']
+        access_token = user.social_user.access_token
+        expires_on = user.social_user.extra_data['expires_on']
 
-        return token
+        if expires_on <= int(time.time()):
+            new_token_response = self.refresh_token(token=access_token)
+            access_token = new_token_response['access_token']
+
+        return access_token
+
