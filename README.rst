@@ -63,6 +63,7 @@ or current ones extended):
     * Clef_ OAuth2
     * Coursera_ OAuth2
     * Dailymotion_ OAuth2
+    * DigitalOcean_ OAuth2 https://developers.digitalocean.com/documentation/oauth/
     * Disqus_ OAuth2
     * Douban_ OAuth1 and OAuth2
     * Dropbox_ OAuth1 and OAuth2
@@ -240,6 +241,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Clef: https://getclef.com/
 .. _Coursera: https://www.coursera.org/
 .. _Dailymotion: https://dailymotion.com
+.. _DigitalOcean: https://www.digitalocean.com/
 .. _Disqus: https://disqus.com
 .. _Douban: http://www.douban.com
 .. _Dropbox: https://dropbox.com
