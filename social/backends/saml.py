@@ -28,7 +28,8 @@ class SAMLIdentityProvider(object):
     def __init__(self, name, **kwargs):
         """ Load and parse configuration """
         self.name = name
-        assert self.name.isalnum()  # If 'name' contained a colon, it would affect our UID mangling
+        # name should be a slug and must not contain a colon, which could conflict with uid prefixing:
+        assert ':' not in self.name and ' ' not in self.name, "IdP 'name' should be a slug (short, no spaces)"
         self.conf = kwargs
 
     def get_user_permanent_id(self, attributes):
