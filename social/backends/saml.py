@@ -14,6 +14,7 @@ from social.exceptions import AuthFailed
 # Helpful constants:
 OID_COMMON_NAME = "urn:oid:2.5.4.3"
 OID_EDU_PERSON_PRINCIPAL_NAME = "urn:oid:1.3.6.1.4.1.5923.1.1.1.6"
+OID_EDU_PERSON_ENTITLEMENT = "urn:oid:1.3.6.1.4.1.5923.1.1.1.7"
 OID_GIVEN_NAME = "urn:oid:2.5.4.42"
 OID_MAIL = "urn:oid:0.9.2342.19200300.100.1.3"
 OID_SURNAME = "urn:oid:2.5.4.4"
@@ -210,11 +211,11 @@ class SAMLAuth(BaseAuth):
         errors = saml_settings.validate_metadata(metadata)
         return metadata, errors
 
-    def _create_saml_auth(self, idp_name):
+    def _create_saml_auth(self, idp):
         """
         Get an instance of OneLogin_Saml2_Auth
         """
-        config = self.generate_saml_config(idp=self.get_idp(idp_name))
+        config = self.generate_saml_config(idp)
         request_info = {
             'https': 'on' if self.strategy.request_is_secure() else 'off',
             'http_host': self.strategy.request_host(),
@@ -228,7 +229,7 @@ class SAMLAuth(BaseAuth):
     def auth_url(self):
         """ Get the URL to which we must redirect in order to authenticate the user """
         idp_name = self.strategy.request_data()['idp']
-        auth = self._create_saml_auth(idp_name)
+        auth = self._create_saml_auth(idp=self.get_idp(idp_name))
         # Below, return_to sets the RelayState, which can contain arbitrary data.
         # We use it to store the specific SAML IdP backend name, since we combine
         # many backends to a single URL.
@@ -257,7 +258,8 @@ class SAMLAuth(BaseAuth):
         everything checks out.
         """
         idp_name = self.strategy.request_data()['RelayState']
-        auth = self._create_saml_auth(idp_name)
+        idp = self.get_idp(idp_name)
+        auth = self._create_saml_auth(idp)
         auth.process_response()
         errors = auth.get_errors()
         if errors or not auth.is_authenticated():
@@ -266,6 +268,8 @@ class SAMLAuth(BaseAuth):
 
         attributes = auth.get_attributes()
         attributes['name_id'] = auth.get_nameid()
+
+        self._check_entitlements(idp, attributes)
 
         response = {
             'idp_name': idp_name,
@@ -276,3 +280,15 @@ class SAMLAuth(BaseAuth):
         kwargs.update({'response': response, 'backend': self})
 
         return self.strategy.authenticate(*args, **kwargs)
+
+    def _check_entitlements(self, idp, attributes):
+        """
+        Additional verification of a SAML response before authenticating the user.
+
+        Subclasses can override this method if they need custom validation code,
+        such as requiring the presence of an eduPersonEntitlement.
+
+        raise social.exceptions.AuthForbidden if the user should not be authenticated,
+        or do nothing to allow the login pipeline to continue.
+        """
+        pass
