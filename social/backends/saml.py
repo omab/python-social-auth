@@ -75,11 +75,6 @@ class SAMLIdentityProvider(object):
         return self.conf['url']  # Required. e.g. "https://idp.testshib.org/idp/profile/SAML2/Redirect/SSO"
 
     @property
-    def sso_binding(self):
-        """ Get the method used to submit our request to the SSO URL """
-        return self.conf.get('binding', 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect')
-
-    @property
     def x509cert(self):
         """ X.509 Public Key Certificate for this IdP """
         return self.conf['x509cert']
@@ -91,7 +86,7 @@ class SAMLIdentityProvider(object):
             "entityId": self.entity_id,
             "singleSignOnService": {
                 "url": self.sso_url,
-                "binding": self.sso_binding,
+                "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",  # python-saml only supports Redirect
             },
             "x509cert": self.x509cert,
         }
@@ -174,7 +169,7 @@ class SAMLAuth(BaseAuth):
             "sp": {
                 "assertionConsumerService": {
                     "url": abs_completion_url,
-                    "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                    "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",  # python-saml only supports HTTP-POST
                 },
                 "entityId": self.setting("SP_ENTITY_ID"),
                 "NameIDFormats": self.setting("SP_NAMEID_FORMATS", []),
@@ -231,8 +226,8 @@ class SAMLAuth(BaseAuth):
         idp_name = self.strategy.request_data()['idp']
         auth = self._create_saml_auth(idp=self.get_idp(idp_name))
         # Below, return_to sets the RelayState, which can contain arbitrary data.
-        # We use it to store the specific SAML IdP backend name, since we combine
-        # many backends to a single URL.
+        # We use it to store the specific SAML IdP name, since we multiple IdPs
+        # share the same auth_complete URL.
         return auth.login(return_to=idp_name)
 
     def get_user_details(self, response):

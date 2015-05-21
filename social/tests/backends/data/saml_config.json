@@ -17,10 +17,7 @@
         },
         "other": {
             "entity_id": "https://unused.saml.example.com",
-            "singleSignOnService": {
-                "url": "https://unused.saml.example.com/SAML2/Redirect/SSO",
-                "binding": "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
-            }
+            "url": "https://unused.saml.example.com/SAML2/Redirect/SSO"
         }
     }
 }
