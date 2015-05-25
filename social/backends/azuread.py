@@ -100,10 +100,10 @@ class AzureADOAuth2(BaseOAuth2):
         
         return extra_arguments
 
-    def extra_data(self, user, uid, response, details=None):
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         """Return access_token and extra defined names to store in
         extra_data field"""
-        data = super(BaseOAuth2, self).extra_data(user, uid, response, details)
+        data = super(AzureADOAuth2, self).extra_data(user, uid, response,details, *args, **kwargs)
         data['resource'] = self.setting('RESOURCE')
         return data
 
