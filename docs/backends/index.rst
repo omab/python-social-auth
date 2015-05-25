@@ -50,6 +50,7 @@ Social backends
    angel
    aol
    appsfuel
+   azure_ad
    battlenet
    beats
    behance
