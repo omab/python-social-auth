@@ -50,6 +50,7 @@ Social backends
    angel
    aol
    appsfuel
+   azuread
    battlenet
    beats
    behance
