@@ -30,19 +30,21 @@ class WeixinOAuth2(BaseOAuth2):
             username = response.get('domain', '')
         else:
             username = response.get('nickname', '')
-        profile_image_url = response.get('headimgurl', '')
-        return {'username': username, 'profile_image_url': profile_image_url}
+        return {
+            'username': username,
+            'profile_image_url': response.get('headimgurl', '')
+        }
 
     def user_data(self, access_token, *args, **kwargs):
-        data = self.get_json('https://api.weixin.qq.com/sns/userinfo',
-                             params={'access_token': access_token,
-                                     'openid': kwargs['response']['openid']})
+        data = self.get_json('https://api.weixin.qq.com/sns/userinfo', params={
+            'access_token': access_token,
+            'openid': kwargs['response']['openid']
+        })
         nickname = data.get('nickname')
         if nickname:
             # weixin api has some encode bug, here need handle
             data['nickname'] = nickname.encode('raw_unicode_escape').decode('utf-8')
         return data
-
 
     def auth_params(self, state=None):
         appid, secret = self.get_key_and_secret()
