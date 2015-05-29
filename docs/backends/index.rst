@@ -57,6 +57,7 @@ Social backends
    belgium_eid
    bitbucket
    box
+   changetip
    clef
    coinbase
    coursera

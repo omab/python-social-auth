@@ -1,5 +1,5 @@
 ChangeTip
-=====
+=========
 
 ChangeTip
 
@@ -18,5 +18,5 @@ ChangeTip
 
   See auth scopes at `ChangeTip OAuth docs`_.
 
-
 .. _ChangeTip: https://www.changetip.com/api
+.. _ChangeTip OAuth docs: https://www.changetip.com/api/auth/#!#scopes
