@@ -8,7 +8,7 @@ from social.backends.oauth import BaseOAuth1
 class FitbitOAuth(BaseOAuth1):
     """Fitbit OAuth authentication backend"""
     name = 'fitbit'
-    AUTHORIZATION_URL = 'https://api.fitbit.com/oauth/authorize'
+    AUTHORIZATION_URL = 'https://www.fitbit.com/oauth/authorize'
     REQUEST_TOKEN_URL = 'https://api.fitbit.com/oauth/request_token'
     ACCESS_TOKEN_URL = 'https://api.fitbit.com/oauth/access_token'
     ID_KEY = 'encodedId'
