@@ -83,12 +83,11 @@ def user_details(strategy, details, user=None, *args, **kwargs):
         # example username and id fields. It's also possible to disable update
         # on fields defined in SOCIAL_AUTH_PROTECTED_FIELDS.
         for name, value in details.items():
-            if not hasattr(user, name):
-                continue
-            current_value = getattr(user, name, None)
-            if not current_value or name not in protected:
-                changed |= current_value != value
-                setattr(user, name, value)
+            if value and hasattr(user, name):
+                current_value = getattr(user, name, None)
+                if current_value is None or name not in protected:
+                    changed |= current_value != value
+                    setattr(user, name, value)
 
         if changed:
             strategy.storage.user.changed(user)
