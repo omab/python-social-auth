@@ -1,7 +1,7 @@
 """
 Copyright (c) 2015 Microsoft Open Technologies, Inc.
 
-All rights reserved. 
+All rights reserved.
 
 MIT License
 
@@ -28,16 +28,13 @@ SOFTWARE.
 Azure AD OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/azuread.html
 """
-import datetime
-from calendar import timegm
-from social.exceptions import AuthException, AuthFailed, AuthCanceled, \
-                              AuthUnknownError, AuthMissingParameter, \
-                              AuthTokenError
-from jwt import DecodeError, ExpiredSignature, decode as jwt_decode
-from social.backends.oauth import BaseOAuth2
-import requests
 import time
-import urllib
+
+from jwt import DecodeError, ExpiredSignature, decode as jwt_decode
+
+from social.exceptions import AuthTokenError
+from social.backends.oauth import BaseOAuth2
+
 
 class AzureADOAuth2(BaseOAuth2):
     name = 'azuread-oauth2'
@@ -79,12 +76,10 @@ class AzureADOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         response = kwargs.get('response')
         id_token = response.get('id_token')
-        
         try:
             decoded_id_token = jwt_decode(id_token, verify=False)
         except (DecodeError, ExpiredSignature) as de:
             raise AuthTokenError(self, de)
-        
         return decoded_id_token
 
     def auth_extra_arguments(self):
@@ -92,18 +87,15 @@ class AzureADOAuth2(BaseOAuth2):
         overriden by GET parameters."""
         extra_arguments = {}
         resource = self.setting('RESOURCE')
-        
         if resource:
-            extra_arguments = {
-                'resource': resource
-            }
-        
+            extra_arguments = {'resource': resource}
         return extra_arguments
 
     def extra_data(self, user, uid, response, details=None, *args, **kwargs):
         """Return access_token and extra defined names to store in
         extra_data field"""
-        data = super(AzureADOAuth2, self).extra_data(user, uid, response,details, *args, **kwargs)
+        data = super(AzureADOAuth2, self).extra_data(user, uid, response,
+            details, *args, **kwargs)
         data['resource'] = self.setting('RESOURCE')
         return data
 
@@ -115,16 +107,12 @@ class AzureADOAuth2(BaseOAuth2):
         }
 
     def get_auth_token(self, user_id):
-        """Return the access token for the given user, after ensuring that it has not expired, 
-        or refreshing it if so."""
+        """Return the access token for the given user, after ensuring that it
+        has not expired, or refreshing it if so."""
         user = self.get_user(user_id=user_id)
-
         access_token = user.social_user.access_token
         expires_on = user.social_user.extra_data['expires_on']
-
         if expires_on <= int(time.time()):
             new_token_response = self.refresh_token(token=access_token)
             access_token = new_token_response['access_token']
-
         return access_token
-
