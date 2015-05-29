@@ -62,6 +62,7 @@ Social backends
    coinbase
    coursera
    dailymotion
+   digitalocean
    disqus
    docker
    douban
