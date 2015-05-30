@@ -1,5 +1,81 @@
+2015-05-29 v0.2.10
+==================
+
+  * 2015-05-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Newline at end of file
+
+  * 2015-05-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix changetip docs errors
+
+  * 2015-05-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Coding style
+
+  * 2015-05-29 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2015-05-29 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2015-05-29 Matías Aguirre <matiasaguirre@gmail.com>
+    Avoid storing empty values from user details
+
+  * 2015-05-26 vinhub <vin.bhalerao@gmail.com>
+    Added Azure AD docs to index.rst
+
+  * 2015-05-26 Vinayak (Vin) Bhalerao <vin.bhalerao@gmail.com>
+    Removed
+
+  * 2015-05-25 sushantgawali <sushant.gawali@gmail.com>
+    changes in extra_data
+
+  * 2015-05-18 sushantgawali <vin.bhalerao@gmail.com>
+    added copyright / license notices
+
+  * 2015-05-15 sushantgawali <vin.bhalerao@gmail.com>
+    updated test cases
+
+  * 2015-05-13 sushantgawali <vin.bhalerao@gmail.com>
+    added get_auth_token method for ease of use
+
+  * 2015-05-12 sushantgawali <vin.bhalerao@gmail.com>
+    added test cases for AzureADOAuth2 refresh token method added
+
+  * 2015-05-11 sushantgawali <vin.bhalerao@gmail.com>
+    added generic resource setting added license text added documentation file
+
+  * 2015-05-11 sushantgawali <vin.bhalerao@gmail.com>
+    cleaned up unneeded Sharepoint related code
+
+  * 2015-05-11 sushantgawali <vin.bhalerao@gmail.com>
+    Added provider for Microsoft Azure Active Directory OAuth2
+
+  * 2015-05-20 Marek Jalovec <marek.jalovec@gmail.com>
+    Fixes "ImportError: No module named packages.urllib3.poolmanager" error
+    (fixes #617)
+
+  * 2015-05-20 blurrcat <blurrcat@gmail.com>
+    fix Fitbit OAuth 1 authorization URL
+
+  * 2015-05-17 duoduo369 <duoduo3369@gmail.com>
+    add weixin backends
+
+  * 2015-05-16 Andrew Starr-Bochicchio <a.starr.b@gmail.com>
+    Add a DigitalOcean backend.
+
+  * 2015-05-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Ensure that all the requirements are installed
+
+  * 2015-05-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix syntax (backward compatible)
+
+  * 2015-05-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Dev version flagged
+
 2015-05-07 v0.2.9
 =================
+
+  * 2015-05-07 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.9
 
   * 2015-05-07 Matías Aguirre <matiasaguirre@gmail.com>
     Fix manifest definition
