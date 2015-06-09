@@ -7,7 +7,6 @@ recursive-include social/tests *.txt
 graft examples
 
 recursive-exclude .tox *
-recursive-exclude python_social_auth.egg-info *
 recursive-exclude social *.pyc
 recursive-exclude examples *.pyc
 recursive-exclude examples *.db
