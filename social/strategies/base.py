@@ -190,21 +190,21 @@ class BaseStrategy(object):
         raise NotImplementedError('Implement in subclass')
 
     def request_is_secure(self):
-        """ Is the request using HTTPS? """
+        """Is the request using HTTPS?"""
         raise NotImplementedError('Implement in subclass')
 
     def request_path(self):
-        """ path of the current request """
+        """path of the current request"""
         raise NotImplementedError('Implement in subclass')
 
     def request_port(self):
-        """ Port in use for this request """
+        """Port in use for this request"""
         raise NotImplementedError('Implement in subclass')
 
     def request_get(self):
-        """ Request GET data """
+        """Request GET data"""
         raise NotImplementedError('Implement in subclass')
 
     def request_post(self):
-        """ Request POST data """
+        """Request POST data"""
         raise NotImplementedError('Implement in subclass')

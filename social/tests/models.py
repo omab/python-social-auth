@@ -1,7 +1,7 @@
 import base64
 
 from social.storage.base import UserMixin, NonceMixin, AssociationMixin, \
-                                CodeMixin, BaseStorage
+    CodeMixin, BaseStorage
 
 
 class BaseModel(object):
@@ -117,7 +117,9 @@ class TestUserSocialAuth(UserMixin, BaseModel):
 
     @classmethod
     def get_social_auth_for_user(cls, user, provider=None, id=None):
-        return [usa for usa in user.social if provider in (None, usa.provider) and id in (None, usa.id)]
+        return [usa for usa in user.social
+                if provider in (None, usa.provider) and
+                id in (None, usa.id)]
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):
