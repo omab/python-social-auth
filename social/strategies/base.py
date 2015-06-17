@@ -188,3 +188,23 @@ class BaseStrategy(object):
     def build_absolute_uri(self, path=None):
         """Build absolute URI with given (optional) path"""
         raise NotImplementedError('Implement in subclass')
+
+    def request_is_secure(self):
+        """ Is the request using HTTPS? """
+        raise NotImplementedError('Implement in subclass')
+
+    def request_path(self):
+        """ path of the current request """
+        raise NotImplementedError('Implement in subclass')
+
+    def request_port(self):
+        """ Port in use for this request """
+        raise NotImplementedError('Implement in subclass')
+
+    def request_get(self):
+        """ Request GET data """
+        raise NotImplementedError('Implement in subclass')
+
+    def request_post(self):
+        """ Request POST data """
+        raise NotImplementedError('Implement in subclass')
