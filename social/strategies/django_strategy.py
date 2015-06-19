@@ -53,6 +53,26 @@ class DjangoStrategy(BaseStrategy):
         if self.request:
             return self.request.get_host()
 
+    def request_is_secure(self):
+        """Is the request using HTTPS?"""
+        return self.request.is_secure()
+
+    def request_path(self):
+        """path of the current request"""
+        return self.request.path
+
+    def request_port(self):
+        """Port in use for this request"""
+        return self.request.META['SERVER_PORT']
+
+    def request_get(self):
+        """Request GET data"""
+        return self.request.GET.copy()
+
+    def request_post(self):
+        """Request POST data"""
+        return self.request.POST.copy()
+
     def redirect(self, url):
         return redirect(url)
 

@@ -55,7 +55,7 @@ with open(requirements_file, 'r') as f:
     requirements = f.readlines()
 
 with open(tests_requirements_file, 'r') as f:
-    tests_requirements = f.readlines()
+    tests_requirements = [line for line in f.readlines() if '@' not in line]
 
 setup(
     name='python-social-auth',

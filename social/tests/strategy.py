@@ -50,6 +50,26 @@ class TestStrategy(BaseStrategy):
         """Return current host value"""
         return TEST_HOST
 
+    def request_is_secure(self):
+        """ Is the request using HTTPS? """
+        return False
+
+    def request_path(self):
+        """ path of the current request """
+        return ''
+
+    def request_port(self):
+        """ Port in use for this request """
+        return 80
+
+    def request_get(self):
+        """ Request GET data """
+        return self._request_data.copy()
+
+    def request_post(self):
+        """ Request POST data """
+        return self._request_data.copy()
+
     def session_get(self, name, default=None):
         """Return session value for given key"""
         return self._session.get(name, default)
