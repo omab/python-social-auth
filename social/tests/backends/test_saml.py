@@ -2,8 +2,8 @@ import re
 import json
 import sys
 import unittest2
-import os.path
 import requests
+from os import path
 
 from mock import patch
 from httpretty import HTTPretty
@@ -14,12 +14,10 @@ except ImportError:
     # Only available for python 2.7 at the moment, so don't worry if this fails
     pass
 
-from social.utils import parse_qs
 from social.tests.backends.base import BaseBackendTest
-from social.p3 import urlparse, urlunparse, urlencode
+from social.p3 import urlparse, urlunparse, urlencode, parse_qs
 
-
-DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+DATA_DIR = path.join(path.dirname(__file__), 'data')
 
 
 @unittest2.skipUnless(
@@ -32,7 +30,7 @@ class SAMLTest(BaseBackendTest):
     expected_username = 'myself'
 
     def extra_settings(self):
-        name = os.path.join(DATA_DIR, 'saml_config.json')
+        name = path.join(DATA_DIR, 'saml_config.json')
         with open(name, 'r') as config_file:
             config_str = config_file.read()
         return json.loads(config_str)
@@ -57,7 +55,7 @@ class SAMLTest(BaseBackendTest):
         # we will eventually get a redirect back, with SAML assertion
         # data in the query string.  A pre-recorded correct response
         # is kept in this .txt file:
-        name = os.path.join(DATA_DIR, 'saml_response.txt')
+        name = path.join(DATA_DIR, 'saml_response.txt')
         with open(name, 'r') as response_file:
             response_url = response_file.read()
         HTTPretty.register_uri(HTTPretty.GET, start_url, status=301,
