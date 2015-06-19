@@ -39,6 +39,7 @@ Base OAuth and OpenId classes
 
    oauth
    openid
+   saml
 
 Social backends
 ***************
