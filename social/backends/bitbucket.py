@@ -13,6 +13,10 @@ class BitbucketOAuth(BaseOAuth1):
     REQUEST_TOKEN_URL = 'https://bitbucket.org/api/1.0/oauth/request_token'
     ACCESS_TOKEN_URL = 'https://bitbucket.org/api/1.0/oauth/access_token'
 
+    # Bitbucket usernames can change. The account ID should always be the UUID
+    # See: https://confluence.atlassian.com/display/BITBUCKET/Use+the+Bitbucket+REST+APIs
+    ID_KEY = 'uuid'
+
     def get_user_details(self, response):
         """Return user details from Bitbucket account"""
         fullname, first_name, last_name = self.get_user_names(response['display_name'])
