@@ -1,18 +1,12 @@
 """
-Bitbucket OAuth1 backend, docs at:
+Bitbucket OAuth2 and OAuth1 backends, docs at:
     http://psa.matiasaguirre.net/docs/backends/bitbucket.html
 """
 from social.exceptions import AuthForbidden
-from social.backends.oauth import BaseOAuth1
+from social.backends.oauth import BaseOAuth1, BaseOAuth2
 
 
-class BitbucketOAuth(BaseOAuth1):
-    """Bitbucket OAuth authentication backend"""
-    name = 'bitbucket'
-    AUTHORIZATION_URL = 'https://bitbucket.org/api/1.0/oauth/authenticate'
-    REQUEST_TOKEN_URL = 'https://bitbucket.org/api/1.0/oauth/request_token'
-    ACCESS_TOKEN_URL = 'https://bitbucket.org/api/1.0/oauth/access_token'
-
+class BitbucketOAuthBase(object):
     # Bitbucket usernames can change. The account ID should always be the UUID
     # See: https://confluence.atlassian.com/display/BITBUCKET/Use+the+Bitbucket+REST+APIs
     ID_KEY = 'uuid'
@@ -27,10 +21,9 @@ class BitbucketOAuth(BaseOAuth1):
                 'first_name': first_name,
                 'last_name': last_name}
 
-    def user_data(self, access_token):
+    def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
-        emails = self.get_json('https://api.bitbucket.org/2.0/user/emails',
-                               auth=self.oauth_auth(access_token))
+        emails = self._get_emails(access_token)
 
         email = None
 
@@ -44,10 +37,63 @@ class BitbucketOAuth(BaseOAuth1):
                 self, 'Bitbucket account has no verified email'
             )
 
-        user = self.get_json('https://api.bitbucket.org/2.0/user',
-                             auth=self.oauth_auth(access_token))
+        user = self._get_user(access_token)
 
         if email:
             user['email'] = email
 
         return user
+
+    def _get_user(self, access_token=None):
+        raise NotImplementedError
+
+    def _get_emails(self, access_token=None):
+        raise NotImplementedError
+
+
+class BitbucketOAuth2(BitbucketOAuthBase, BaseOAuth2):
+    name = 'bitbucket-oauth2'
+    SCOPE_SEPARATOR = ' '
+    AUTHORIZATION_URL = 'https://bitbucket.org/site/oauth2/authorize'
+    ACCESS_TOKEN_URL = 'https://bitbucket.org/site/oauth2/access_token'
+    ACCESS_TOKEN_METHOD = 'POST'
+    REDIRECT_STATE = False
+    EXTRA_DATA = [
+        ('scopes', 'scopes'),
+        ('expires_in', 'expires'),
+        ('token_type', 'token_type'),
+        ('refresh_token', 'refresh_token')
+    ]
+
+    def auth_complete_credentials(self):
+        return self.get_key_and_secret()
+
+    def _get_user(self, access_token=None):
+        return self.get_json('https://api.bitbucket.org/2.0/user',
+                             params={'access_token': access_token})
+
+    def _get_emails(self, access_token=None):
+        return self.get_json('https://api.bitbucket.org/2.0/user/emails',
+                             params={'access_token': access_token})
+
+    def refresh_token(self, *args, **kwargs):
+        raise NotImplementedError('Refresh tokens for Bitbucket have not been implemented')
+
+
+class BitbucketOAuth(BitbucketOAuthBase, BaseOAuth1):
+    """Bitbucket OAuth authentication backend"""
+    name = 'bitbucket'
+    AUTHORIZATION_URL = 'https://bitbucket.org/api/1.0/oauth/authenticate'
+    REQUEST_TOKEN_URL = 'https://bitbucket.org/api/1.0/oauth/request_token'
+    ACCESS_TOKEN_URL = 'https://bitbucket.org/api/1.0/oauth/access_token'
+
+    def oauth_auth(self, *args, **kwargs):
+        return super(BitbucketOAuth, self).oauth_auth(*args, **kwargs)
+
+    def _get_user(self, access_token=None):
+        return self.get_json('https://api.bitbucket.org/2.0/user',
+                             auth=self.oauth_auth(access_token))
+
+    def _get_emails(self, access_token=None):
+        return self.get_json('https://api.bitbucket.org/2.0/user/emails',
+                             auth=self.oauth_auth(access_token))
