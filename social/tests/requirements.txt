@@ -6,4 +6,4 @@ rednose>=0.4.1
 requests>=1.1.0
 PyJWT>=1.0.0,<2.0.0
 unittest2==0.5.1
-git+https://github.com/open-craft/python-saml.git@9602b8133056d8c3caa7c3038761147df3d4b257#egg=python-saml
+python-saml==2.1.3

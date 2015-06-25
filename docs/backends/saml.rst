@@ -10,6 +10,11 @@ users can use for authentication. For example, if your users are students, you
 could enable Harvard and MIT as identity providers, so that students of either
 of those two universities can use their campus login to access your app.
 
+Required Dependency
+-------------------
+
+You must install python-saml_ 2.1.3 or higher in order to use this backend.
+
 Required Configuration
 ----------------------
 
@@ -139,14 +144,6 @@ Advanced Settings
   your metadata for up to 10 days, but no longer. ``metadataCacheDuration`` must
   be specified as an ISO 8601 duration string (e.g. `P1D` for one day).
 
-- ``SOCIAL_AUTH_SAML_SP_NAMEID_FORMATS``: This is a list of ``NameID`` formats
-  accepted by your app. The default is not to specify any. Example::
-
-      SOCIAL_AUTH_SAML_SP_NAMEID_FORMATS = [
-        'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-        'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
-      ]
-
 
 Advanced Usage
 --------------
@@ -167,5 +164,6 @@ particular, there are two methods that are designed for subclasses to override:
   inspecting the passed attributes parameter, do nothing to allow the user to
   login, or raise ``social.exceptions.AuthForbidden`` to reject the user.
 
+.. _python-saml: https://github.com/onelogin/python-saml
 .. _TestShib: https://www.testshib.org/
 .. _metadata: https://www.testshib.org/metadata/testshib-providers.xml
