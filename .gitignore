@@ -42,3 +42,5 @@ fabfile.py
 changelog.sh
 
 .DS_Store
+.\#*
+\#*\#
