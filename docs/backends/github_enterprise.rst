@@ -1,3 +1,5 @@
+.. _github-enterprise:
+
 GitHub Enterprise
 =================
 
@@ -14,11 +16,11 @@ GitHub Enterprise works similar to regular Github, which is in turn based on Fac
 
 - Also it's possible to define extra permissions with::
 
-      SOCIAL_AUTH_GITHUB_SCOPE = [...]
+      SOCIAL_AUTH_GITHUB_ENTERPRISE_SCOPE = [...]
 
 
 GitHub Enterprise for Organizations
-------------------------
+-----------------------------------
 
 When defining authentication for organizations, use the
 ``GithubEnterpriseOrganizationOAuth2`` backend instead. The settings are the same as
@@ -35,7 +37,7 @@ organization and discard it if they're not part of it.
 
 
 GitHub Enterprise for Teams
-----------------
+---------------------------
 
 Similar to ``GitHub Enterprise for Organizations``, there's a GitHub for Teams backend,
 use the backend ``GithubEnterpriseTeamOAuth2``. The settings are the same as

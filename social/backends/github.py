@@ -13,8 +13,9 @@ from social.exceptions import AuthFailed
 class GithubOAuth2(BaseOAuth2):
     """Github OAuth authentication backend"""
     name = 'github'
-    AUTHORIZATION_URL_SUFFIX = 'login/oauth/authorize'
-    ACCESS_TOKEN_URL_SUFFIX = 'login/oauth/access_token'
+    API_URL = 'https://api.github.com/'
+    AUTHORIZATION_URL = 'https://github.com/login/oauth/authorize'
+    ACCESS_TOKEN_URL = 'https://github.com/login/oauth/access_token'
     ACCESS_TOKEN_METHOD = 'POST'
     SCOPE_SEPARATOR = ','
     EXTRA_DATA = [
@@ -23,17 +24,8 @@ class GithubOAuth2(BaseOAuth2):
         ('login', 'login')
     ]
 
-    @property
-    def API_URL(self):
-        return 'https://api.github.com/'
-
-    @property
-    def AUTHORIZATION_URL(self):
-        return urljoin('https://github.com/', self.AUTHORIZATION_URL_SUFFIX)
-
-    @property
-    def ACCESS_TOKEN_URL(self):
-        return urljoin('https://github.com/', self.ACCESS_TOKEN_URL_SUFFIX)
+    def api_url(self):
+        return self.API_URL
 
     def get_user_details(self, response):
         """Return user details from Github account"""
@@ -57,10 +49,10 @@ class GithubOAuth2(BaseOAuth2):
 
             if emails:
                 email = emails[0]
-                primary_emails = [e for e in emails
-                                    if not isinstance(e, dict) or
-                                       e.get('primary')]
-
+                primary_emails = [
+                    e for e in emails
+                    if not isinstance(e, dict) or e.get('primary')
+                ]
                 if primary_emails:
                     email = primary_emails[0]
                 if isinstance(email, dict):
@@ -69,7 +61,7 @@ class GithubOAuth2(BaseOAuth2):
         return data
 
     def _user_data(self, access_token, path=None):
-        url = urljoin(self.API_URL, 'user{0}'.format(path or ''))
+        url = urljoin(self.api_url(), 'user{0}'.format(path or ''))
         return self.get_json(url, params={'access_token': access_token})
 
 
@@ -103,9 +95,13 @@ class GithubOrganizationOAuth2(GithubMemberOAuth2):
     no_member_string = 'User doesn\'t belong to the organization'
 
     def member_url(self, user_data):
-        return urljoin(self.API_URL, 'orgs/{org}/members/{username}'.format(
-            org=self.setting('NAME'),
-            username=user_data.get('login')))
+        return urljoin(
+            self.api_url(),
+            'orgs/{org}/members/{username}'.format(
+                org=self.setting('NAME'),
+                username=user_data.get('login')
+            )
+        )
 
 
 class GithubTeamOAuth2(GithubMemberOAuth2):
@@ -114,6 +110,10 @@ class GithubTeamOAuth2(GithubMemberOAuth2):
     no_member_string = 'User doesn\'t belong to the team'
 
     def member_url(self, user_data):
-        return urljoin(self.API_URL, 'teams/{team_id}/members/{username}'.format(
-            team_id=self.setting('ID'),
-            username=user_data.get('login')))
+        return urljoin(
+            self.api_url(),
+            'teams/{team_id}/members/{username}'.format(
+                team_id=self.setting('ID'),
+                username=user_data.get('login')
+            )
+        )

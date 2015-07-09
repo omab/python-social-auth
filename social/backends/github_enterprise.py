@@ -4,34 +4,23 @@ Github Enterprise OAuth2 backend, docs at:
 """
 from six.moves.urllib.parse import urljoin
 
-from social.backends.github import (
-    GithubOAuth2, GithubOrganizationOAuth2, GithubTeamOAuth2)
-
-
-def append_slash(url):
-    """Make sure we append a slash at the end of the URL otherwise we have issues with urljoin
-    Example:
-    >>> urlparse.urljoin('http://www.example.com/api/v3', 'user/1/')
-    'http://www.example.com/api/user/1/'
-    """
-    if not url:
-        return url
-    return "%s/" % url if not url.endswith('/') else url
+from social.utils import append_slash
+from social.backends.github import GithubOAuth2, GithubOrganizationOAuth2, \
+    GithubTeamOAuth2
 
 
 class GithubEnterpriseMixin(object):
-
-    @property
-    def API_URL(self):
+    def api_url(self):
         return append_slash(self.setting('API_URL'))
 
-    @property
-    def AUTHORIZATION_URL(self):
-        return urljoin(append_slash(self.setting('URL')), GithubOAuth2.AUTHORIZATION_URL_SUFFIX)
+    def authorization_url(self):
+        return self._url('login/oauth/authorize')
 
-    @property
-    def ACCESS_TOKEN_URL(self):
-        return urljoin(append_slash(self.setting('URL')), GithubOAuth2.ACCESS_TOKEN_URL_SUFFIX)
+    def access_token_url(self):
+        return self._url('login/oauth/access_token')
+
+    def _url(self, path):
+        return urljoin(append_slash(self.setting('URL')), path)
 
 
 class GithubEnterpriseOAuth2(GithubEnterpriseMixin, GithubOAuth2):
@@ -39,13 +28,15 @@ class GithubEnterpriseOAuth2(GithubEnterpriseMixin, GithubOAuth2):
     name = 'github-enterprise'
 
 
-class GithubEnterpriseOrganizationOAuth2(GithubEnterpriseMixin, GithubOrganizationOAuth2):
-    """Github Enterprise OAuth2 authentication backend for organizations"""
-    DEFAULT_SCOPE = ['read:org']
+class GithubEnterpriseOrganizationOAuth2(GithubEnterpriseMixin,
+                                         GithubOrganizationOAuth2):
+    """Github Enterprise OAuth2 authentication backend for
+    organizations"""
     name = 'github-enterprise-org'
+    DEFAULT_SCOPE = ['read:org']
 
 
 class GithubEnterpriseTeamOAuth2(GithubEnterpriseMixin, GithubTeamOAuth2):
     """Github Enterprise OAuth2 authentication backend for teams"""
-    DEFAULT_SCOPE = ['read:org']
     name = 'github-enterprise-team'
+    DEFAULT_SCOPE = ['read:org']
