@@ -76,7 +76,8 @@ results and others for error situations.
 
 ``SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/new-users-redirect-url/'``
     Used to redirect new registered users, will be used in place of
-    ``SOCIAL_AUTH_LOGIN_REDIRECT_URL`` if defined.
+    ``SOCIAL_AUTH_LOGIN_REDIRECT_URL`` if defined. Note that ``?next=/foo`` is appended if present, 
+    if you want new users to go to next, you'll need to do it yourself.
 
 ``SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/new-association-redirect-url/'``
     Like ``SOCIAL_AUTH_NEW_USER_REDIRECT_URL`` but for new associated accounts
