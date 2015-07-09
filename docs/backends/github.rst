@@ -50,4 +50,12 @@ Be sure to define the ``Team ID`` using the setting::
 This ``id`` will be used to check that the user really belongs to the given
 team and discard it if they're not part of it.
 
+
+Github for Enterprises
+----------------------
+
+Check the docs :ref:`github-enterprise` if planning to use Github
+Enterprises.
+
+
 .. _GitHub Developers: https://github.com/settings/applications/new

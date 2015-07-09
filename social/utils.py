@@ -235,3 +235,14 @@ def handle_http_errors(func):
             else:
                 raise
     return wrapper
+
+
+def append_slash(url):
+    """Make sure we append a slash at the end of the URL otherwise we
+    have issues with urljoin Example:
+    >>> urlparse.urljoin('http://www.example.com/api/v3', 'user/1/')
+    'http://www.example.com/api/user/1/'
+    """
+    if url and not url.endswith('/'):
+        url = '{0}/'.format(url)
+    return url
