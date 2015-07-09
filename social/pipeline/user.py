@@ -85,7 +85,7 @@ def user_details(strategy, details, user=None, *args, **kwargs):
         for name, value in details.items():
             if value and hasattr(user, name):
                 current_value = getattr(user, name, None)
-                if current_value is None or name not in protected:
+                if not current_value or name not in protected:
                     changed |= current_value != value
                     setattr(user, name, value)
 
