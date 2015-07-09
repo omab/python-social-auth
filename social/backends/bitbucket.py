@@ -9,17 +9,22 @@ from social.backends.oauth import BaseOAuth1
 class BitbucketOAuth(BaseOAuth1):
     """Bitbucket OAuth authentication backend"""
     name = 'bitbucket'
+    ID_KEY = 'uuid'
     AUTHORIZATION_URL = 'https://bitbucket.org/api/1.0/oauth/authenticate'
     REQUEST_TOKEN_URL = 'https://bitbucket.org/api/1.0/oauth/request_token'
     ACCESS_TOKEN_URL = 'https://bitbucket.org/api/1.0/oauth/access_token'
 
-    # Bitbucket usernames can change. The account ID should always be the UUID
-    # See: https://confluence.atlassian.com/display/BITBUCKET/Use+the+Bitbucket+REST+APIs
-    ID_KEY = 'uuid'
+    def get_user_id(self, details, response):
+        id_key = self.ID_KEY
+        if self.setting('USERNAME_AS_ID', False):
+            id_key = 'username'
+        return response.get(id_key)
 
     def get_user_details(self, response):
         """Return user details from Bitbucket account"""
-        fullname, first_name, last_name = self.get_user_names(response['display_name'])
+        fullname, first_name, last_name = self.get_user_names(
+            response['display_name']
+        )
 
         return {'username': response.get('username', ''),
                 'email': response.get('email', ''),

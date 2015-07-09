@@ -24,3 +24,13 @@ It's possible to avoid these users with this setting::
 
 By default the setting is set to ``False`` since it's possible for a project to
 gather this information by other methods.
+
+Bitbucket recommends the use of UUID_ as the user identifier instead
+of ``username`` since they can change and impose a security risk. For
+that reason ``UUID`` is used by default, but for backward
+compatibility reasons, it's possible to get the old behavior again by
+defining this setting::
+
+    SOCIAL_AUTH_BITBUCKET_USERNAME_AS_ID = True
+
+.. _UUID: https://confluence.atlassian.com/display/BITBUCKET/Use+the+Bitbucket+REST+APIs
