@@ -24,7 +24,7 @@ class SpotifyOAuth2(BaseOAuth2):
         return {
             'Authorization': 'Basic {0}'.format(base64.urlsafe_b64encode(
                 ('{0}:{1}'.format(*self.get_key_and_secret()).encode())
-            ))
+            ).decode())
         }
 
     def get_user_details(self, response):
@@ -32,8 +32,9 @@ class SpotifyOAuth2(BaseOAuth2):
         fullname, first_name, last_name = self.get_user_names(
             response.get('display_name')
         )
-        return {'username': response.get('id'),
-                'email': response.get('email'),
+        username = response.get('id')
+        return {'username': username,
+                'email': response.get('email', '{0}@spotifyDOTcom'.format(username)),
                 'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name}
