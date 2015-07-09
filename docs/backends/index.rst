@@ -132,6 +132,7 @@ Social backends
    vimeo
    vk
    weibo
+   withings
    wunderlist
    xing
    yahoo
