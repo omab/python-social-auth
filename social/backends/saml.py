@@ -167,7 +167,6 @@ class SAMLAuth(BaseAuth):
     Optional settings:
     SOCIAL_AUTH_SAML_SP_EXTRA = {}
     SOCIAL_AUTH_SAML_SECURITY_CONFIG = {}
-    SOCIAL_AUTH_SAML_SP_NAMEID_FORMATS = []
     """
     name = "saml"
 
@@ -202,7 +201,6 @@ class SAMLAuth(BaseAuth):
                     'binding': 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'
                 },
                 'entityId': self.setting('SP_ENTITY_ID'),
-                'NameIDFormats': self.setting('SP_NAMEID_FORMATS', []),
                 'x509cert': self.setting('SP_PUBLIC_CERT'),
                 'privateKey': self.setting('SP_PRIVATE_KEY'),
             },
