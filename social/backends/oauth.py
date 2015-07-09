@@ -350,6 +350,9 @@ class BaseOAuth2(OAuthAuth):
             'redirect_uri': self.get_redirect_uri(state)
         }
 
+    def auth_complete_credentials(self):
+        return None
+
     def auth_headers(self):
         return {'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json'}
@@ -371,12 +374,15 @@ class BaseOAuth2(OAuthAuth):
         """Completes loging process, must return user instance"""
         state = self.validate_state()
         self.process_error(self.data)
+
         response = self.request_access_token(
             self.access_token_url(),
             data=self.auth_complete_params(state),
             headers=self.auth_headers(),
+            auth=self.auth_complete_credentials(),
             method=self.ACCESS_TOKEN_METHOD
         )
+        print(dict(response))
         self.process_error(response)
         return self.do_auth(response['access_token'], response=response,
                             *args, **kwargs)
@@ -384,6 +390,8 @@ class BaseOAuth2(OAuthAuth):
     @handle_http_errors
     def do_auth(self, access_token, *args, **kwargs):
         """Finish the auth process once the access_token was retrieved"""
+        print(args)
+        print(kwargs)
         data = self.user_data(access_token, *args, **kwargs)
         response = kwargs.get('response') or {}
         response.update(data or {})
