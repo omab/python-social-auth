@@ -1,5 +1,5 @@
 Withings
-=========
+========
 
 Withings uses OAuth v1 for Authentication.
 
