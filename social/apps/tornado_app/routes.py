@@ -1,6 +1,6 @@
 from tornado.web import url
 
-from handlers import AuthHandler, CompleteHandler, DisconnectHandler
+from .handlers import AuthHandler, CompleteHandler, DisconnectHandler
 
 
 SOCIAL_AUTH_ROUTES = [
