@@ -16,6 +16,28 @@
   * 2015-06-17 Matías Aguirre <matiasaguirre@gmail.com>
     PEP8
 
+  * 2015-05-21 Braden MacDonald <braden@opencraft.com>
+    Minor cleanups
+
+  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
+    Minor consistency fix
+
+  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
+    Add an integration point for extra security layers like
+    eduPersonEntitlement
+
+  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
+    Make IdP name format slightly more flexible
+
+  * 2015-05-11 Braden MacDonald <braden@opencraft.com>
+    Add python-saml requirement (temporary commit)
+
+  * 2015-05-08 Braden MacDonald <braden@opencraft.com>
+    Tests for SAML backend
+
+  * 2015-04-30 Braden MacDonald <braden@opencraft.com>
+    SAML2 backend using OneLogin's python-saml
+
 2015-05-29 v0.2.10
 ==================
 
@@ -70,19 +92,6 @@
   * 2015-05-11 sushantgawali <vin.bhalerao@gmail.com>
     Added provider for Microsoft Azure Active Directory OAuth2
 
-  * 2015-05-21 Braden MacDonald <braden@opencraft.com>
-    Minor cleanups
-
-  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
-    Minor consistency fix
-
-  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
-    Add an integration point for extra security layers like
-    eduPersonEntitlement
-
-  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
-    Make IdP name format slightly more flexible
-
   * 2015-05-20 Marek Jalovec <marek.jalovec@gmail.com>
     Fixes "ImportError: No module named packages.urllib3.poolmanager" error
     (fixes #617)
@@ -95,15 +104,6 @@
 
   * 2015-05-16 Andrew Starr-Bochicchio <a.starr.b@gmail.com>
     Add a DigitalOcean backend.
-
-  * 2015-05-11 Braden MacDonald <braden@opencraft.com>
-    Add python-saml requirement (temporary commit)
-
-  * 2015-05-08 Braden MacDonald <braden@opencraft.com>
-    Tests for SAML backend
-
-  * 2015-04-30 Braden MacDonald <braden@opencraft.com>
-    SAML2 backend using OneLogin's python-saml
 
   * 2015-05-08 Matías Aguirre <matiasaguirre@gmail.com>
     Ensure that all the requirements are installed
