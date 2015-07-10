@@ -43,7 +43,7 @@ class ShopifyOAuth2(BaseOAuth2):
                                                      details, *args, **kwargs)
         session = self.shopifyAPI.Session(self.data.get('shop').strip())
         # Get, and store the permanent token
-        token = session.request_token(data['access_token'].dicts[1])
+        token = session.request_token(data['access_token'][0])
         data['access_token'] = token
         return dict(data)
 
