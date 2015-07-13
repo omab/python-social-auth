@@ -1,10 +1,9 @@
 """
 Meetup OAuth2 backend, docs at:
-    http://psa.matiasaguirre.net/docs/backends/soundcloud.html
+    http://psa.matiasaguirre.net/docs/backends/meetup.html
 """
 from social.p3 import urlencode
 from social.backends.oauth import BaseOAuth2
-
 
 class MeetupOAuth2(BaseOAuth2):
     """Meetup OAuth2 authentication backend"""
