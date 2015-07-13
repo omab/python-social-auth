@@ -14,11 +14,6 @@ class MeetupOAuth2(BaseOAuth2):
     DEFAULT_SCOPE = ['basic',]
     SCOPE_SEPARATOR = ','
     REDIRECT_STATE = False
-    EXTRA_DATA = [
-        ('id', 'id'),
-        ('refresh_token', 'refresh_token'),
-        ('expires', 'expires')
-    ]
     STATE_PARAMETER = 'state'
 
     def get_user_details(self, response):
