@@ -23,6 +23,9 @@ class ClefOAuth2(BaseOAuth2):
         params['redirect_url'] = params.pop('redirect_uri')
         return params
 
+    def get_user_id(self, response, details):
+        return details.get('info').get('id')
+
     def get_user_details(self, response):
         """Return user details from Github account"""
         info = response.get('info')
@@ -30,9 +33,16 @@ class ClefOAuth2(BaseOAuth2):
             first_name=info.get('first_name'),
             last_name=info.get('last_name')
         )
+
+        email = info.get('email', '')
+        if email:
+            username = email.split('@', 1)[0]
+        else:
+            username = info.get('id')
+
         return {
-            'username': response.get('clef_id'),
-            'email': info.get('email', ''),
+            'username': username,
+            'email': email,
             'fullname': fullname,
             'first_name': first_name,
             'last_name': last_name,
