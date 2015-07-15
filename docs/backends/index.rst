@@ -91,6 +91,7 @@ Social backends
    loginradius
    mailru
    mapmyfitness
+   meetup
    mendeley
    mineid
    mixcloud
