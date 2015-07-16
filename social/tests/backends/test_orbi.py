@@ -6,6 +6,7 @@ from social.tests.backends.oauth import OAuth2Test
 class OrbiOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.orbi.OrbiOAuth2'
     user_data_url = 'https://login.orbi.kr/oauth/user/get'
+    expected_username = 'foobar'
     access_token_body = json.dumps({
         'access_token': 'foobar',
     })
@@ -19,8 +20,7 @@ class OrbiOAuth2Test(OAuth2Test):
         'nick': 'foobar',
         'photo': 'http://s3.orbi.kr/data/member/wi/wizetdev_132894975780.jpeg',
         'sex': 'M',
-        'birth': '1973-08-03'
-
+        'birth': '1973-08-03',
     })
 
     def test_login(self):
