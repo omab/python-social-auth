@@ -76,6 +76,8 @@ class BaseOAuthTest(BaseBackendTest):
         response = requests.get(start_url)
         self.assertEqual(response.url, target_url)
         self.assertEqual(response.text, 'foobar')
+        self.strategy.set_request_data(parse_qs(urlparse(start_url).query),
+                                       self.backend)
         self.strategy.set_request_data(parse_qs(urlparse(target_url).query),
                                        self.backend)
         return self.backend.complete()
