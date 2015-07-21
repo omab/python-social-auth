@@ -4,3 +4,4 @@ oauthlib>=0.3.8
 requests-oauthlib>0.3.2
 six>=1.2.0
 PyJWT>=1.0.0
+pyjwkest==1.0.1

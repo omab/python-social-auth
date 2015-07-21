@@ -1,7 +1,10 @@
 import datetime
+import six
 from calendar import timegm
 
-from jwt import InvalidTokenError, decode as jwt_decode
+from jwkest import JWKESTException
+from jwkest.jwk import KEYS
+from jwkest.jws import JWS
 
 from openid.consumer.consumer import Consumer, SUCCESS, CANCEL, FAILURE
 from openid.consumer.discover import DiscoveryFailure
@@ -277,11 +280,37 @@ class OpenIdConnectAuth(BaseOAuth2):
 
     Currently only the code response type is supported.
     """
-    ID_TOKEN_ISSUER = None
-    DEFAULT_SCOPE = ['openid']
+    # Override OIDC_ENDPOINT in your subclass to enable autoconfig of OIDC
+    OIDC_ENDPOINT = None
+
+    DEFAULT_SCOPE = ['openid', 'profile', 'email']
     EXTRA_DATA = ['id_token', 'refresh_token', ('sub', 'id')]
-    # Set after access_token is retrieved
-    id_token = None
+    REDIRECT_STATE = False
+    ACCESS_TOKEN_METHOD = 'POST'
+    REVOKE_TOKEN_METHOD = 'GET'
+
+    # Will be autoconfigured
+    oidc_config = None
+    ID_TOKEN_ISSUER = None
+    JWKS_KEYS = None
+    ACCESS_TOKEN_URL = None
+    AUTHORIZATION_URL = None
+    REVOKE_TOKEN_URL = None
+    SIGNING_ALGS = None
+
+    def __init__(self, strategy=None, redirect_uri=None):
+        super(OpenIdConnectAuth, self).__init__(strategy, redirect_uri)
+
+        if self.oidc_config is None and self.OIDC_ENDPOINT:
+            self.oidc_config = self.get_json(self.OIDC_ENDPOINT + '/.well-known/openid-configuration')
+            self.ACCESS_TOKEN_URL = self.oidc_config['token_endpoint']
+            self.AUTHORIZATION_URL = self.oidc_config['authorization_endpoint']
+            self.REVOKE_TOKEN_URL = self.oidc_config['revocation_endpoint']
+            self.USERINFO_URL = self.oidc_config['userinfo_endpoint']
+            self.ID_TOKEN_ISSUER = self.oidc_config['issuer']
+            self.SIGNING_ALGS = self.oidc_config['id_token_signing_alg_values_supported']
+            self.JWKS_KEYS = KEYS()
+            self.JWKS_KEYS.load_from_url(self.oidc_config['jwks_uri'])
 
     def auth_params(self, state=None):
         """Return extra arguments needed on auth process."""
@@ -319,25 +348,30 @@ class OpenIdConnectAuth(BaseOAuth2):
     def remove_nonce(self, nonce_id):
         self.strategy.storage.association.remove([nonce_id])
 
-    def validate_and_return_id_token(self, id_token):
-        """
-        Validates the id_token according to the steps at
-        http://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation.
-        """
-        client_id, _client_secret = self.get_key_and_secret()
-        decryption_key = self.setting('ID_TOKEN_DECRYPTION_KEY')
-        try:
-            # Decode the JWT and raise an error if the secret is invalid or
-            # the response has expired.
-            id_token = jwt_decode(id_token, decryption_key, audience=client_id,
-                                  issuer=self.ID_TOKEN_ISSUER,
-                                  algorithms=['HS256'])
-        except InvalidTokenError as err:
-            raise AuthTokenError(self, err)
+    def validate_claims(self, id_token, client_id):
+        if id_token['iss'] != self.ID_TOKEN_ISSUER:
+            raise AuthTokenError(self, 'Incorrect id_token: iss')
+
+        if isinstance(id_token['aud'], six.string_types):
+            id_token['aud'] = [id_token['aud']]
+        if client_id not in id_token['aud']:
+            raise AuthTokenError(self, 'Incorrect id_token: aud')
+
+        if len(id_token['aud']) > 1 and 'azp' not in id_token:
+            raise AuthTokenError(self, 'Incorrect id_token: azp')
+
+        if 'azp' in id_token and id_token['azp'] != client_id:
+            raise AuthTokenError(self, 'Incorrect id_token: azp')
+
+        utc_timestamp = timegm(datetime.datetime.utcnow().utctimetuple())
+        if utc_timestamp > id_token['exp']:
+            raise AuthTokenError(self, 'Incorrect id_token: exp')
+
+        if 'nbf' in id_token and utc_timestamp < id_token['nbf']:
+            raise AuthTokenError(self, 'Incorrect id_token: nbf')
 
         # Verify the token was issued in the last 10 minutes
-        utc_timestamp = timegm(datetime.datetime.utcnow().utctimetuple())
-        if id_token['iat'] < (utc_timestamp - 600):
+        if utc_timestamp > id_token['iat'] + 600:
             raise AuthTokenError(self, 'Incorrect id_token: iat')
 
         # Validate the nonce to ensure the request was not modified
@@ -350,6 +384,21 @@ class OpenIdConnectAuth(BaseOAuth2):
             self.remove_nonce(nonce_obj.id)
         else:
             raise AuthTokenError(self, 'Incorrect id_token: nonce')
+
+    def validate_and_return_id_token(self, jws):
+        """
+        Validates the id_token according to the steps at
+        http://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation.
+        """
+        client_id, _client_secret = self.get_key_and_secret()
+        try:
+            # Decode the JWT and raise an error if the sig is invalid
+            id_token = JWS().verify_compact(jws.encode('utf-8'), self.JWKS_KEYS)
+        except JWKESTException as err:
+            raise AuthTokenError(self, err)
+
+        self.validate_claims(id_token, client_id=client_id)
+
         return id_token
 
     def request_access_token(self, *args, **kwargs):
@@ -360,3 +409,16 @@ class OpenIdConnectAuth(BaseOAuth2):
         response = self.get_json(*args, **kwargs)
         self.id_token = self.validate_and_return_id_token(response['id_token'])
         return response
+
+    def user_data(self, access_token, *args, **kwargs):
+        return self.get_json(self.USERINFO_URL,
+                             headers={'Authorization': 'Bearer {0}'.format(access_token)})
+
+    def get_user_details(self, response):
+        return {
+            'username': response.get('preferred_username'),
+            'email': response.get('email'),
+            'fullname': response.get('name'),
+            'first_name': response.get('given_name'),
+            'last_name': response.get('family_name'),
+        }
