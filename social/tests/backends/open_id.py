@@ -127,6 +127,21 @@ class OpenIdConnectTestMixin(object):
     client_key = 'a-key'
     client_secret = 'a-secret-key'
     issuer = None  # id_token issuer
+    openid_config_body = None
+    jwks_body = None
+
+    def setUp(self):
+        super(OpenIdConnectTestMixin, self).setUp()
+        HTTPretty.register_uri(HTTPretty.GET,
+                               self.backend.OIDC_ENDPOINT + '/.well-known/openid-configuration',
+                               status=200,
+                               body=self.openid_config_body
+                               )
+        oidc_config = json.loads(self.openid_config_body)
+        HTTPretty.register_uri(HTTPretty.GET,
+                               oidc_config.get('jwks_uri'),
+                               status=200,
+                               body=self.jwks_body)
 
     def extra_settings(self):
         settings = super(OpenIdConnectTestMixin, self).extra_settings()

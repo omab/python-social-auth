@@ -298,9 +298,7 @@ class OpenIdConnectAuth(BaseOAuth2):
     REVOKE_TOKEN_URL = None
     SIGNING_ALGS = None
 
-    def __init__(self, strategy=None, redirect_uri=None):
-        super(OpenIdConnectAuth, self).__init__(strategy, redirect_uri)
-
+    def init_oidc_config(self):
         if self.oidc_config is None and self.OIDC_ENDPOINT:
             self.oidc_config = self.get_json(self.OIDC_ENDPOINT + '/.well-known/openid-configuration')
             self.ACCESS_TOKEN_URL = self.oidc_config['token_endpoint']
@@ -311,9 +309,13 @@ class OpenIdConnectAuth(BaseOAuth2):
             self.SIGNING_ALGS = self.oidc_config['id_token_signing_alg_values_supported']
             self.JWKS_KEYS = KEYS()
             self.JWKS_KEYS.load_from_url(self.oidc_config['jwks_uri'])
+            _client_id, client_secret = self.get_key_and_secret()
+            # Add client secret as oct key so it can be used for HMAC signatures
+            self.JWKS_KEYS.add({'key': client_secret, 'kty': 'oct'})
 
     def auth_params(self, state=None):
         """Return extra arguments needed on auth process."""
+        self.init_oidc_config()
         params = super(OpenIdConnectAuth, self).auth_params(state)
         params['nonce'] = self.get_and_store_nonce(
             self.AUTHORIZATION_URL, state
@@ -348,14 +350,15 @@ class OpenIdConnectAuth(BaseOAuth2):
     def remove_nonce(self, nonce_id):
         self.strategy.storage.association.remove([nonce_id])
 
-    def validate_claims(self, id_token, client_id):
+    def validate_claims(self, id_token):
         if id_token['iss'] != self.ID_TOKEN_ISSUER:
-            raise AuthTokenError(self, 'Incorrect id_token: iss')
+            raise AuthTokenError(self, 'Token error: Invalid issuer')
 
+        client_id, _client_secret = self.get_key_and_secret()
         if isinstance(id_token['aud'], six.string_types):
             id_token['aud'] = [id_token['aud']]
         if client_id not in id_token['aud']:
-            raise AuthTokenError(self, 'Incorrect id_token: aud')
+            raise AuthTokenError(self, 'Token error: Invalid audience')
 
         if len(id_token['aud']) > 1 and 'azp' not in id_token:
             raise AuthTokenError(self, 'Incorrect id_token: azp')
@@ -365,7 +368,7 @@ class OpenIdConnectAuth(BaseOAuth2):
 
         utc_timestamp = timegm(datetime.datetime.utcnow().utctimetuple())
         if utc_timestamp > id_token['exp']:
-            raise AuthTokenError(self, 'Incorrect id_token: exp')
+            raise AuthTokenError(self, 'Token error: Signature has expired')
 
         if 'nbf' in id_token and utc_timestamp < id_token['nbf']:
             raise AuthTokenError(self, 'Incorrect id_token: nbf')
@@ -390,14 +393,13 @@ class OpenIdConnectAuth(BaseOAuth2):
         Validates the id_token according to the steps at
         http://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation.
         """
-        client_id, _client_secret = self.get_key_and_secret()
         try:
             # Decode the JWT and raise an error if the sig is invalid
             id_token = JWS().verify_compact(jws.encode('utf-8'), self.JWKS_KEYS)
-        except JWKESTException as err:
-            raise AuthTokenError(self, err)
+        except JWKESTException:
+            raise AuthTokenError(self, 'Token error: Signature verification failed')
 
-        self.validate_claims(id_token, client_id=client_id)
+        self.validate_claims(id_token)
 
         return id_token
 
