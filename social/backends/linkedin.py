@@ -68,7 +68,7 @@ class LinkedinOAuth(BaseLinkedinAuth, BaseOAuth1):
             scope = '?scope=' + self.SCOPE_SEPARATOR.join(scope)
         return self.request(self.REQUEST_TOKEN_URL + scope,
                             params=self.request_token_extra_arguments(),
-                            auth=self.oauth_auth()).content
+                            auth=self.oauth_auth()).text
 
 
 class LinkedinOAuth2(BaseLinkedinAuth, BaseOAuth2):
