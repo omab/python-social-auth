@@ -100,6 +100,7 @@ Social backends
    nationbuilder
    odnoklassnikiru
    openstreetmap
+   orbi
    persona
    pixelpin
    pocket

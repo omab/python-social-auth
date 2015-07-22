@@ -22,10 +22,11 @@ class OrbiOAuth2(BaseOAuth2):
         return response.get('id')
 
     def get_user_details(self, response):
-        fullname, first_name, last_name = self.get_user_names(response.get('name', ''),
-                                                              response.get('first_name', ''),
-                                                              response.get('last_name', ''))
-
+        fullname, first_name, last_name = self.get_user_names(
+            response.get('name', ''),
+            response.get('first_name', ''),
+            response.get('last_name', '')
+        )
         return {
             'username': response.get('username', response.get('name')),
             'email': response.get('email', ''),
@@ -36,4 +37,6 @@ class OrbiOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Load user data from orbi"""
-        return self.get_json('https://login.orbi.kr/oauth/user/get', params={'access_token': access_token})
+        return self.get_json('https://login.orbi.kr/oauth/user/get', params={
+            'access_token': access_token
+        })
