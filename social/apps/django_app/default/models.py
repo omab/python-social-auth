@@ -89,7 +89,7 @@ class Association(models.Model, DjangoAssociationMixin):
 
 
 class Code(models.Model, DjangoCodeMixin):
-    email = models.EmailField()
+    email = models.EmailField(max_length=254)
     code = models.CharField(max_length=32, db_index=True)
     verified = models.BooleanField(default=False)
 
