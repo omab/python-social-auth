@@ -382,7 +382,6 @@ class BaseOAuth2(OAuthAuth):
             auth=self.auth_complete_credentials(),
             method=self.ACCESS_TOKEN_METHOD
         )
-        print(dict(response))
         self.process_error(response)
         return self.do_auth(response['access_token'], response=response,
                             *args, **kwargs)
@@ -390,8 +389,6 @@ class BaseOAuth2(OAuthAuth):
     @handle_http_errors
     def do_auth(self, access_token, *args, **kwargs):
         """Finish the auth process once the access_token was retrieved"""
-        print(args)
-        print(kwargs)
         data = self.user_data(access_token, *args, **kwargs)
         response = kwargs.get('response') or {}
         response.update(data or {})
