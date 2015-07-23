@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
 from calendar import timegm
 
+import os
 import sys
 import json
 import datetime
 
+from jwkest.jwk import RSAKey, KEYS
+from jwkest.jws import JWS
+from jwkest.jwt import b64encode_item
+
 import requests
-import jwt
 
 from openid import oidutil
 
@@ -128,20 +132,28 @@ class OpenIdConnectTestMixin(object):
     client_secret = 'a-secret-key'
     issuer = None  # id_token issuer
     openid_config_body = None
-    jwks_body = None
+    key = None
 
     def setUp(self):
         super(OpenIdConnectTestMixin, self).setUp()
+        here = os.path.dirname(__file__)
+        self.key = RSAKey(kid='testkey').load(os.path.join(here, '../testkey.pem'))
         HTTPretty.register_uri(HTTPretty.GET,
                                self.backend.OIDC_ENDPOINT + '/.well-known/openid-configuration',
                                status=200,
                                body=self.openid_config_body
                                )
         oidc_config = json.loads(self.openid_config_body)
+
+        def jwks(_request, _uri, headers):
+            ks = KEYS()
+            ks.add(self.key.serialize())
+            return 200, headers, ks.dump_jwks()
+
         HTTPretty.register_uri(HTTPretty.GET,
                                oidc_config.get('jwks_uri'),
                                status=200,
-                               body=self.jwks_body)
+                               body=jwks)
 
     def extra_settings(self):
         settings = super(OpenIdConnectTestMixin, self).extra_settings()
@@ -180,7 +192,7 @@ class OpenIdConnectTestMixin(object):
 
         return id_token
 
-    def prepare_access_token_body(self, client_key=None, client_secret=None,
+    def prepare_access_token_body(self, client_key=None, tamper_message=False,
                                   expiration_datetime=None,
                                   issue_datetime=None, nonce=None,
                                   issuer=None):
@@ -189,15 +201,12 @@ class OpenIdConnectTestMixin(object):
 
         client_id       -- (str) OAuth ID for the client that requested
                                  authentication.
-        client_secret   -- (str) OAuth secret for the client that requested
-                                 authentication.
         expiration_time -- (datetime) Date and time after which the response
                                       should be considered invalid.
         """
 
         body = {'access_token': 'foobar', 'token_type': 'bearer'}
         client_key = client_key or self.client_key
-        client_secret = client_secret or self.client_secret
         now = datetime.datetime.utcnow()
         expiration_datetime = expiration_datetime or \
                               (now + datetime.timedelta(seconds=30))
@@ -208,8 +217,13 @@ class OpenIdConnectTestMixin(object):
             client_key, timegm(expiration_datetime.utctimetuple()),
             timegm(issue_datetime.utctimetuple()), nonce, issuer)
 
-        body['id_token'] = jwt.encode(id_token, client_secret,
-                                      algorithm='HS256').decode('utf-8')
+        body['id_token'] = JWS(id_token, jwk=self.key, alg='RS256').sign_compact().decode('utf-8')
+        if tamper_message:
+            header, msg, sig = body['id_token'].split('.')
+            id_token['sub'] = '1235'
+            msg = b64encode_item(id_token).decode('utf-8')
+            body['id_token'] = '.'.join([header, msg, sig])
+
         return json.dumps(body)
 
     def authtoken_raised(self, expected_message, **access_token_kwargs):
@@ -219,10 +233,10 @@ class OpenIdConnectTestMixin(object):
         with self.assertRaisesRegexp(AuthTokenError, expected_message):
             self.do_login()
 
-    def test_invalid_secret(self):
+    def test_invalid_signature(self):
         self.authtoken_raised(
             'Token error: Signature verification failed',
-            client_secret='wrong!'
+            tamper_message=True
         )
 
     def test_expired_signature(self):

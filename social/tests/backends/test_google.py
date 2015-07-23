@@ -324,25 +324,3 @@ class GoogleOpenIdConnectTest(OpenIdConnectTestMixin, GoogleOAuth2Test):
         ' ]',
         '}'
     ])
-    jwks_body = (
-        '{'
-        ' "keys": ['
-        '  {'
-        '   "kty": "RSA",'
-        '   "alg": "RS256",'
-        '   "use": "sig",'
-        '   "kid": "fc73ee475a8b6afd7fd25657522a1070cf45d81f",'
-        '   "n": "m_Lk8Fqr0-Au20FLAyn-_Z7GvrCaCvHeDpqVzMEdHeGWsd-LbTpuPE9kMUyQAVDOdbNOw2lNwtbvgapTUorSPokUlhzFUzZHWghA6ugBxGPaTlqzhWAqkWu0X_4af6KsmeCDjWzswshLHcwEtv7ApiqyBeMCoMhUYkIwZOLAeUqlffW8Kv3-kvvwHoC2GP7bNEuD1h52m_AB-Z6s5xKdyLpRzHKFznccx-RPlFCTwLz_HcnBYSNJm6nfLjLZ4Tji9V7vwySfxBkWgvlutN3bSCQreTJK2I_AvY6q-I8BCBJTpOsZErRe5u8-pUV2EBd2m5Q4AU_A3nsxPFFLG33iAw",'
-        '   "e": "AQAB"'
-        '  },'
-        '  {'
-        '   "kty": "RSA",'
-        '   "alg": "RS256",'
-        '   "use": "sig",'
-        '   "kid": "0acc20686a4e069018a6590715bf7a2ca16d8237",'
-        '   "n": "p4911hGvQBJDLA6Tj7zJzH_SbqAUFnQKGRUuuOLBimI7rR_7CfCnXr1ygtXfOvkIe6Tj_89XWGQX3BIwaO0N8fadYlOLrtyZ675dbxV0ijCP7z8edmTiaBgVuQoqGuv3vCqd1zuGTxmfhZq-3TvesPWCMhFvleocgE6EjipmBrmWTw-6-9f2LYdffsIDgeWEcxM9J3_5DwiEYAJbCFO9RG-iuZhe_xtGy6VeDd7Ghy5_7y0xqKcpip-4JJ7x5yAgncKNMxrIgjiEE2emH6ZFtiO_g1idsmoaSeTErXwA7Y9LqLDDmbOiiL0yElDLcC8fm3QSHCE8IiTvifz1zcU4mw",'
-        '   "e": "AQAB"'
-        '  }'
-        ' ]'
-        '}'
-    )
