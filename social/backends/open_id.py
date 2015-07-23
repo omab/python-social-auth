@@ -300,14 +300,16 @@ class OpenIdConnectAuth(BaseOAuth2):
 
     def init_oidc_config(self):
         if self.oidc_config is None and self.OIDC_ENDPOINT:
-            self.oidc_config = self.get_json(self.OIDC_ENDPOINT + '/.well-known/openid-configuration')
-            self.ACCESS_TOKEN_URL = self.oidc_config['token_endpoint']
-            self.AUTHORIZATION_URL = self.oidc_config['authorization_endpoint']
-            self.REVOKE_TOKEN_URL = self.oidc_config['revocation_endpoint']
-            self.USERINFO_URL = self.oidc_config['userinfo_endpoint']
-            self.ID_TOKEN_ISSUER = self.oidc_config['issuer']
-            self.SIGNING_ALGS = self.oidc_config['id_token_signing_alg_values_supported']
-            self.JWKS_KEYS = KEYS()
+            # Cache these settings by setting class variables
+            cls = self.__class__
+            cls.oidc_config = self.get_json(self.OIDC_ENDPOINT + '/.well-known/openid-configuration')
+            cls.ACCESS_TOKEN_URL = self.oidc_config['token_endpoint']
+            cls.AUTHORIZATION_URL = self.oidc_config['authorization_endpoint']
+            cls.REVOKE_TOKEN_URL = self.oidc_config['revocation_endpoint']
+            cls.USERINFO_URL = self.oidc_config['userinfo_endpoint']
+            cls.ID_TOKEN_ISSUER = self.oidc_config['issuer']
+            cls.SIGNING_ALGS = self.oidc_config['id_token_signing_alg_values_supported']
+            cls.JWKS_KEYS = KEYS()
             self.JWKS_KEYS.load_from_url(self.oidc_config['jwks_uri'])
             _client_id, client_secret = self.get_key_and_secret()
             # Add client secret as oct key so it can be used for HMAC signatures
