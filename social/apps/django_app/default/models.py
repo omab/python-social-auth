@@ -12,6 +12,7 @@ from social.storage.django_orm import DjangoUserMixin, \
                                       DjangoCodeMixin, \
                                       BaseDjangoStorage
 from social.apps.django_app.default.fields import JSONField
+from social.apps.django_app.default.managers import UserSocialAuthManager
 
 
 USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \
@@ -26,20 +27,19 @@ ASSOCIATION_HANDLE_LENGTH = getattr(
     settings, setting_name('ASSOCIATION_HANDLE_LENGTH'), 255)
 
 
-class UserSocialAuth(models.Model, DjangoUserMixin):
-    """Social Auth association model"""
+class AbstractUserSocialAuth(models.Model, DjangoUserMixin):
+    """Abstract Social Auth association model"""
     user = models.ForeignKey(USER_MODEL, related_name='social_auth')
     provider = models.CharField(max_length=32)
     uid = models.CharField(max_length=UID_LENGTH)
     extra_data = JSONField()
+    objects = UserSocialAuthManager()
 
     def __str__(self):
         return str(self.user)
 
     class Meta:
-        """Meta data"""
-        unique_together = ('provider', 'uid')
-        db_table = 'social_auth_usersocialauth'
+        abstract = True
 
     @classmethod
     def get_social_auth(cls, provider, uid):
@@ -62,6 +62,15 @@ class UserSocialAuth(models.Model, DjangoUserMixin):
             app_label, model_name = user_model.split('.')
             return models.get_model(app_label, model_name)
         return user_model
+
+
+class UserSocialAuth(AbstractUserSocialAuth):
+    """Social Auth association model"""
+
+    class Meta:
+        """Meta data"""
+        unique_together = ('provider', 'uid')
+        db_table = 'social_auth_usersocialauth'
 
 
 class Nonce(models.Model, DjangoNonceMixin):
