@@ -9,7 +9,7 @@ Understanding PSA URLs
 -----------------------
 
 If you have not seen namespaced URLs before, you are about to be introduced.
-When you add the PSA entry to your urls.py, it looks like this:
+When you add the PSA entry to your urls.py, it looks like this::
 
     url(r'', include('social.apps.django_app.urls', namespace='social'))
 
