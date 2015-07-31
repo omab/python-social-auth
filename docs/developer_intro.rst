@@ -15,7 +15,7 @@ When you add the PSA entry to your urls.py, it looks like this::
 
 that "namespace" part on the end is what keeps the names in the PSA-world from
 colliding with the names in your app, or other 3rd-party apps.  So your login
-link will look like this:
+link will look like this::
 
     <a href="{% url 'social:begin' 'provider-name' %}">Login</a>
 
@@ -28,20 +28,19 @@ Understanding Backends
 PSA implements a lot of backends.  Find the entry in the docs for your backend,
 and if it's there, follow the steps to enable it, which come down to
 
-    1) Set up SOCIAL_AUTH_{backend} variables in settings.py.  (The settings
-        vary, based on the backends)
-    2) Adding your backend to AUTHENTICATION_BACKENDS in settings.py.
+1) Set up SOCIAL_AUTH_{backend} variables in settings.py.  (The settings vary, based on the backends)
+
+2) Adding your backend to AUTHENTICATION_BACKENDS in settings.py.
 
 If you need to implement a different backend (for instance, let's say you
 want to use Intuit's OpenID), you can subclass the nearest one and override
-the "name" attribute:
+the "name" attribute::
 
     from social.backends.open_id import OpenIDAuth
     class IntuitOpenID(OpenIDAuth):
         name = 'intuit'
 
 And then add your new backend to AUTHENTICATION_BACKENDS in settings.py.
-
 
 A couple notes about the pipeline:
 
@@ -64,9 +63,7 @@ run_pipeline() function in BaseAuth.)
 
 The design contract for each function in the pipeline is:
 
-1) The pipeline starts with a four-item dictionary (the accumulative dictionary)
-    which is updated with the results of each function in the pipeline. The
-    initial four values are:
+1) The pipeline starts with a four-item dictionary (the accumulative dictionary) which is updated with the results of each function in the pipeline. The initial four values are:
         'strategy' : contains a strategy object
         'backend' : contains the backend being used during this pipeline run
         'request' : contains a dictionary of the request keys.  Note to Django
@@ -74,21 +71,15 @@ The design contract for each function in the pipeline is:
             the results of request.REQUEST.
         'details' : which is an empty dict.
 
-2) If the function returns a dictionary or something False-ish, add the
-    contents of the dictionary to an accumulative dictionary (called "out" in
-    run_pipeline), and call the next step in the pipeline with the accumulative
-    dictionary.
+2) If the function returns a dictionary or something False-ish, add the contents of the dictionary to an accumulative dictionary (called "out" in run_pipeline), and call the next step in the pipeline with the accumulative dictionary.
 
-3) If something else is returned (for example, a subclass of HttpResponse),
-    then return that to the browser.
+3) If something else is returned (for example, a subclass of HttpResponse), then return that to the browser.
 
-4) If the pipeline completes, *THEN* the user is authenticated (logged in).  So
-    if you are finding an authenticated user object while the pipeline is
-    running, that means that the user was logged in when the pipeline started.
+4) If the pipeline completes, *THEN* the user is authenticated (logged in).  So if you are finding an authenticated user object while the pipeline is running, that means that the user was logged in when the pipeline started.
 
 There is one pipeline for your site as a whole -- if you have backend-specific
 logic, you have to make your pipeline steps smart enough to skip the step if it
-is not relevant.  This is as simple as:
+is not relevant.  This is as simple as::
 
     def my_custom_step(strategy, backend, request, details, *args, **kwargs):
         if backend_name != 'my_custom_backend':
@@ -106,11 +97,11 @@ to keep track of where it is so that it can be restarted.
 The first thing we need to do is set up a way for our views to communicate with
 the pipeline. That is done by adding a value to the settings file to tell
 us which values should be passed back and forth between the Django session
-and the pipeline:
+and the pipeline::
 
     FIELDS_STORED_IN_SESSION = ['local_password',]
 
-In our pipeline code, we would have:
+In our pipeline code, we would have::
 
     from django.shortcuts import redirect
     from django.contrib.auth.models import User
@@ -138,7 +129,7 @@ In our pipeline code, we would have:
         # continue the pipeline
         return
 
-In our view code, we would have something like:
+In our view code, we would have something like::
 
     class PasswordForm(forms.Form):
         secret_word = forms.CharField(max_length=10)
