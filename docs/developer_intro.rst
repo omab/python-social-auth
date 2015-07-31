@@ -66,9 +66,7 @@ The design contract for each function in the pipeline is:
 1) The pipeline starts with a four-item dictionary (the accumulative dictionary) which is updated with the results of each function in the pipeline. The initial four values are:
         'strategy' : contains a strategy object
         'backend' : contains the backend being used during this pipeline run
-        'request' : contains a dictionary of the request keys.  Note to Django
-            users -- this is not an HttpRequest object, it is actually
-            the results of request.REQUEST.
+        'request' : contains a dictionary of the request keys.  Note to Django users -- this is not an HttpRequest object, it is actually the results of request.REQUEST.
         'details' : which is an empty dict.
 
 2) If the function returns a dictionary or something False-ish, add the contents of the dictionary to an accumulative dictionary (called "out" in run_pipeline), and call the next step in the pipeline with the accumulative dictionary.
