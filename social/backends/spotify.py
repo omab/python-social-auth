@@ -21,10 +21,10 @@ class SpotifyOAuth2(BaseOAuth2):
     ]
 
     def auth_headers(self):
+        auth_str = '{0}:{1}'.format(*self.get_key_and_secret())
+        b64_auth_str = base64.urlsafe_b64encode(auth_str.encode()).decode()
         return {
-            'Authorization': 'Basic {0}'.format(base64.urlsafe_b64encode(
-                ('{0}:{1}'.format(*self.get_key_and_secret()).encode())
-            ))
+            'Authorization': 'Basic {0}'.format(b64_auth_str)
         }
 
     def get_user_details(self, response):
