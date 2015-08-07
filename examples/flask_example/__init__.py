@@ -55,10 +55,9 @@ def global_user():
 def commit_on_success(error=None):
     if error is None:
         db_session.commit()
+    else:
+        db_session.rollback()
 
-
-@app.teardown_request
-def shutdown_session(exception=None):
     db_session.remove()
 
 
