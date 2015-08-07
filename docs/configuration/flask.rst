@@ -101,6 +101,32 @@ handlers to these::
             return {'user': None}
 
 
+Remembering sessions
+--------------------
+
+The users session can be remembered when specified on login. The common
+implementation for this feature is to pass a parameter from the login form
+(``remember_me``, ``keep``, etc), to flag the action. Flask-Login_ will mark
+the session as persistent if told so.
+
+python-social-auth_ will check for a given name (``keep``) by default, but
+since providers won't pass parameters back to the application, the value must
+be persisted in the session before the authentication process happens.
+
+So, the following setting is required for this to work::
+
+    SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['keep']
+
+It's possible to override the default name with this setting::
+
+    SOCIAL_AUTH_REMEMBER_SESSION_NAME = 'remember_me'
+
+Don't use the value ``remember`` since that will clash with Flask-Login_ which
+pops the value from the session.
+
+Then just pass the parameter ``keep=1`` as a GET or POST parameter.
+
+
 Exceptions handling
 -------------------
 
