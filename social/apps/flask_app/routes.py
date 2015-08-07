@@ -36,6 +36,9 @@ def disconnect(backend, association_id=None):
 
 
 def do_login(backend, user, social_user):
-    return login_user(user, remember=request.cookies.get('remember') or
-                                     request.args.get('remember') or
-                                     request.form.get('remember') or False)
+    remember = backend.strategy.session_get('remember') or \
+               request.cookies.get('remember') or \
+               request.args.get('remember') or \
+               request.form.get('remember') or \
+               False
+    return login_user(user, remember=remember)
