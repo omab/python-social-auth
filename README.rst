@@ -118,6 +118,7 @@ or current ones extended):
     * Tumblr_ OAuth1
     * Twilio_ Auth
     * Twitter_ OAuth1
+    * Uber_ OAuth2
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
     * Withings_ OAuth1
@@ -279,6 +280,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Tripit: https://www.tripit.com
 .. _Twilio: https://www.twilio.com
 .. _Twitter: http://twitter.com
+.. _Uber: http://uber.com
 .. _VK.com: http://vk.com
 .. _Weibo: https://weibo.com
 .. _Wunderlist: https://wunderlist.com
