@@ -297,23 +297,25 @@ class OpenIdConnectAuth(BaseOAuth2):
     AUTHORIZATION_URL = None
     REVOKE_TOKEN_URL = None
     SIGNING_ALGS = None
+    USERINFO_URL = None
 
     def init_oidc_config(self):
         if self.oidc_config is None and self.OIDC_ENDPOINT:
             # Cache these settings by setting class variables
             cls = self.__class__
-            cls.oidc_config = self.get_json(self.OIDC_ENDPOINT + '/.well-known/openid-configuration')
-            cls.ACCESS_TOKEN_URL = self.oidc_config['token_endpoint']
-            cls.AUTHORIZATION_URL = self.oidc_config['authorization_endpoint']
-            cls.REVOKE_TOKEN_URL = self.oidc_config['revocation_endpoint']
-            cls.USERINFO_URL = self.oidc_config['userinfo_endpoint']
+            oidc_config = self.get_json(self.OIDC_ENDPOINT + '/.well-known/openid-configuration')
             cls.ID_TOKEN_ISSUER = self.oidc_config['issuer']
-            cls.SIGNING_ALGS = self.oidc_config['id_token_signing_alg_values_supported']
+            cls.AUTHORIZATION_URL = self.oidc_config['authorization_endpoint']
+            cls.ACCESS_TOKEN_URL = self.oidc_config.get('token_endpoint')
+            cls.USERINFO_URL = self.oidc_config.get('userinfo_endpoint')
             cls.JWKS_KEYS = KEYS()
             self.JWKS_KEYS.load_from_url(self.oidc_config['jwks_uri'])
             _client_id, client_secret = self.get_key_and_secret()
             # Add client secret as oct key so it can be used for HMAC signatures
             self.JWKS_KEYS.add({'key': client_secret, 'kty': 'oct'})
+            cls.SIGNING_ALGS = self.oidc_config['id_token_signing_alg_values_supported']
+            cls.REVOKE_TOKEN_URL = self.oidc_config.get('revocation_endpoint')  # Not part of spec
+            cls.oidc_config = oidc_config
 
     def auth_params(self, state=None):
         """Return extra arguments needed on auth process."""
