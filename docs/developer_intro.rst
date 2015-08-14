@@ -2,7 +2,7 @@ Beginners Guide
 ===============
 
 This is an attempt to bring together a number of concepts in python-social-auth
-(psa) so that you will understand how it fits into your system.  This definitely
+(psa) so that you will understand how it fits into your system. This definitely
 has a Django flavor to it (because that's how I learned it).
 
 Understanding PSA URLs
@@ -28,7 +28,8 @@ Understanding Backends
 PSA implements a lot of backends.  Find the entry in the docs for your backend,
 and if it's there, follow the steps to enable it, which come down to
 
-1) Set up SOCIAL_AUTH_{backend} variables in settings.py.  (The settings vary, based on the backends)
+1) Set up SOCIAL_AUTH_{backend} variables in settings.py.  (The
+   settings vary, based on the backends)
 
 2) Adding your backend to AUTHENTICATION_BACKENDS in settings.py.
 
@@ -51,29 +52,40 @@ dictionary, that implies that the user was logged in when the process started.
 Understanding the Pipeline
 --------------------------
 
-Reversing a URL like {% url 'social:begin' 'github' %} will give you a url like:
+Reversing a URL like ``{% url 'social:begin' 'github' %}`` will give you a url
+like::
 
-http://example.com/login/github
+    http://example.com/login/github
 
-And clicking on that link will cfrom:(seth@hillcountryny.com)ause the "pipeline" to be started.  The pipeline
+And clicking on that link will cause the "pipeline" to be started. The pipeline
 is a list of functions that build up data about the user as we go through the
 steps of the authentication process.  (If you really want to understand the
-pipeline, look at the source in social/backends/base.py, and see the
-run_pipeline() function in BaseAuth.)
+pipeline, look at the source in ``social/backends/base.py``, and see the
+``run_pipeline()`` function in ``BaseAuth``.)
 
 The design contract for each function in the pipeline is:
 
-1) The pipeline starts with a four-item dictionary (the accumulative dictionary) which is updated with the results of each function in the pipeline. The initial four values are:
-        'strategy' : contains a strategy object
-        'backend' : contains the backend being used during this pipeline run
-        'request' : contains a dictionary of the request keys.  Note to Django users -- this is not an HttpRequest object, it is actually the results of request.REQUEST.
-        'details' : which is an empty dict.
+1) The pipeline starts with a four-item dictionary (the accumulative dictionary)
+   which is updated with the results of each function in the pipeline. The
+   initial four values are:
+       'strategy' : contains a strategy object
+       'backend' : contains the backend being used during this pipeline run
+       'request' : contains a dictionary of the request keys. Note to Django
+                   users -- this is not an HttpRequest object, it is actually
+                   the results of ``request.REQUEST``.
+       'details' : which is an empty dict.
 
-2) If the function returns a dictionary or something False-ish, add the contents of the dictionary to an accumulative dictionary (called "out" in run_pipeline), and call the next step in the pipeline with the accumulative dictionary.
+2) If the function returns a dictionary or something False-ish, add the contents
+   of the dictionary to an accumulative dictionary (called ``out`` in
+   ``run_pipeline``), and call the next step in the pipeline with the
+   accumulative dictionary.
 
-3) If something else is returned (for example, a subclass of HttpResponse), then return that to the browser.
+3) If something else is returned (for example, a subclass of ``HttpResponse``),
+   then return that to the browser.
 
-4) If the pipeline completes, *THEN* the user is authenticated (logged in).  So if you are finding an authenticated user object while the pipeline is running, that means that the user was logged in when the pipeline started.
+4) If the pipeline completes, *THEN* the user is authenticated (logged in). So
+   if you are finding an authenticated user object while the pipeline is
+   running, that means that the user was logged in when the pipeline started.
 
 There is one pipeline for your site as a whole -- if you have backend-specific
 logic, you have to make your pipeline steps smart enough to skip the step if it
@@ -97,7 +109,7 @@ the pipeline. That is done by adding a value to the settings file to tell
 us which values should be passed back and forth between the Django session
 and the pipeline::
 
-    FIELDS_STORED_IN_SESSION = ['local_password',]
+    SOCIAL_AUTH_FIELDS_STORED_IN_SESSION = ['local_password',]
 
 In our pipeline code, we would have::
 
@@ -148,6 +160,5 @@ In our view code, we would have something like::
 
         return render(request, "password_form.html")
 
-Note that the "social:complete" will re-enter the pipeline with the same
+Note that the ``social:complete`` will re-enter the pipeline with the same
 function that interrupted it (in this case, collect_password).
-

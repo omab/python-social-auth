@@ -26,6 +26,7 @@ Contents:
    storage
    exceptions
    backends/index
+   developer_intro
    logging_out
    tests
    use_cases
