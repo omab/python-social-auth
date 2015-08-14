@@ -304,17 +304,17 @@ class OpenIdConnectAuth(BaseOAuth2):
             # Cache these settings by setting class variables
             cls = self.__class__
             oidc_config = self.get_json(self.OIDC_ENDPOINT + '/.well-known/openid-configuration')
-            cls.ID_TOKEN_ISSUER = self.oidc_config['issuer']
-            cls.AUTHORIZATION_URL = self.oidc_config['authorization_endpoint']
-            cls.ACCESS_TOKEN_URL = self.oidc_config.get('token_endpoint')
-            cls.USERINFO_URL = self.oidc_config.get('userinfo_endpoint')
+            cls.ID_TOKEN_ISSUER = oidc_config['issuer']
+            cls.AUTHORIZATION_URL = oidc_config['authorization_endpoint']
+            cls.ACCESS_TOKEN_URL = oidc_config.get('token_endpoint')
+            cls.USERINFO_URL = oidc_config.get('userinfo_endpoint')
             cls.JWKS_KEYS = KEYS()
-            self.JWKS_KEYS.load_from_url(self.oidc_config['jwks_uri'])
+            self.JWKS_KEYS.load_from_url(oidc_config['jwks_uri'])
             _client_id, client_secret = self.get_key_and_secret()
             # Add client secret as oct key so it can be used for HMAC signatures
             self.JWKS_KEYS.add({'key': client_secret, 'kty': 'oct'})
-            cls.SIGNING_ALGS = self.oidc_config['id_token_signing_alg_values_supported']
-            cls.REVOKE_TOKEN_URL = self.oidc_config.get('revocation_endpoint')  # Not part of spec
+            cls.SIGNING_ALGS = oidc_config['id_token_signing_alg_values_supported']
+            cls.REVOKE_TOKEN_URL = oidc_config.get('revocation_endpoint')  # Not part of spec
             cls.oidc_config = oidc_config
 
     def auth_params(self, state=None):
