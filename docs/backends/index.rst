@@ -131,6 +131,7 @@ Social backends
    twilio
    twitch
    twitter
+   uber
    vend
    vimeo
    vk
