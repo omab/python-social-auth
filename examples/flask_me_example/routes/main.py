@@ -9,8 +9,8 @@ def main():
     return render_template('home.html')
 
 
-@login_required
 @app.route('/done/')
+@login_required
 def done():
     return render_template('done.html')
 
