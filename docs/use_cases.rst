@@ -139,7 +139,7 @@ implemented easily)::
         else:
             return 'ERROR'
 
-The snipped above is quite simple, it doesn't return JSON and usually this call
+The snippet above is quite simple, it doesn't return JSON and usually this call
 will be done by AJAX. It doesn't return the user information, but that's
 something that can be extended and filled to suit the project where it's going
 to be used.
