@@ -25,7 +25,12 @@ class PyramidStrategy(BaseStrategy):
 
     def redirect(self, url):
         """Return a response redirect to the given URL"""
-        return HTTPFound(location=url)
+        response = getattr(self.request, 'response', None)
+        if response is None:
+            response = HTTPFound(location=url)
+        else:
+            response = HTTPFound(location=url, headers=response.headers)
+        return response
 
     def get_setting(self, name):
         """Return value for given setting name"""
@@ -33,7 +38,13 @@ class PyramidStrategy(BaseStrategy):
 
     def html(self, content):
         """Return HTTP response with given content"""
-        return Response(body=content)
+        response = getattr(self.request, 'response', None)
+        if response is None:
+            response = Response(body=content)
+        else:
+            response = self.request.response
+            response.body = content
+        return response
 
     def request_data(self, merge=True):
         """Return current request data (POST or GET)"""
