@@ -7,7 +7,7 @@ Some miscellaneous options and use cases for python-social-auth_.
 Return the user to the original page
 ------------------------------------
 
-There's a common scenario were it's desired to return the user back to the
+There's a common scenario where it's desired to return the user back to the
 original page from where it was requested to login. For that purpose, the usual
 ``next`` query-string argument is used, the value of this parameter will be
 stored in the session and later used to redirect the user when login was
