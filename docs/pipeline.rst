@@ -86,7 +86,7 @@ ones would look like this::
         'social.pipeline.social_auth.social_user',
         'social.pipeline.social_auth.associate_user',
         'social.pipeline.social_auth.load_extra_data',
-        'social.pipeline.user.user_details'
+        'social.pipeline.user.user_details',
     )
 
 Note that this assumes the user is already authenticated, and thus the ``user`` key
@@ -144,7 +144,7 @@ In order to override the disconnection pipeline, just define the setting::
         'social.pipeline.disconnect.revoke_tokens',
 
         # Removes the social associations.
-        'social.pipeline.disconnect.disconnect'
+        'social.pipeline.disconnect.disconnect',
     )
 
 
@@ -303,7 +303,7 @@ returned by the provider (``Facebook`` in this example). The usual Facebook
         'updated_time': '2014-01-14T15:58:35+0000',
         'link': 'https://www.facebook.com/foobar',
         'timezone': -3,
-        'id': '100000126636010'
+        'id': '100000126636010',
     }
 
 Let's say we are interested in storing the user profile link, the gender and
@@ -333,7 +333,7 @@ the pipeline, since it needs the user instance, it needs to be put after
         'path.to.save_profile',  # <--- set the path to the function
         'social.pipeline.social_auth.associate_user',
         'social.pipeline.social_auth.load_extra_data',
-        'social.pipeline.user.user_details'
+        'social.pipeline.user.user_details',
     )
 
 If the return value of the function is a ``dict``, the values will be merged
