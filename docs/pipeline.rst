@@ -71,7 +71,7 @@ The default pipeline is composed by::
         'social.pipeline.social_auth.load_extra_data',
 
         # Update the user record with any changed info from the auth service.
-        'social.pipeline.user.user_details'
+        'social.pipeline.user.user_details',
     )
 
 
