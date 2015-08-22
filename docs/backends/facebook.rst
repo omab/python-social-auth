@@ -24,9 +24,13 @@ development resources`_:
      SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
 - Define ``SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS`` to pass extra parameters
-  to https://graph.facebook.com/me when gathering the user profile data, like::
+  to https://graph.facebook.com/me when gathering the user profile data (you need
+  to explicitly ask for fields like ``email`` using ``fields`` key)::
 
-    SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}
+    SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+      'locale': 'ru_RU',
+      'fields': 'id, name, email, age_range'
+    }
 
 If you define a redirect URL in Facebook setup page, be sure to not define
 http://127.0.0.1:8000 or http://localhost:8000 because it won't work when
