@@ -63,8 +63,9 @@ Google+ Sign-In
 done by their Javascript which thens calls a defined handler to complete the
 auth process.
 
-* To enable the backend create an application using the `Google console`_ and
-  following the steps from the `official guide`_. Make sure to enable the Google+ API in the console.
+* To enable the backend create an application using the `Google
+  console`_ and following the steps from the `official guide`_. Make
+  sure to enable the Google+ API in the console.
 
 * Fill in the key settings looking inside the Google console the subsection
   ``Credentials`` inside ``API & auth``::
@@ -81,57 +82,83 @@ auth process.
   ``SOCIAL_AUTH_GOOGLE_PLUS_SECRET`` corresponds to the variable
   ``CLIENT SECRET``.
 
-* Create a new Django view and in its template add the Google+ Sign-In button::
+* Add the sign-in button to your template, you can use the SDK button
+  or add your own and attacht he click handler to it (check `Google+ Identity Sign-In`_
+  documentation about it)::
 
-    <div id="signinButton">
-        <span id="signinButton">
-            <span
-                class="g-signin"
-                data-callback="signInCallback"
-                data-clientid="{{ plus_id }}"
-                data-cookiepolicy="single_host_origin"
-                data-requestvisibleactions="http://schemas.google.com/AddActivity"
-                data-scope="https://www.googleapis.com/auth/plus.login">
-            </span>
-        </span>
-    </div>
-
-    <form id="google-plus" method="post" action="{% url 'social:complete' "google-plus" %}">
-        {% csrf_token %}
-        <input id="at" type="hidden" name="access_token" value="" />
-        <input id="code" type="hidden" name="code" value="" />
-    </form>
-
-  ``plus_id`` is the value from ``SOCIAL_AUTH_GOOGLE_PLUS_KEY``.
-  ``signInCallback`` is the name of your Javascript callback function.
-  If you would like to get user's email address and have it stored, then set
-  this value in `data-scope`::
-
-    data-scope="https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/userinfo.email"
+    <div id="google-plus-button">Google+ Sign In</div>
 
 * Add the Javascript snippet in the same template as above::
 
-    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://apis.google.com/js/api:client.js"></script>
+
     <script type="text/javascript">
-    (function() {
-        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-        po.src = 'https://apis.google.com/js/client:plusone.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-    })();
+      gapi.load('auth2', function () {
+        var auth2;
+
+        auth2 = gapi.auth2.init({
+          client_id: "<PUT SOCIAL_AUTH_GOOGLE_PLUS_KEY HERE>",
+          scope: "<PUT BACKEND SCOPE HERE>"
+        });
+
+        auth2.then(function () {
+          var button = document.getElementById("google-plus-button");
+          console.log("User is signed-in in Google+ platform?", auth2.isSignedIn.get() ? "Yes" : "No");
+
+          auth2.attachClickHandler(button, {}, function (googleUser) {
+            // Send access-token to backend to finish the authenticate
+            // with your application
+
+            var authResponse = googleUser.getAuthResponse();
+            var $form;
+            var $input;
+
+            $form = $("<form>");
+            $form.attr("action", "/complete/google-plus");
+            $form.attr("method", "post");
+            $input = $("<input>");
+            $input.attr("name", "access_token");
+            $input.attr("value", authResponse.access_token);
+            $form.append($input);
+            // Add csrf-token if needed
+            $(document.body).append($form);
+            $form.submit();
+          });
+        });
+      });
     </script>
+    {% endif %}
 
-* And define your Javascript callback function::
+* Logging out
+
+  Logging-out can be tricky when using the the platform SDK because it
+  can trigger an automatic sign-in when listening to the user status
+  change. With the method show above, that won't happen, but if the UI
+  depends more in the SDK values than the backend, then things can get
+  out of sync easilly. To prevent this, the user should be logged-out
+  from Google+ platform too. This can be accomplished by doing::
 
     <script type="text/javascript">
-    var signInCallback = function (result) {
-        if (result['error']) {
-            alert('An error happened:', result['error']);
-        } else {
-            $('#code').attr('value', result['code']);
-            $('#at').attr('value', result['access_token']);
-            $('#google-plus').submit();
-        }
-    };
+      gapi.load('auth2', function () {
+        var auth2;
+
+        auth2 = gapi.auth2.init({
+          client_id: "{{ plus_id }}",
+          scope: "{{ plus_scope }}"
+        });
+
+        auth2.then(function () {
+          if (auth2.isSignedIn.get()) {
+            $('#logout').on('click', function (event) {
+              event.preventDefault();
+              auth2.signOut().then(function () {
+                console.log("Logged out from Google+ platform");
+                document.location = "/logout";
+              });
+            });
+          }
+        });
+      });
     </script>
 
 
@@ -223,3 +250,4 @@ supporting them you can default to the old values by defining this setting::
 .. _official guide: https://developers.google.com/+/web/signin/#step_1_create_a_client_id_and_client_secret
 .. _Sept 1, 2014: https://developers.google.com/+/api/auth-migration#timetable
 .. _e3525187: https://github.com/omab/python-social-auth/commit/e35251878a88954cecf8e575eca27c63164b9f67
+.. _Google+ Identity Sign-In: https://developers.google.com/identity/sign-in/web/sign-in

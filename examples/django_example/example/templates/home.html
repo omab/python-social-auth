@@ -11,7 +11,7 @@
       .col-md-2 { width: 18.6667%; }
       .buttons { display: block; table-layout: fixed; border-radius: 7px; border: 1px solid #ccc;
                  margin: 20px; background: #eee; padding: 30px; }
-      .buttons > div a { margin: 5px 10px; }
+      .buttons > div .btn { margin: 5px 10px; }
       .buttons > div:not(:first-child) { margin-top: 10px; border-top: 1px solid #ccc;
                                          padding-top: 10px; text-align: center; }
       .user-details { text-align: center; font-size: 16px; font-weight: bold; }
@@ -35,17 +35,24 @@
             {% for name, backend in sublist %}
               {% associated backend %}
               {% if association %}
-                <form class="disconnect-form col-md-2" action="{% url "social:disconnect_individual" backend=association.provider association_id=association.id %}" method="post">{% csrf_token %}
+                <form class="disconnect-form col-md-2" id="{{ name }}-disconnect" action="{% url "social:disconnect_individual" backend=association.provider association_id=association.id %}" method="post">{% csrf_token %}
                   <a class="btn btn-danger" name="{{ backend|backend_class }}" href="#">
                     <i class="fa fa-{{ name|icon_name }}"></i>
                     Disconnect {{ backend|backend_name }}
                   </a>
                 </form>
               {% else %}
-                <a class="col-md-2 btn btn-default" name="{{ backend|backend_class }}" href="{% url "social:begin" backend=name %}">
-                  <i class="fa fa-{{ name|icon_name }}"></i>
-                  {{ backend|backend_name }}
-                </a>
+                {% if name == "google-plus" %}
+                  <div class="col-md-2 btn btn-default" id="{{ name }}-button" name="{{ backend|backend_class }}">
+                    <i class="fa fa-{{ name|icon_name }}"></i>
+                    {{ backend|backend_name }}
+                  </div>
+                {% else %}
+                  <a class="col-md-2 btn btn-default" id="{{ name }}-button" name="{{ backend|backend_class }}" href="{% url "social:begin" backend=name %}">
+                    <i class="fa fa-{{ name|icon_name }}"></i>
+                    {{ backend|backend_name }}
+                  </a>
+                {% endif %}
               {% endif %}
             {% endfor %}
           </div>
@@ -77,7 +84,7 @@
       </div>
 
       <div>
-        <a class="btn btn-primary" href="/logout/">
+        <a class="btn btn-primary" href="/logout/" id="logout">
           <i class="fa fa-sign-out"></i>
           Logout
         </a>
@@ -322,38 +329,57 @@
     </div>
 
     {% if plus_id %}
-    <form id="google-plus" method="post" action="{% url "social:complete" backend="google-plus" %}">{% csrf_token %}
-      <input id="at" type="hidden" name="access_token" value="" />
-      <input id="code" type="hidden" name="code" value="" />
+    <script src="https://apis.google.com/js/api:client.js"></script>
+    <script type="text/javascript">
+        gapi.load('auth2', function () {
+          var auth2;
 
-      <div id="signinButton">
-        <span class="g-signin" data-scope="{{ plus_scope }}"
-                               data-clientid="{{ plus_id }}"
-                               data-redirecturi="postmessage"
-                               data-accesstype="offline"
-                               data-cookiepolicy="single_host_origin"
-                               data-callback="signInCallback">
-        </span>
-      </div>
-    </form>
+          auth2 = gapi.auth2.init({
+            client_id: "{{ plus_id }}",
+            scope: "{{ plus_scope }}"
+          });
+
+          auth2.then(function () {
+            var button = document.getElementById("google-plus-button");
+            console.log("User is signed-in in Google+ platform?", auth2.isSignedIn.get() ? "Yes" : "No");
+
+            if (button) {
+              auth2.attachClickHandler(button, {}, function (googleUser) {
+                var authResponse = googleUser.getAuthResponse();
+                var $form;
+                var $input;
+
+                $form = $("<form>");
+                $form.attr("action", "{% url "social:complete" backend="google-plus" %}");
+                $form.attr("method", "post");
+                $input = $("<input>");
+                $input.attr("name", "access_token");
+                $input.attr("value", authResponse.access_token);
+                $form.append($input);
+                $form.append("{% csrf_token %}");
+                $(document.body).append($form);
+                $form.submit();
+              });
+            } else if (auth2.isSignedIn.get()) {
+              $('#logout').on('click', function (event) {
+                event.preventDefault();
+
+                auth2.signOut().then(function () {
+                  console.log("Logged out from Google+ platform");
+                  document.location = $(event.target).attr('href');
+                });
+              });
+            }
+          });
+        });
+    </script>
     {% endif %}
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script src="https://plus.google.com/js/client:plusone.js?onload=start" type="text/javascript"></script>
     <script src="https://login.persona.org/include.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-      var signInCallback = function (result) {
-          if (result['error']) {
-            alert('An error happened:', result['error']);
-          } else {
-            $('#code').attr('value', result['code']);
-            $('#at').attr('value', result['access_token']);
-            $('#google-plus').submit();
-          }
-      };
-
       var modalDialog = function (modalId, modalLinkName, submitHandler) {
         var $modal;
 

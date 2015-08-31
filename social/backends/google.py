@@ -113,6 +113,7 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
     REVOKE_TOKEN_METHOD = 'GET'
     DEFAULT_SCOPE = [
         'https://www.googleapis.com/auth/plus.login',
+        'https://www.googleapis.com/auth/plus.me',
     ]
     DEPRECATED_DEFAULT_SCOPE = [
         'https://www.googleapis.com/auth/plus.login',
@@ -136,26 +137,27 @@ class GooglePlusAuth(BaseGoogleOAuth2API, BaseOAuth2):
 
     @handle_http_errors
     def auth_complete(self, *args, **kwargs):
-        if 'access_token' in self.data and 'code' not in self.data:
-            raise AuthMissingParameter(self, 'access_token or code')
-
-        # Token won't be available in plain server-side workflow
-        token = self.data.get('access_token')
-        if token:
-            self.process_error(self.get_json(
+        if 'access_token' in self.data:  # Client-side workflow
+            token = self.data.get('access_token')
+            response = self.get_json(
                 'https://www.googleapis.com/oauth2/v1/tokeninfo',
                 params={'access_token': token}
-            ))
-
-        response = self.request_access_token(
-            self.ACCESS_TOKEN_URL,
-            data=self.auth_complete_params(),
-            headers=self.auth_headers(),
-            method=self.ACCESS_TOKEN_METHOD
-        )
-        self.process_error(response)
-        return self.do_auth(response['access_token'], response=response,
-                            *args, **kwargs)
+            )
+            self.process_error(response)
+            return self.do_auth(token, response=response, *args, **kwargs)
+        elif 'code' in self.data:  # Server-side workflow
+            response = self.request_access_token(
+                self.ACCESS_TOKEN_URL,
+                data=self.auth_complete_params(),
+                headers=self.auth_headers(),
+                method=self.ACCESS_TOKEN_METHOD
+            )
+            self.process_error(response)
+            return self.do_auth(response['access_token'],
+                                response=response,
+                                *args, **kwargs)
+        else:
+            raise AuthMissingParameter(self, 'access_token or code')
 
 
 class GoogleOAuth(BaseGoogleAuth, BaseOAuth1):
