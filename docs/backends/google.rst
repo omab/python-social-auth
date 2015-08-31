@@ -127,7 +127,6 @@ auth process.
         });
       });
     </script>
-    {% endif %}
 
 * Logging out
 
