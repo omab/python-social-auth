@@ -262,7 +262,7 @@ responses. To enumerate a few:
     The server user-details response, it depends on the protocol in use (and
     sometimes the provider implementation of such protocol), but usually it's
     just a ``dict`` with the user profile details in such provider. Lots of
-    information related to the user is provider here, sometimes the ``scope``
+    information related to the user is provided here, sometimes the ``scope``
     will increase the amount of information in this response on OAuth
     providers.
 
