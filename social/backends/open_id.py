@@ -277,24 +277,28 @@ class OpenIdConnectAssociation(object):
 
 class _cache(object):
     """
-    Cache decorator that caches the return value of a function or
-    method for a specified time.
+    Cache decorator that caches the return value of a method for a specified time.
 
-    It ignores the arguments of the cached function and always returns
-    the same value within the time range.
+    It maintains a cache per class, so subclasses have a different cache entry
+    for the same cached method.
+
+    Does not work for methods with arguments.
     """
     def __init__(self, ttl):
         self.ttl = ttl
-        self.value = None
-        self.last_update = None
+        self.cache = {}
 
     def __call__(self, fn):
-        def wrapped(*args, **kwargs):
+        def wrapped(this):
             now = time.time()
-            if not self.value or now - self.last_update > self.ttl:
-                self.value = fn(*args, **kwargs)
-                self.last_update = now
-            return self.value
+            last_updated = None
+            cached_value = None
+            if this.__class__ in self.cache:
+                last_updated, cached_value = self.cache[this.__class__]
+            if not cached_value or now - last_updated > self.ttl:
+                cached_value = fn(this)
+                self.cache[this.__class__] = (now, cached_value)
+            return cached_value
         return wrapped
 
 
