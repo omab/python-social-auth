@@ -274,7 +274,7 @@ class GoogleOpenIdConnectTest(OpenIdConnectTestMixin, GoogleOAuth2Test):
     backend_path = 'social.backends.google.GoogleOpenIdConnect'
     user_data_url = \
         'https://www.googleapis.com/plus/v1/people/me/openIdConnect'
-    issuer = "https://accounts.google.com"
+    issuer = "accounts.google.com"
     openid_config_body = ''.join([
         '{',
         ' "issuer": "https://accounts.google.com",',
