@@ -1,5 +1,6 @@
 import datetime
 import six
+import time
 from calendar import timegm
 
 from jwkest import JWKESTException
@@ -274,6 +275,39 @@ class OpenIdConnectAssociation(object):
         self.assoc_type = assoc_type  # as state
 
 
+class _cache(object):
+    """
+    Cache decorator that caches the return value of a function or
+    method for a specified time.
+
+    It ignores the arguments of the cached function and always returns
+    the same value within the time range.
+    """
+    def __init__(self, ttl):
+        self.ttl = ttl
+        self.value = None
+        self.last_update = None
+
+    def __call__(self, fn):
+        def wrapped(*args, **kwargs):
+            now = time.time()
+            if not self.value or now - self.last_update > self.ttl:
+                self.value = fn(*args, **kwargs)
+                self.last_update = now
+            return self.value
+        return wrapped
+
+
+def _autoconf(name):
+    """
+    fget helper function to fetch the value of a property from the OIDC
+    configuration
+    """
+    def getter(self):
+        return self.oidc_config().get(name)
+    return getter
+
+
 class OpenIdConnectAuth(BaseOAuth2):
     """
     Base class for Open ID Connect backends.
@@ -289,37 +323,29 @@ class OpenIdConnectAuth(BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     REVOKE_TOKEN_METHOD = 'GET'
 
-    # Will be autoconfigured
-    oidc_config = None
-    ID_TOKEN_ISSUER = None
-    JWKS_KEYS = None
-    ACCESS_TOKEN_URL = None
-    AUTHORIZATION_URL = None
-    REVOKE_TOKEN_URL = None
-    SIGNING_ALGS = None
-    USERINFO_URL = None
+    @_cache(ttl=600)
+    def oidc_config(self):
+        return self.get_json(self.OIDC_ENDPOINT + '/.well-known/openid-configuration')
 
-    def init_oidc_config(self):
-        if self.oidc_config is None and self.OIDC_ENDPOINT:
-            # Cache these settings by setting class variables
-            cls = self.__class__
-            oidc_config = self.get_json(self.OIDC_ENDPOINT + '/.well-known/openid-configuration')
-            cls.ID_TOKEN_ISSUER = oidc_config['issuer']
-            cls.AUTHORIZATION_URL = oidc_config['authorization_endpoint']
-            cls.ACCESS_TOKEN_URL = oidc_config.get('token_endpoint')
-            cls.USERINFO_URL = oidc_config.get('userinfo_endpoint')
-            cls.JWKS_KEYS = KEYS()
-            self.JWKS_KEYS.load_from_url(oidc_config['jwks_uri'])
-            _client_id, client_secret = self.get_key_and_secret()
-            # Add client secret as oct key so it can be used for HMAC signatures
-            self.JWKS_KEYS.add({'key': client_secret, 'kty': 'oct'})
-            cls.SIGNING_ALGS = oidc_config['id_token_signing_alg_values_supported']
-            cls.REVOKE_TOKEN_URL = oidc_config.get('revocation_endpoint')  # Not part of spec
-            cls.oidc_config = oidc_config
+    ID_TOKEN_ISSUER = property(_autoconf('issuer'))
+    ACCESS_TOKEN_URL = property(_autoconf('token_endpoint'))
+    AUTHORIZATION_URL = property(_autoconf('authorization_endpoint'))
+    REVOKE_TOKEN_URL = property(_autoconf('revocation_endpoint'))
+    USERINFO_URL = property(_autoconf('userinfo_endpoint'))
+    JWKS_URI = property(_autoconf('jwks_uri'))
+
+    @_cache(ttl=600)
+    def get_jwks_keys(self):
+        keys = KEYS()
+        keys.load_from_url(self.JWKS_URI)
+
+        # Add client secret as oct key so it can be used for HMAC signatures
+        _client_id, client_secret = self.get_key_and_secret()
+        keys.add({'key': client_secret, 'kty': 'oct'})
+        return keys
 
     def auth_params(self, state=None):
         """Return extra arguments needed on auth process."""
-        self.init_oidc_config()
         params = super(OpenIdConnectAuth, self).auth_params(state)
         params['nonce'] = self.get_and_store_nonce(
             self.AUTHORIZATION_URL, state
@@ -399,7 +425,7 @@ class OpenIdConnectAuth(BaseOAuth2):
         """
         try:
             # Decode the JWT and raise an error if the sig is invalid
-            id_token = JWS().verify_compact(jws.encode('utf-8'), self.JWKS_KEYS)
+            id_token = JWS().verify_compact(jws.encode('utf-8'), self.get_jwks_keys())
         except JWKESTException:
             raise AuthTokenError(self, 'Token error: Signature verification failed')
 
