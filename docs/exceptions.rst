@@ -49,4 +49,7 @@ than just the ``ValueError`` usually raised.
 ``AuthTokenRevoked``
     Raised when the user revoked the access_token in the provider.
 
+``AuthUnreachableProvider``
+    Raised when server couldn't communicate with backend.
+
 These are a subclass of ``ValueError`` to keep backward compatibility.
