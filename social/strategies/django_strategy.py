@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import authenticate
 from django.shortcuts import redirect
 from django.template import TemplateDoesNotExist, RequestContext, loader
+from django.template import engines
 from django.utils.encoding import force_text
 from django.utils.functional import Promise
 from django.utils.translation import get_language
@@ -18,7 +19,7 @@ class DjangoTemplateStrategy(BaseTemplateStrategy):
         return template.render(RequestContext(self.strategy.request, context))
 
     def render_string(self, html, context):
-        template = loader.get_template_from_string(html)
+        template = engines['django'].from_string(html)
         return template.render(RequestContext(self.strategy.request, context))
 
 
@@ -86,7 +87,7 @@ class DjangoStrategy(BaseStrategy):
         try:
             template = loader.get_template(tpl)
         except TemplateDoesNotExist:
-            template = loader.get_template_from_string(html)
+            template = engines['django'].from_string(html)
         return template.render(RequestContext(self.request, context))
 
     def authenticate(self, backend, *args, **kwargs):
