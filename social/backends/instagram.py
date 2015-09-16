@@ -42,7 +42,7 @@ class InstagramOAuth2(BaseOAuth2):
         sig = self._generate_sig("users/self", params, secret)
         params['sig'] = sig
         return self.get_json('https://api.instagram.com/v1/users/self',
-                             params)
+                             params=params)
 
     def _generate_sig(self, endpoint, params, secret):
         sig = endpoint
