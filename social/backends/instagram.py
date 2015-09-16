@@ -39,7 +39,7 @@ class InstagramOAuth2(BaseOAuth2):
         """Loads user data from service"""
         key, secret = self.get_key_and_secret()
         params = {'access_token': access_token}
-        sig = self._generate_sig("users/self", params, secret)
+        sig = self._generate_sig("/users/self", params, secret)
         params['sig'] = sig
         return self.get_json('https://api.instagram.com/v1/users/self',
                              params=params)
