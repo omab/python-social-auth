@@ -2,6 +2,8 @@
 Instagram OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/instagram.html
 """
+from hashlib import sha256
+import hmac
 from social.backends.oauth import BaseOAuth2
 
 
@@ -35,5 +37,15 @@ class InstagramOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
+        key, secret = self.get_key_and_secret()
+        params = params={'access_token': access_token}
+        sig = self._generate_sig("users/self", params, secret)
+        params['sig'] = sig
         return self.get_json('https://api.instagram.com/v1/users/self',
-                             params={'access_token': access_token})
+                             params)
+
+    def _generate_sig(self, endpoint, params, secret):
+        sig = endpoint
+        for key in sorted(params.keys()):
+            sig += '|%s=%s' % (key, params[key])
+        return hmac.new(secret.encode(), sig.encode(), sha256).hexdigest()
