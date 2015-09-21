@@ -51,6 +51,11 @@ class DjangoStrategy(BaseStrategy):
 
     def request_host(self):
         if self.request:
+            if self.setting("RESPECT_X_FORWARDED_HEADERS", False):
+                forwarded_host = self.request.META.get('HTTP_X_FORWARDED_HOST')
+                if forwarded_host:
+                    return forwarded_host
+
             return self.request.get_host()
 
     def request_is_secure(self):
@@ -63,6 +68,11 @@ class DjangoStrategy(BaseStrategy):
 
     def request_port(self):
         """Port in use for this request"""
+        if self.setting("RESPECT_X_FORWARDED_HEADERS", False):
+            forwarded_port = self.request.META.get('HTTP_X_FORWARDED_PORT')
+            if forwarded_port:
+                return forwarded_port
+
         return self.request.META['SERVER_PORT']
 
     def request_get(self):
