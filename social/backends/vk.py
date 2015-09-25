@@ -111,7 +111,7 @@ class VKOAuth2(BaseOAuth2):
             'fields': fields,
         })
 
-        if data.get('error'):
+        if data and data.get('error'):
             error = data['error']
             msg = error.get('error_msg', 'Unknown error')
             if error.get('error_code') == 5:
@@ -122,7 +122,7 @@ class VKOAuth2(BaseOAuth2):
         if data:
             data = data.get('response')[0]
             data['user_photo'] = data.get('photo')  # Backward compatibility
-        return data
+        return data or {}
 
 
 class VKAppOAuth2(VKOAuth2):
