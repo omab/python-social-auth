@@ -5,7 +5,7 @@ from social.tests.backends.oauth import OAuth1Test
 
 
 class FitbitOAuth1Test(OAuth1Test):
-    backend_path = 'social.backends.fitbit.FitbitOAuth'
+    backend_path = 'social.backends.fitbit.FitbitOAuth1'
     expected_username = 'foobar'
     access_token_body = urlencode({
         'oauth_token_secret': 'a-secret',
