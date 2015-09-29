@@ -291,14 +291,6 @@ class OpenIdConnectAuth(BaseOAuth2):
         )
         return params
 
-    def auth_complete_params(self, state=None):
-        params = super(OpenIdConnectAuth, self).auth_complete_params(state)
-        # Add a nonce to the request so that to help counter CSRF
-        params['nonce'] = self.get_and_store_nonce(
-            self.ACCESS_TOKEN_URL, state
-        )
-        return params
-
     def get_and_store_nonce(self, url, state):
         # Create a nonce
         nonce = self.strategy.random_string(64)
@@ -310,7 +302,7 @@ class OpenIdConnectAuth(BaseOAuth2):
     def get_nonce(self, nonce):
         try:
             return self.strategy.storage.association.get(
-                server_url=self.ACCESS_TOKEN_URL,
+                server_url=self.AUTHORIZATION_URL,
                 handle=nonce
             )[0]
         except IndexError:
