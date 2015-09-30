@@ -93,6 +93,7 @@ or current ones extended):
     * `Moves app`_ OAuth2 https://dev.moves-app.com/docs/authentication
     * `Mozilla Persona`_
     * NaszaKlasa_ OAuth2
+    * `NGPVAN ActionID`_ OpenId
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
     * OpenStreetMap_ OAuth1 http://wiki.openstreetmap.org/wiki/OAuth
@@ -267,6 +268,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Moves app: https://dev.moves-app.com/docs/
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _NaszaKlasa: https://developers.nk.pl/
+.. _NGPVAN ActionID: http://developers.ngpvan.com/action-id
 .. _Odnoklassniki: http://www.odnoklassniki.ru
 .. _Pocket: http://getpocket.com
 .. _Podio: https://podio.com

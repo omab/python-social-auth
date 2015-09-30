@@ -98,6 +98,7 @@ Social backends
    moves
    naszaklasa
    nationbuilder
+   ngpvan_actionid
    odnoklassnikiru
    openstreetmap
    orbi
