@@ -326,6 +326,7 @@ class OpenIdConnectAuth(BaseOAuth2):
     REDIRECT_STATE = False
     ACCESS_TOKEN_METHOD = 'POST'
     REVOKE_TOKEN_METHOD = 'GET'
+    ID_KEY = 'sub'
 
     @_cache(ttl=600)
     def oidc_config(self):
