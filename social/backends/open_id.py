@@ -297,8 +297,13 @@ class _cache(object):
             if this.__class__ in self.cache:
                 last_updated, cached_value = self.cache[this.__class__]
             if not cached_value or now - last_updated > self.ttl:
-                cached_value = fn(this)
-                self.cache[this.__class__] = (now, cached_value)
+                try:
+                    cached_value = fn(this)
+                    self.cache[this.__class__] = (now, cached_value)
+                except:
+                    # Use previously cached value when call fails, if available
+                    if not cached_value:
+                        raise
             return cached_value
         return wrapped
 
