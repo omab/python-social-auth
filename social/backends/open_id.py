@@ -277,7 +277,8 @@ class OpenIdConnectAssociation(object):
 
 class _cache(object):
     """
-    Cache decorator that caches the return value of a method for a specified time.
+    Cache decorator that caches the return value of a method for a
+    specified time.
 
     It maintains a cache per class, so subclasses have a different cache entry
     for the same cached method.
@@ -330,7 +331,8 @@ class OpenIdConnectAuth(BaseOAuth2):
 
     @_cache(ttl=600)
     def oidc_config(self):
-        return self.get_json(self.OIDC_ENDPOINT + '/.well-known/openid-configuration')
+        return self.get_json(self.OIDC_ENDPOINT +
+                             '/.well-known/openid-configuration')
 
     ID_TOKEN_ISSUER = property(_autoconf('issuer'))
     ACCESS_TOKEN_URL = property(_autoconf('token_endpoint'))
@@ -422,9 +424,11 @@ class OpenIdConnectAuth(BaseOAuth2):
         """
         try:
             # Decode the JWT and raise an error if the sig is invalid
-            id_token = JWS().verify_compact(jws.encode('utf-8'), self.get_jwks_keys())
+            id_token = JWS().verify_compact(jws.encode('utf-8'),
+                                            self.get_jwks_keys())
         except JWKESTException:
-            raise AuthTokenError(self, 'Token error: Signature verification failed')
+            raise AuthTokenError(self,
+                                 'Token error: Signature verification failed')
 
         self.validate_claims(id_token)
 
@@ -441,7 +445,8 @@ class OpenIdConnectAuth(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         return self.get_json(self.USERINFO_URL,
-                             headers={'Authorization': 'Bearer {0}'.format(access_token)})
+                             headers={'Authorization':
+                                          'Bearer {0}'.format(access_token)})
 
     def get_user_details(self, response):
         return {
