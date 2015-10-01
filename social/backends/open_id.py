@@ -334,7 +334,7 @@ class OpenIdConnectAuth(BaseOAuth2):
     REVOKE_TOKEN_METHOD = 'GET'
     ID_KEY = 'sub'
 
-    @_cache(ttl=600)
+    @_cache(ttl=86400)
     def oidc_config(self):
         return self.get_json(self.OIDC_ENDPOINT +
                              '/.well-known/openid-configuration')
@@ -346,7 +346,7 @@ class OpenIdConnectAuth(BaseOAuth2):
     USERINFO_URL = property(_autoconf('userinfo_endpoint'))
     JWKS_URI = property(_autoconf('jwks_uri'))
 
-    @_cache(ttl=600)
+    @_cache(ttl=86400)
     def get_jwks_keys(self):
         keys = KEYS()
         keys.load_from_url(self.JWKS_URI)
