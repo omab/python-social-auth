@@ -7,7 +7,6 @@ env:
 python:
   - "2.6"
   - "2.7"
-  - "pypy"
 matrix:
   include:
     - python: "pypy"
@@ -18,6 +17,10 @@ matrix:
         - REQUIREMENTS=requirements-python3.txt
         - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
     - python: "3.4"
+      env:
+        - REQUIREMENTS=requirements-python3.txt
+        - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
+    - python: "3.5"
       env:
         - REQUIREMENTS=requirements-python3.txt
         - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
