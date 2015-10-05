@@ -10,6 +10,9 @@ python:
   - "pypy"
 matrix:
   include:
+    - python: "pypy"
+      env:
+        - TEST_REQUIREMENTS=social/tests/requirements-pypy.txt
     - python: "3.3"
       env:
         - REQUIREMENTS=requirements-python3.txt
