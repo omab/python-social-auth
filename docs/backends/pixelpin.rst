@@ -1,14 +1,13 @@
 PixelPin
 ========
 
-PixelPin itself supports OAuth 1 and 2 but this provider only supports OAuth2.
+PixelPin only supports OAuth2.
 
 PixelPin OAuth2
 ---------------
 
 Developer documentation for PixelPin can be found at
-https://login.pixelpin.co.uk/Developer/Index.aspx To setup OAuth2 do the
-following:
+http://developer.pixelpin.co.uk/. To setup OAuth2 do the following:
 
 - Register a new developer account at `PixelPin Developers`_.
 
@@ -31,4 +30,4 @@ following:
 
 .. _PixelPin homepage: http://pixelpin.co.uk/
 .. _PixelPin Account Page: https://login.pixelpin.co.uk/
-.. _PixelPin Developers: https://login.pixelpin.co.uk/Developers/Index.aspx
+.. _PixelPin Developers: http://developer.pixelpin.co.uk/
