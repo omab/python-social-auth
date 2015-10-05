@@ -2,8 +2,10 @@
 Instagram OAuth2 backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/instagram.html
 """
-from hashlib import sha256
 import hmac
+
+from hashlib import sha256
+
 from social.backends.oauth import BaseOAuth2
 
 
