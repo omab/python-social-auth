@@ -12,16 +12,17 @@ matrix:
   include:
     - python: "3.3"
       env:
-          - REQUIREMENTS=requirements-python3.txt
-          - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
+        - REQUIREMENTS=requirements-python3.txt
+        - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
     - python: "3.4"
       env:
-          - REQUIREMENTS=requirements-python3.txt
-          - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
-apt:
-  packages:
-    - libxmlsec1-dev
-    - swig
+        - REQUIREMENTS=requirements-python3.txt
+        - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
+addons:
+  apt:
+    packages:
+      - libxmlsec1-dev
+      - swig
 install:
   - "python setup.py -q install"
   - "travis_retry pip install -r $REQUIREMENTS"
