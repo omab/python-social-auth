@@ -4,7 +4,10 @@ Just Giving
 OAuth2
 ------
 
-Add the Just Giving OAuth2 backend to your settings page::
+Follow the steps at `Just Giving API Docs`_ to register your
+application and get the needed keys.
+
+- Add the Just Giving OAuth2 backend to your settings page::
 
     SOCIAL_AUTH_AUTHENTICATION_BACKENDS = (
         ...

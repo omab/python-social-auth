@@ -30,14 +30,12 @@ class JustGivingOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         key, secret = self.get_key_and_secret()
-        return self.get_json(
-            self.USER_DATA_URL,
-            headers={
-                'Authorization': 'Bearer {0}'.format(access_token),
-                'Content-Type': 'application/json',
-                'x-application-key': secret,
-                'x-api-key': key
-            })
+        return self.get_json(self.USER_DATA_URL, headers={
+            'Authorization': 'Bearer {0}'.format(access_token),
+            'Content-Type': 'application/json',
+            'x-application-key': secret,
+            'x-api-key': key
+        })
 
     @handle_http_errors
     def auth_complete(self, *args, **kwargs):
@@ -54,4 +52,5 @@ class JustGivingOAuth2(BaseOAuth2):
             method=self.ACCESS_TOKEN_METHOD
         )
         self.process_error(response)
-        return self.do_auth(response['access_token'], response=response, *args, **kwargs)
+        return self.do_auth(response['access_token'], response=response,
+                            *args, **kwargs)
