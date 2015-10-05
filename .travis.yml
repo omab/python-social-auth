@@ -18,7 +18,6 @@ matrix:
       env:
           - REQUIREMENTS=requirements-python3.txt
           - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
-            addons:
 apt:
   packages:
     - libxmlsec1-dev
