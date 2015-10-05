@@ -44,3 +44,5 @@ changelog.sh
 .DS_Store
 .\#*
 \#*\#
+
+.python-version

@@ -1,0 +1,8 @@
+httpretty==0.6.5
+coverage>=3.6
+mock==1.0.1
+nose>=1.2.1
+rednose>=0.4.1
+requests>=1.1.0
+PyJWT>=1.0.0,<2.0.0
+unittest2==0.5.1
