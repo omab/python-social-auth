@@ -81,6 +81,7 @@ Social backends
    google
    instagram
    jawbone
+   justgiving
    kakao
    khanacademy
    lastfm
