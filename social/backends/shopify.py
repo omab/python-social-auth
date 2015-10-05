@@ -19,6 +19,7 @@ class ShopifyOAuth2(BaseOAuth2):
         ('website', 'website'),
         ('expires', 'expires')
     ]
+    REDIRECT_STATE = False
 
     @property
     def shopifyAPI(self):
