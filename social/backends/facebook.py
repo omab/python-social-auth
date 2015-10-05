@@ -177,7 +177,7 @@ class FacebookAppOAuth2(FacebookOAuth2):
     def load_signed_request(self, signed_request):
         def base64_url_decode(data):
             data = data.encode('ascii')
-            data += '=' * (4 - (len(data) % 4))
+            data += '='.encode('ascii') * (4 - (len(data) % 4))
             return base64.urlsafe_b64decode(data)
 
         key, secret = self.get_key_and_secret()
@@ -187,8 +187,10 @@ class FacebookAppOAuth2(FacebookOAuth2):
             pass  # ignore if can't split on dot
         else:
             sig = base64_url_decode(sig)
-            data = json.loads(base64_url_decode(payload))
-            expected_sig = hmac.new(secret, msg=payload,
+            payload_json_bytes = base64_url_decode(payload)
+            data = json.loads(payload_json_bytes.decode('utf-8', 'replace'))
+            expected_sig = hmac.new(secret.encode('ascii'),
+                                    msg=payload.encode('ascii'),
                                     digestmod=hashlib.sha256).digest()
             # allow the signed_request to function for upto 1 day
             if constant_time_compare(sig, expected_sig) and \
