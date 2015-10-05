@@ -20,10 +20,6 @@ matrix:
       env:
         - REQUIREMENTS=requirements-python3.txt
         - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
-    - python: "3.5"
-      env:
-        - REQUIREMENTS=requirements-python3.txt
-        - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
 addons:
   apt:
     packages:
