@@ -333,6 +333,7 @@ class OpenIdConnectAuth(BaseOAuth2):
     ACCESS_TOKEN_METHOD = 'POST'
     REVOKE_TOKEN_METHOD = 'GET'
     ID_KEY = 'sub'
+    USERNAME_KEY = 'preferred_username'
 
     @_cache(ttl=86400)
     def oidc_config(self):
@@ -454,8 +455,9 @@ class OpenIdConnectAuth(BaseOAuth2):
                                           'Bearer {0}'.format(access_token)})
 
     def get_user_details(self, response):
+        username_key = self.setting('USERNAME_KEY', default=self.USERNAME_KEY)
         return {
-            'username': response.get('preferred_username'),
+            'username': response.get(username_key),
             'email': response.get('email'),
             'fullname': response.get('name'),
             'first_name': response.get('given_name'),
