@@ -15,6 +15,7 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
     name = 'odnoklassniki-oauth2'
     ID_KEY = 'uid'
     ACCESS_TOKEN_METHOD = 'POST'
+    SCOPE_SEPARATOR = ';'
     AUTHORIZATION_URL = 'http://www.odnoklassniki.ru/oauth/authorize'
     ACCESS_TOKEN_URL = 'http://api.odnoklassniki.ru/oauth/token.do'
     EXTRA_DATA = [('refresh_token', 'refresh_token'),
@@ -29,7 +30,7 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
         )
         return {
             'username': response['uid'],
-            'email': '',
+            'email': response.get('email', ''),
             'fullname': fullname,
             'first_name': first_name,
             'last_name': last_name
