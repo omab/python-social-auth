@@ -85,9 +85,6 @@ class VKOAuth2(BaseOAuth2):
         ('expires_in', 'expires')
     ]
 
-    def get_user_id(self, details, response):
-        return response['uid']
-
     def get_user_details(self, response):
         """Return user details from VK.com account"""
         fullname, first_name, last_name = self.get_user_names(
