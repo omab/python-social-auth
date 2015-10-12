@@ -117,7 +117,7 @@ class BaseAuth(object):
         return out
 
     def extra_data(self, user, uid, response, details=None, *args, **kwargs):
-        """Return deafault extra data to store in extra_data field"""
+        """Return default extra data to store in extra_data field"""
         data = {}
         for entry in (self.EXTRA_DATA or []) + self.setting('EXTRA_DATA', []):
             if not isinstance(entry, (list, tuple)):
@@ -194,7 +194,7 @@ class BaseAuth(object):
 
     def auth_extra_arguments(self):
         """Return extra arguments needed on auth process. The defaults can be
-        overriden by GET parameters."""
+        overridden by GET parameters."""
         extra_arguments = self.setting('AUTH_EXTRA_ARGUMENTS', {}).copy()
         extra_arguments.update((key, self.data[key]) for key in extra_arguments
                                     if key in self.data)
