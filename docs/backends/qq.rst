@@ -22,6 +22,10 @@ QQ implemented OAuth2 protocol for their authentication mechanism. To enable
 
 The values for ``nickname``, ``figureurl_qq_1`` and ``gender`` will be stored
 in the ``extra_data`` field. The ``nickname`` will be used as the account
-username. ``figureurl_qq_1`` can be used as the profile image.
+username. ``figureurl_qq_1`` can be used as the profile image. sometimes
+nickname will duplicate with another qq account, to avoid this issue it's
+possible to use ``openid`` as ``username`` by define this setting::
+
+    SOCIAL_AUTH_QQ_USE_OPENID_AS_USERNAME = True
 
 .. _QQ: http://connect.qq.com/
