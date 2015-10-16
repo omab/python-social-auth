@@ -38,14 +38,14 @@ Database
 
 (For Django 1.7 and higher) sync database to create needed models::
 
-    ./manage.py makemigrations
+    ./manage.py migrate
 
 If you're still using South, you'll need override SOUTH_MIGRATION_MODULES_::
 
     SOUTH_MIGRATION_MODULES = {
         'default': 'social.apps.django_app.default.south_migrations'
     }
-    
+
 Note that Django's app labels take the last part of the import, so
 in this case ``social.apps.django_app.default`` becomes ``default`` here.
 
@@ -148,9 +148,8 @@ A base middleware is provided that handles ``SocialAuthBaseException`` by
 providing a message to the user via the Django messages framework, and then
 responding with a redirect to a URL defined in one of the middleware methods.
 
-The middleware is at ``social.apps.django_app.middleware.SocialAuthExceptionMiddleware``. 
-Any method can be overrided but for simplifications these two are the
-recommended::
+The middleware is at ``social.apps.django_app.middleware.SocialAuthExceptionMiddleware``.
+Any method can be overridden, but for simplicity these two are recommended::
 
     get_message(request, exception)
     get_redirect_uri(request, exception)

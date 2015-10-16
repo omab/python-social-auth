@@ -6,7 +6,7 @@ authorization mechanism for Python projects supporting protocols like OAuth (1
 and 2), OpenId and others.
 
 The initial codebase is derived from django-social-auth_ with the idea of
-generalizing the process to suite the different frameworks around, providing
+generalizing the process to suit the different frameworks around, providing
 the needed tools to bring support to new frameworks.
 
 django-social-auth_ itself was a product of modified code from

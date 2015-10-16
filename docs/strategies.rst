@@ -8,7 +8,7 @@ capabilities under a common API to reuse as much code as possible.
 Description
 -----------
 
-An strategy responsibility is to provide access to:
+A strategy's responsibility is to provide access to:
 
     * Request data and host information and URI building
     * Session access

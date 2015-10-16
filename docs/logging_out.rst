@@ -1,13 +1,13 @@
 Disconnect and Logging Out
 ==========================
 
-It's a common misconception that ``disconnect`` action is the same as logging
-the user out, but is far from it.
+It's a common misconception that the ``disconnect`` action is the same as
+logging the user out, but this is not the case.
 
-``Disconnect`` is the way that your users have to say to you "forget about my
-account", that implies removing the ``UserSocialAuth`` instance that was
+``Disconnect`` is the way that your users can ask your project to "forget about
+my account". This implies removing the ``UserSocialAuth`` instance that was
 created, this also implies that the user won't be able to login back into your
-site with the social account, instead the action will be a signup, a new user
+site with the social account. Instead the action will be a signup, a new user
 instance will be created, not related to the previous one.
 
 Logging out is just a way to say "forget my current session", and usually
