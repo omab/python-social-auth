@@ -31,7 +31,7 @@ class QQOAuth2(BaseOAuth2):
         this issue it's possible to use `openid` as `username` by define
         `SOCIAL_AUTH_QQ_USE_OPENID_AS_USERNAME = True`
         """
-        if self.setting('SOCIAL_AUTH_QQ_USE_OPENID_AS_USERNAME', False):
+        if self.setting('USE_OPENID_AS_USERNAME', False):
             username = response.get('openid', '')
         else:
             username = response.get('nickname', '')
