@@ -16,7 +16,7 @@ from social.utils import setting_name
 
 
 if VERSION >= (1, 8):
-    _JSONFieldBase = models.TextField
+    _JSONFieldBase = models.Field
 else:
     _JSONFieldBase = six.with_metaclass(models.SubfieldBase, models.TextField)
 
@@ -33,6 +33,9 @@ else:
         def __init__(self, *args, **kwargs):
             kwargs.setdefault('default', '{}')
             super(JSONField, self).__init__(*args, **kwargs)
+
+        def get_internal_type(self):
+            return 'TextField'
 
         # Support for Django < 1.8
         def to_python(self, value):
