@@ -31,7 +31,7 @@ else:
         """
 
         def __init__(self, *args, **kwargs):
-            kwargs.setdefault('default', '{}')
+            kwargs.setdefault('default', {})
             super(JSONField, self).__init__(*args, **kwargs)
 
         def get_internal_type(self):
