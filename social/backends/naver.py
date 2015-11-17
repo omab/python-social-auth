@@ -27,9 +27,8 @@ class NaverOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         dom = minidom.parseString(self.request(
-            'https://openapi.naver.com/v1/nid/getUserProfile.xml', 
-            method='POST',
-            headers={'Authorization': 'Bearer {0}'.format(access_token)}
+            'https://openapi.naver.com/v1/nid/getUserProfile.xml',
+            headers={'Authorization': 'Bearer {0}'.format(access_token), 'Content_Type': 'text/xml'}
             ).text.encode('utf-8').strip())
 
         return {

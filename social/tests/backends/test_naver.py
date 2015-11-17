@@ -12,21 +12,24 @@ class NaverOAuth2Test(OAuth2Test):
 
     user_data_content_type = 'text/xml'
     user_data_body = \
+    '<?xml version="1.0" encoding="UTF-8" ?>' \
     '<data>' \
         '<result>' \
             '<resultcode>00</resultcode>' \
             '<message>success</message>' \
         '</result>' \
         '<response>' \
-            '<nickname>naverIDLogin</nickname>' \
-            '<name>userName<name>' \
-            '<id>123456</id>' \
+            '<email><![CDATA[foobar@naver.com]]></email>' \
+            '<nickname><![CDATA[foobar]]></nickname>' \
+            '<profile_image><![CDATA[http://naver.com/image.url.jpg]]></profile_image>' \
+            '<age><![CDATA[20-29]]></age>' \
             '<gender>M</gender>' \
-            '<age>40-49</age>' \
-            '<birthday>01-01</birthday>' \
-            '<profile_image>http://naver.com/image.url.jpg</profile_image>' \
+            '<id><![CDATA[123456]]></id>' \
+            '<name><![CDATA[foobar]]></name>' \
+            '<birthday><![CDATA[12-01]]></birthday>' \
         '</response>' \
     '</data>'
+
 
     def test_login(self):
         self.do_login()
