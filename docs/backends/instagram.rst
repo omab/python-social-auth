@@ -5,6 +5,14 @@ Instagram uses OAuth v2 for Authentication.
 
 - Register a new application at the `Instagram API`_, and
 
+- Add instagram backend to ``AUTHENTICATION_SETTINGS``::
+
+      AUTHENTICATION_SETTINGS = (
+        ...
+        'social.backends.insagram.InstagramOAuth2',
+        ...
+      )
+
 - fill ``Client Id`` and ``Client Secret`` values in the settings::
 
       SOCIAL_AUTH_INSTAGRAM_KEY = ''
