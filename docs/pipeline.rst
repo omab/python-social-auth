@@ -75,8 +75,8 @@ The default pipeline is composed by::
     )
 
 
-It's possible to override it by defining the setting ``SOCIAL_AUTH_PIPELINE``,
-for example a pipeline that won't create users, just accept already registered
+It's possible to override it by defining the setting ``SOCIAL_AUTH_PIPELINE``.
+For example, a pipeline that won't create users, just accept already registered
 ones would look like this::
 
     SOCIAL_AUTH_PIPELINE = (
@@ -178,7 +178,7 @@ There's a pipeline to validate email addresses, but it relies a lot on your
 project.
 
 The pipeline is at ``social.pipeline.mail.mail_validation`` and it's a partial
-pipeline, it will return a redirect to an URL that you can use to tell the
+pipeline, it will return a redirect to a URL that you can use to tell the
 users that an email validation was sent to them. If you want to mention the
 email address you can get it from the session under the key ``email_validation_address``.
 
