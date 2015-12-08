@@ -26,10 +26,9 @@ class QQOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """
-        Return user detail from QQ account
-        sometimes nickname will duplicate with another qq account, to avoid
-        this issue it's possible to use `openid` as `username` by define
-        `SOCIAL_AUTH_QQ_USE_OPENID_AS_USERNAME = True`
+        Return user detail from QQ account sometimes nickname will duplicate
+        with another qq account, to avoid this issue it's possible to use
+        openid as username.
         """
         if self.setting('USE_OPENID_AS_USERNAME', False):
             username = response.get('openid', '')
