@@ -176,12 +176,12 @@ example to request Facebook to show Mobile authorization page, define::
 
 For other providers, just define settings in the form::
 
-      <uppercase backend name>_AUTH_EXTRA_ARGUMENTS = {...}
+      SOCIAL_AUTH_<uppercase backend name>_AUTH_EXTRA_ARGUMENTS = {...}
 
 Also, you can send extra parameters on request token process by defining
 settings in the same way explained above but with this other suffix::
 
-      <uppercase backend name>_REQUEST_TOKEN_EXTRA_ARGUMENTS = {...}
+      SOCIAL_AUTH_<uppercase backend name>_REQUEST_TOKEN_EXTRA_ARGUMENTS = {...}
 
 Basic information is requested to the different providers in order to create
 a coherent user instance (with first and last name, email and full name), this
