@@ -371,7 +371,7 @@ class BaseOAuth2(OAuthAuth):
 
     @handle_http_errors
     def auth_complete(self, *args, **kwargs):
-        """Completes loging process, must return user instance"""
+        """Completes login process, must return user instance"""
         state = self.validate_state()
         self.process_error(self.data)
 
