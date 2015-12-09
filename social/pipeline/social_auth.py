@@ -78,7 +78,8 @@ def associate_by_email(backend, details, user=None, *args, **kwargs):
                 'The given email address is associated with another account'
             )
         else:
-            return {'user': users[0]}
+            return {'user': users[0],
+                    'is_new': False}
 
 
 def load_extra_data(backend, details, response, uid, user, *args, **kwargs):
