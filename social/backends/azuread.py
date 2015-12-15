@@ -101,8 +101,8 @@ class AzureADOAuth2(BaseOAuth2):
 
     def refresh_token_params(self, token, *args, **kwargs):
         return {
-			'client_id' : self.setting('KEY'),
-			'client_secret' : self.setting('SECRET'),
+            'client_id': self.setting('KEY'),
+            'client_secret': self.setting('SECRET'),
             'refresh_token': token,
             'grant_type': 'refresh_token',
             'resource': self.setting('RESOURCE')
