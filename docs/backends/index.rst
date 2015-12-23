@@ -99,6 +99,7 @@ Social backends
    moves
    naszaklasa
    nationbuilder
+   naver
    odnoklassnikiru
    openstreetmap
    orbi

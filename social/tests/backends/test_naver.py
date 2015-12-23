@@ -1,5 +1,7 @@
 import json
+
 from social.tests.backends.oauth import OAuth2Test
+
 
 class NaverOAuth2Test(OAuth2Test):
     backend_path = 'social.backends.naver.NaverOAuth2'
@@ -21,7 +23,9 @@ class NaverOAuth2Test(OAuth2Test):
         '<response>' \
             '<email><![CDATA[foobar@naver.com]]></email>' \
             '<nickname><![CDATA[foobar]]></nickname>' \
-            '<profile_image><![CDATA[http://naver.com/image.url.jpg]]></profile_image>' \
+            '<profile_image>' \
+                '<![CDATA[http://naver.com/image.url.jpg]]>' \
+            '</profile_image>' \
             '<age><![CDATA[20-29]]></age>' \
             '<gender>M</gender>' \
             '<id><![CDATA[123456]]></id>' \
@@ -29,7 +33,6 @@ class NaverOAuth2Test(OAuth2Test):
             '<birthday><![CDATA[12-01]]></birthday>' \
         '</response>' \
     '</data>'
-
 
     def test_login(self):
         self.do_login()

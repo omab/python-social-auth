@@ -1,5 +1,5 @@
 Naver
-========
+=====
 
 Naver uses OAuth v2 for Authentication.
 
@@ -13,13 +13,15 @@ Naver uses OAuth v2 for Authentication.
         ...
     )
 
-- fill ``Client ID`` and ``Client Secret`` from developer.naver.com values in the settings::
+- fill ``Client ID`` and ``Client Secret`` from developer.naver.com
+  values in the settings::
 
 	SOCIAL_AUTH_NAVER_KEY = ''
 	SOCIAL_AUTH_NAVER_SECRET = ''
 
-- you can get EXTRA_DATA:: 
-	
-	SOCIAL_AUTH_NAVER_EXTRA_DATA = ['nickname', 'gender', 'age', 'birthday', 'profile_image']
+- you can get EXTRA_DATA::
+
+	SOCIAL_AUTH_NAVER_EXTRA_DATA = ['nickname', 'gender', 'age',
+                                        'birthday', 'profile_image']
 
 .. _Naver API: https://nid.naver.com/devcenter/docs.nhn?menu=API

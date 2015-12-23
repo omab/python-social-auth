@@ -1,4 +1,3 @@
-
 from xml.dom import minidom
 
 from social.backends.oauth import BaseOAuth2
@@ -26,20 +25,25 @@ class NaverOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        dom = minidom.parseString(self.request(
+        response = self.request(
             'https://openapi.naver.com/v1/nid/getUserProfile.xml',
-            headers={'Authorization': 'Bearer {0}'.format(access_token), 'Content_Type': 'text/xml'}
-            ).text.encode('utf-8').strip())
+            headers={
+                'Authorization': 'Bearer {0}'.format(access_token),
+                'Content_Type': 'text/xml'
+            }
+        )
+
+        dom = minidom.parseString(response.text.encode('utf-8').strip())
 
         return {
-            'id': dom.getElementsByTagName('id')[0].childNodes[0].data,
-            'email': dom.getElementsByTagName('email')[0].childNodes[0].data,
-            'username': dom.getElementsByTagName('name')[0].childNodes[0].data,
-            'nickname': dom.getElementsByTagName('nickname')[0].childNodes[0].data,
-            'gender': dom.getElementsByTagName('gender')[0].childNodes[0].data,
-            'age': dom.getElementsByTagName('age')[0].childNodes[0].data,
-            'birthday': dom.getElementsByTagName('birthday')[0].childNodes[0].data,
-            'profile_image': dom.getElementsByTagName('profile_image')[0].childNodes[0].data,
+            'id': self._dom_value(dom, 'id'),
+            'email': self._dom_value(dom, 'email'),
+            'username': self._dom_value(dom, 'name'),
+            'nickname': self._dom_value(dom, 'nickname'),
+            'gender': self._dom_value(dom, 'gender'),
+            'age': self._dom_value(dom, 'age'),
+            'birthday': self._dom_value(dom, 'birthday'),
+            'profile_image': self._dom_value(dom, 'profile_image')
         }
 
     def auth_headers(self):
@@ -50,3 +54,6 @@ class NaverOAuth2(BaseOAuth2):
             'client_id': client_id,
             'client_secret': client_secret,
         }
+
+    def _dom_value(self, dom, key):
+        return dom.getElementsByTagName(key)[0].childNodes[0].data
