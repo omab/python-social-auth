@@ -1,6 +1,10 @@
+# TODO: Add support for PostgreSQL specific JSONField
+#     https://docs.djangoproject.com/en/dev/ref/contrib/postgres/fields/#jsonfield
+#     It work on Django >= 1.9, PostgreSQL >= 9.4
 import json
 import six
 
+from django import VERSION
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -10,8 +14,13 @@ try:
 except ImportError:
     from django.utils.encoding import smart_text
 
+if VERSION >= (1, 8):
+    _JSONFieldBase = models.TextField
+else:  # Django < 1.8, deprecated code, remove it after Django 1.9 release (in December 2015)
+    _JSONFieldBase = six.with_metaclass(models.SubfieldBase, models.TextField)
 
-class JSONField(six.with_metaclass(models.SubfieldBase, models.TextField)):
+
+class JSONField(_JSONFieldBase):
     """Simple JSON field that stores python structures as JSON strings
     on database.
     """
@@ -21,6 +30,28 @@ class JSONField(six.with_metaclass(models.SubfieldBase, models.TextField)):
         super(JSONField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
+        """
+        Convert the input JSON value into python structures, raises
+        django.core.exceptions.ValidationError if the data can't be converted.
+        """
+        if self.blank and not value:
+            return {}
+        value = value or '{}'
+        if isinstance(value, six.binary_type):
+            value = six.text_type(value, 'utf-8')
+        if isinstance(value, six.string_types):
+            try:
+                # with django 1.6 i have '"{}"' as default value here
+                if value[0] == value[-1] == '"':
+                    value = value[1:-1]
+
+                return json.loads(value)
+            except Exception as err:
+                raise ValidationError(str(err))
+        else:
+            return value
+
+    def from_db_value(self, value, expression, connection, context):
         """
         Convert the input JSON value into python structures, raises
         django.core.exceptions.ValidationError if the data can't be converted.
