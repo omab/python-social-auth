@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 
 from social.utils import setting_name
+from social.apps.django_app.default.compat import get_all_field_names_from_options
 from social.apps.django_app.default.models import UserSocialAuth, Nonce, \
                                                   Association
 
@@ -24,7 +25,7 @@ class UserSocialAuthOption(admin.ModelAdmin):
                        hasattr(_User, 'username') and 'username' or \
                        None
             fieldnames = ('first_name', 'last_name', 'email', username)
-            all_names = _User._meta.get_all_field_names()
+            all_names = get_all_field_names_from_options(_User._meta)
             search_fields = [name for name in fieldnames
                                 if name and name in all_names]
         return ['user__' + name for name in search_fields]
