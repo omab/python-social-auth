@@ -6,13 +6,11 @@ except ImportError:
     # Django < 1.4
     from django.conf.urls.defaults import url
 
-
 from social.utils import setting_name
 from social.apps.django_app import views
 
 
 extra = getattr(settings, setting_name('TRAILING_SLASH'), True) and '/' or ''
-
 
 urlpatterns = [
     # authentication / association
