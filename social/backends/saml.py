@@ -11,7 +11,7 @@ from onelogin.saml2.auth import OneLogin_Saml2_Auth
 from onelogin.saml2.settings import OneLogin_Saml2_Settings
 
 from social.backends.base import BaseAuth
-from social.exceptions import AuthFailed
+from social.exceptions import AuthFailed, AuthMissingParameter
 
 # Helpful constants:
 OID_COMMON_NAME = "urn:oid:2.5.4.3"
@@ -256,7 +256,10 @@ class SAMLAuth(BaseAuth):
     def auth_url(self):
         """Get the URL to which we must redirect in order to
         authenticate the user"""
-        idp_name = self.strategy.request_data()['idp']
+        try:
+            idp_name = self.strategy.request_data()['idp']
+        except KeyError:
+            raise AuthMissingParameter(self, 'idp')
         auth = self._create_saml_auth(idp=self.get_idp(idp_name))
         # Below, return_to sets the RelayState, which can contain
         # arbitrary data.  We use it to store the specific SAML IdP
