@@ -56,6 +56,7 @@ or current ones extended):
     * Angel_ OAuth2
     * AOL_ OpenId http://www.aol.com/
     * Appsfuel_ OAuth2
+    * ArcGIS_ OAuth2
     * Behance_ OAuth2
     * BelgiumEIDOpenId_ OpenId https://www.e-contract.be/
     * Bitbucket_ OAuth1
@@ -237,6 +238,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _myOpenID: https://www.myopenid.com/
 .. _Angel: https://angel.co
 .. _Appsfuel: http://docs.appsfuel.com
+.. _ArcGIS: http://www.arcgis.com/
 .. _Behance: https://www.behance.net
 .. _Bitbucket: https://bitbucket.org
 .. _Box: https://www.box.com
