@@ -1,8 +1,328 @@
+2016-01-14 HEAD (unreleased)
+============================
+
+  * 2016-01-14 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8
+
+  * 2015-12-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Document run_tox script dependencies
+
+  * 2015-12-23 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and doc styles applied
+
+  * 2015-12-16 Yuri Prezument <y@yprez.com>
+    Fix Django 1.10 deprecation warnings
+
+  * 2015-12-08 Matías Aguirre <matiasaguirre@gmail.com>
+    Typos and PEP8
+
+  * 2015-12-05 Romulo Tavares <romuloctavares@gmail.com>
+    Changed instagram backend to new authorization routes
+
+  * 2015-12-01 James Keys <skolsuper@users.noreply.github.com>
+    Update settings.rst
+
+  * 2015-11-23 Matías Aguirre <matiasaguirre@gmail.com>
+    Add instagram authentication backend to docs
+
+  * 2015-11-17 SeokJun Hong <hong921122@gmail.com>
+    fix Travis-CI failed
+
+  * 2015-11-16 SeokJun Hong <hong921122@gmail.com>
+    fix a typing error in naver.rst
+
+  * 2015-11-16 SeokJun Hong <hong921122@gmail.com>
+    Add naver backends
+
+  * 2015-11-11 Matthew Jones <mat@matburt.net>
+    Formatter fixes for SAML to support Py2.6
+
+  * 2015-10-20 Martín Prunell <martin.prunell@gmail.com>
+    Fix typo
+
+  * 2015-10-17 lneoe <joe.hu.c+git@gmail.com>
+    use `self.setting('USE_OPENID_AS_USERNAME', False)` this will fast
+
+  * 2015-10-14 lneoe <joe.hu.c+git@gmail.com>
+    use `openid` as username
+
+  * 2015-10-16 Kevin Harvey <kharvey@axialhealthcare.com>
+    Fixes a few grammar issues in the docs
+
+  * 2015-10-12 Peter Schmidt <peter@peterjs.com>
+    Fix a few typos in backends
+
+  * 2015-10-07 Sergey Trofimov <truetug@gmail.com>
+    Update odnoklassniki.py
+
+  * 2015-10-07 Sergey Trofimov <truetug@gmail.com>
+    Update vk.py
+
+  * 2015-10-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Switch import order
+
+  * 2015-10-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Link justgiving doc
+
+  * 2015-09-16 Matías Aguirre <julian.bez@gmail.com>
+    Fix missing slash
+
+  * 2015-09-16 Matías Aguirre <julian.bez@gmail.com>
+    Fix kwarg
+
+  * 2015-09-16 Matías Aguirre <julian.bez@gmail.com>
+    Fix typo
+
+  * 2015-09-16 Matías Aguirre <julian.bez@gmail.com>
+    Add signed request signature for Instagram
+
+  * 2015-10-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Codestyle and missing docs
+
+  * 2015-10-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix syntax error
+
+  * 2015-10-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove python3.5 (openid breaks), silence pypy warings
+
+  * 2015-10-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove duplicated pypy entry, add python 3.5
+
+  * 2015-10-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Pypy test requirements for travisci
+
+  * 2015-10-05 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix pypy support, no python-saml for it, silence python2.6 warnings
+
+  * 2015-10-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix travis conf
+
+  * 2015-10-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Syntax typo
+
+  * 2015-10-04 Matías Aguirre <matiasaguirre@gmail.com>
+    Swtich travisci from legacy to container infrastructure
+
+  * 2015-10-02 Maarten van Schaik <maarten@byte.nl>
+    Store all tokens on refresh
+
+  * 2015-09-29 Maarten van Schaik <maarten@byte.nl>
+    Save extra_data on login
+
+  * 2015-09-28 Luke Briner <lukiebriner@gmail.com>
+    Update URLs to match new site and remove OAuth comment.
+
+2015-09-25 v0.2.13
+==================
+
+  * 2015-09-25 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.13
+
+  * 2015-09-23 James Maddox <jhmaddox@gmail.com>
+    added Python 3 support to FacebookAppOAuth2's load_signed_request method
+
+  * 2015-09-15 alrusdi <alrusdi@gmail.com>
+    VK API workflow fix if error happens on vk-side
+
+  * 2015-09-07 Bulgantamir Gankhuyag <mr.unagaldai@gmail.com>
+    added AuthUnreachableProvider exception to documentation
+
+  * 2015-09-02 Michael Willmott <michael@knodium.com>
+    Added justgiving.com OAuth2 backend
+
+  * 2015-09-01 Julian Bez <julian.bez@gmail.com>
+    Add REDIRECT_STATE = False
+
+  * 2015-08-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Remove template tag
+
+  * 2015-08-31 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix Google+ auth complete, update examples with updated SDK usage. Refs
+    #316
+
+  * 2015-08-24 Andy <andygmb1@gmail.com>
+    Fix typo in pipeline doc
+
+  * 2015-08-20 Michał Zagdan <michal.zagdan@gmail.com>
+    Update facebook.rst
+
+  * 2015-08-19 Jerzy Spendel <jspendel@gmail.com>
+    One more coma in use_cases.rst
+
+  * 2015-08-18 Jerzy Spendel <jspendel@gmail.com>
+    Coma at the end of every tuple and dict
+
+  * 2015-08-18 Jerzy Spendel <jspendel@gmail.com>
+    Tuple in pipeline's documentation should be ended with coma
+
+  * 2015-08-15 Chun-Jung Lee <github.tsod@tsod.idv.tw>
+    Support Pyramid Authentication Policies
+
+  * 2015-08-14 Ajoy Oommen <ajoy91ad@gmail.com>
+    Fix another mistake in use_cases.rst
+
+  * 2015-08-14 Ajoy Oommen <ajoy91ad@gmail.com>
+    Fix typo in use_cases.rst
+
+  * 2015-08-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Small cosmetic changes and link from main index. Refs #700
+
+  * 2015-08-14 Matías Aguirre <matiasaguirre@gmail.com>
+    Small cosmetic changes and link from main index. Refs #700
+
+  * 2015-08-10 Henoc Díaz <henocdz@gmail.com>
+    References to UberOAuth2 backend docs added in intro.rst and
+    backends/index.rst
+
+  * 2015-08-10 Henoc Díaz <henocdz@gmail.com>
+    Add support for Uber OAuth2 - Uber API v1 - Backend UberOAuth2 added -
+    Tests for UberOAuth2 backend added - Docs for backend added
+
+  * 2015-08-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix flask remember-me functionality
+
+  * 2015-08-07 Matías Aguirre <matiasaguirre@gmail.com>
+    Retrieve remember value from session
+
+  * 2015-08-05 khamaileon <khamaileon@users.noreply.github.com>
+    Fix #703
+
+  * 2015-07-31 Chris Curvey <chris@chriscurvey.com>
+    formatting cleanups
+
+  * 2015-07-31 Chris Curvey <chris@chriscurvey.com>
+    more formatting
+
+  * 2015-07-31 Chris Curvey <chris@chriscurvey.com>
+    formatting test
+
+  * 2015-07-31 Chris Curvey <chris@chriscurvey.com>
+    first revision
+
+  * 2015-07-29 Troy Grosfield <troy.grosfield@gmail.com>
+    Adding abstract UserSocialAuth model as well as a model manager class.
+
+  * 2015-07-29 Troy Grosfield <troy.grosfield@gmail.com>
+    Adding a model manager for the django app.
+
+  * 2015-07-25 James Little <jim@jameslittle.me.uk>
+    Update main.py
+
+  * 2015-07-22 Matías Aguirre <matiasaguirre@gmail.com>
+    Link docs and PEP8
+
+  * 2015-07-21 Can Kaya <akaya@dropbox.com>
+    removed @app.teardown_request since it is called before
+    @app.teardown_appcontext and removes current session. With
+    @app.teardown_request session is removed just before session.commit and
+    logged in user can not be saved on db.
+
+  * 2015-07-21 Georgy Cheshkov <georgy@cheshkov.com>
+    Remove debug printing from BaseOAuth2 backend
+
+  * 2015-07-19 João Miguel Neves <jneves@gosimpletax.com>
+    support for goclio.eu service
+
+  * 2015-07-16 Jordan Reiter <jordanreiter@gmail.com>
+    text -> content solves "is not JSON serializable"
+
+  * 2015-07-16 Frankie Robertson <frankie@robertson.name>
+    Close #622 by explicitly setting email length (compatibility with Django
+    1.7)
+
+  * 2015-07-16 Lee Jaeyoung <jaeyoung@monodiary.net>
+    Fix test failed: get right user_id from response
+
+  * 2015-07-16 Lee Jaeyoung <jaeyoung@monodiary.net>
+    Add orbi backend
+
+  * 2015-07-15 Matías Aguirre <matiasaguirre@gmail.com>
+    Meetup PEP8 and link docs
+
+  * 2015-07-14 Jesse Pollak <jpollak92@gmail.com>
+    fix clef backend by access ID in correct way
+
+  * 2015-07-13 bluszcz <bluszcz@bluszcz.net>
+    Clean up
+
+  * 2015-07-13 bluszcz <bluszcz@bluszcz.net>
+    Fixed typo
+
+  * 2015-07-13 bluszcz <bluszcz@bluszcz.net>
+    Added Meetup.com OAuth2 backend
+
+  * 2015-07-10 paxapy <paxapy@gmail.com>
+    echosign OAuth2 backend
+
+2015-07-10 v0.2.12
+==================
+
+  * 2015-07-10 Matías Aguirre <matiasaguirre@gmail.com>
+    v0.2.12
+
+  * 2015-07-10 Julian Bez <julian.bez@gmail.com>
+    Use full
+
+  * 2015-07-10 Julian Bez <julian.bez@gmail.com>
+    Use key
+
+  * 2015-07-10 Julian Bez <julian.bez@gmail.com>
+    Fix 'QueryDict' object has no attribute 'dicts'
+
+  * 2015-07-10 Maarten van Schaik <maarten@byte.nl>
+    Fix redirect_uri issue with tornado reversed url
+
+  * 2015-07-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Fix doc title in withins file
+
+  * 2015-07-09 Matías Aguirre <matiasaguirre@gmail.com>
+    PEP8 and code simplification
+
+  * 2015-07-09 eshellman <eric@hellman.net>
+    Update settings.rst
+
+  * 2015-07-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Backward compatibility option. Refs #652
+
+  * 2015-07-09 Matías Aguirre <matiasaguirre@gmail.com>
+    Add comment refering to ticket. Refs #671, #672
+
+  * 2015-07-09 Maksim Sokolskiy <misokolsky@gmail.com>
+    fix(pipeline): fix user_detail pipeline issue
+
+  * 2015-07-03 Maarten van Schaik <maarten@byte.nl>
+    Fix decoding of request args
+
+  * 2015-07-03 Maarten van Schaik <maarten@byte.nl>
+    Fix cookie handling for tornado
+
+  * 2015-06-28 Igor Serko <igor.serko@gmail.com>
+    added support for Github Enterprise
+
+  * 2015-06-25 Tomas <tomas.garzon@iactiveit.com>
+    Withings Backend
+
+  * 2015-06-24 Braden MacDonald <braden@opencraft.com>
+    Use official python-saml 2.1.3 release, remove setting that is no longer
+    included
+
+  * 2015-06-24 Braden MacDonald <braden@opencraft.com>
+    Fix wrong placement of changelog commits in 76a27b2
+
 2015-06-24 v0.2.11
 ==================
 
   * 2015-06-24 Matías Aguirre <matiasaguirre@gmail.com>
     v0.2.11
+
+  * 2015-06-21 Mark Adams <mark@markadams.me>
+    Added an OAuth2 backend for Bitbucket
+
+  * 2015-06-21 Mark Adams <mark@markadams.me>
+    Updated Bitbucket backend to use the  UUID as the ID_KEY
+
+  * 2015-06-21 Mark Adams <mark@markadams.me>
+    Updated Bitbucket backend to use newer 2.0 APIs instead of 1.0
 
   * 2015-06-19 Matías Aguirre <matiasaguirre@gmail.com>
     Link docs
@@ -13,30 +333,14 @@
   * 2015-06-18 Braden MacDonald <braden@opencraft.com>
     Added documentation
 
+  * 2015-06-17 Maarten van Schaik <maarten@byte.nl>
+    Python3 fixes for Tornado
+
   * 2015-06-17 Matías Aguirre <matiasaguirre@gmail.com>
     PEP8
 
-  * 2015-05-21 Braden MacDonald <braden@opencraft.com>
-    Minor cleanups
-
-  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
-    Minor consistency fix
-
-  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
-    Add an integration point for extra security layers like
-    eduPersonEntitlement
-
-  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
-    Make IdP name format slightly more flexible
-
-  * 2015-05-11 Braden MacDonald <braden@opencraft.com>
-    Add python-saml requirement (temporary commit)
-
-  * 2015-05-08 Braden MacDonald <braden@opencraft.com>
-    Tests for SAML backend
-
-  * 2015-04-30 Braden MacDonald <braden@opencraft.com>
-    SAML2 backend using OneLogin's python-saml
+  * 2015-06-01 Aurélien Bompard <aurelien@bompard.org>
+    Keep the egg-info directory in the sdist
 
 2015-05-29 v0.2.10
 ==================
@@ -92,6 +396,19 @@
   * 2015-05-11 sushantgawali <vin.bhalerao@gmail.com>
     Added provider for Microsoft Azure Active Directory OAuth2
 
+  * 2015-05-21 Braden MacDonald <braden@opencraft.com>
+    Minor cleanups
+
+  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
+    Minor consistency fix
+
+  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
+    Add an integration point for extra security layers like
+    eduPersonEntitlement
+
+  * 2015-05-20 Braden MacDonald <braden@opencraft.com>
+    Make IdP name format slightly more flexible
+
   * 2015-05-20 Marek Jalovec <marek.jalovec@gmail.com>
     Fixes "ImportError: No module named packages.urllib3.poolmanager" error
     (fixes #617)
@@ -104,6 +421,15 @@
 
   * 2015-05-16 Andrew Starr-Bochicchio <a.starr.b@gmail.com>
     Add a DigitalOcean backend.
+
+  * 2015-05-11 Braden MacDonald <braden@opencraft.com>
+    Add python-saml requirement (temporary commit)
+
+  * 2015-05-08 Braden MacDonald <braden@opencraft.com>
+    Tests for SAML backend
+
+  * 2015-04-30 Braden MacDonald <braden@opencraft.com>
+    SAML2 backend using OneLogin's python-saml
 
   * 2015-05-08 Matías Aguirre <matiasaguirre@gmail.com>
     Ensure that all the requirements are installed
@@ -858,9 +1184,6 @@
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     Flag dev version
 
-2014-09-11 v0.2.1
-=================
-
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     v0.2.1
 
@@ -872,9 +1195,6 @@
 
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     Flag dev version
-
-2014-09-11 v0.2.0
-=================
 
   * 2014-09-11 Matías Aguirre <matiasaguirre@gmail.com>
     v0.2.0
