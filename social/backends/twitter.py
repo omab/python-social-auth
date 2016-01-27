@@ -27,14 +27,17 @@ class TwitterOAuth(BaseOAuth1):
         """Return user details from Twitter account"""
         fullname, first_name, last_name = self.get_user_names(response['name'])
         return {'username': response['screen_name'],
-                'email': '',  # not supplied
+                'email': response.get('email', ''),
                 'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name}
 
     def user_data(self, access_token, *args, **kwargs):
         """Return user data provided"""
+        url = 'https://api.twitter.com/1.1/account/verify_credentials.json'
+        if self.setting('INCLUDE_EMAIL', False):
+            url += '?include_email=true'
         return self.get_json(
-            'https://api.twitter.com/1.1/account/verify_credentials.json',
-            auth=self.oauth_auth(access_token)
+                url,
+                auth=self.oauth_auth(access_token)
         )
