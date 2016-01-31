@@ -40,21 +40,6 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.CreateModel(
-            name='Code',
-            fields=[
-                ('id', models.AutoField(
-                    verbose_name='ID', serialize=False, auto_created=True,
-                    primary_key=True)),
-                ('email', models.EmailField(max_length=75)),
-                ('code', models.CharField(max_length=32, db_index=True)),
-                ('verified', models.BooleanField(default=False)),
-            ],
-            options={
-                'db_table': 'social_auth_code',
-            },
-            bases=(models.Model, social.storage.django_orm.DjangoCodeMixin),
-        ),
-        migrations.CreateModel(
             name='Nonce',
             fields=[
                 ('id', models.AutoField(
@@ -90,10 +75,6 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='usersocialauth',
             unique_together=set([('provider', 'uid')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='code',
-            unique_together=set([('email', 'code')]),
         ),
         migrations.AlterUniqueTogether(
             name='nonce',
