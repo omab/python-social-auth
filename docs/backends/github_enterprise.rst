@@ -9,7 +9,11 @@ GitHub Enterprise works similar to regular Github, which is in turn based on Fac
   set the callback URL to ``http://example.com/complete/github/`` replacing ``example.com``
   with your domain.
 
-- Fill the ``Client ID`` and ``Client Secret`` values from GitHub in the settings::
+- Set the API URL for your Github Enterprise appliance:
+
+      SOCIAL_AUTH_GITHUB_ENTERPRISE_API_URL = 'https://git.example.com/api/v3/'
+
+- Fill the ``Client ID`` and ``Client Secret`` values from GitHub in the settings:
 
       SOCIAL_AUTH_GITHUB_ENTERPRISE_KEY = ''
       SOCIAL_AUTH_GITHUB_ENTERPRISE_SECRET = ''
