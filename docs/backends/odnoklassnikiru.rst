@@ -50,7 +50,7 @@ You may also use::
 
 Defaults to empty tuple, for the list of available fields see `Documentation on user.getInfo`_
 
-.. _OAuth registration form: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188
-.. _Rules for application developers: http://dev.odnoklassniki.ru/wiki/display/ok/Odnoklassniki.ru+Third+Party+Platform
-.. _Developers registration form: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=5668937
-.. _Documentation on user.getInfo: http://dev.odnoklassniki.ru/wiki/display/ok/REST+API+-+users.getInfo
+.. _OAuth registration form: https://apiok.ru/wiki/pages/viewpage.action?pageId=42476652
+.. _Rules for application developers: https://apiok.ru/wiki/display/ok/Odnoklassniki.ru+Third+Party+Platform
+.. _Developers registration form: https://apiok.ru/wiki/pages/viewpage.action?pageId=5668937
+.. _Documentation on user.getInfo: https://apiok.ru/wiki/display/ok/REST+API+-+users.getInfo
