@@ -3,7 +3,7 @@ Deezer backend, docs at:
     https://developers.deezer.com/api/oauth
     https://developers.deezer.com/api/permissions
 """
-from urllib.parse import parse_qsl
+from six.moves.urllib.parse import parse_qsl
 
 from social.backends.oauth import BaseOAuth2
 
