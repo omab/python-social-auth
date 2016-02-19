@@ -78,6 +78,7 @@ or current ones extended):
     * Github_ OAuth2
     * Google_ OAuth1, OAuth2 and OpenId
     * Instagram_ OAuth2
+    * Itembase_ OAuth2
     * Jawbone_ OAuth2 https://jawbone.com/up/developer/authentication
     * Kakao_ OAuth2 https://developer.kakao.com
     * `Khan Academy`_ OAuth1
@@ -256,6 +257,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Github: https://github.com
 .. _Google: http://google.com
 .. _Instagram: https://instagram.com
+.. _Itembase: https://www.itembase.com
 .. _LaunchPad: https://help.launchpad.net/YourAccount/OpenID
 .. _Linkedin: https://www.linkedin.com
 .. _Live: https://live.com
