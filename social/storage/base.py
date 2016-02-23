@@ -81,7 +81,7 @@ class UserMixin(object):
 
     def set_extra_data(self, extra_data=None):
         if extra_data and self.extra_data != extra_data:
-            if self.extra_data:
+            if self.extra_data and not isinstance(self.extra_data, str):
                 self.extra_data.update(extra_data)
             else:
                 self.extra_data = extra_data
