@@ -51,6 +51,7 @@ Social backends
    angel
    aol
    appsfuel
+   arcgis
    azuread
    battlenet
    beats
