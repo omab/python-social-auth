@@ -7,15 +7,18 @@ from django.conf import settings
 import social.storage.django_orm
 from social.utils import setting_name
 
-user_model = getattr(settings, setting_name('USER_MODEL'), None) or \
-             getattr(settings, 'AUTH_USER_MODEL', None) or \
-             'auth.User'
+USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \
+             getattr(settings, 'AUTH_USER_MODEL', None) or 'auth.User'
+UID_LENGTH = getattr(settings, setting_name('UID_LENGTH'), 255)
+NONCE_SERVER_URL_LENGTH = getattr(settings, setting_name('NONCE_SERVER_URL_LENGTH'), 255)
+ASSOCIATION_SERVER_URL_LENGTH = getattr(settings, setting_name('ASSOCIATION_SERVER_URL_LENGTH'), 255)
+ASSOCIATION_HANDLE_LENGTH = getattr(settings, setting_name('ASSOCIATION_HANDLE_LENGTH'), 255)
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        migrations.swappable_dependency(user_model),
+        migrations.swappable_dependency(USER_MODEL),
     ]
 
     operations = [
@@ -25,8 +28,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(
                     verbose_name='ID', serialize=False, auto_created=True,
                     primary_key=True)),
-                ('server_url', models.CharField(max_length=255)),
-                ('handle', models.CharField(max_length=255)),
+                ('server_url', models.CharField(max_length=ASSOCIATION_SERVER_URL_LENGTH)),
+                ('handle', models.CharField(max_length=ASSOCIATION_HANDLE_LENGTH)),
                 ('secret', models.CharField(max_length=255)),
                 ('issued', models.IntegerField()),
                 ('lifetime', models.IntegerField()),
@@ -60,7 +63,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(
                     verbose_name='ID', serialize=False, auto_created=True,
                     primary_key=True)),
-                ('server_url', models.CharField(max_length=255)),
+                ('server_url', models.CharField(max_length=NONCE_SERVER_URL_LENGTH)),
                 ('timestamp', models.IntegerField()),
                 ('salt', models.CharField(max_length=65)),
             ],
@@ -76,11 +79,11 @@ class Migration(migrations.Migration):
                     verbose_name='ID', serialize=False, auto_created=True,
                     primary_key=True)),
                 ('provider', models.CharField(max_length=32)),
-                ('uid', models.CharField(max_length=255)),
+                ('uid', models.CharField(max_length=UID_LENGTH)),
                 ('extra_data', social.apps.django_app.default.fields.JSONField(
                     default='{}')),
                 ('user', models.ForeignKey(
-                    related_name='social_auth', to=user_model)),
+                    related_name='social_auth', to=USER_MODEL)),
             ],
             options={
                 'db_table': 'social_auth_usersocialauth',
@@ -89,14 +92,14 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterUniqueTogether(
             name='usersocialauth',
-            unique_together=set([('provider', 'uid')]),
+            unique_together={('provider', 'uid')},
         ),
         migrations.AlterUniqueTogether(
             name='code',
-            unique_together=set([('email', 'code')]),
+            unique_together={('email', 'code')},
         ),
         migrations.AlterUniqueTogether(
             name='nonce',
-            unique_together=set([('server_url', 'timestamp', 'salt')]),
+            unique_together={('server_url', 'timestamp', 'salt')},
         ),
     ]
