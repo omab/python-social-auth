@@ -27,7 +27,7 @@ class TwitterOAuth(BaseOAuth1):
         """Return user details from Twitter account"""
         fullname, first_name, last_name = self.get_user_names(response['name'])
         return {'username': response['screen_name'],
-                'email': response.get('email'),
+                'email': response.get('email', ''),
                 'fullname': fullname,
                 'first_name': first_name,
                 'last_name': last_name}
