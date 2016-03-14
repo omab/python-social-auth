@@ -11,13 +11,19 @@ except ImportError:
     from django.utils.encoding import smart_text
 
 
-class JSONField(six.with_metaclass(models.SubfieldBase, models.TextField)):
+try:
+    base_class = six.with_metaclass(models.SubfieldBase, models.TextField)
+except AttributeError:  # Django 1.10 removed SubfieldBase
+    base_class = models.TextField
+
+
+class JSONField(base_class):
     """Simple JSON field that stores python structures as JSON strings
     on database.
     """
 
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('default', '{}')
+        kwargs.setdefault('default', {})
         super(JSONField, self).__init__(*args, **kwargs)
 
     def to_python(self, value):
@@ -66,6 +72,12 @@ class JSONField(six.with_metaclass(models.SubfieldBase, models.TextField)):
     def value_from_object(self, obj):
         """Return value dumped to string."""
         return self.get_prep_value(self._get_val_from_obj(obj))
+
+    def from_db_value(self, value, expression, connection, context):
+        try:
+            return json.loads(value)
+        except Exception as err:
+            raise ValidationError(str(err))
 
 
 try:
