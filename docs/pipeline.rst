@@ -41,7 +41,7 @@ The default pipeline is composed by::
         'social.pipeline.social_auth.social_uid',
 
         # Verifies that the current auth process is valid within the current
-        # project, this is were emails and domains whitelists are applied (if
+        # project, this is where emails and domains whitelists are applied (if
         # defined).
         'social.pipeline.social_auth.auth_allowed',
 
