@@ -63,7 +63,7 @@ needed methods:
 * Social user::
 
     @classmethod
-    def get_social_auth(cls, provider, uid):
+    def get_social_auth(cls, provider, uid, provider_domain=None):
         """Return UserSocialAuth for given provider and uid"""
         raise NotImplementedError('Implement in subclass')
 
@@ -73,7 +73,7 @@ needed methods:
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_social_auth(cls, user, uid, provider, provider_domain=None):
         """Create a UserSocialAuth instance for given user"""
         raise NotImplementedError('Implement in subclass')
 

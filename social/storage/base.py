@@ -21,6 +21,7 @@ CLEAN_USERNAME_REGEX = re.compile(r'[^\w.@+_-]+', re.UNICODE)
 class UserMixin(object):
     user = ''
     provider = ''
+    provider_domain = None
     uid = None
     extra_data = None
 
@@ -147,17 +148,18 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def get_social_auth(cls, provider, uid):
+    def get_social_auth(cls, provider, uid, provider_domain=None):
         """Return UserSocialAuth for given provider and uid"""
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def get_social_auth_for_user(cls, user, provider=None, id=None):
+    def get_social_auth_for_user(
+            cls, user, provider=None, id=None, provider_domain=None):
         """Return all the UserSocialAuth instances for given user"""
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_social_auth(cls, user, uid, provider, provider_domain=None):
         """Create a UserSocialAuth instance for given user"""
         raise NotImplementedError('Implement in subclass')
 
