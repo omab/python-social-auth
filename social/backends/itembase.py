@@ -34,11 +34,13 @@ class ItembaseOAuth2(BaseOAuth2):
         return data
 
     def extra_data(self, user, uid, response, details=None, *args, **kwargs):
-        data = BaseOAuth2.extra_data(self, user, uid, response, details=details, *args, **kwargs)
+        data = BaseOAuth2.extra_data(self, user, uid, response, details=details,
+                                     *args, **kwargs)
         return self.add_expires(data)
 
     def process_refresh_token_response(self, response, *args, **kwargs):
-        data = BaseOAuth2.process_refresh_token_response(self, response, *args, **kwargs)
+        data = BaseOAuth2.process_refresh_token_response(self, response,
+                                                         *args, **kwargs)
         return self.add_expires(data)
 
     def get_user_details(self, response):
@@ -46,14 +48,16 @@ class ItembaseOAuth2(BaseOAuth2):
         return response
 
     def user_data(self, access_token, *args, **kwargs):
-        return self.get_json(self.USER_DETAILS_URL,
-                             headers={'Authorization': 'Bearer {0}'.format(access_token)})
+        return self.get_json(self.USER_DETAILS_URL, headers={
+            'Authorization': 'Bearer {0}'.format(access_token)
+        })
 
     def activation_data(self, response):
         # returns activation_data dict with activation_url inside
         # see http://developers.itembase.com/authentication/activation
-        return self.get_json(self.ACTIVATION_ENDPOINT,
-                             headers={'Authorization': 'Bearer {0}'.format(response['access_token'])})
+        return self.get_json(self.ACTIVATION_ENDPOINT, headers={
+            'Authorization': 'Bearer {0}'.format(response['access_token'])
+        })
 
     @handle_http_errors
     def auth_complete(self, *args, **kwargs):
