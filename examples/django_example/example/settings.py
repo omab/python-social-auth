@@ -132,6 +132,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.coinbase.CoinbaseOAuth2',
     'social.backends.coursera.CourseraOAuth2',
     'social.backends.dailymotion.DailymotionOAuth2',
+    'social.backends.deezer.DeezerOAuth2',
     'social.backends.disqus.DisqusOAuth2',
     'social.backends.douban.DoubanOAuth2',
     'social.backends.dropbox.DropboxOAuth',

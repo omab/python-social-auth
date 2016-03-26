@@ -40,6 +40,7 @@ or extend current one):
     * Bitbucket_ OAuth1
     * Box_ OAuth2
     * Dailymotion_ OAuth2
+    * Deezer_ OAuth2
     * Disqus_ OAuth2
     * Douban_ OAuth1 and OAuth2
     * Dropbox_ OAuth1
@@ -120,6 +121,7 @@ section.
 .. _Bitbucket: https://bitbucket.org
 .. _Box: https://www.box.com
 .. _Dailymotion: https://dailymotion.com
+.. _Deezer: https://www.deezer.com
 .. _Disqus: https://disqus.com
 .. _Douban: http://www.douban.com
 .. _Dropbox: https://dropbox.com
