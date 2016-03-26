@@ -19,7 +19,7 @@ from social.p3 import urlparse, urlunparse, urlencode, \
 
 SETTING_PREFIX = 'SOCIAL_AUTH'
 
-social_logger = logging.Logger('social')
+social_logger = logging.getLogger('social')
 
 
 class SSLHttpAdapter(HTTPAdapter):
