@@ -80,6 +80,7 @@ Social backends
    github_enterprise
    google
    instagram
+   itembase
    jawbone
    justgiving
    kakao
