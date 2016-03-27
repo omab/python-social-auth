@@ -16,8 +16,8 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
     ID_KEY = 'uid'
     ACCESS_TOKEN_METHOD = 'POST'
     SCOPE_SEPARATOR = ';'
-    AUTHORIZATION_URL = 'http://www.odnoklassniki.ru/oauth/authorize'
-    ACCESS_TOKEN_URL = 'http://api.odnoklassniki.ru/oauth/token.do'
+    AUTHORIZATION_URL = 'https://connect.ok.ru/oauth/authorize'
+    ACCESS_TOKEN_URL = 'https://api.ok.ru/oauth/token.do'
     EXTRA_DATA = [('refresh_token', 'refresh_token'),
                   ('expires_in', 'expires')]
 
@@ -41,7 +41,7 @@ class OdnoklassnikiOAuth2(BaseOAuth2):
         data = {'access_token': access_token, 'method': 'users.getCurrentUser'}
         key, secret = self.get_key_and_secret()
         public_key = self.setting('PUBLIC_NAME')
-        return odnoklassniki_api(self, data, 'http://api.odnoklassniki.ru/',
+        return odnoklassniki_api(self, data, 'https://api.ok.ru/',
                                  public_key, secret, 'oauth')
 
 
@@ -123,7 +123,7 @@ def odnoklassniki_oauth_sig(data, client_secret):
     """
     Calculates signature of request data access_token value must be included
     Algorithm is described at
-        http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=12878032,
+        https://apiok.ru/wiki/pages/viewpage.action?pageId=12878032,
     search for "little bit different way"
     """
     suffix = md5(
@@ -139,8 +139,7 @@ def odnoklassniki_oauth_sig(data, client_secret):
 def odnoklassniki_iframe_sig(data, client_secret_or_session_secret):
     """
     Calculates signature as described at:
-        http://dev.odnoklassniki.ru/wiki/display/ok/
-            Authentication+and+Authorization
+        https://apiok.ru/wiki/display/ok/Authentication+and+Authorization
     If API method requires session context, request is signed with session
     secret key. Otherwise it is signed with application secret key
     """
@@ -154,7 +153,7 @@ def odnoklassniki_iframe_sig(data, client_secret_or_session_secret):
 def odnoklassniki_api(backend, data, api_url, public_key, client_secret,
                       request_type='oauth'):
     """Calls Odnoklassniki REST API method
-    http://dev.odnoklassniki.ru/wiki/display/ok/Odnoklassniki+Rest+API"""
+    https://apiok.ru/wiki/display/ok/Odnoklassniki+Rest+API"""
     data.update({
         'application_key': public_key,
         'format': 'JSON'
