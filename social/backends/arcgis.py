@@ -24,12 +24,10 @@ class ArcGISOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        data = self.get_json(
+        return self.get_json(
             'https://www.arcgis.com/sharing/rest/community/self',
             params={
                 'token': access_token,
                 'f': 'json'
             }
         )
-
-        return data
