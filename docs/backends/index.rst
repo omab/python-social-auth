@@ -70,6 +70,7 @@ Social backends
    docker
    douban
    dribbble
+   drip
    dropbox
    eveonline
    evernote
