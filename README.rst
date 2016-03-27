@@ -99,6 +99,7 @@ or current ones extended):
     * OpenId_
     * OpenStreetMap_ OAuth1 http://wiki.openstreetmap.org/wiki/OAuth
     * OpenSuse_ OpenId http://en.opensuse.org/openSUSE:Connect
+    * Pinterest_ OAuth2
     * PixelPin_ OAuth2
     * Pocket_ OAuth2
     * Podio_ OAuth2
@@ -321,3 +322,4 @@ check `django-social-auth LICENSE`_ for details:
 .. _requests: http://docs.python-requests.org/en/latest/
 .. _PixelPin: http://pixelpin.co.uk
 .. _Zotero: http://www.zotero.org/
+.. _Pinterest: https://www.pinterest.com
