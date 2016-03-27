@@ -48,7 +48,7 @@ class YandexOAuth2(BaseOAuth2):
                 'first_name': first_name,
                 'last_name': last_name}
 
-    def user_data(self, access_token, response, *args, **kwargs):
+    def user_data(self, access_token, *args, **kwargs):
         return self.get_json('https://login.yandex.ru/info',
                              params={'oauth_token': access_token,
                                      'format': 'json'})
@@ -72,7 +72,7 @@ class YaruOAuth2(BaseOAuth2):
                 'first_name': first_name,
                 'last_name': last_name}
 
-    def user_data(self, access_token, response, *args, **kwargs):
+    def user_data(self, access_token, *args, **kwargs):
         return self.get_json('https://login.yandex.ru/info',
                              params={'oauth_token': access_token,
                                      'format': 'json'})
