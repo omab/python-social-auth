@@ -83,7 +83,7 @@ auth process.
   ``CLIENT SECRET``.
 
 * Add the sign-in button to your template, you can use the SDK button
-  or add your own and attacht he click handler to it (check `Google+ Identity Sign-In`_
+  or add your own and attach the click handler to it (check `Google+ Identity Sign-In`_
   documentation about it)::
 
     <div id="google-plus-button">Google+ Sign In</div>
