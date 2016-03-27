@@ -65,6 +65,7 @@ or extend current one):
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
     * Podio_ OAuth2
+    * Pinterest_ OAuth2
     * Rdio_ OAuth1 and OAuth2
     * Readability_ OAuth1
     * Shopify_ OAuth2
@@ -163,6 +164,7 @@ section.
 .. _Yahoo: http://yahoo.com
 .. _Yammer: https://www.yammer.com
 .. _Yandex: https://yandex.ru
+.. _Pinterest: https://www.pinterest.com
 .. _Readability: http://www.readability.com/
 .. _Stackoverflow: http://stackoverflow.com/
 .. _Steam: http://steamcommunity.com/
