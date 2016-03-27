@@ -19,11 +19,6 @@ class PinterestOAuth2(BaseOAuth2):
     REDIRECT_STATE = False
     ACCESS_TOKEN_METHOD = 'POST'
     SSL_PROTOCOL = ssl.PROTOCOL_TLSv1
-    FAKE_HTTPS = False
-
-    def get_redirect_uri(self, state=None):
-        url = super(PinterestOAuth2, self).get_redirect_uri(state)
-        return self.FAKE_HTTPS and url.replace('http:', 'https:') or url
 
     def user_data(self, access_token, *args, **kwargs):
         response = self.get_json('https://api.pinterest.com/v1/me/',
