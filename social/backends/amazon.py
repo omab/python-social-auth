@@ -10,7 +10,7 @@ from social.backends.oauth import BaseOAuth2
 class AmazonOAuth2(BaseOAuth2):
     name = 'amazon'
     ID_KEY = 'user_id'
-    AUTHORIZATION_URL = 'http://www.amazon.com/ap/oa'
+    AUTHORIZATION_URL = 'https://www.amazon.com/ap/oa'
     ACCESS_TOKEN_URL = 'https://api.amazon.com/auth/o2/token'
     DEFAULT_SCOPE = ['profile']
     REDIRECT_STATE = False
