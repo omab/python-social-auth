@@ -26,7 +26,7 @@ class PocketAuth(BaseAuth):
 
     def auth_url(self):
         data = {
-            'consumer_key': self.setting('SOCIAL_AUTH_POCKET_KEY'),
+            'consumer_key': self.setting('POCKET_KEY'),
             'redirect_uri': self.redirect_uri,
         }
         token = self.get_json(self.REQUEST_TOKEN_URL, data=data)['code']
@@ -37,7 +37,7 @@ class PocketAuth(BaseAuth):
     @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         data = {
-            'consumer_key': self.setting('SOCIAL_AUTH_POCKET_KEY'),
+            'consumer_key': self.setting('POCKET_KEY'),
             'code': self.strategy.session_get('pocket_request_token'),
         }
         response = self.get_json(self.ACCESS_TOKEN_URL, data=data)
