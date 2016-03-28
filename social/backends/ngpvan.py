@@ -3,8 +3,9 @@ NGP VAN's `ActionID` Provider
 
 http://developers.ngpvan.com/action-id
 """
-from social.backends.open_id import OpenIdAuth
 from openid.extensions import ax
+
+from social.backends.open_id import OpenIdAuth
 
 
 class ActionIDOpenID(OpenIdAuth):
@@ -42,20 +43,24 @@ class ActionIDOpenID(OpenIdAuth):
         fetch_request.add(ax.AttrInfo(
             'http://openid.net/schema/contact/internet/email',
             alias='ngpvanemail',
-            required=True))
+            required=True
+        ))
 
         fetch_request.add(ax.AttrInfo(
             'http://openid.net/schema/contact/phone/business',
             alias='ngpvanphone',
-            required=False))
+            required=False
+        ))
         fetch_request.add(ax.AttrInfo(
             'http://openid.net/schema/namePerson/first',
             alias='ngpvanfirstname',
-            required=False))
+            required=False
+        ))
         fetch_request.add(ax.AttrInfo(
             'http://openid.net/schema/namePerson/last',
             alias='ngpvanlastname',
-            required=False))
+            required=False
+        ))
         request.addExtension(fetch_request)
 
         return request

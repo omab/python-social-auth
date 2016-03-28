@@ -14,29 +14,28 @@ class NGPVANActionIDOpenIDTest(OpenIdTest):
     """Test the NGP VAN ActionID OpenID 1.1 Backend"""
     backend_path = 'social.backends.ngpvan.ActionIDOpenID'
     expected_username = 'testuser@user.local'
-    discovery_body = ' '.join(
-        [
-            '<?xml version="1.0" encoding="UTF-8"?>',
-            '<xrds:XRDS',
-            'xmlns:xrds="xri://$xrds"',
-            'xmlns:openid="http://openid.net/xmlns/1.0"',
-            'xmlns="xri://$xrd*($v*2.0)">',
-            '<XRD>',
-            '<Service priority="10">',
-            '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
-            '<Type>http://openid.net/extensions/sreg/1.1</Type>',
-            '<Type>http://axschema.org/contact/email</Type>',
-            '<URI>https://accounts.ngpvan.com/OpenId/Provider</URI>',
-            '</Service>',
-            '<Service priority="20">',
-            '<Type>http://openid.net/signon/1.0</Type>',
-            '<Type>http://openid.net/extensions/sreg/1.1</Type>',
-            '<Type>http://axschema.org/contact/email</Type>',
-            '<URI>https://accounts.ngpvan.com/OpenId/Provider</URI>',
-            '</Service>',
-            '</XRD>',
-            '</xrds:XRDS>',
-        ])
+    discovery_body = ' '.join([
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<xrds:XRDS',
+        'xmlns:xrds="xri://$xrds"',
+        'xmlns:openid="http://openid.net/xmlns/1.0"',
+        'xmlns="xri://$xrd*($v*2.0)">',
+        '<XRD>',
+        '<Service priority="10">',
+        '<Type>http://specs.openid.net/auth/2.0/signon</Type>',
+        '<Type>http://openid.net/extensions/sreg/1.1</Type>',
+        '<Type>http://axschema.org/contact/email</Type>',
+        '<URI>https://accounts.ngpvan.com/OpenId/Provider</URI>',
+        '</Service>',
+        '<Service priority="20">',
+        '<Type>http://openid.net/signon/1.0</Type>',
+        '<Type>http://openid.net/extensions/sreg/1.1</Type>',
+        '<Type>http://axschema.org/contact/email</Type>',
+        '<URI>https://accounts.ngpvan.com/OpenId/Provider</URI>',
+        '</Service>',
+        '</XRD>',
+        '</xrds:XRDS>'
+    ])
     server_response = urlencode({
         'openid.claimed_id': 'https://accounts.ngpvan.com/user/abcd123',
         'openid.identity': 'https://accounts.ngpvan.com/user/abcd123',
@@ -91,17 +90,20 @@ class NGPVANActionIDOpenIDTest(OpenIdTest):
             HTTPretty.POST,
             'https://accounts.ngpvan.com/Home/Xrds',
             status=200,
-            body=self.discovery_body)
+            body=self.discovery_body
+        )
         HTTPretty.register_uri(
             HTTPretty.GET,
             'https://accounts.ngpvan.com/user/abcd123',
             status=200,
-            body=self.discovery_body)
+            body=self.discovery_body
+        )
         HTTPretty.register_uri(
             HTTPretty.GET,
             'https://accounts.ngpvan.com/OpenId/Provider',
             status=200,
-            body=self.discovery_body)
+            body=self.discovery_body
+        )
 
     def test_login(self):
         """Test the login flow using python-social-auth's built in test"""
@@ -115,16 +117,13 @@ class NGPVANActionIDOpenIDTest(OpenIdTest):
         """Test that the AX attributes that NGP VAN responds with are present"""
         records = self.backend.get_ax_attributes()
 
-        self.assertEqual(
-            records,
-            [
-                ('http://openid.net/schema/contact/internet/email', 'email'),
-                ('http://openid.net/schema/contact/phone/business', 'phone'),
-                ('http://openid.net/schema/namePerson/first', 'first_name'),
-                ('http://openid.net/schema/namePerson/last', 'last_name'),
-                ('http://openid.net/schema/namePerson', 'fullname'),
-            ]
-        )
+        self.assertEqual(records, [
+            ('http://openid.net/schema/contact/internet/email', 'email'),
+            ('http://openid.net/schema/contact/phone/business', 'phone'),
+            ('http://openid.net/schema/namePerson/first', 'first_name'),
+            ('http://openid.net/schema/namePerson/last', 'last_name'),
+            ('http://openid.net/schema/namePerson', 'fullname'),
+        ])
 
     def test_setup_request(self):
         """Test the setup_request functionality in the NGP VAN backend"""
@@ -143,16 +142,20 @@ class NGPVANActionIDOpenIDTest(OpenIdTest):
         # Verify the individual attribute properties
         self.assertEqual(
             inputs['openid.ax.type.ngpvanemail'],
-            'http://openid.net/schema/contact/internet/email')
+            'http://openid.net/schema/contact/internet/email'
+        )
         self.assertEqual(
             inputs['openid.ax.type.ngpvanfirstname'],
-            'http://openid.net/schema/namePerson/first')
+            'http://openid.net/schema/namePerson/first'
+        )
         self.assertEqual(
             inputs['openid.ax.type.ngpvanlastname'],
-            'http://openid.net/schema/namePerson/last')
+            'http://openid.net/schema/namePerson/last'
+        )
         self.assertEqual(
             inputs['openid.ax.type.ngpvanphone'],
-            'http://openid.net/schema/contact/phone/business')
+            'http://openid.net/schema/contact/phone/business'
+        )
 
     def test_user_data(self):
         """Ensure that the correct user data is being passed to create_user"""
@@ -167,7 +170,6 @@ class NGPVANActionIDOpenIDTest(OpenIdTest):
             ]
         })
         user = self.do_start()
-
         self.assertEqual(user.username, u'testuser@user.local')
         self.assertEqual(user.email, u'testuser@user.local')
         self.assertEqual(user.extra_user_fields['phone'], u'+12015555555')
@@ -190,4 +192,5 @@ class NGPVANActionIDOpenIDTest(OpenIdTest):
         user = self.do_start()
         self.assertEqual(
             user.social_user.uid,
-            'https://accounts.ngpvan.com/user/abcd123')
+            'https://accounts.ngpvan.com/user/abcd123'
+        )

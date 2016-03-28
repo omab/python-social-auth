@@ -1,7 +1,7 @@
 import base64
 
 from social.storage.base import UserMixin, NonceMixin, AssociationMixin, \
-    CodeMixin, BaseStorage
+                                CodeMixin, BaseStorage
 
 
 class BaseModel(object):
