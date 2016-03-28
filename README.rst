@@ -72,7 +72,7 @@ or current ones extended):
     * Exacttarget OAuth2
     * Facebook_ OAuth2 and OAuth2 for Applications
     * Fedora_ OpenId http://fedoraproject.org/wiki/OpenID
-    * Fitbit_ OAuth1
+    * Fitbit_ OAuth2 and OAuth1
     * Flickr_ OAuth1
     * Foursquare_ OAuth2
     * `Google App Engine`_ Auth

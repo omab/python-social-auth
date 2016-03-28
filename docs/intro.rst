@@ -46,7 +46,7 @@ or extend current one):
     * Dropbox_ OAuth1
     * Evernote_ OAuth1
     * Facebook_ OAuth2 and OAuth2 for Applications
-    * Fitbit_ OAuth1
+    * Fitbit_ OAuth2 and OAuth1
     * Flickr_ OAuth1
     * Foursquare_ OAuth2
     * `Google App Engine`_ Auth
