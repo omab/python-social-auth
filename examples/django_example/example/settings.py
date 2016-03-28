@@ -142,7 +142,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookAppOAuth2',
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.fedora.FedoraOpenId',
-    'social.backends.fitbit.FitbitOAuth',
+    'social.backends.fitbit.FitbitOAuth2',
     'social.backends.flickr.FlickrOAuth',
     'social.backends.foursquare.FoursquareOAuth2',
     'social.backends.github.GithubOAuth2',
