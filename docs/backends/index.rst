@@ -104,6 +104,7 @@ Social backends
    naszaklasa
    nationbuilder
    naver
+   ngpvan_actionid
    odnoklassnikiru
    openstreetmap
    orbi
