@@ -56,6 +56,7 @@ class FitbitOAuth2(BaseOAuth2):
             'https://api.fitbit.com/1/user/-/profile.json',
             headers=auth_header
         )['user']
+
     def auth_headers(self):
         return {
             'Authorization': 'Basic {0}'.format(base64.urlsafe_b64encode(
