@@ -8,15 +8,21 @@ import social.storage.django_orm
 from social.utils import setting_name
 
 USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \
-             getattr(settings, 'AUTH_USER_MODEL', None) or 'auth.User'
+             getattr(settings, 'AUTH_USER_MODEL', None) or \
+             'auth.User'
 UID_LENGTH = getattr(settings, setting_name('UID_LENGTH'), 255)
-NONCE_SERVER_URL_LENGTH = getattr(settings, setting_name('NONCE_SERVER_URL_LENGTH'), 255)
-ASSOCIATION_SERVER_URL_LENGTH = getattr(settings, setting_name('ASSOCIATION_SERVER_URL_LENGTH'), 255)
-ASSOCIATION_HANDLE_LENGTH = getattr(settings, setting_name('ASSOCIATION_HANDLE_LENGTH'), 255)
+NONCE_SERVER_URL_LENGTH = getattr(
+    settings, setting_name('NONCE_SERVER_URL_LENGTH'), 255
+)
+ASSOCIATION_SERVER_URL_LENGTH = getattr(
+    settings, setting_name('ASSOCIATION_SERVER_URL_LENGTH'), 255
+)
+ASSOCIATION_HANDLE_LENGTH = getattr(
+    settings, setting_name('ASSOCIATION_HANDLE_LENGTH'), 255
+)
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(USER_MODEL),
     ]
@@ -28,8 +34,10 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(
                     verbose_name='ID', serialize=False, auto_created=True,
                     primary_key=True)),
-                ('server_url', models.CharField(max_length=ASSOCIATION_SERVER_URL_LENGTH)),
-                ('handle', models.CharField(max_length=ASSOCIATION_HANDLE_LENGTH)),
+                ('server_url',
+                 models.CharField(max_length=ASSOCIATION_SERVER_URL_LENGTH)),
+                ('handle',
+                 models.CharField(max_length=ASSOCIATION_HANDLE_LENGTH)),
                 ('secret', models.CharField(max_length=255)),
                 ('issued', models.IntegerField()),
                 ('lifetime', models.IntegerField()),
@@ -62,8 +70,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(
                     verbose_name='ID', serialize=False, auto_created=True,
-                    primary_key=True)),
-                ('server_url', models.CharField(max_length=NONCE_SERVER_URL_LENGTH)),
+                    primary_key=True
+                )),
+                ('server_url',
+                 models.CharField(max_length=NONCE_SERVER_URL_LENGTH)),
                 ('timestamp', models.IntegerField()),
                 ('salt', models.CharField(max_length=65)),
             ],
