@@ -62,6 +62,7 @@ or extend current one):
     * Mixcloud_ OAuth2
     * `Mozilla Persona`_
     * NaszaKlasa_ OAuth2
+    * `NGPVAN ActionID`_ OpenId
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
     * Podio_ OAuth2
@@ -144,6 +145,7 @@ section.
 .. _Mixcloud: https://www.mixcloud.com
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _NaszaKlasa: https://developers.nk.pl/
+.. _NGPVAN ActionID: http://developers.ngpvan.com/action-id
 .. _Odnoklassniki: http://www.odnoklassniki.ru
 .. _Podio: https://podio.com
 .. _Shopify: http://shopify.com
