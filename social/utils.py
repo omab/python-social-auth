@@ -166,7 +166,24 @@ def partial_pipeline_data(backend, user=None, *args, **kwargs):
     if partial:
         idx, backend_name, xargs, xkwargs = \
             backend.strategy.partial_from_session(partial)
+
+        partial_matches_request = False
+
         if backend_name == backend.name:
+            partial_matches_request = True
+
+            req_data = backend.strategy.request_data()
+            # Normally when resuming a pipeline, request_data will be empty. We
+            # only need to check for a uid match if new data was provided (i.e.
+            # if current request specifies the ID_KEY).
+            if backend.ID_KEY in req_data:
+                id_from_partial = xkwargs.get('uid')
+                id_from_request = req_data.get(backend.ID_KEY)
+
+                if id_from_partial != id_from_request:
+                    partial_matches_request = False
+
+        if partial_matches_request:
             kwargs.setdefault('pipeline_index', idx)
             if user:  # don't update user if it's None
                 kwargs.setdefault('user', user)
