@@ -41,6 +41,10 @@ class AuthFailed(AuthException):
 
 class AuthCanceled(AuthException):
     """Auth process was canceled by user."""
+    def __init__(self, *args, **kwargs):
+        self.response = kwargs.pop('response', None)
+        super(AuthCanceled, self).__init__(*args, **kwargs)
+
     def __str__(self):
         return 'Authentication process canceled'
 
