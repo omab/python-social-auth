@@ -34,12 +34,14 @@ class EvernoteOAuth1CanceledTest(EvernoteOAuth1Test):
     access_token_status = 401
 
     def test_login(self):
-        with self.assertRaises(AuthCanceled):
+        with self.assertRaises(AuthCanceled) as cm:
             self.do_login()
+        self.assertTrue(cm.exception.response is not None)
 
     def test_partial_pipeline(self):
-        with self.assertRaises(AuthCanceled):
+        with self.assertRaises(AuthCanceled) as cm:
             self.do_partial_pipeline()
+        self.assertTrue(cm.exception.response is not None)
 
 
 class EvernoteOAuth1ErrorTest(EvernoteOAuth1Test):

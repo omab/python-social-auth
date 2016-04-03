@@ -50,7 +50,7 @@ class EvernoteOAuth(BaseOAuth1):
         except HTTPError as err:
             # Evernote returns a 401 error when AuthCanceled
             if err.response.status_code == 401:
-                raise AuthCanceled(self)
+                raise AuthCanceled(self, response=err.response)
             else:
                 raise
 
