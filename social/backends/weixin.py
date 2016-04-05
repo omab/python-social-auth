@@ -3,6 +3,7 @@
 """
 Weixin OAuth2 backend
 """
+import urllib
 from requests import HTTPError
 
 from social.backends.oauth import BaseOAuth2
@@ -94,6 +95,77 @@ class WeixinOAuth2(BaseOAuth2):
                 raise
         except KeyError:
             raise AuthUnknownError(self)
+        if 'errcode' in response:
+            raise AuthCanceled(self)
+        self.process_error(response)
+        return self.do_auth(response['access_token'], response=response,
+                            *args, **kwargs)
+
+
+class WeixinOAuth2APP(WeixinOAuth2):
+    """Weixin OAuth authentication backend
+
+        can't use in web, only in weixin app
+    """
+    name = 'weixinapp'
+    ID_KEY = 'openid'
+    AUTHORIZATION_URL = 'https://open.weixin.qq.com/connect/oauth2/authorize'
+    ACCESS_TOKEN_URL = 'https://api.weixin.qq.com/sns/oauth2/access_token'
+    ACCESS_TOKEN_METHOD = 'POST'
+    REDIRECT_STATE = False
+
+    def auth_url(self):
+        if self.STATE_PARAMETER or self.REDIRECT_STATE:
+            # Store state in session for further request validation. The state
+            # value is passed as state parameter (as specified in OAuth2 spec),
+            # but also added to redirect, that way we can still verify the
+            # request if the provider doesn't implement the state parameter.
+            # Reuse token if any.
+            name = self.name + '_state'
+            state = self.strategy.session_get(name)
+            if state is None:
+                state = self.state_token()
+                self.strategy.session_set(name, state)
+        else:
+            state = None
+
+        params = self.auth_params(state)
+        params.update(self.get_scope_argument())
+        params.update(self.auth_extra_arguments())
+        params = urllib.urlencode(sorted(params.items()))
+        return '{}#wechat_redirect'.format(self.AUTHORIZATION_URL + '?' + params)
+
+
+    def auth_complete_params(self, state=None):
+            appid, secret = self.get_key_and_secret()
+            return {
+                'grant_type': 'authorization_code',  # request auth code
+                'code': self.data.get('code', ''),  # server response code
+                'appid': appid,
+                'secret': secret,
+            }
+
+    def validate_state(self):
+        return None
+
+    def auth_complete(self, *args, **kwargs):
+        """Completes loging process, must return user instance"""
+        self.process_error(self.data)
+        try:
+            response = self.request_access_token(
+                self.ACCESS_TOKEN_URL,
+                data=self.auth_complete_params(self.validate_state()),
+                headers=self.auth_headers(),
+                method=self.ACCESS_TOKEN_METHOD
+            )
+        except HTTPError as err:
+            if err.response.status_code == 400:
+                raise AuthCanceled(self)
+            else:
+                raise
+        except KeyError:
+            raise AuthUnknownError(self)
+
         if 'errcode' in response:
             raise AuthCanceled(self)
         self.process_error(response)
