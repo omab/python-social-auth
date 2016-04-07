@@ -95,7 +95,7 @@ class BaseStrategy(object):
         return OpenIdStore(self)
 
     def get_pipeline(self):
-        return self.setting('PIPELINE', DEFAULT_AUTH_PIPELINE)
+        return self.setting('SOCIAL_AUTH_PIPELINE', DEFAULT_AUTH_PIPELINE)
 
     def get_disconnect_pipeline(self):
         return self.setting('DISCONNECT_PIPELINE', DEFAULT_DISCONNECT_PIPELINE)
