@@ -123,6 +123,7 @@ or current ones extended):
     * Twilio_ Auth
     * Twitter_ OAuth1
     * Uber_ OAuth2
+    * Untappd_ OAuth2
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
     * Withings_ OAuth1
@@ -325,3 +326,4 @@ check `django-social-auth LICENSE`_ for details:
 .. _PixelPin: http://pixelpin.co.uk
 .. _Zotero: http://www.zotero.org/
 .. _Pinterest: https://www.pinterest.com
+.. _Untappd: https://untappd.com/

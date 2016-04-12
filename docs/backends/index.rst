@@ -140,6 +140,7 @@ Social backends
    twitch
    twitter
    uber
+   untappd
    vend
    vimeo
    vk
