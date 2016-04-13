@@ -1,7 +1,9 @@
 # Change Log
 
-## [v0.2.15](https://github.com/omab/python-social-auth/tree/v0.2.15) (2016-04-13)
+## [v0.2.16](https://github.com/omab/python-social-auth/tree/v0.2.16) (2016-04-13)
+[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.15...v0.2.16)
 
+## [v0.2.15](https://github.com/omab/python-social-auth/tree/v0.2.15) (2016-04-13)
 [Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.14...v0.2.15)
 
 **Closed issues:**
