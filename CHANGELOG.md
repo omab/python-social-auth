@@ -1,5 +1,47 @@
 # Change Log
 
+## [v0.2.15](https://github.com/omab/python-social-auth/tree/v0.2.15) (2016-04-13)
+
+[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.14...v0.2.15)
+
+**Closed issues:**
+
+- Warning with dependency six [\#885](https://github.com/omab/python-social-auth/issues/885)
+- Password Reset Emails don't come if Authenticated via Python Social Auth [\#881](https://github.com/omab/python-social-auth/issues/881)
+- I followed the documentation, but it didn't work for me. Would you please let me know where my PIPELINE is wrong? [\#867](https://github.com/omab/python-social-auth/issues/867)
+- Is this AttributeError caused by facebook settings or python-social-auth? [\#865](https://github.com/omab/python-social-auth/issues/865)
+- Google: Backend not found [\#862](https://github.com/omab/python-social-auth/issues/862)
+- Django 1.9.2 ImportError: No module named 'social.apps.django\_app' [\#861](https://github.com/omab/python-social-auth/issues/861)
+- Microsoft live oauth sign up/sign in issue [\#837](https://github.com/omab/python-social-auth/issues/837)
+- Redirect url always ends with /\#\_=\_ [\#833](https://github.com/omab/python-social-auth/issues/833)
+- Google Sign in problem [\#826](https://github.com/omab/python-social-auth/issues/826)
+- Fitbit oauth2 [\#733](https://github.com/omab/python-social-auth/issues/733)
+
+**Merged pull requests:**
+
+- Add a backend for Classlink. [\#890](https://github.com/omab/python-social-auth/pull/890) ([antinescience](https://github.com/antinescience))
+- Pass response to AuthCancel exception [\#883](https://github.com/omab/python-social-auth/pull/883) ([st4lk](https://github.com/st4lk))
+- modifed wrong key names in pocket.py [\#878](https://github.com/omab/python-social-auth/pull/878) ([EunJung-Seo](https://github.com/EunJung-Seo))
+- Fix typos [\#869](https://github.com/omab/python-social-auth/pull/869) ([Chronial](https://github.com/Chronial))
+- Do not instantiate Logger directly [\#864](https://github.com/omab/python-social-auth/pull/864) ([browniebroke](https://github.com/browniebroke))
+- Fix xgettext warning due to unknown encoding [\#856](https://github.com/omab/python-social-auth/pull/856) ([federicobond](https://github.com/federicobond))
+- Update base.py [\#852](https://github.com/omab/python-social-auth/pull/852) ([hellvix](https://github.com/hellvix))
+- Fix misspelled backend name [\#847](https://github.com/omab/python-social-auth/pull/847) ([victorgutemberg](https://github.com/victorgutemberg))
+- Add some tests for Spotify backend + add a backend for Deezer music service [\#845](https://github.com/omab/python-social-auth/pull/845) ([khamaileon](https://github.com/khamaileon))
+- \[Fix\] update odnoklasniki docs to new domain ok [\#836](https://github.com/omab/python-social-auth/pull/836) ([vanadium23](https://github.com/vanadium23))
+- add github enterprise docs on how to specify the API URL [\#834](https://github.com/omab/python-social-auth/pull/834) ([iserko](https://github.com/iserko))
+- Fix ImportError: cannot import name ‘urlencode’ in Python3 [\#828](https://github.com/omab/python-social-auth/pull/828) ([mishbahr](https://github.com/mishbahr))
+- Fix wrong evaluation of boolean kwargs [\#824](https://github.com/omab/python-social-auth/pull/824) ([falknes](https://github.com/falknes))
+- SAML: raise AuthMissingParameter if idp param missing [\#821](https://github.com/omab/python-social-auth/pull/821) ([omarkhan](https://github.com/omarkhan))
+- added support for ArcGIS OAuth2 [\#820](https://github.com/omab/python-social-auth/pull/820) ([aspcanada](https://github.com/aspcanada))
+- BaseOAuth2: Store access token in response if it does not exist [\#816](https://github.com/omab/python-social-auth/pull/816) ([kchange](https://github.com/kchange))
+- Minor backend fixes [\#815](https://github.com/omab/python-social-auth/pull/815) ([mback2k](https://github.com/mback2k))
+- Fix Django 1.10 Deprecation Warning "SubfieldBase has been deprecated." [\#813](https://github.com/omab/python-social-auth/pull/813) ([contracode](https://github.com/contracode))
+- Fix typo: "attacht he" -\> "attach the" [\#808](https://github.com/omab/python-social-auth/pull/808) ([smholloway](https://github.com/smholloway))
+- Azure AD updates [\#807](https://github.com/omab/python-social-auth/pull/807) ([vinhub](https://github.com/vinhub))
+- Remove unused response arg from user\_data method of yandex backend [\#784](https://github.com/omab/python-social-auth/pull/784) ([SrgyPetrov](https://github.com/SrgyPetrov))
+- Support all kind of data type \(like uuid\) of User.id on Pyramid [\#769](https://github.com/omab/python-social-auth/pull/769) ([cjltsod](https://github.com/cjltsod))
+
 ## [v0.2.14](https://github.com/omab/python-social-auth/tree/v0.2.14) (2016-01-25)
 [Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.13...v0.2.14)
 
@@ -14,11 +56,13 @@
 
 **Merged pull requests:**
 
+- Add support for Drip Email Marketing Site [\#810](https://github.com/omab/python-social-auth/pull/810) ([buddylindsey](https://github.com/buddylindsey))
 - Fix Django 1.10 deprecation warnings [\#806](https://github.com/omab/python-social-auth/pull/806) ([yprez](https://github.com/yprez))
 - Changed instagram backend to new authorization routes [\#797](https://github.com/omab/python-social-auth/pull/797) ([clybob](https://github.com/clybob))
 - Update settings.rst [\#793](https://github.com/omab/python-social-auth/pull/793) ([skolsuper](https://github.com/skolsuper))
 - Add naver.com OAuth2 backend [\#789](https://github.com/omab/python-social-auth/pull/789) ([se0kjun](https://github.com/se0kjun))
 - Formatter fixes for SAML to support Py2.6 [\#783](https://github.com/omab/python-social-auth/pull/783) ([matburt](https://github.com/matburt))
+- Add pinterest backend [\#774](https://github.com/omab/python-social-auth/pull/774) ([scailer](https://github.com/scailer))
 - Fix typo [\#768](https://github.com/omab/python-social-auth/pull/768) ([mprunell](https://github.com/mprunell))
 - Fixes a few grammar issues in the docs [\#764](https://github.com/omab/python-social-auth/pull/764) ([kevinharvey](https://github.com/kevinharvey))
 - use qq openid as username [\#763](https://github.com/omab/python-social-auth/pull/763) ([lneoe](https://github.com/lneoe))
@@ -26,9 +70,11 @@
 - Fix vk backend [\#757](https://github.com/omab/python-social-auth/pull/757) ([truetug](https://github.com/truetug))
 - Fix odnoklassniki backend [\#756](https://github.com/omab/python-social-auth/pull/756) ([truetug](https://github.com/truetug))
 - Store all tokens when tokens are refreshed [\#753](https://github.com/omab/python-social-auth/pull/753) ([mvschaik](https://github.com/mvschaik))
+- Added support for NGPVAN ActionID OpenID [\#750](https://github.com/omab/python-social-auth/pull/750) ([nickcatal](https://github.com/nickcatal))
 - Python 3 support for facebook-app backend [\#749](https://github.com/omab/python-social-auth/pull/749) ([jhmaddox](https://github.com/jhmaddox))
 - Save extra\_data on login [\#748](https://github.com/omab/python-social-auth/pull/748) ([mvschaik](https://github.com/mvschaik))
 - Update URLs to match new site and remove OAuth comment. [\#744](https://github.com/omab/python-social-auth/pull/744) ([lukos](https://github.com/lukos))
+- Fitbit OAuth 2.0 support [\#743](https://github.com/omab/python-social-auth/pull/743) ([robbiet480](https://github.com/robbiet480))
 - added AuthUnreachableProvider exception to documentation [\#729](https://github.com/omab/python-social-auth/pull/729) ([Qlio](https://github.com/Qlio))
 - Add REDIRECT\_STATE = False [\#725](https://github.com/omab/python-social-auth/pull/725) ([webjunkie](https://github.com/webjunkie))
 - Tuple in pipeline's documentation should be ended with coma [\#712](https://github.com/omab/python-social-auth/pull/712) ([JerzySpendel](https://github.com/JerzySpendel))
@@ -386,7 +432,7 @@
 - Add Kakao link and detailed address for description. [\#403](https://github.com/omab/python-social-auth/pull/403) ([jeyraof](https://github.com/jeyraof))
 - Added some legal stuff [\#402](https://github.com/omab/python-social-auth/pull/402) ([dzerrenner](https://github.com/dzerrenner))
 - Recreate migration with Django 1.7 final and re-PEP8. [\#401](https://github.com/omab/python-social-auth/pull/401) ([akx](https://github.com/akx))
-- master  add SCOPE\_SEPARATOR to DisqusOAuth2 [\#398](https://github.com/omab/python-social-auth/pull/398) ([ctrl-alt-delete](https://github.com/ctrl-alt-delete))
+- master  add SCOPE\_SEPARATOR to DisqusOAuth2 [\#398](https://github.com/omab/python-social-auth/pull/398) ([vero4karu](https://github.com/vero4karu))
 - added a backend for Battle.net Oauth2 auth [\#397](https://github.com/omab/python-social-auth/pull/397) ([dzerrenner](https://github.com/dzerrenner))
 - Update documentation with info on upgrading from 0.1-0.2 with migrations [\#395](https://github.com/omab/python-social-auth/pull/395) ([timsavage](https://github.com/timsavage))
 - Allow more Trello settings [\#389](https://github.com/omab/python-social-auth/pull/389) ([sk7](https://github.com/sk7))
