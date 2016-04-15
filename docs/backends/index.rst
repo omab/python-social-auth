@@ -120,6 +120,7 @@ Social backends
    runkeeper
    salesforce
    shopify
+   sketchfab
    skyrock
    slack
    soundcloud

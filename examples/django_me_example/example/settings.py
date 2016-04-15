@@ -173,6 +173,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.yammer.YammerOAuth2',
     'social.backends.stackoverflow.StackoverflowOAuth2',
     'social.backends.readability.ReadabilityOAuth',
+    'social.backends.sketchfab.SketchfabOAuth2',
     'social.backends.skyrock.SkyrockOAuth',
     'social.backends.tumblr.TumblrOAuth',
     'social.backends.reddit.RedditOAuth2',
