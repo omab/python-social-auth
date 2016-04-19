@@ -43,5 +43,5 @@ class SteamOpenId(OpenIdAuth):
     def _user_id(self, response):
         user_id = response.identity_url.rsplit('/', 1)[-1]
         if not user_id.isdigit():
-            raise AuthFailed(self, 'Missing Steam Id')
+            raise AuthFailed(self, self.strategy.ugettext('Missing Steam Id'))
         return user_id

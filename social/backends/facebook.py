@@ -109,8 +109,8 @@ class FacebookOAuth2(BaseOAuth2):
             # data is needed (it contains the user ID used to identify the
             # account on further logins), this app cannot allow it to
             # continue with the auth process.
-            raise AuthUnknownError(self, 'An error ocurred while retrieving '
-                                         'users Facebook data')
+            raise AuthUnknownError(self, self.strategy.ugettext('An error ocurred while retrieving '
+                                         'users Facebook data'))
 
         data['access_token'] = access_token
         if 'expires' in response:

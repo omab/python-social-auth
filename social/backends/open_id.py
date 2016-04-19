@@ -175,7 +175,7 @@ class OpenIdAuth(BaseAuth):
 
     def process_error(self, data):
         if not data:
-            raise AuthException(self, 'OpenID relying party endpoint')
+            raise AuthException(self, self.strategy.ugettext('OpenID relying party endpoint'))
         elif data.status == FAILURE:
             raise AuthFailed(self, data.message)
         elif data.status == CANCEL:
@@ -244,7 +244,7 @@ class OpenIdAuth(BaseAuth):
             return self.consumer().begin(url_add_parameters(self.openid_url(),
                                          params))
         except DiscoveryFailure as err:
-            raise AuthException(self, 'OpenID discovery error: {0}'.format(
+            raise AuthException(self, self.strategy.ugettext('OpenID discovery error: {0}').format(
                 err
             ))
 
@@ -338,18 +338,18 @@ class OpenIdConnectAuth(BaseOAuth2):
         # Verify the token was issued in the last 10 minutes
         utc_timestamp = timegm(datetime.datetime.utcnow().utctimetuple())
         if id_token['iat'] < (utc_timestamp - 600):
-            raise AuthTokenError(self, 'Incorrect id_token: iat')
+            raise AuthTokenError(self, self.strategy.ugettext('Incorrect id_token: iat'))
 
         # Validate the nonce to ensure the request was not modified
         nonce = id_token.get('nonce')
         if not nonce:
-            raise AuthTokenError(self, 'Incorrect id_token: nonce')
+            raise AuthTokenError(self, self.strategy.ugettext('Incorrect id_token: nonce'))
 
         nonce_obj = self.get_nonce(nonce)
         if nonce_obj:
             self.remove_nonce(nonce_obj.id)
         else:
-            raise AuthTokenError(self, 'Incorrect id_token: nonce')
+            raise AuthTokenError(self, self.strategy.ugettext('Incorrect id_token: nonce'))
         return id_token
 
     def request_access_token(self, *args, **kwargs):

@@ -14,7 +14,7 @@ class BaseTemplateStrategy(object):
 
     def render(self, tpl=None, html=None, context=None):
         if not tpl and not html:
-            raise ValueError('Missing template or html parameters')
+            raise ValueError(self.ugettext('Missing template or html parameters'))
         context = context or {}
         if tpl:
             return self.render_template(tpl, context)
@@ -150,6 +150,9 @@ class BaseStrategy(object):
     def get_backends(self):
         """Return configured backends"""
         return self.setting('AUTHENTICATION_BACKENDS', [])
+
+    def ugettext(self, message):
+        return message
 
     # Implement the following methods on strategies sub-classes
 

@@ -35,8 +35,8 @@ class AuthFailed(AuthException):
     def __str__(self):
         msg = super(AuthFailed, self).__str__()
         if msg == 'access_denied':
-            return 'Authentication process was canceled'
-        return 'Authentication failed: {0}'.format(msg)
+            return self.backend.strategy.ugettext('Authentication process was canceled')
+        return self.backend.strategy.ugettext('Authentication failed: {0}').format(msg)
 
 
 class AuthCanceled(AuthException):
@@ -46,21 +46,21 @@ class AuthCanceled(AuthException):
         super(AuthCanceled, self).__init__(*args, **kwargs)
 
     def __str__(self):
-        return 'Authentication process canceled'
+        return self.backend.strategy.ugettext('Authentication process canceled')
 
 
 class AuthUnknownError(AuthException):
     """Unknown auth process error."""
     def __str__(self):
         msg = super(AuthUnknownError, self).__str__()
-        return 'An unknown error happened while authenticating {0}'.format(msg)
+        return self.backend.strategy.ugettext('An unknown error happened while authenticating {0}').format(msg)
 
 
 class AuthTokenError(AuthException):
     """Auth token error."""
     def __str__(self):
         msg = super(AuthTokenError, self).__str__()
-        return 'Token error: {0}'.format(msg)
+        return self.backend.strategy.ugettext('Token error: {0}').format(msg)
 
 
 class AuthMissingParameter(AuthException):
@@ -70,19 +70,19 @@ class AuthMissingParameter(AuthException):
         super(AuthMissingParameter, self).__init__(backend, *args, **kwargs)
 
     def __str__(self):
-        return 'Missing needed parameter {0}'.format(self.parameter)
+        return self.backend.strategy.ugettext('Missing needed parameter {0}').format(self.parameter)
 
 
 class AuthStateMissing(AuthException):
     """State parameter is incorrect."""
     def __str__(self):
-        return 'Session value state missing.'
+        return self.backend.strategy.ugettext('Session value state missing.')
 
 
 class AuthStateForbidden(AuthException):
     """State parameter is incorrect."""
     def __str__(self):
-        return 'Wrong state parameter given.'
+        return self.backend.strategy.ugettext('Wrong state parameter given.')
 
 
 class AuthAlreadyAssociated(AuthException):
@@ -93,21 +93,21 @@ class AuthAlreadyAssociated(AuthException):
 class AuthTokenRevoked(AuthException):
     """User revoked the access_token in the provider."""
     def __str__(self):
-        return 'User revoke access to the token'
+        return self.backend.strategy.ugettext('User revoke access to the token')
 
 
 class AuthForbidden(AuthException):
     """Authentication for this user is forbidden"""
     def __str__(self):
-        return 'Your credentials aren\'t allowed'
+        return self.backend.strategy.ugettext('Your credentials aren\'t allowed')
 
 
 class AuthUnreachableProvider(AuthException):
     """Cannot reach the provider"""
     def __str__(self):
-        return 'The authentication provider could not be reached'
+        return self.backend.strategy.ugettext('The authentication provider could not be reached')
 
 
 class InvalidEmail(AuthException):
     def __str__(self):
-        return 'Email couldn\'t be validated'
+        return self.backend.strategy.ugettext('Email couldn\'t be validated')

@@ -51,7 +51,7 @@ class VKontakteOpenAPI(BaseAuth):
             'vk_app_' + self.setting('APP_ID')
         )
         if 'id' not in self.data or not session_value:
-            raise ValueError('VK.com authentication is not completed')
+            raise ValueError(self.strategy.ugettext('VK.com authentication is not completed'))
 
         mapping = parse_qs(session_value)
         check_str = ''.join(item + '=' + mapping[item]
@@ -60,7 +60,7 @@ class VKontakteOpenAPI(BaseAuth):
         key, secret = self.get_key_and_secret()
         hash = md5((check_str + secret).encode('utf-8')).hexdigest()
         if hash != mapping['sig'] or int(mapping['expire']) < time():
-            raise ValueError('VK.com authentication failed: Invalid Hash')
+            raise ValueError(self.strategy.ugettext('VK.com authentication failed: Invalid Hash'))
 
         kwargs.update({'backend': self,
                        'response': self.user_data(mapping['mid'])})
@@ -110,7 +110,7 @@ class VKOAuth2(BaseOAuth2):
 
         if data and data.get('error'):
             error = data['error']
-            msg = error.get('error_msg', 'Unknown error')
+            msg = error.get('error_msg', self.strategy.ugettext('Unknown error'))
             if error.get('error_code') == 5:
                 raise AuthTokenRevoked(self, msg)
             else:
@@ -152,8 +152,8 @@ class VKAppOAuth2(VKOAuth2):
                                       self.data.get('viewer_id'),
                                       secret]).encode('utf-8')).hexdigest()
             if check_key != auth_key:
-                raise ValueError('VK.com authentication failed: invalid '
-                                 'auth key')
+                raise ValueError(self.strategy.ugettext('VK.com authentication failed: invalid '
+                                 'auth key'))
 
         user_check = self.setting('USERMODE')
         user_id = self.data.get('viewer_id')

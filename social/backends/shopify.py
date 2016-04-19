@@ -76,7 +76,7 @@ class ShopifyOAuth2(BaseOAuth2):
             raise AuthCanceled(self)
         else:
             if not access_token:
-                raise AuthFailed(self, 'Authentication Failed')
+                raise AuthFailed(self, self.strategy.ugettext('Authentication Failed'))
         return self.do_auth(access_token, shop_url, shopify_session.url,
                             *args, **kwargs)
 

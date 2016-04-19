@@ -7,7 +7,7 @@ from django.shortcuts import redirect
 from django.template import TemplateDoesNotExist, RequestContext, loader
 from django.utils.encoding import force_text
 from django.utils.functional import Promise
-from django.utils.translation import get_language
+from django.utils.translation import get_language, ugettext
 
 from social.strategies.base import BaseStrategy, BaseTemplateStrategy
 
@@ -29,6 +29,9 @@ class DjangoStrategy(BaseStrategy):
         self.request = request
         self.session = request.session if request else {}
         super(DjangoStrategy, self).__init__(storage, tpl)
+
+    def ugettext(self, message):
+        return ugettext(message)
 
     def get_setting(self, name):
         value = getattr(settings, name)
@@ -81,7 +84,7 @@ class DjangoStrategy(BaseStrategy):
 
     def render_html(self, tpl=None, html=None, context=None):
         if not tpl and not html:
-            raise ValueError('Missing template or html parameters')
+            raise ValueError(self.ugettext('Missing template or html parameters'))
         context = context or {}
         try:
             template = loader.get_template(tpl)

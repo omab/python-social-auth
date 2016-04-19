@@ -1,0 +1,143 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-18 15:42+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Alexey Trofimov <trofimovL@metadesign.ru>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "This {0} account is already in use."
+msgstr "Этот аккаунт {0} уже используется."
+
+msgid "Authentication error"
+msgstr "Ошибка аутентификации"
+
+msgid "Authentication Failed"
+msgstr "Аутентификации не удалась"
+
+msgid "Jawbone error was {0}"
+msgstr "Ошибка Jawbone: {0}"
+
+msgid "User refused the access"
+msgstr "Пользователь отклонил доступ"
+
+msgid "Error was "
+msgstr "Произошла ошибка "
+
+msgid "Missing unauthorized token"
+msgstr "Отсутствует неавторизованный токен"
+
+msgid "Incorrect tokens"
+msgstr "Неправильные токены"
+
+msgid "Missing oauth_token"
+msgstr "Отсутствует OAuth токен"
+
+msgid "Missing oauth_token_secret"
+msgstr "Отсутствует OAuth секрет"
+
+msgid "Cannot get user details: API error"
+msgstr "Невозможно получить информацию о пользователе: ошибка API"
+
+msgid "Wrong authorization key"
+msgstr "Неверный ключ авторизации"
+
+msgid "Missing Steam Id"
+msgstr "Отсутствует Steam Id"
+
+msgid "No AccountSid returned"
+msgstr "Сервер не вернул AccountSid"
+
+msgid "VK.com authentication is not completed"
+msgstr "Авторизация на vk.com не завершена"
+
+msgid "VK.com authentication failed: Invalid Hash"
+msgstr "Авторизация на vk.com не удалась: неверный хэш"
+
+msgid "VK.com authentication failed: invalid auth key"
+msgstr "Авторизация на vk.com не удалась: неверный ключ"
+
+msgid "User doesn't belong to the organization"
+msgstr "Пользователь не принадлежит данной организации"
+
+msgid "An error ocurred while retrieving users Facebook data"
+msgstr "Ошибка при получении данных пользователя с Facebook"
+
+msgid "Missing template or html parameters"
+msgstr "Отсутствуют параметры шаблонов или HTML"
+
+msgid "Authentication process canceled"
+msgstr "Процесс аутентификации отменён"
+
+msgid "Authentication process was canceled"
+msgstr "Процесс аутентификации отменён"
+
+msgid "Authentication failed: {0}"
+msgstr "Аутентификация не удалась: {0}"
+
+msgid "An unknown error happened while authenticating {0}"
+msgstr "Во время аутентификации произошла неизвестная ошибка {0}"
+
+msgid "Token error: {0}"
+msgstr "Ошибка токена: {0}"
+
+msgid "Missing needed parameter {0}"
+msgstr "Отсутствует необходимый параметр {0}"
+
+msgid "Session value state missing."
+msgstr "Значение состояния отсутствует в сессии."
+
+msgid "Wrong state parameter given."
+msgstr "Неверное значение параметра состояния."
+
+msgid "User revoke access to the token"
+msgstr "Пользователь отозвал права доступа к токену"
+
+msgid "Your credentials aren't allowed"
+msgstr "Нет доступа с вашими учётными данными"
+
+msgid "The authentication provider could not be reached"
+msgstr "Невозможно подключиться к службе аутентификации"
+
+msgid "Email couldn't be validated"
+msgstr "Невозможно проверить адрес электронной почты"
+
+msgid "Bitbucket account has no verified email"
+msgstr "Аккаунт Bitbucket не содержит подтвержденного адреса электронной почты"
+
+msgid "Refresh tokens for Bitbucket have not been implemented"
+msgstr "Обновление токенов для Bitbucket еще не реализовано"
+
+msgid "OpenID discovery error: {0}"
+msgstr "Ошибка обнаружения OpenID: {0}"
+
+msgid "Incorrect id_token: iat"
+msgstr "Неправильный id_token: iat"
+
+msgid "Incorrect id_token: nonce"
+msgstr "Неправильный id_token: nonce"
+
+msgid "Unknown request type {0}. How should it be signed?"
+msgstr "Неизвестный тип запроса {0}. Как он должен быть подписан?"
+
+msgid "Unknown error"
+msgstr "Неизвестная ошибка"
+
+msgid "The given email address is associated with another account"
+msgstr "Указанный адрес электронной почты связан с другим аккаунтом"
+
+msgid "SAML login failed: {0} ({1})"
+msgstr "Вход через SAML не удался: {0} ({1})"

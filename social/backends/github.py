@@ -82,7 +82,7 @@ class GithubMemberOAuth2(GithubOAuth2):
             # will be 204, see http://bit.ly/ZS6vFl
             if err.response.status_code != 204:
                 raise AuthFailed(self,
-                                 'User doesn\'t belong to the organization')
+                                 self.strategy.ugettext('User doesn\'t belong to the organization'))
         return user_data
 
     def member_url(self, user_data):
