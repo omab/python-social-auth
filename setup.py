@@ -46,6 +46,18 @@ def get_packages():
     return packages
 
 
+if 'sdist' in sys.argv or 'develop' in sys.argv:
+    os.chdir('social/apps/django_app/default')
+    try:
+        from django.core import management
+        management.call_command('compilemessages', stdout=sys.stderr, verbosity=1)
+    except ImportError:
+        if 'sdist' in sys.argv:
+            raise
+    finally:
+        os.chdir('../../../..')
+
+
 requirements_file, tests_requirements_file = {
     False: ('requirements.txt', 'social/tests/requirements.txt'),
     True: ('requirements-python3.txt', 'social/tests/requirements-python3.txt')
