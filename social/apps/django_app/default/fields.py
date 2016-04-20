@@ -20,6 +20,9 @@ class JSONField(models.TextField):
         kwargs.setdefault('default', '{}')
         super(JSONField, self).__init__(*args, **kwargs)
 
+    def from_db_value(self, value, expression, connection, context):
+        return self.to_python(value)
+
     def to_python(self, value):
         """
         Convert the input JSON value into python structures, raises
