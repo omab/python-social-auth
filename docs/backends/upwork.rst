@@ -21,8 +21,8 @@ Add the Upwork OAuth backend to your settings page::
       SOCIAL_AUTH_UPWORK_KEY = ''
       SOCIAL_AUTH_UPWORK_SECRET = ''
 
-------
-For more information please go to `Upwork API Reference`_.
+
+**Note:** For more information please go to `Upwork API Reference`_.
 
 .. _Upwork Developers: https://www.upwork.com/services/api/apply
 .. _Upwork API Reference: https://developers.upwork.com/?lang=python
