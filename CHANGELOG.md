@@ -1,5 +1,13 @@
 # Change Log
 
+## [v0.2.17](https://github.com/omab/python-social-auth/tree/v0.2.17) (2016-04-20)
+
+[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.16...v0.2.17)
+
+**Merged pull requests:**
+
+- django 1.8+ compat to ensure to\_python is always called when accessing result from db.. [\#897](https://github.com/omab/python-social-auth/pull/897) ([sbussetti](https://github.com/sbussetti))
+
 ## [v0.2.16](https://github.com/omab/python-social-auth/tree/v0.2.16) (2016-04-13)
 [Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.15...v0.2.16)
 
