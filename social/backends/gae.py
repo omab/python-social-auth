@@ -35,6 +35,6 @@ class GoogleAppEngineAuth(BaseAuth):
     def auth_complete(self, *args, **kwargs):
         """Completes login process, must return user instance."""
         if not users.get_current_user():
-            raise AuthException('Authentication error')
+            raise AuthException(self.strategy.ugettext('Authentication error'))
         kwargs.update({'response': '', 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)

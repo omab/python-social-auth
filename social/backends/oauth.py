@@ -168,8 +168,8 @@ class BaseOAuth1(OAuthAuth):
     def process_error(self, data):
         if 'oauth_problem' in data:
             if data['oauth_problem'] == 'user_refused':
-                raise AuthCanceled(self, 'User refused the access')
-            raise AuthUnknownError(self, 'Error was ' + data['oauth_problem'])
+                raise AuthCanceled(self, self.strategy.ugettext('User refused the access'))
+            raise AuthUnknownError(self, self.strategy.ugettext('Error was ') + data['oauth_problem'])
 
     @handle_http_errors
     def auth_complete(self, *args, **kwargs):
@@ -196,12 +196,12 @@ class BaseOAuth1(OAuthAuth):
         name = self.name + self.UNATHORIZED_TOKEN_SUFIX
         unauthed_tokens = self.strategy.session_get(name, [])
         if not unauthed_tokens:
-            raise AuthTokenError(self, 'Missing unauthorized token')
+            raise AuthTokenError(self, self.strategy.ugettext('Missing unauthorized token'))
 
         data_token = self.data.get(self.OAUTH_TOKEN_PARAMETER_NAME)
 
         if data_token is None:
-            raise AuthTokenError(self, 'Missing unauthorized token')
+            raise AuthTokenError(self, self.strategy.ugettext('Missing unauthorized token'))
 
         token = None
         for utoken in unauthed_tokens:
@@ -214,7 +214,7 @@ class BaseOAuth1(OAuthAuth):
                 token = utoken
                 break
         else:
-            raise AuthTokenError(self, 'Incorrect tokens')
+            raise AuthTokenError(self, self.strategy.ugettext('Incorrect tokens'))
         return token
 
     def set_unauthorized_token(self):
@@ -273,9 +273,9 @@ class BaseOAuth1(OAuthAuth):
             resource_owner_key = token.get('oauth_token')
             resource_owner_secret = token.get('oauth_token_secret')
             if not resource_owner_key:
-                raise AuthTokenError(self, 'Missing oauth_token')
+                raise AuthTokenError(self, self.strategy.ugettext('Missing oauth_token'))
             if not resource_owner_secret:
-                raise AuthTokenError(self, 'Missing oauth_token_secret')
+                raise AuthTokenError(self, self.strategy.ugettext('Missing oauth_token_secret'))
         else:
             resource_owner_key = None
             resource_owner_secret = None

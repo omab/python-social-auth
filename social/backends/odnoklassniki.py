@@ -95,7 +95,7 @@ class OdnoklassnikiApp(BaseAuth):
             details['extra_data_list'] = fields + auth_data_fields
             kwargs.update({'backend': self, 'response': details})
         else:
-            raise AuthFailed(self, 'Cannot get user details: API error')
+            raise AuthFailed(self, self.strategy.ugettext('Cannot get user details: API error'))
         return self.strategy.authenticate(*args, **kwargs)
 
     def get_auth_sig(self):
@@ -116,7 +116,7 @@ class OdnoklassnikiApp(BaseAuth):
         correct_key = self.get_auth_sig()
         key = self.data['auth_sig'].lower()
         if correct_key != key:
-            raise AuthFailed(self, 'Wrong authorization key')
+            raise AuthFailed(self, self.strategy.ugettext('Wrong authorization key'))
 
 
 def odnoklassniki_oauth_sig(data, client_secret):
@@ -166,6 +166,6 @@ def odnoklassniki_api(backend, data, api_url, public_key, client_secret,
     elif request_type == 'iframe_nosession':
         data['sig'] = odnoklassniki_iframe_sig(data, client_secret)
     else:
-        msg = 'Unknown request type {0}. How should it be signed?'
+        msg = self.strategy.ugettext('Unknown request type {0}. How should it be signed?')
         raise AuthFailed(backend, msg.format(request_type))
     return backend.get_json(api_url + 'fb.do', params=data)

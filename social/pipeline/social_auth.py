@@ -20,7 +20,7 @@ def social_user(backend, uid, user=None, *args, **kwargs):
     social = backend.strategy.storage.user.get_social_auth(provider, uid)
     if social:
         if user and social.user != user:
-            msg = 'This {0} account is already in use.'.format(provider)
+            msg = backend.strategy.ugettext('This {0} account is already in use.').format(provider)
             raise AuthAlreadyAssociated(backend, msg)
         elif not user:
             user = social.user
@@ -73,7 +73,7 @@ def associate_by_email(backend, details, user=None, *args, **kwargs):
         elif len(users) > 1:
             raise AuthException(
                 backend,
-                'The given email address is associated with another account'
+                backend.strategy.ugettext('The given email address is associated with another account')
             )
         else:
             return {'user': users[0]}

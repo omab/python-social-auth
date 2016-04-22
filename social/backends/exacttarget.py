@@ -71,7 +71,7 @@ class ExactTargetOAuth2(BaseOAuth2):
         """Completes login process, must return user instance"""
         token = self.data.get('jwt', {})
         if not token:
-            raise AuthFailed(self, 'Authentication Failed')
+            raise AuthFailed(self, self.strategy.ugettext('Authentication Failed'))
         return self.do_auth(token, *args, **kwargs)
 
     def extra_data(self, user, uid, response, details=None, *args, **kwargs):

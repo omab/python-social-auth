@@ -38,7 +38,7 @@ class WebpyStrategy(BaseStrategy):
 
     def render_html(self, tpl=None, html=None, context=None):
         if not tpl and not html:
-            raise ValueError('Missing template or html parameters')
+            raise ValueError(self.ugettext('Missing template or html parameters'))
         context = context or {}
         if tpl:
             tpl = web.template.frender(tpl)

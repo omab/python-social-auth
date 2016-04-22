@@ -39,7 +39,7 @@ class BitbucketOAuthBase(object):
 
         if self.setting('VERIFIED_EMAILS_ONLY', False) and \
            not address['is_confirmed']:
-            raise AuthForbidden(self, 'Bitbucket account has no verified email')
+            raise AuthForbidden(self, self.strategy.ugettext('Bitbucket account has no verified email'))
 
         user = self._get_user(access_token)
         if email:
@@ -79,8 +79,8 @@ class BitbucketOAuth2(BitbucketOAuthBase, BaseOAuth2):
                              params={'access_token': access_token})
 
     def refresh_token(self, *args, **kwargs):
-        raise NotImplementedError('Refresh tokens for Bitbucket have '
-                                  'not been implemented')
+        raise NotImplementedError(self.strategy.ugettext('Refresh tokens for Bitbucket have '
+                                  'not been implemented'))
 
 
 class BitbucketOAuth(BitbucketOAuthBase, BaseOAuth1):

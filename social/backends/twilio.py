@@ -34,6 +34,6 @@ class TwilioAuth(BaseAuth):
         """Completes loging process, must return user instance"""
         account_sid = self.data.get('AccountSid')
         if not account_sid:
-            raise ValueError('No AccountSid returned')
+            raise ValueError(self.strategy.ugettext('No AccountSid returned'))
         kwargs.update({'response': self.data, 'backend': self})
         return self.strategy.authenticate(*args, **kwargs)
