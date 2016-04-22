@@ -14,7 +14,7 @@ class BaseTemplateStrategy(object):
 
     def render(self, tpl=None, html=None, context=None):
         if not tpl and not html:
-            raise ValueError(self.ugettext('Missing template or html parameters'))
+            raise ValueError(self.strategy.ugettext('Missing template or html parameters'))
         context = context or {}
         if tpl:
             return self.render_template(tpl, context)
