@@ -30,7 +30,7 @@ class BaseExceptionTestCase(unittest.TestCase):
 
 
 class WrongBackendTest(BaseExceptionTestCase):
-    exception = WrongBackend(foobar)
+    exception = WrongBackend('foobar')
     expected_message = 'Incorrect authentication service "foobar"'
 
 
