@@ -325,13 +325,19 @@ class OpenIdConnectAuth(BaseOAuth2):
         http://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation.
         """
         client_id, _client_secret = self.get_key_and_secret()
-        decryption_key = self.setting('ID_TOKEN_DECRYPTION_KEY')
+
+        decode_kwargs = {
+            'algorithms': ['HS256'],
+            'audience': client_id,
+            'issuer': self.ID_TOKEN_ISSUER,
+            'key': self.setting('ID_TOKEN_DECRYPTION_KEY'),
+        }
+        decode_kwargs.update(self.setting('ID_TOKEN_JWT_DECODE_KWARGS', {}))
+
         try:
             # Decode the JWT and raise an error if the secret is invalid or
             # the response has expired.
-            id_token = jwt_decode(id_token, decryption_key, audience=client_id,
-                                  issuer=self.ID_TOKEN_ISSUER,
-                                  algorithms=['HS256'])
+            id_token = jwt_decode(id_token, **decode_kwargs)
         except InvalidTokenError as err:
             raise AuthTokenError(self, err)
 
