@@ -21,8 +21,8 @@ class Migration(SchemaMigration):
             ('uid', self.gf('django.db.models.fields.CharField')(
                 max_length=255)),
             ('extra_data', self.gf(
-                'social.apps.django_app.default.fields.JSONField'
-            )(default='{}')),
+                'jsonfield.JSONField'
+            )(default=dict)),
         ))
         db.send_create_signal(u'default', ['UserSocialAuth'])
 

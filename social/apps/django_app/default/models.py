@@ -4,6 +4,7 @@ import six
 from django.db import models
 from django.conf import settings
 from django.db.utils import IntegrityError
+import jsonfield
 
 from social.utils import setting_name
 from social.storage.django_orm import DjangoUserMixin, \
@@ -11,7 +12,6 @@ from social.storage.django_orm import DjangoUserMixin, \
                                       DjangoNonceMixin, \
                                       DjangoCodeMixin, \
                                       BaseDjangoStorage
-from social.apps.django_app.default.fields import JSONField
 from social.apps.django_app.default.managers import UserSocialAuthManager
 
 
@@ -33,7 +33,7 @@ class AbstractUserSocialAuth(models.Model, DjangoUserMixin):
     user = models.ForeignKey(USER_MODEL, related_name='social_auth')
     provider = models.CharField(max_length=32)
     uid = models.CharField(max_length=UID_LENGTH)
-    extra_data = JSONField()
+    extra_data = jsonfield.JSONField()
     objects = UserSocialAuthManager()
 
     def __str__(self):
