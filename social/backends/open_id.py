@@ -2,18 +2,16 @@ import datetime
 from calendar import timegm
 
 from jwt import InvalidTokenError, decode as jwt_decode
-
 from openid.consumer.consumer import Consumer, SUCCESS, CANCEL, FAILURE
 from openid.consumer.discover import DiscoveryFailure
 from openid.extensions import sreg, ax, pape
 
-from social.utils import url_add_parameters
-from social.exceptions import AuthException, AuthFailed, AuthCanceled, \
-                              AuthUnknownError, AuthMissingParameter, \
-                              AuthTokenError
 from social.backends.base import BaseAuth
 from social.backends.oauth import BaseOAuth2
-
+from social.exceptions import (
+    AuthException, AuthFailed, AuthCanceled, AuthUnknownError, AuthMissingParameter, AuthTokenError
+)
+from social.utils import url_add_parameters
 
 # OpenID configuration
 OLD_AX_ATTRS = [
@@ -278,6 +276,7 @@ class OpenIdConnectAuth(BaseOAuth2):
     Currently only the code response type is supported.
     """
     ID_TOKEN_ISSUER = None
+    ID_TOKEN_MAX_AGE = 600
     DEFAULT_SCOPE = ['openid']
     EXTRA_DATA = ['id_token', 'refresh_token', ('sub', 'id')]
     # Set after access_token is retrieved
@@ -325,19 +324,35 @@ class OpenIdConnectAuth(BaseOAuth2):
         http://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation.
         """
         client_id, _client_secret = self.get_key_and_secret()
-        decryption_key = self.setting('ID_TOKEN_DECRYPTION_KEY')
+
+        decode_kwargs = {
+            'algorithms': ['HS256'],
+            'audience': client_id,
+            'issuer': self.ID_TOKEN_ISSUER,
+            'key': self.setting('ID_TOKEN_DECRYPTION_KEY'),
+            'options': {
+                'verify_signature': True,
+                'verify_exp': True,
+                'verify_iat': True,
+                'verify_aud': True,
+                'verify_iss': True,
+                'require_exp': True,
+                'require_iat': True,
+            },
+        }
+        decode_kwargs.update(self.setting('ID_TOKEN_JWT_DECODE_KWARGS', {}))
+
         try:
             # Decode the JWT and raise an error if the secret is invalid or
             # the response has expired.
-            id_token = jwt_decode(id_token, decryption_key, audience=client_id,
-                                  issuer=self.ID_TOKEN_ISSUER,
-                                  algorithms=['HS256'])
+            id_token = jwt_decode(id_token, **decode_kwargs)
         except InvalidTokenError as err:
             raise AuthTokenError(self, err)
 
-        # Verify the token was issued in the last 10 minutes
+        # Verify the token was issued within a specified amount of time
+        iat_leeway = self.setting('ID_TOKEN_MAX_AGE', self.ID_TOKEN_MAX_AGE)
         utc_timestamp = timegm(datetime.datetime.utcnow().utctimetuple())
-        if id_token['iat'] < (utc_timestamp - 600):
+        if id_token['iat'] < (utc_timestamp - iat_leeway):
             raise AuthTokenError(self, 'Incorrect id_token: iat')
 
         # Validate the nonce to ensure the request was not modified
