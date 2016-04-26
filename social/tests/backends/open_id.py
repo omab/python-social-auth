@@ -132,8 +132,10 @@ class OpenIdConnectTestMixin(object):
         settings.update({
             'SOCIAL_AUTH_{0}_KEY'.format(self.name): self.client_key,
             'SOCIAL_AUTH_{0}_SECRET'.format(self.name): self.client_secret,
-            'SOCIAL_AUTH_{0}_ID_TOKEN_DECRYPTION_KEY'.format(self.name): self.client_secret,
-            'SOCIAL_AUTH_{0}_ID_TOKEN_MAX_AGE'.format(self.name): self.id_token_max_age,
+            'SOCIAL_AUTH_{0}_ID_TOKEN_DECRYPTION_KEY'.format(self.name):
+                self.client_secret,
+            'SOCIAL_AUTH_{0}_ID_TOKEN_MAX_AGE'.format(self.name):
+                self.id_token_max_age
         })
         return settings
 

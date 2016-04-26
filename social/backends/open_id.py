@@ -2,16 +2,18 @@ import datetime
 from calendar import timegm
 
 from jwt import InvalidTokenError, decode as jwt_decode
+
 from openid.consumer.consumer import Consumer, SUCCESS, CANCEL, FAILURE
 from openid.consumer.discover import DiscoveryFailure
 from openid.extensions import sreg, ax, pape
 
+from social.utils import url_add_parameters
 from social.backends.base import BaseAuth
 from social.backends.oauth import BaseOAuth2
-from social.exceptions import (
-    AuthException, AuthFailed, AuthCanceled, AuthUnknownError, AuthMissingParameter, AuthTokenError
-)
-from social.utils import url_add_parameters
+from social.exceptions import AuthException, AuthFailed, AuthCanceled, \
+                              AuthUnknownError, AuthMissingParameter, \
+                              AuthTokenError
+
 
 # OpenID configuration
 OLD_AX_ATTRS = [
