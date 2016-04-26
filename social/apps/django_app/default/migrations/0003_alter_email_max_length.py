@@ -11,7 +11,7 @@ EMAIL_LENGTH = getattr(settings, setting_name('EMAIL_LENGTH'), 254)
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('default', '0002_add_related_name'),
+        ('social_auth', '0002_add_related_name'),
     ]
 
     operations = [
