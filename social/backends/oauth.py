@@ -357,6 +357,16 @@ class BaseOAuth2(OAuthAuth):
         return {'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json'}
 
+    def extra_data(self, user, uid, response, details=None, *args, **kwargs):
+        """Return access_token, token_type, and extra defined names to store in
+            extra_data field"""
+        data = super(BaseOAuth2, self).extra_data(user, uid, response,
+                                                  details=details,
+                                                  *args, **kwargs)
+        data['token_type'] = response.get('token_type') or \
+                             kwargs.get('token_type')
+        return data
+
     def request_access_token(self, *args, **kwargs):
         return self.get_json(*args, **kwargs)
 
