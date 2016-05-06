@@ -1,5 +1,5 @@
 """
-Amazon auth backend, docs at:
+Twilio auth backend, docs at:
     http://psa.matiasaguirre.net/docs/backends/twilio.html
 """
 from re import sub

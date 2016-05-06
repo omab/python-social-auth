@@ -34,6 +34,9 @@ nosetests.xml
 .project
 .pydevproject
 
+# PyCharm
+.idea/
+
 test.db
 local_settings.py
 sessions/

@@ -1,6 +1,6 @@
 global-include *.py
 
-include *.txt Changelog LICENSE README.rst
+include *.txt CHANGELOG.md LICENSE README.rst
 recursive-include docs *.rst
 recursive-include social/tests *.txt
 

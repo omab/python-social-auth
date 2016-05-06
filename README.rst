@@ -56,6 +56,7 @@ or current ones extended):
     * Angel_ OAuth2
     * AOL_ OpenId http://www.aol.com/
     * Appsfuel_ OAuth2
+    * ArcGIS_ OAuth2
     * Behance_ OAuth2
     * BelgiumEIDOpenId_ OpenId https://www.e-contract.be/
     * Bitbucket_ OAuth1
@@ -71,13 +72,14 @@ or current ones extended):
     * Exacttarget OAuth2
     * Facebook_ OAuth2 and OAuth2 for Applications
     * Fedora_ OpenId http://fedoraproject.org/wiki/OpenID
-    * Fitbit_ OAuth1
+    * Fitbit_ OAuth2 and OAuth1
     * Flickr_ OAuth1
     * Foursquare_ OAuth2
     * `Google App Engine`_ Auth
     * Github_ OAuth2
     * Google_ OAuth1, OAuth2 and OpenId
     * Instagram_ OAuth2
+    * Itembase_ OAuth2
     * Jawbone_ OAuth2 https://jawbone.com/up/developer/authentication
     * Kakao_ OAuth2 https://developer.kakao.com
     * `Khan Academy`_ OAuth1
@@ -93,10 +95,12 @@ or current ones extended):
     * `Moves app`_ OAuth2 https://dev.moves-app.com/docs/authentication
     * `Mozilla Persona`_
     * NaszaKlasa_ OAuth2
+    * `NGPVAN ActionID`_ OpenId
     * Odnoklassniki_ OAuth2 and Application Auth
     * OpenId_
     * OpenStreetMap_ OAuth1 http://wiki.openstreetmap.org/wiki/OAuth
     * OpenSuse_ OpenId http://en.opensuse.org/openSUSE:Connect
+    * Pinterest_ OAuth2
     * PixelPin_ OAuth2
     * Pocket_ OAuth2
     * Podio_ OAuth2
@@ -237,6 +241,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _myOpenID: https://www.myopenid.com/
 .. _Angel: https://angel.co
 .. _Appsfuel: http://docs.appsfuel.com
+.. _ArcGIS: http://www.arcgis.com/
 .. _Behance: https://www.behance.net
 .. _Bitbucket: https://bitbucket.org
 .. _Box: https://www.box.com
@@ -256,6 +261,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Github: https://github.com
 .. _Google: http://google.com
 .. _Instagram: https://instagram.com
+.. _Itembase: https://www.itembase.com
 .. _LaunchPad: https://help.launchpad.net/YourAccount/OpenID
 .. _Linkedin: https://www.linkedin.com
 .. _Live: https://live.com
@@ -267,6 +273,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Moves app: https://dev.moves-app.com/docs/
 .. _Mozilla Persona: http://www.mozilla.org/persona/
 .. _NaszaKlasa: https://developers.nk.pl/
+.. _NGPVAN ActionID: http://developers.ngpvan.com/action-id
 .. _Odnoklassniki: http://www.odnoklassniki.ru
 .. _Pocket: http://getpocket.com
 .. _Podio: https://podio.com
@@ -317,3 +324,4 @@ check `django-social-auth LICENSE`_ for details:
 .. _requests: http://docs.python-requests.org/en/latest/
 .. _PixelPin: http://pixelpin.co.uk
 .. _Zotero: http://www.zotero.org/
+.. _Pinterest: https://www.pinterest.com

@@ -89,7 +89,7 @@ class WeixinOAuth2(BaseOAuth2):
             )
         except HTTPError as err:
             if err.response.status_code == 400:
-                raise AuthCanceled(self)
+                raise AuthCanceled(self, response=err.response)
             else:
                 raise
         except KeyError:

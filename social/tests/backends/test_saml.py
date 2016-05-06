@@ -15,6 +15,7 @@ except ImportError:
     pass
 
 from social.tests.backends.base import BaseBackendTest
+from social.exceptions import AuthMissingParameter
 from social.p3 import urlparse, urlunparse, urlencode, parse_qs
 
 DATA_DIR = path.join(path.dirname(__file__), 'data')
@@ -64,8 +65,6 @@ class SAMLTest(BaseBackendTest):
                                body='foobar')
 
     def do_start(self):
-        # pretend we've started with a URL like /login/saml/?idp=testshib:
-        self.strategy.set_request_data({'idp': 'testshib'}, self.backend)
         start_url = self.backend.start().url
         # Modify the start URL to make the SAML request consistent
         # from test to test:
@@ -91,7 +90,14 @@ class SAMLTest(BaseBackendTest):
 
     def test_login(self):
         """Test that we can authenticate with a SAML IdP (TestShib)"""
+        # pretend we've started with a URL like /login/saml/?idp=testshib:
+        self.strategy.set_request_data({'idp': 'testshib'}, self.backend)
         self.do_login()
+
+    def test_login_no_idp(self):
+        """Logging in without an idp param should raise AuthMissingParameter"""
+        with self.assertRaises(AuthMissingParameter):
+            self.do_start()
 
     def modify_start_url(self, start_url):
         """

@@ -39,8 +39,8 @@ from social.backends.oauth import BaseOAuth2
 class AzureADOAuth2(BaseOAuth2):
     name = 'azuread-oauth2'
     SCOPE_SEPARATOR = ' '
-    AUTHORIZATION_URL = 'https://login.windows.net/common/oauth2/authorize'
-    ACCESS_TOKEN_URL = 'https://login.windows.net/common/oauth2/token'
+    AUTHORIZATION_URL = 'https://login.microsoftonline.com/common/oauth2/authorize'
+    ACCESS_TOKEN_URL = 'https://login.microsoftonline.com/common/oauth2/token'
     ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
     DEFAULT_SCOPE = ['openid', 'profile', 'user_impersonation']
@@ -101,6 +101,8 @@ class AzureADOAuth2(BaseOAuth2):
 
     def refresh_token_params(self, token, *args, **kwargs):
         return {
+            'client_id': self.setting('KEY'),
+            'client_secret': self.setting('SECRET'),
             'refresh_token': token,
             'grant_type': 'refresh_token',
             'resource': self.setting('RESOURCE')

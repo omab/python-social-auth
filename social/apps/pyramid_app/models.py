@@ -31,7 +31,7 @@ def init_social(config, Base, session):
     class UserSocialAuth(_AppSession, Base, SQLAlchemyUserMixin):
         """Social Auth association model"""
         uid = Column(String(UID_LENGTH))
-        user_id = Column(Integer, ForeignKey(User.id),
+        user_id = Column(User.id.type, ForeignKey(User.id),
                          nullable=False, index=True)
         user = relationship(User, backref=backref('social_auth',
                                                   lazy='dynamic'))

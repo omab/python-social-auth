@@ -1,5 +1,5 @@
-from urllib import urlencode
 from social.backends.oauth import BaseOAuth2
+from social.p3 import urlencode
 
 
 class SalesforceOAuth2(BaseOAuth2):
