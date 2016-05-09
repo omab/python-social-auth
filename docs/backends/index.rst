@@ -71,6 +71,7 @@ Social backends
    dribbble
    drip
    dropbox
+   edmodo
    eveonline
    evernote
    facebook

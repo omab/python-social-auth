@@ -110,6 +110,7 @@ let me know and I'll update the list):
   * vbsteven_
   * sbassi_
   * aspcanada_
+  * browniebroke_
 
 
 .. _python-social-auth: https://github.com/omab/python-social-auth
@@ -215,3 +216,4 @@ let me know and I'll update the list):
 .. _vbsteven: https://github.com/vbsteven
 .. _sbassi: https://github.com/sbassi
 .. _aspcanada: https://github.com/aspcanada
+.. _browniebroke: https://github.com/browniebroke
