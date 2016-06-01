@@ -5,7 +5,6 @@ env:
     - REQUIREMENTS=requirements.txt
     - TEST_REQUIREMENTS=social/tests/requirements.txt
 python:
-  - "2.6"
   - "2.7"
 matrix:
   include:

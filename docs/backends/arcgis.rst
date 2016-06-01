@@ -1,5 +1,5 @@
 ArcGIS
-=====
+======
 
 ArcGIS uses OAuth2 for authentication.
 
@@ -7,7 +7,7 @@ ArcGIS uses OAuth2 for authentication.
 
 
 OAuth2
-------------
+------
 
 1. Add the OAuth2 backend to your settings page::
 
