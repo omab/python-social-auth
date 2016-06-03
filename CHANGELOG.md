@@ -1,5 +1,30 @@
 # Change Log
 
+## [v0.2.19](https://github.com/omab/python-social-auth/tree/v0.2.19) (2016-04-29)
+
+[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.18...v0.2.19)
+
+**Closed issues:**
+
+- \[Flask\] Not Logged in After Redirect [\#913](https://github.com/omab/python-social-auth/issues/913)
+- Django: type\(social\_user.extra\_data\) == unicode [\#898](https://github.com/omab/python-social-auth/issues/898)
+- Email is empty in login with Facebook [\#889](https://github.com/omab/python-social-auth/issues/889)
+
+**Merged pull requests:**
+
+- Updates to OpenIdConnectAuth [\#911](https://github.com/omab/python-social-auth/pull/911) ([clintonb](https://github.com/clintonb))
+- Corrected default value of JSONField [\#908](https://github.com/omab/python-social-auth/pull/908) ([clintonb](https://github.com/clintonb))
+
+## [v0.2.18](https://github.com/omab/python-social-auth/tree/v0.2.18) (2016-04-20)
+[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.17...v0.2.18)
+
+## [v0.2.17](https://github.com/omab/python-social-auth/tree/v0.2.17) (2016-04-20)
+[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.16...v0.2.17)
+
+**Merged pull requests:**
+
+- django 1.8+ compat to ensure to\_python is always called when accessing result from db.. [\#897](https://github.com/omab/python-social-auth/pull/897) ([sbussetti](https://github.com/sbussetti))
+
 ## [v0.2.16](https://github.com/omab/python-social-auth/tree/v0.2.16) (2016-04-13)
 [Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.15...v0.2.16)
 
@@ -919,7 +944,7 @@
 **Merged pull requests:**
 
 - Fix OpenId auth with Flask 0.10 [\#16](https://github.com/omab/python-social-auth/pull/16) ([Flyflo](https://github.com/Flyflo))
-- Add CodersClan button [\#13](https://github.com/omab/python-social-auth/pull/13) ([Orchestrator81](https://github.com/Orchestrator81))
+- Add CodersClan button [\#13](https://github.com/omab/python-social-auth/pull/13) ([DrorCohenCC](https://github.com/DrorCohenCC))
 - Added a default to response in FacebookOAuth.do\_auth [\#12](https://github.com/omab/python-social-auth/pull/12) ([san-mate](https://github.com/san-mate))
 - Bug fix of FacebookAppOAuth2 [\#11](https://github.com/omab/python-social-auth/pull/11) ([san-mate](https://github.com/san-mate))
 

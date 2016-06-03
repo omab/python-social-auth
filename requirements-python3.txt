@@ -1,6 +1,6 @@
-python3-openid>=3.0.1
-requests>=1.1.0
-oauthlib>=0.3.8
-requests-oauthlib>0.3.2
-six>=1.2.0
-PyJWT>=1.0.0
+python3-openid>=3.0.9
+requests>=2.9.1
+oauthlib>=1.0.3
+requests-oauthlib>=0.6.1
+six>=1.10.0
+PyJWT>=1.4.0
