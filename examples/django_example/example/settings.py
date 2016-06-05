@@ -174,6 +174,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.readability.ReadabilityOAuth',
     'social.backends.reddit.RedditOAuth2',
     'social.backends.runkeeper.RunKeeperOAuth2',
+    'social.backends.sketchfab.SketchfabOAuth2',
     'social.backends.skyrock.SkyrockOAuth',
     'social.backends.soundcloud.SoundcloudOAuth2',
     'social.backends.spotify.SpotifyOAuth2',

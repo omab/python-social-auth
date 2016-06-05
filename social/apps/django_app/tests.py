@@ -31,6 +31,7 @@ from social.tests.backends.test_mixcloud import *
 from social.tests.backends.test_podio import *
 from social.tests.backends.test_readability import *
 from social.tests.backends.test_reddit import *
+from social.tests.backends.test_sketchfab import *
 from social.tests.backends.test_skyrock import *
 from social.tests.backends.test_soundcloud import *
 from social.tests.backends.test_stackoverflow import *

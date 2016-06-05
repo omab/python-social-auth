@@ -108,6 +108,7 @@ or current ones extended):
     * Readability_ OAuth1
     * Reddit_ OAuth2 https://github.com/reddit/reddit/wiki/OAuth2
     * Shopify_ OAuth2
+    * Sketchfab_ OAuth2
     * Skyrock_ OAuth1
     * Soundcloud_ OAuth2
     * Stackoverflow_ OAuth2
@@ -278,6 +279,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Pocket: http://getpocket.com
 .. _Podio: https://podio.com
 .. _Shopify: http://shopify.com
+.. _Sketchfab: https://sketchfab.com/developers/oauth
 .. _Skyrock: https://skyrock.com
 .. _Soundcloud: https://soundcloud.com
 .. _Stocktwits: https://stocktwits.com
