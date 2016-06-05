@@ -36,7 +36,9 @@ class UntappdOAuth2(BaseOAuth2):
         return params
 
     def process_error(self, data):
-        """ All errors from Untappd are contained in the 'meta' key of the response. """
+        """
+        All errors from Untappd are contained in the 'meta' key of the response.
+        """
         response_code = data.get('meta', {}).get('http_code')
         if response_code is not None and response_code != requests.codes.ok:
             raise AuthFailed(self, data['meta']['error_detail'])
@@ -49,7 +51,8 @@ class UntappdOAuth2(BaseOAuth2):
 
         self.process_error(self.data)
 
-        # Untapped sends the access token request with URL parameters, not a body
+        # Untapped sends the access token request with URL parameters,
+        # not a body
         response = self.request_access_token(
             self.access_token_url(),
             method=self.ACCESS_TOKEN_METHOD,
@@ -64,9 +67,13 @@ class UntappdOAuth2(BaseOAuth2):
 
         self.process_error(response)
 
-        # Both the access_token and the rest of the response are buried in the 'response' key
-        return self.do_auth(response['response']['access_token'], response=response['response'],
-                            *args, **kwargs)
+        # Both the access_token and the rest of the response are
+        # buried in the 'response' key
+        return self.do_auth(
+            response['response']['access_token'],
+            response=response['response'],
+            *args, **kwargs
+        )
 
     def get_user_details(self, response):
         """Return user details from an Untappd account"""
@@ -79,13 +86,16 @@ class UntappdOAuth2(BaseOAuth2):
             'email': user_data.get('settings', {}).get('email_address', ''),
             'first_name': user_data.get('first_name'),
             'last_name': user_data.get('last_name'),
-            'fullname': user_data.get('first_name') + ' ' + user_data.get('last_name')
+            'fullname': user_data.get('first_name') + ' ' +
+                        user_data.get('last_name')
         })
         return user_data
 
     def get_user_id(self, details, response):
-        """Return a unique ID for the current user, by default from server
-        response."""
+        """
+        Return a unique ID for the current user, by default from
+        server response.
+        """
         return response['user'].get(self.ID_KEY)
 
     def user_data(self, access_token, *args, **kwargs):
