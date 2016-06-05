@@ -110,8 +110,10 @@ def do_disconnect(backend, user, association_id=None, redirect_name='next',
 
     if isinstance(response, dict):
         response = backend.strategy.redirect(
-            backend.strategy.request_data().get(redirect_name, '') or
-            backend.setting('DISCONNECT_REDIRECT_URL') or
-            backend.setting('LOGIN_REDIRECT_URL')
+            backend.strategy.absolute_uri(
+                backend.strategy.request_data().get(redirect_name, '') or
+                backend.setting('DISCONNECT_REDIRECT_URL') or
+                backend.setting('LOGIN_REDIRECT_URL')
+            )
         )
     return response
