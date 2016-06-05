@@ -15,7 +15,7 @@ VK.com uses OAuth2 for Authentication.
       SOCIAL_AUTH_VK_OAUTH2_KEY = ''
       SOCIAL_AUTH_VK_OAUTH2_SECRET = ''
 
-- Add ``'social.backends.vk.VKOAuth2'`` into your ``AUTHENTICATION_BACKENDS``.
+- Add ``'social.backends.vk.VKOAuth2'`` into your ``SOCIAL_AUTH_AUTHENTICATION_BACKENDS``.
 
 - Then you can start using ``/login/vk-oauth2`` in your link href.
 
