@@ -44,7 +44,9 @@ class WeixinOAuth2(BaseOAuth2):
         nickname = data.get('nickname')
         if nickname:
             # weixin api has some encode bug, here need handle
-            data['nickname'] = nickname.encode('raw_unicode_escape').decode('utf-8')
+            data['nickname'] = nickname.encode(
+                'raw_unicode_escape'
+            ).decode('utf-8')
         return data
 
     def auth_params(self, state=None):
@@ -103,9 +105,10 @@ class WeixinOAuth2(BaseOAuth2):
 
 
 class WeixinOAuth2APP(WeixinOAuth2):
-    """Weixin OAuth authentication backend
+    """
+    Weixin OAuth authentication backend
 
-        can't use in web, only in weixin app
+    Can't use in web, only in weixin app
     """
     name = 'weixinapp'
     ID_KEY = 'openid'
@@ -133,17 +136,18 @@ class WeixinOAuth2APP(WeixinOAuth2):
         params.update(self.get_scope_argument())
         params.update(self.auth_extra_arguments())
         params = urllib.urlencode(sorted(params.items()))
-        return '{}#wechat_redirect'.format(self.AUTHORIZATION_URL + '?' + params)
-
+        return '{}#wechat_redirect'.format(
+            self.AUTHORIZATION_URL + '?' + params
+        )
 
     def auth_complete_params(self, state=None):
-            appid, secret = self.get_key_and_secret()
-            return {
-                'grant_type': 'authorization_code',  # request auth code
-                'code': self.data.get('code', ''),  # server response code
-                'appid': appid,
-                'secret': secret,
-            }
+        appid, secret = self.get_key_and_secret()
+        return {
+            'grant_type': 'authorization_code',  # request auth code
+            'code': self.data.get('code', ''),  # server response code
+            'appid': appid,
+            'secret': secret,
+        }
 
     def validate_state(self):
         return None
