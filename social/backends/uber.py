@@ -19,7 +19,8 @@ class UberOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from Uber account"""
         email = response.get('email', '')
-        fullname, first_name, last_name = self.get_user_names()
+        fullname, first_name, last_name = self.get_user_names('', response.get('first_name', ''),
+                                                              response.get('last_name', ''))
         return {'username': email,
                 'email': email,
                 'fullname': fullname,
