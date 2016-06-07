@@ -1,6 +1,8 @@
 import json
 
+from unittest import TestCase
 from social.tests.backends.oauth import OAuth2Test
+from social.backends.reddit import RedditOAuth2
 
 
 class RedditOAuth2Test(OAuth2Test):
@@ -57,3 +59,13 @@ class RedditOAuth2Test(OAuth2Test):
     def test_refresh_token(self):
         user, social = self.do_refresh_token()
         self.assertEqual(social.extra_data['access_token'], 'foobar-new-token')
+
+
+class RedditOAuth2Test(TestCase):
+
+    def setUp(self):
+        self.backend = RedditOAuth2()
+        self.backend.setting = { "KEY": "k", "SECRET": "s" }.get
+
+    def test_auth_headers(self):
+        self.assertEqual({'Authorization': 'Basic azpz'}, self.backend.auth_headers())
