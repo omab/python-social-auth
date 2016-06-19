@@ -84,6 +84,7 @@ or current ones extended):
     * Kakao_ OAuth2 https://developer.kakao.com
     * `Khan Academy`_ OAuth1
     * Launchpad_ OpenId
+    * Line_ OAuth2
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
@@ -265,6 +266,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Instagram: https://instagram.com
 .. _Itembase: https://www.itembase.com
 .. _LaunchPad: https://help.launchpad.net/YourAccount/OpenID
+.. _Line: https://line.me/
 .. _Linkedin: https://www.linkedin.com
 .. _Live: https://live.com
 .. _Livejournal: http://livejournal.com
