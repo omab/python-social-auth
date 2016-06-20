@@ -16,6 +16,7 @@ class MongoengineUserMixin(UserMixin):
     """Social Auth association model"""
     user = None
     provider = StringField(max_length=32)
+    provider_domain = StringField(max_length=256)
     uid = StringField(max_length=255, unique_with='provider')
     extra_data = DictField()
 
@@ -23,19 +24,22 @@ class MongoengineUserMixin(UserMixin):
         return str(self.id)
 
     @classmethod
-    def get_social_auth_for_user(cls, user, provider=None, id=None):
+    def get_social_auth_for_user(
+            cls, user, provider=None, id=None, provider_domain=None):
         qs = cls.objects
         if provider:
-            qs = qs.filter(provider=provider)
+            qs = qs.filter(provider=provider, provider_domain=provider_domain)
         if id:
             qs = qs.filter(id=id)
         return qs.filter(user=user.id)
 
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_social_auth(cls, user, uid, provider, provider_domain=None):
         if not isinstance(type(uid), six.string_types):
             uid = str(uid)
-        return cls.objects.create(user=user.id, uid=uid, provider=provider)
+        return cls.objects.create(
+            user=user.id, uid=uid, provider=provider,
+            provider_domain=provider_domain)
 
     @classmethod
     def username_max_length(cls):

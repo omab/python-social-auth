@@ -75,28 +75,32 @@ class DjangoUserMixin(UserMixin):
         return user_model.objects.filter(**{email_field + '__iexact': email})
 
     @classmethod
-    def get_social_auth(cls, provider, uid):
+    def get_social_auth(cls, provider, uid, provider_domain=None):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
         try:
-            return cls.objects.get(provider=provider, uid=uid)
+            return cls.objects.get(
+                provider=provider, uid=uid, provider_domain=provider_domain)
         except cls.DoesNotExist:
             return None
 
     @classmethod
-    def get_social_auth_for_user(cls, user, provider=None, id=None):
+    def get_social_auth_for_user(
+            cls, user, provider=None, id=None, provider_domain=None):
         qs = user.social_auth.all()
         if provider:
-            qs = qs.filter(provider=provider)
+            qs = qs.filter(provider=provider, provider_domain=provider_domain)
         if id:
             qs = qs.filter(id=id)
         return qs
 
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_social_auth(cls, user, uid, provider, provider_domain=None):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
-        return cls.objects.create(user=user, uid=uid, provider=provider)
+        return cls.objects.create(
+            user=user, uid=uid, provider=provider,
+            provider_domain=provider_domain)
 
 
 class DjangoNonceMixin(NonceMixin):

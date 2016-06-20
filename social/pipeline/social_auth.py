@@ -17,7 +17,9 @@ def auth_allowed(backend, details, response, *args, **kwargs):
 
 def social_user(backend, uid, user=None, *args, **kwargs):
     provider = backend.name
-    social = backend.strategy.storage.user.get_social_auth(provider, uid)
+    provider_domain = backend.get_provider_domain()
+    social = backend.strategy.storage.user.get_social_auth(
+        provider, uid, provider_domain)
     if social:
         if user and social.user != user:
             msg = 'This {0} account is already in use.'.format(provider)
@@ -34,7 +36,7 @@ def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
     if user and not social:
         try:
             social = backend.strategy.storage.user.create_social_auth(
-                user, uid, backend.name
+                user, uid, backend.name, backend.get_provider_domain()
             )
         except Exception as err:
             if not backend.strategy.storage.is_integrity_error(err):
@@ -81,7 +83,8 @@ def associate_by_email(backend, details, user=None, *args, **kwargs):
 
 def load_extra_data(backend, details, response, uid, user, *args, **kwargs):
     social = kwargs.get('social') or \
-             backend.strategy.storage.user.get_social_auth(backend.name, uid)
+             backend.strategy.storage.user.get_social_auth(
+                backend.name, uid, backend.get_provider_domain())
     if social:
         extra_data = backend.extra_data(user, uid, response, details,
                                         *args, **kwargs)

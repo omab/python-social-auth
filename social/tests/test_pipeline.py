@@ -17,11 +17,12 @@ class UnknownError(Exception):
 
 class IntegrityErrorUserSocialAuth(TestUserSocialAuth):
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_social_auth(
+            cls, user, uid, provider, provider_domain=None):
         raise IntegrityError()
 
     @classmethod
-    def get_social_auth(cls, provider, uid):
+    def get_social_auth(cls, provider, uid, provider_domain=None):
         if not hasattr(cls, '_called_times'):
             cls._called_times = 0
         cls._called_times += 1
@@ -30,7 +31,7 @@ class IntegrityErrorUserSocialAuth(TestUserSocialAuth):
             return IntegrityErrorUserSocialAuth(user, provider, uid)
         else:
             return super(IntegrityErrorUserSocialAuth, cls).get_social_auth(
-                provider, uid
+                provider, uid, provider_domain
             )
 
 
@@ -45,7 +46,7 @@ class IntegrityErrorStorage(TestStorage):
 
 class UnknownErrorUserSocialAuth(TestUserSocialAuth):
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_social_auth(cls, user, uid, provider, provider_domain=None):
         raise UnknownError()
 
 

@@ -231,6 +231,9 @@ class BaseAuth(object):
     def get_querystring(self, url, *args, **kwargs):
         return parse_qs(self.request(url, *args, **kwargs).text)
 
+    def get_provider_domain(self):
+        return None
+
     def get_key_and_secret(self):
         """Return tuple with Consumer Key and Consumer Secret for current
         service provider. Must return (key, secret), order *must* be respected.

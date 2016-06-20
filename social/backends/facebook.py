@@ -29,6 +29,10 @@ class FacebookOAuth2(BaseOAuth2):
         ('expires', 'expires')
     ]
 
+    def get_provider_domain(self):
+        key, secret = self.get_key_and_secret()
+        return key
+
     def get_user_details(self, response):
         """Return user details from Facebook account"""
         fullname, first_name, last_name = self.get_user_names(

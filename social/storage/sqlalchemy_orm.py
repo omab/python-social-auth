@@ -67,6 +67,7 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
     __table_args__ = (UniqueConstraint('provider', 'uid'),)
     id = Column(Integer, primary_key=True)
     provider = Column(String(32))
+    provider_domain = Column(String(256))
     extra_data = Column(MutableDict.as_mutable(JSONType))
     uid = None
     user_id = None
@@ -128,29 +129,31 @@ class SQLAlchemyUserMixin(SQLAlchemyMixin, UserMixin):
         return cls.user_query().filter_by(email=email)
 
     @classmethod
-    def get_social_auth(cls, provider, uid):
+    def get_social_auth(cls, provider, uid, provider_domain=None):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
-        try:
-            return cls._query().filter_by(provider=provider,
-                                          uid=uid)[0]
-        except IndexError:
-            return None
+        return cls._query().filter_by(
+            provider=provider, uid=uid,
+            provider_domain=provider_domain).first()
 
     @classmethod
-    def get_social_auth_for_user(cls, user, provider=None, id=None):
+    def get_social_auth_for_user(
+            cls, user, provider=None, id=None, provider_domain=None):
         qs = cls._query().filter_by(user_id=user.id)
         if provider:
-            qs = qs.filter_by(provider=provider)
+            qs = qs.filter_by(
+                provider=provider, provider_domain=provider_domain)
         if id:
             qs = qs.filter_by(id=id)
         return qs
 
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_social_auth(cls, user, uid, provider, provider_domain=None):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
-        return cls._new_instance(cls, user=user, uid=uid, provider=provider)
+        return cls._new_instance(
+            cls, user=user, uid=uid, provider=provider,
+            provider_domain=provider_domain)
 
 
 class SQLAlchemyNonceMixin(SQLAlchemyMixin, NonceMixin):

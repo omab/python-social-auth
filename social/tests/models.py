@@ -111,20 +111,24 @@ class TestUserSocialAuth(UserMixin, BaseModel):
                 return user
 
     @classmethod
-    def get_social_auth(cls, provider, uid):
+    def get_social_auth(cls, provider, uid, provider_domain=None):
         social_user = cls.cache_by_uid.get(uid)
-        if social_user and social_user.provider == provider:
+        if social_user and social_user.provider == provider \
+                and social_user.provider_domain == provider_domain:
             return social_user
 
     @classmethod
-    def get_social_auth_for_user(cls, user, provider=None, id=None):
+    def get_social_auth_for_user(
+            cls, user, provider=None, id=None, provider_domain=None):
         return [usa for usa in user.social
                 if provider in (None, usa.provider) and
-                id in (None, usa.id)]
+                id in (None, usa.id) and
+                provider_domain in (None, usa.provider_domain)]
 
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
-        return cls(user=user, provider=provider, uid=uid)
+    def create_social_auth(cls, user, uid, provider, provider_domain=None):
+        return cls(user=user, provider=provider, uid=uid,
+                   provider_domain=provider_domain)
 
     @classmethod
     def get_users_by_email(cls, email):
