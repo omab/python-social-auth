@@ -3,6 +3,11 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 from django.conf import settings
+from social.utils import setting_name
+
+USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \
+             getattr(settings, 'AUTH_USER_MODEL', None) or \
+             'auth.User'
 
 
 class Migration(migrations.Migration):
@@ -15,6 +20,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='usersocialauth',
             name='user',
-            field=models.ForeignKey(related_name='social_auth', to=settings.AUTH_USER_MODEL)
+            field=models.ForeignKey(related_name='social_auth', to=USER_MODEL)
         ),
     ]
