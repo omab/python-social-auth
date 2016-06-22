@@ -19,11 +19,11 @@ class FacebookOAuth2(BaseOAuth2):
     name = 'facebook'
     RESPONSE_TYPE = None
     SCOPE_SEPARATOR = ','
-    AUTHORIZATION_URL = 'https://www.facebook.com/v2.3/dialog/oauth'
-    ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.3/oauth/access_token'
-    REVOKE_TOKEN_URL = 'https://graph.facebook.com/v2.3/{uid}/permissions'
+    AUTHORIZATION_URL = 'https://www.facebook.com/v2.5/dialog/oauth'
+    ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.5/oauth/access_token'
+    REVOKE_TOKEN_URL = 'https://graph.facebook.com/v2.5/{uid}/permissions'
     REVOKE_TOKEN_METHOD = 'DELETE'
-    USER_DATA_URL = 'https://graph.facebook.com/v2.3/me'
+    USER_DATA_URL = 'https://graph.facebook.com/v2.5/me'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires')
@@ -76,7 +76,7 @@ class FacebookOAuth2(BaseOAuth2):
             'client_secret': secret,
             'code': self.data['code']
         })
-        # API v2.3 returns a JSON, according to the documents linked at issue
+        # API v2.5 returns a JSON, according to the documents linked at issue
         # #592, but it seems that this needs to be enabled(?), otherwise the
         # usual querystring type response is returned.
         try:
