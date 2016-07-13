@@ -1,6 +1,6 @@
 from mongoengine import StringField, EmailField, BooleanField
 
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
 
 from flask_me_example import db
 

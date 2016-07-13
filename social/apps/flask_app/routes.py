@@ -1,5 +1,5 @@
 from flask import g, Blueprint, request
-from flask.ext.login import login_required, login_user
+from flask_login import login_required, login_user
 
 from social.actions import do_auth, do_complete, do_disconnect
 from social.apps.flask_app.utils import psa
