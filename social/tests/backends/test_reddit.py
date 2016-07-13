@@ -57,3 +57,7 @@ class RedditOAuth2Test(OAuth2Test):
     def test_refresh_token(self):
         user, social = self.do_refresh_token()
         self.assertEqual(social.extra_data['access_token'], 'foobar-new-token')
+
+    def test_auth_headers(self):
+        self.assertDictEqual(self.backend.auth_headers(),
+                            {'Authorization': 'Basic YS1rZXk6YS1zZWNyZXQta2V5'})
