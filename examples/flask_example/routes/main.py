@@ -1,5 +1,5 @@
 from flask import render_template, redirect
-from flask.ext.login import login_required, logout_user
+from flask_login import login_required, logout_user
 
 from flask_example import app
 

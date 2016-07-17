@@ -39,7 +39,9 @@ def get_username(strategy, details, user=None, *args, **kwargs):
         else:
             username = uuid4().hex
 
-        short_username = username[:max_length - uuid_length]
+        short_username = (username[:max_length - uuid_length]
+                          if max_length is not None
+                          else username)
         final_username = slug_func(clean_func(username[:max_length]))
 
         # Generate a unique username for current user using username
