@@ -25,16 +25,19 @@ class LineOAuth2(BaseOAuth2):
 
     def auth_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
-        params = {
+        return {
             'client_id': client_id,
             'redirect_uri': self.get_redirect_uri(),
             'response_type': self.RESPONSE_TYPE
         }
-        return params
 
     def process_error(self, data):
-        error_code = data.get('errorCode') or data.get('statusCode') or data.get('error')
-        error_message = data.get('errorMessage') or data.get('statusMessage') or data.get('error_desciption')
+        error_code = data.get('errorCode') or \
+                     data.get('statusCode') or \
+                     data.get('error')
+        error_message = data.get('errorMessage') or \
+                        data.get('statusMessage') or \
+                        data.get('error_desciption')
         if error_code is not None or error_message is not None:
             raise AuthFailed(self, error_message or error_code)
 
@@ -57,7 +60,8 @@ class LineOAuth2(BaseOAuth2):
             )
             self.process_error(response)
 
-            return self.do_auth(response['accessToken'], response=response, *args, **kwargs)
+            return self.do_auth(response['accessToken'], response=response,
+                                *args, **kwargs)
         except requests.HTTPError as err:
             self.process_error(json.loads(err.response.content))
 
