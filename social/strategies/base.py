@@ -131,6 +131,8 @@ class BaseStrategy(object):
         verification_code = self.storage.code.get_code(code)
         if not verification_code or verification_code.code != code:
             return False
+        elif verification_code.email != email:
+            return False
         else:
             verification_code.verify()
             return True

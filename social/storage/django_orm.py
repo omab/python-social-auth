@@ -1,6 +1,7 @@
 """Django ORM models for Social Auth"""
 import base64
 import six
+from django.db import transaction
 
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
                                 CodeMixin, BaseStorage
@@ -96,7 +97,16 @@ class DjangoUserMixin(UserMixin):
     def create_social_auth(cls, user, uid, provider):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
-        return cls.objects.create(user=user, uid=uid, provider=provider)
+        if hasattr(transaction, 'atomic'):
+            # In Django versions that have an "atomic" transaction decorator / context
+            # manager, there's a transaction wrapped around this call.
+            # If the create fails below due to an IntegrityError, ensure that the transaction
+            # stays undamaged by wrapping the create in an atomic.
+            with transaction.atomic():
+                social_auth = cls.objects.create(user=user, uid=uid, provider=provider)
+        else:
+            social_auth = cls.objects.create(user=user, uid=uid, provider=provider)
+        return social_auth
 
 
 class DjangoNonceMixin(NonceMixin):
