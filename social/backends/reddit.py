@@ -42,9 +42,9 @@ class RedditOAuth2(BaseOAuth2):
 
     def auth_headers(self):
         return {
-            'Authorization': 'Basic {0}'.format(base64.urlsafe_b64encode(
+            'Authorization': b'Basic ' + base64.urlsafe_b64encode(
                 ('{0}:{1}'.format(*self.get_key_and_secret()).encode())
-            ))
+            )
         }
 
     def refresh_token_params(self, token, redirect_uri=None, *args, **kwargs):
