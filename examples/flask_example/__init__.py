@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from flask import Flask, g
-from flask.ext import login
+from flask_login import LoginManager, current_user
 
 sys.path.append('../..')
 
@@ -29,7 +29,7 @@ db_session = scoped_session(Session)
 app.register_blueprint(social_auth)
 init_social(app, db_session)
 
-login_manager = login.LoginManager()
+login_manager = LoginManager()
 login_manager.login_view = 'main'
 login_manager.login_message = ''
 login_manager.init_app(app)
@@ -48,7 +48,7 @@ def load_user(userid):
 
 @app.before_request
 def global_user():
-    g.user = login.current_user
+    g.user = current_user
 
 
 @app.teardown_appcontext

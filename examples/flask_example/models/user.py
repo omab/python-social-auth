@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Integer, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 
-from flask.ext.login import UserMixin
+from flask_login import UserMixin
 
 from flask_example import db_session
 

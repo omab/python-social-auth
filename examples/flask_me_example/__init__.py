@@ -1,7 +1,7 @@
 import sys
 
 from flask import Flask, g
-from flask.ext import login
+from flask_login import LoginManager, current_user
 from flask.ext.mongoengine import MongoEngine
 
 sys.path.append('../..')
@@ -26,7 +26,7 @@ db = MongoEngine(app)
 app.register_blueprint(social_auth)
 init_social(app, db)
 
-login_manager = login.LoginManager()
+login_manager = LoginManager()
 login_manager.login_view = 'main'
 login_manager.login_message = ''
 login_manager.init_app(app)
@@ -45,7 +45,7 @@ def load_user(userid):
 
 @app.before_request
 def global_user():
-    g.user = login.current_user
+    g.user = current_user
 
 
 @app.context_processor
