@@ -48,7 +48,7 @@ def load_user(userid):
 
 @app.before_request
 def global_user():
-    g.user = login.current_user
+    g.user = login.current_user._get_current_object()
 
 
 @app.teardown_appcontext
