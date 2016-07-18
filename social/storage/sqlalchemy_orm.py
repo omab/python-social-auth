@@ -28,6 +28,8 @@ class JSONType(PickleType):
 
 
 class SQLAlchemyMixin(object):
+    COMMIT_SESSION = True
+
     @classmethod
     def _session(cls):
         raise NotImplementedError('Implement in subclass')
@@ -43,7 +45,11 @@ class SQLAlchemyMixin(object):
     @classmethod
     def _save_instance(cls, instance):
         cls._session().add(instance)
-        cls._flush()
+        if cls.COMMIT_SESSION:
+            cls._session().commit()
+            cls._session().flush()
+        else:
+            cls._flush()
         return instance
 
     @classmethod
