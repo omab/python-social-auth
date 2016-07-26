@@ -81,21 +81,21 @@ def setting_name(*names):
     return to_setting_name(*((SETTING_PREFIX,) + names))
 
 
-def sanitize_redirect(host, redirect_to):
+def sanitize_redirect(hosts, redirect_to):
     """
-    Given the hostname and an untrusted URL to redirect to,
+    Given a list of hostnames and an untrusted URL to redirect to,
     this method tests it to make sure it isn't garbage/harmful
     and returns it, else returns None, similar as how's it done
     on django.contrib.auth.views.
     """
     if redirect_to:
         try:
-            # Don't redirect to a different host
-            netloc = urlparse(redirect_to)[1] or host
+            # Don't redirect to a host not in a list
+            netloc = urlparse(redirect_to)[1] or hosts[0]
         except (TypeError, AttributeError):
             pass
         else:
-            if netloc == host:
+            if netloc in hosts:
                 return redirect_to
 
 
