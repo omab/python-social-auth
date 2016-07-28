@@ -96,6 +96,9 @@ class Association(models.Model, DjangoAssociationMixin):
 
     class Meta:
         db_table = 'social_auth_association'
+        unique_together = (
+            ('server_url', 'handle',)
+        )
 
 
 class Code(models.Model, DjangoCodeMixin):
