@@ -90,7 +90,7 @@ def sanitize_redirect(hosts, redirect_to):
     """
     if redirect_to:
         try:
-            # Don't redirect to a host not in a list
+            # Don't redirect to a host that's not in the list
             netloc = urlparse(redirect_to)[1] or hosts[0]
         except (TypeError, AttributeError):
             pass
