@@ -10,7 +10,8 @@ Production Mode
 In order to enable the backend, follow:
 
 
-- Register an application at `Client Applications`_
+- Register an application at `Client Applications`_,
+  set the ``Redirect URI`` to ``http://<your hostname>/complete/yammer/``
 
 - Fill **Client Key** and **Client Secret** settings::
 
