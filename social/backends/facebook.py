@@ -19,11 +19,11 @@ class FacebookOAuth2(BaseOAuth2):
     name = 'facebook'
     RESPONSE_TYPE = None
     SCOPE_SEPARATOR = ','
-    AUTHORIZATION_URL = 'https://www.facebook.com/v2.6/dialog/oauth'
-    ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.6/oauth/access_token'
-    REVOKE_TOKEN_URL = 'https://graph.facebook.com/v2.6/{uid}/permissions'
+    AUTHORIZATION_URL = 'https://www.facebook.com/v2.7/dialog/oauth'
+    ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.7/oauth/access_token'
+    REVOKE_TOKEN_URL = 'https://graph.facebook.com/v2.7/{uid}/permissions'
     REVOKE_TOKEN_METHOD = 'DELETE'
-    USER_DATA_URL = 'https://graph.facebook.com/v2.6/me'
+    USER_DATA_URL = 'https://graph.facebook.com/v2.7/me'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires')
