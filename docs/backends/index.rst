@@ -90,6 +90,7 @@ Social backends
    khanacademy
    lastfm
    launchpad
+   line
    linkedin
    livejournal
    live
