@@ -253,9 +253,6 @@ class TwitterOAuth1IncludeEmailTest(OAuth1Test):
     })
 
     def test_login(self):
-        self.strategy.set_settings({
-            'SOCIAL_AUTH_TWITTER_INCLUDE_EMAIL': True
-        })
         user = self.do_login()
         self.assertEquals(user.email, 'foo@bar.bas')
 

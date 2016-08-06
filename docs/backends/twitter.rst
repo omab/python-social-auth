@@ -20,9 +20,9 @@ To enable Twitter these two keys are needed. Further documentation at
   Client type instead of the Browser. Almost any dummy value will work if
   you plan some test.
 
-- You can request user's Email address by setting (consult `Twitter verify credentials`_)::
-
-      SOCIAL_AUTH_TWITTER_INCLUDE_EMAIL = True
+- You can request user's Email address (consult `Twitter verify
+  credentials`_), the parameter is sent automatically, but the
+  applicaton needs to be whitelisted in order to get a valid value.
 
 Twitter usually fails with a 401 error when trying to call the request-token
 URL, this is usually caused by server datetime errors (check miscellaneous
