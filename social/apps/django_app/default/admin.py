@@ -24,10 +24,22 @@ class UserSocialAuthOption(admin.ModelAdmin):
                        hasattr(_User, 'username') and 'username' or \
                        None
             fieldnames = ('first_name', 'last_name', 'email', username)
-            all_names = _User._meta.get_all_field_names()
+            all_names = self._get_all_field_names(_User._meta)
             search_fields = [name for name in fieldnames
                                 if name and name in all_names]
         return ['user__' + name for name in search_fields]
+
+    @staticmethod
+    def _get_all_field_names(model):
+        from itertools import chain
+
+        return list(set(chain.from_iterable(
+            (field.name, field.attname) if hasattr(field, 'attname') else (field.name,)
+            for field in model.get_fields()
+            # For complete backwards compatibility, you may want to exclude
+            # GenericForeignKey from the results.
+            if not (field.many_to_one and field.related_model is None)
+        )))
 
 
 class NonceOption(admin.ModelAdmin):
