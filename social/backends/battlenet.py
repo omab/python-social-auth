@@ -45,6 +45,6 @@ class BattleNetOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         """ Loads user data from service """
         return self.get_json(
-            'https://eu.api.battle.net/account/user/battletag',
+            'https://eu.api.battle.net/account/user',
             params={'access_token': access_token}
         )

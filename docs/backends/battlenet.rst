@@ -19,12 +19,16 @@ enable ``python-social-auth`` support follow this steps:
         ...
     )
 
-Note: The API returns an accountId which will be used as identifier for the
-user.  If you want to allow the user to choose a username from his own
+Note: If you want to allow the user to choose a username from his own
 characters, some further steps are required, see the use cases part of the
-documentation.
+documentation. To get the account id and battletag use the user_data function, as
+`account id is no longer passed inherently`_.
+
+Another note: If you get a 500 response "Internal Server Error" the API now requires `https on callback endpoints`_.
 
 Further documentation at `Developer Guide`_.
 
 .. _Battlenet Developer Portal: https://dev.battle.net/
 .. _Developer Guide: https://dev.battle.net/docs/read/oauth
+.. _https on callback endpoints: http://us.battle.net/en/forum/topic/17085510584
+.. _account id is no longer passed inherently: http://us.battle.net/en/forum/topic/18300183303
