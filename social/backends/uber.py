@@ -19,8 +19,11 @@ class UberOAuth2(BaseOAuth2):
     def get_user_details(self, response):
         """Return user details from Uber account"""
         email = response.get('email', '')
-        fullname, first_name, last_name = self.get_user_names('', response.get('first_name', ''),
-                                                              response.get('last_name', ''))
+        fullname, first_name, last_name = self.get_user_names(
+            '',
+            response.get('first_name', ''),
+            response.get('last_name', '')
+        )
         return {'username': email,
                 'email': email,
                 'fullname': fullname,
@@ -29,12 +32,8 @@ class UberOAuth2(BaseOAuth2):
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
-        client_id, client_secret = self.get_key_and_secret()
         response = kwargs.pop('response')
-
         return self.get_json('https://api.uber.com/v1/me', headers={
-                                    'Authorization': '{0} {1}'.format(
-                                        response.get('token_type'), access_token
-                                    )
-                                }
-                            )
+            'Authorization': '{0} {1}'.format(response.get('token_type'),
+                                              access_token)
+        })
