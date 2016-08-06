@@ -1,5 +1,5 @@
 Upwork
-=======
+======
 
 Upwork supports only OAuth 1.
 

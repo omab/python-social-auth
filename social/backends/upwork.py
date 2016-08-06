@@ -17,11 +17,15 @@ class UpworkOAuth(BaseOAuth1):
 
     def get_user_details(self, response):
         """Return user details from Upwork account"""
+        info = response.get('info', {})
         auth_user = response.get('auth_user', {})
         first_name = auth_user.get('first_name')
         last_name = auth_user.get('last_name')
         fullname = '{} {}'.format(first_name, last_name)
+        profile_url = info.get('profile_url', '')
+        username = profile_url.rsplit('/')[-1].replace('~', '')
         return {
+            'username': username,
             'fullname': fullname,
             'first_name': first_name,
             'last_name': last_name
