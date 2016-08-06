@@ -20,6 +20,10 @@ To enable Twitter these two keys are needed. Further documentation at
   Client type instead of the Browser. Almost any dummy value will work if
   you plan some test.
 
+- You can request user's Email address (consult `Twitter verify
+  credentials`_), the parameter is sent automatically, but the
+  applicaton needs to be whitelisted in order to get a valid value.
+
 Twitter usually fails with a 401 error when trying to call the request-token
 URL, this is usually caused by server datetime errors (check miscellaneous
 section). Installing ``ntp`` and syncing the server date with some pool does
@@ -27,3 +31,4 @@ the trick.
 
 .. _Twitter development resources: http://dev.twitter.com/pages/auth
 .. _Twitter App Creation: http://twitter.com/apps/new
+.. _Twitter verify credentials: https://dev.twitter.com/rest/reference/get/account/verify_credentials
