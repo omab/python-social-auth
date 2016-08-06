@@ -204,6 +204,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
     'django.contrib.auth.backends.ModelBackend',
+    'social.backends.upwork.UpworkOAuth',
 )
 
 AUTH_USER_MODEL = 'app.CustomUser'

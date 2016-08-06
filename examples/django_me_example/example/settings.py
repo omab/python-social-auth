@@ -183,6 +183,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.email.EmailAuth',
     'social.backends.username.UsernameAuth',
     'social.backends.wunderlist.WunderlistOAuth2',
+    'social.backends.upwork.UpworkOAuth',
     'mongoengine.django.auth.MongoEngineBackend',
     'django.contrib.auth.backends.ModelBackend',
 )

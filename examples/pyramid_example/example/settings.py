@@ -46,6 +46,7 @@ SOCIAL_AUTH_SETTINGS = {
         'social.backends.reddit.RedditOAuth2',
         'social.backends.mineid.MineIDOAuth2',
         'social.backends.wunderlist.WunderlistOAuth2',
+        'social.backends.upwork.UpworkOAuth',
     )
 }
 
