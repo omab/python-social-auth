@@ -17,7 +17,6 @@ def auth_allowed(backend, details, response, *args, **kwargs):
 
 def social_user(backend, uid, user=None, *args, **kwargs):
     provider = backend.name
-    new_association = True
     social = backend.strategy.storage.user.get_social_auth(provider, uid)
     if social:
         if user and social.user != user:
@@ -25,11 +24,10 @@ def social_user(backend, uid, user=None, *args, **kwargs):
             raise AuthAlreadyAssociated(backend, msg)
         elif not user:
             user = social.user
-        new_association = False
     return {'social': social,
             'user': user,
             'is_new': user is None,
-            'new_association': new_association}
+            'new_association': social is None}
 
 
 def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
