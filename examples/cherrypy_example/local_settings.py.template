@@ -39,6 +39,7 @@ SOCIAL_SETTINGS = {
         'social.backends.podio.PodioOAuth2',
         'social.backends.reddit.RedditOAuth2',
         'social.backends.wunderlist.WunderlistOAuth2',
+        'social.backends.upwork.UpworkOAuth',
     ),
     'SOCIAL_AUTH_GOOGLE_OAUTH2_KEY': '',
     'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET': ''

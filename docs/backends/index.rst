@@ -142,6 +142,7 @@ Social backends
    twitter
    uber
    untappd
+   upwork
    vend
    vimeo
    vk

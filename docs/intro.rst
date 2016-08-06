@@ -83,6 +83,7 @@ or extend current one):
     * Twilio_ Auth
     * Twitch_ OAuth2
     * Twitter_ OAuth1
+    * Upwork_ OAuth1
     * Vimeo_ OAuth1
     * VK.com_ OpenAPI, OAuth2 and OAuth2 for Applications
     * Weibo_ OAuth2
@@ -179,3 +180,4 @@ section.
 .. _Webpy: https://github.com/omab/python-social-auth/tree/master/social/apps/webpy_app
 .. _Tornado: http://www.tornadoweb.org/
 .. _Authentication Pipeline: pipeline.html
+.. _Upwork: https://www.upwork.com
