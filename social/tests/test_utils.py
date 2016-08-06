@@ -13,31 +13,41 @@ PY3 = sys.version_info[0] == 3
 
 class SanitizeRedirectTest(unittest.TestCase):
     def test_none_redirect(self):
-        self.assertEqual(sanitize_redirect('myapp.com', None), None)
+        self.assertEqual(sanitize_redirect(['myapp.com'], None), None)
 
     def test_empty_redirect(self):
-        self.assertEqual(sanitize_redirect('myapp.com', ''), None)
+        self.assertEqual(sanitize_redirect(['myapp.com'], ''), None)
 
     def test_dict_redirect(self):
-        self.assertEqual(sanitize_redirect('myapp.com', {}), None)
+        self.assertEqual(sanitize_redirect(['myapp.com'], {}), None)
 
     def test_invalid_redirect(self):
-        self.assertEqual(sanitize_redirect('myapp.com', {'foo': 'bar'}), None)
+        self.assertEqual(sanitize_redirect(['myapp.com'], {'foo': 'bar'}), None)
 
     def test_wrong_path_redirect(self):
         self.assertEqual(
-            sanitize_redirect('myapp.com', 'http://notmyapp.com/path/'),
+            sanitize_redirect(['myapp.com'], 'http://notmyapp.com/path/'),
             None
         )
 
     def test_valid_absolute_redirect(self):
         self.assertEqual(
-            sanitize_redirect('myapp.com', 'http://myapp.com/path/'),
+            sanitize_redirect(['myapp.com'], 'http://myapp.com/path/'),
             'http://myapp.com/path/'
         )
 
     def test_valid_relative_redirect(self):
-        self.assertEqual(sanitize_redirect('myapp.com', '/path/'), '/path/')
+        self.assertEqual(sanitize_redirect(['myapp.com'], '/path/'), '/path/')
+
+    def test_multiple_hosts(self):
+        allowed_hosts = ['myapp1.com', 'myapp2.com']
+        for host in allowed_hosts:
+            url = 'http://{}/path/'.format(host)
+            self.assertEqual(sanitize_redirect(allowed_hosts, url), url)
+
+    def test_multiple_hosts_wrong_host(self):
+        self.assertEqual(sanitize_redirect(
+            ['myapp1.com', 'myapp2.com'], 'http://notmyapp.com/path/'), None)
 
 
 class UserIsAuthenticatedTest(unittest.TestCase):
