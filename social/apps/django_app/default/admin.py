@@ -1,4 +1,6 @@
 """Admin settings"""
+from itertools import chain
+
 from django.conf import settings
 from django.contrib import admin
 
@@ -31,15 +33,15 @@ class UserSocialAuthOption(admin.ModelAdmin):
 
     @staticmethod
     def _get_all_field_names(model):
-        from itertools import chain
-
-        return list(set(chain.from_iterable(
-            (field.name, field.attname) if hasattr(field, 'attname') else (field.name,)
+        names = chain.from_iterable(
+            (field.name, field.attname)
+                if hasattr(field, 'attname') else (field.name,)
             for field in model.get_fields()
             # For complete backwards compatibility, you may want to exclude
             # GenericForeignKey from the results.
             if not (field.many_to_one and field.related_model is None)
-        )))
+        )
+        return list(set(names))
 
 
 class NonceOption(admin.ModelAdmin):
