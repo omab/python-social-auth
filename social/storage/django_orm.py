@@ -1,7 +1,9 @@
 """Django ORM models for Social Auth"""
 import base64
 import six
+import sys
 from django.db import transaction
+from django.db.utils import IntegrityError
 
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
                                 CodeMixin, BaseStorage
@@ -58,7 +60,20 @@ class DjangoUserMixin(UserMixin):
         username_field = cls.username_field()
         if 'username' in kwargs and username_field not in kwargs:
             kwargs[username_field] = kwargs.pop('username')
-        return cls.user_model().objects.create_user(*args, **kwargs)
+        try:
+            user = cls.user_model().objects.create_user(*args, **kwargs)
+        except IntegrityError:
+            # User might have been created on a different thread, try and find them.
+            # If we don't, re-raise the IntegrityError.
+            exc_info = sys.exc_info()
+            # If email comes in as None it won't get found in the get
+            if kwargs.get('email', True) is None:
+                kwargs['email'] = ''
+            try:
+                user = cls.user_model().objects.get(*args, **kwargs)
+            except cls.user_model().DoesNotExist:
+                six.reraise(*exc_info)
+        return user
 
     @classmethod
     def get_user(cls, pk=None, **kwargs):
