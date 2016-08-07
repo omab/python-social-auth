@@ -38,13 +38,7 @@ class PyramidStrategy(BaseStrategy):
 
     def html(self, content):
         """Return HTTP response with given content"""
-        response = getattr(self.request, 'response', None)
-        if response is None:
-            response = Response(body=content)
-        else:
-            response = self.request.response
-            response.body = content
-        return response
+        return Response(body=content)
 
     def request_data(self, merge=True):
         """Return current request data (POST or GET)"""
