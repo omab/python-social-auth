@@ -5,17 +5,16 @@ from peewee import CharField, Model, Proxy, IntegrityError
 from playhouse.kv import JSONField
 
 from social.storage.base import UserMixin, AssociationMixin, NonceMixin, \
-    CodeMixin, BaseStorage
+                                CodeMixin, BaseStorage
 
 
 def get_query_by_dict_param(cls, params):
-    q = True
+    query = True
+
     for field_name, value in params.iteritems():
         query_item = cls._meta.fields[field_name] == value
-        
-        q = q & query_item
-
-        return q
+        query = query & query_item
+        return query
 
 
 database_proxy = Proxy()
@@ -53,16 +52,16 @@ class PeeweeUserMixin(UserMixin, BaseModel):
     @classmethod
     def allowed_to_disconnect(cls, user, backend_name, association_id=None):
         if association_id is not None:
-            qs = cls.select().where(cls.id != association_id)
+            query = cls.select().where(cls.id != association_id)
         else:
-            qs = cls.select().where(cls.provider != backend_name)
-        qs = qs.where(cls.user == user)
+            query = cls.select().where(cls.provider != backend_name)
+        query = query.where(cls.user == user)
 
         if hasattr(user, 'has_usable_password'):
             valid_password = user.has_usable_password()
         else:
             valid_password = True
-        return valid_password or qs.count() > 0
+        return valid_password or query.count() > 0
 
     @classmethod
     def disconnect(cls, entry):
@@ -74,10 +73,8 @@ class PeeweeUserMixin(UserMixin, BaseModel):
         Return True/False if a User instance exists with the given arguments.
         """
         user_model = cls.user_model()
-
-        q = get_query_by_dict_param(user_model, kwargs)
-
-        return user_model.select().where(q).count() > 0
+        query = get_query_by_dict_param(user_model, kwargs)
+        return user_model.select().where(query).count() > 0
 
     @classmethod
     def get_username(cls, user):
@@ -95,7 +92,9 @@ class PeeweeUserMixin(UserMixin, BaseModel):
         if pk:
             kwargs = {'id': pk}
         try:
-            return cls.user_model().select().get(get_query_by_dict_param(cls.user_model(), kwargs))
+            return cls.user_model().select().get(
+                get_query_by_dict_param(cls.user_model(), kwargs)
+            )
         except cls.user_model().DoesNotExist:
             return None
 
@@ -109,18 +108,20 @@ class PeeweeUserMixin(UserMixin, BaseModel):
         if not isinstance(uid, six.string_types):
             uid = str(uid)
         try:
-            return cls.select().where(cls.provider == provider, cls.uid == uid).get()
+            return cls.select().where(
+                cls.provider == provider, cls.uid == uid
+            ).get()
         except cls.DoesNotExist:
             return None
 
     @classmethod
     def get_social_auth_for_user(cls, user, provider=None, id=None):
-        qs = cls.select().where(cls.user == user)
+        query = cls.select().where(cls.user == user)
         if provider:
-            qs = qs.where(cls.provider == provider)
+            query = query.where(cls.provider == provider)
         if id:
-            qs = qs.where(cls.id == id)
-        return list(qs)
+            query = query.where(cls.id == id)
+        return list(query)
 
     @classmethod
     def create_social_auth(cls, user, uid, provider):
@@ -149,7 +150,6 @@ class PeeweeAssociationMixin(AssociationMixin, BaseModel):
     lifetime = CharField()
     assoc_type = CharField()
 
-
     @classmethod
     def store(cls, server_url, association):
         try:
@@ -167,8 +167,8 @@ class PeeweeAssociationMixin(AssociationMixin, BaseModel):
 
     @classmethod
     def get(cls, *args, **kwargs):
-        q = get_query_by_dict_param(cls, kwargs)
-        return cls.select().where(q)
+        query = get_query_by_dict_param(cls, kwargs)
+        return cls.select().where(query)
 
     @classmethod
     def remove(cls, ids_to_delete):

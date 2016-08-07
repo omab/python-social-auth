@@ -3,11 +3,11 @@ from peewee import Model, ForeignKeyField, Proxy
 
 from social.utils import setting_name, module_member
 from social.storage.peewee_orm import PeeweeUserMixin, \
-                                           PeeweeAssociationMixin, \
-                                           PeeweeNonceMixin, \
-                                           PeeweeCodeMixin, \
-                                           BasePeeweeStorage, \
-                                           database_proxy
+                                      PeeweeAssociationMixin, \
+                                      PeeweeNonceMixin, \
+                                      PeeweeCodeMixin, \
+                                      BasePeeweeStorage, \
+                                      database_proxy
 
 
 class FlaskStorage(BasePeeweeStorage):
