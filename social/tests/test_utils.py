@@ -131,6 +131,30 @@ class BuildAbsoluteURITest(unittest.TestCase):
 
 
 class PartialPipelineData(unittest.TestCase):
+    def test_returns_partial_when_uid_and_email_do_match(self):
+        email = 'foo@example.com'
+        backend = self._backend({'uid': email})
+        backend.strategy.request_data.return_value = {
+            backend.ID_KEY: email
+        }
+        key, val = ('foo', 'bar')
+        _, xkwargs = partial_pipeline_data(backend, None,
+                                           *(), **dict([(key, val)]))
+        self.assertTrue(key in xkwargs)
+        self.assertEqual(xkwargs[key], val)
+        self.assertEqual(backend.strategy.clean_partial_pipeline.call_count, 0)
+
+    def test_clean_pipeline_when_uid_does_not_match(self):
+        backend = self._backend({'uid': 'foo@example.com'})
+        backend.strategy.request_data.return_value = {
+            backend.ID_KEY: 'bar@example.com'
+        }
+        key, val = ('foo', 'bar')
+        ret = partial_pipeline_data(backend, None,
+                                           *(), **dict([(key, val)]))
+        self.assertIsNone(ret)
+        self.assertEqual(backend.strategy.clean_partial_pipeline.call_count, 1)
+
     def test_kwargs_included_in_result(self):
         backend = self._backend()
         key, val = ('foo', 'bar')
@@ -138,6 +162,7 @@ class PartialPipelineData(unittest.TestCase):
                                            *(), **dict([(key, val)]))
         self.assertTrue(key in xkwargs)
         self.assertEqual(xkwargs[key], val)
+        self.assertEqual(backend.strategy.clean_partial_pipeline.call_count, 0)
 
     def test_update_user(self):
         user = object()
@@ -145,15 +170,18 @@ class PartialPipelineData(unittest.TestCase):
         _, xkwargs = partial_pipeline_data(backend, user)
         self.assertTrue('user' in xkwargs)
         self.assertEqual(xkwargs['user'], user)
+        self.assertEqual(backend.strategy.clean_partial_pipeline.call_count, 0)
 
     def _backend(self, session_kwargs=None):
         strategy = Mock()
         strategy.request = None
+        strategy.request_data.return_value = {}
         strategy.session_get.return_value = object()
         strategy.partial_from_session.return_value = \
             (0, 'mock-backend', [], session_kwargs or {})
 
         backend = Mock()
+        backend.ID_KEY = 'email'
         backend.name = 'mock-backend'
         backend.strategy = strategy
         return backend
