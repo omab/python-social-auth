@@ -1,4 +1,4 @@
-"""Flask SQLAlchemy ORM models for Social Auth"""
+"""Flask Peewee ORM models for Social Auth"""
 from peewee import Model, ForeignKeyField, Proxy
 
 from social.utils import setting_name, module_member
