@@ -1,5 +1,6 @@
 import json
 import six
+import functools
 
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -10,8 +11,14 @@ try:
 except ImportError:
     from django.utils.encoding import smart_text
 
+try:
+    from django.db.models import SubfieldBase
+    field_class = functools.partial(six.with_metaclass, SubfieldBase)
+except ImportError:
+    field_class = functools.partial(six.with_metaclass, type)
 
-class JSONField(models.TextField):
+
+class JSONField(field_class(models.TextField)):
     """Simple JSON field that stores python structures as JSON strings
     on database.
     """
