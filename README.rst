@@ -14,9 +14,6 @@ for more frameworks and ORMs.
 .. image:: https://badge.fury.io/py/python-social-auth.png
    :target: http://badge.fury.io/py/python-social-auth
 
-.. image:: https://pypip.in/d/python-social-auth/badge.png
-   :target: https://crate.io/packages/python-social-auth?version=latest
-
 .. image:: https://readthedocs.org/projects/python-social-auth/badge/?version=latest
    :target: https://readthedocs.org/projects/python-social-auth/?badge=latest
    :alt: Documentation Status
