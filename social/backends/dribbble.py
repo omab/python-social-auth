@@ -58,5 +58,5 @@ class DribbbleOAuth2(BaseOAuth2):
         return self.get_json(
             'https://api.dribbble.com/v1/user',
             headers={
-                'Authorization': ' Bearer {0}'.format(access_token)
+                'Authorization': 'Bearer {0}'.format(access_token)
             })
