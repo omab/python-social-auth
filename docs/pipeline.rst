@@ -63,7 +63,7 @@ The default pipeline is composed by::
         # Create a user account if we haven't found one yet.
         'social.pipeline.user.create_user',
 
-        # Create the record that associated the social account with this user.
+        # Create the record that associates the social account with the user.
         'social.pipeline.social_auth.associate_user',
 
         # Populate the extra_data field in the social record with the values
@@ -109,8 +109,9 @@ Each pipeline function will receive the following parameters:
     * ``is_new`` flag (initialized as ``False``)
     * Any arguments passed to ``auth_complete`` backend method, default views
       pass these arguments:
-      - current logged in user (if it's logged in, otherwise ``None``)
-      - current request
+      
+      * current logged in user (if it's logged in, otherwise ``None``)
+      * current request
 
 
 Disconnection Pipeline
@@ -199,9 +200,9 @@ three fields:
 ``verified = True / False``
     Flag marking if the email was verified or not.
 
-You should use the code in this instance the build the link for email
-validation which should go to ``/complete/email?verification_code=<code here>``, if using
-Django you can do it with::
+You should use the code in this instance to build the link for email
+validation which should go to ``/complete/email?verification_code=<code here>``. If you are using
+Django, you can do it with::
 
     from django.core.urlresolvers import reverse
     url = strategy.build_absolute_uri(
@@ -226,23 +227,26 @@ Or individually by defining the setting per backend basis like
 Extending the Pipeline
 ======================
 
-The main purpose of the pipeline (either creation or deletion pipelines), is to
-allow extensibility for developers, you can jump in the middle of it, do
-changes to the data, create other models instances, ask users for data, or even
-halt the whole process.
+The main purpose of the pipeline (either creation or deletion pipelines) is to
+allow extensibility for developers. You can jump in the middle of it, do
+changes to the data, create other models instances, ask users for extra data,
+or even halt the whole process.
 
 Extending the pipeline implies:
 
     1. Writing a function
-    2. Locate it in a accessible path (accessible in the way that it can be
-       imported)
-    3. Override the default pipeline definition with one that includes your
-       function.
+    2. Locating the function in an accessible path 
+       (accessible in the way that it can be imported)
+    3. Overriding the default pipeline definition with one that includes
+       newly created function.
 
-Writing the function is quite simple. Depending on the place you locate it will
-determine the arguments it will receive, for example, adding your function
-after ``social.pipeline.user.create_user`` ensures that you get the user
-instance (created or already existent) instead of a ``None`` value.
+The part of writing the function is quite simple. However please be careful
+when placing your function in the pipeline definition, because order
+does matter in this case! Ordering of functions in ``SOCIAL_AUTH_PIPELINE``
+will determine the value of arguments that each function will receive. 
+For example, adding your function after ``social.pipeline.user.create_user``
+ensures that your function will get the user instance (created or already existent)
+instead of a ``None`` value.
 
 The pipeline functions will get quite a lot of arguments, ranging from the
 backend in use, different model instances, server requests and provider
@@ -285,7 +289,7 @@ other APIs endpoints to retrieve even more details about the user, store them
 on some other place, etc.
 
 Here's an example of a simple pipeline function that will create a ``Profile``
-class related to the current user, this profile will store some simple details
+class instance, related to the current user. This profile will store some simple details
 returned by the provider (``Facebook`` in this example). The usual Facebook
 ``response`` looks like this::
 
@@ -319,9 +323,9 @@ the timezone in our ``Profile`` model::
             profile.timezone = response.get('timezone')
             profile.save()
 
-Now all that's needed is to tell ``python-social-auth`` to use this function in
-the pipeline, since it needs the user instance, it needs to be put after
-``create_user`` function::
+Now all that's needed is to tell ``python-social-auth`` to use our function in
+the pipeline. Since the function uses user instance, we need to put it after
+``social.pipeline.user.create_user``::
 
     SOCIAL_AUTH_PIPELINE = (
         'social.pipeline.social_auth.social_details',
@@ -336,10 +340,9 @@ the pipeline, since it needs the user instance, it needs to be put after
         'social.pipeline.user.user_details',
     )
 
-If the return value of the function is a ``dict``, the values will be merged
-into the next pipeline function parameters, so, for instance, if you want the
-``profile`` instance to be available to the next function, all that it needs to
-do is return ``{'profile': profile}``.
+So far the function we created returns ``None``, which is taken as if ``{}`` was returned.
+If you want the ``profile`` object to be available to the next function in the
+pipeline, all you need to do is return ``{'profile': profile}``.
 
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _example applications: https://github.com/omab/python-social-auth/tree/master/examples
