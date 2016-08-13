@@ -12,6 +12,7 @@ USER_MODEL = getattr(settings, setting_name('USER_MODEL'), None) or \
 
 
 class Migration(migrations.Migration):
+    replaces = [('default', '0002_add_related_name')]
 
     dependencies = [
         ('social_auth', '0001_initial'),
