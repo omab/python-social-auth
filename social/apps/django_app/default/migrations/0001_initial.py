@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.db import models, migrations
-import social.apps.django_app.default.fields
 from django.conf import settings
+from django.db import models, migrations
+import jsonfield
+
 import social.storage.django_orm
 from social.utils import setting_name
 
@@ -90,7 +91,7 @@ class Migration(migrations.Migration):
                     primary_key=True)),
                 ('provider', models.CharField(max_length=32)),
                 ('uid', models.CharField(max_length=UID_LENGTH)),
-                ('extra_data', social.apps.django_app.default.fields.JSONField(
+                ('extra_data', jsonfield.JSONField(
                     default='{}')),
                 ('user', models.ForeignKey(
                     related_name='social_auth', to=USER_MODEL)),

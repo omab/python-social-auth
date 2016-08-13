@@ -6,6 +6,15 @@ from `django-social-auth`_. Here are some details on configuring this
 application on Django.
 
 
+Installation
+------------
+
+Additional requirements are necessary to support Django. These can be installed with one of the commands below::
+
+    $ pip install python-social-auth[django]
+    $ easy_install python-social-auth[django]
+
+
 Register the application
 ------------------------
 

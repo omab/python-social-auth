@@ -85,5 +85,8 @@ setup(
     include_package_data=True,
     tests_require=tests_requirements,
     test_suite='social.tests',
-    zip_safe=False
+    zip_safe=False,
+    extras_require={
+        'django': ['django-jsonfield>=0.9.19'],
+    },
 )
