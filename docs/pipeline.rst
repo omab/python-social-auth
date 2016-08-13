@@ -12,7 +12,7 @@ in the parameters to avoid errors for unexpected arguments.
 
 Each pipeline entry can return a ``dict`` or ``None``, any other type of return
 value is treated as a response instance and returned directly to the client,
-check *Partial Piepeline* below for details.
+check *Partial Pipeline* below for details.
 
 If a ``dict`` is returned, the value in the set will be merged into the
 ``kwargs`` argument for the next pipeline entry, ``None`` is taken as if ``{}``
