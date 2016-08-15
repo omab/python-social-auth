@@ -1,8 +1,24 @@
 # Change Log
 
-## [v0.2.20](https://github.com/omab/python-social-auth/tree/v0.2.20) (2016-08-11)
+## [Unreleased](https://github.com/omab/python-social-auth/tree/HEAD)
 
-[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.19...HEAD)
+[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.21...HEAD)
+
+## [v0.2.21](https://github.com/omab/python-social-auth/tree/v0.2.21) (2016-08-15)
+
+**Closed issues:**
+
+- Django Migrations Broken [\#991](https://github.com/omab/python-social-auth/issues/991)
+
+**Merged pull requests:**
+
+- Fixed Django Migrations [\#993](https://github.com/omab/python-social-auth/pull/993) ([clintonb](https://github.com/clintonb))
+- Rewrited pipeline.rst [\#992](https://github.com/omab/python-social-auth/pull/992) ([an0o0nym](https://github.com/an0o0nym))
+- fix typo "Piepeline" -\> "Pipeline" [\#990](https://github.com/omab/python-social-auth/pull/990) ([das-g](https://github.com/das-g))
+- Fixed Django \< 1.8 broken compatibility [\#986](https://github.com/omab/python-social-auth/pull/986) ([seroy](https://github.com/seroy))
+
+## [v0.2.20](https://github.com/omab/python-social-auth/tree/v0.2.20) (2016-08-12)
+[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.19...v0.2.20)
 
 **Closed issues:**
 
