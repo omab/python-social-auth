@@ -41,8 +41,8 @@ Password handling
 
 Here's an example of password handling to add to the pipeline::
 
-    def user_password(strategy, user, is_new=False, *args, **kwargs):
-        if strategy.backend.name != 'email':
+    def user_password(strategy, backend, user, is_new=False, *args, **kwargs):
+        if backend.name != 'email':
             return
 
         password = strategy.request_data()['password']
@@ -51,7 +51,7 @@ Here's an example of password handling to add to the pipeline::
             user.save()
         elif not user.validate_password(password):
             # return {'user': None, 'social': None}
-            raise AuthException(strategy.backend)
+            raise AuthForbidden(backend)
 
 .. _python-social-auth: https://github.com/omab/python-social-auth
 .. _EmailAuth: https://github.com/omab/python-social-auth/blob/master/social/backends/email.py#L5
