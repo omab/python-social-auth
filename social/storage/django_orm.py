@@ -105,7 +105,7 @@ class DjangoUserMixin(UserMixin):
         if provider:
             qs = qs.filter(provider=provider)
         if id:
-            qs = qs.filter(id=id)
+            qs = qs.filter(uid=id)
         return qs
 
     @classmethod
