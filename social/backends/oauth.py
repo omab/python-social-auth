@@ -319,7 +319,8 @@ class BaseOAuth2(OAuthAuth):
         client_id, client_secret = self.get_key_and_secret()
         params = {
             'client_id': client_id,
-            'redirect_uri': self.get_redirect_uri(state)
+            'redirect_uri': self.get_redirect_uri(state),
+            'auth_type': 'rerequest'
         }
         if self.STATE_PARAMETER and state:
             params['state'] = state
