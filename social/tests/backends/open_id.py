@@ -144,7 +144,7 @@ class OpenIdConnectTestMixin(object):
         Get the nonce from the request parameters, add it to the id_token, and
         return the complete response.
         """
-        nonce = parse_qs(request.body).get('nonce')
+        nonce = self.backend.data['nonce']
         body = self.prepare_access_token_body(nonce=nonce)
         return 200, headers, body
 
