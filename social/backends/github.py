@@ -38,6 +38,9 @@ class GithubOAuth2(BaseOAuth2):
                 'first_name': first_name,
                 'last_name': last_name}
 
+    def get_user_id(self, details, response):
+        return response.get('login')
+        
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
         data = self._user_data(access_token)
