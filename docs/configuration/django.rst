@@ -6,6 +6,14 @@ from `django-social-auth`_. Here are some details on configuring this
 application on Django.
 
 
+Strategy
+--------
+
+Configure the strategy to be used::
+
+    SOCIAL_AUTH_STRATEGY = 'social.strategies.django_strategy.DjangoStrategy'
+
+
 Register the application
 ------------------------
 
