@@ -169,6 +169,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.openstreetmap.OpenStreetMapOAuth',
     'social.backends.persona.PersonaAuth',
     'social.backends.podio.PodioOAuth2',
+    'social.backends.quizlet.QuizletOAuth2',
     'social.backends.rdio.RdioOAuth1',
     'social.backends.rdio.RdioOAuth2',
     'social.backends.readability.ReadabilityOAuth',
