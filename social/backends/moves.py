@@ -22,7 +22,7 @@ class MovesOAuth2(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details Moves account"""
-        return {'username': response.get('user_id')}
+        return {'username': str(response.get('user_id'))}
 
     def user_data(self, access_token, *args, **kwargs):
         """Loads user data from service"""
