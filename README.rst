@@ -8,10 +8,10 @@ Crafted using base code from django-social-auth, it implements a common interfac
 to define new authentication providers from third parties, and to bring support
 for more frameworks and ORMs.
 
-.. image:: https://travis-ci.org/omab/python-social-auth.png?branch=master
+.. image:: https://travis-ci.org/omab/python-social-auth.svg?branch=master
    :target: https://travis-ci.org/omab/python-social-auth
 
-.. image:: https://badge.fury.io/py/python-social-auth.png
+.. image:: https://badge.fury.io/py/python-social-auth.svg
    :target: http://badge.fury.io/py/python-social-auth
 
 .. image:: https://readthedocs.org/projects/python-social-auth/badge/?version=latest
