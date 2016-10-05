@@ -27,14 +27,6 @@ class StripeOAuth2(BaseOAuth2):
         return {'username': response.get('stripe_user_id'),
                 'email': ''}
 
-    def auth_params(self, state=None):
-        client_id, client_secret = self.get_key_and_secret()
-        params = {'response_type': 'code',
-                  'client_id': client_id}
-        if state:
-            params['state'] = state
-        return params
-
     def auth_complete_params(self, state=None):
         client_id, client_secret = self.get_key_and_secret()
         return {
