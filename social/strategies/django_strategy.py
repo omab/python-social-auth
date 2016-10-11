@@ -44,10 +44,23 @@ class DjangoStrategy(BaseStrategy):
             data = self.request.GET.copy()
             data.update(self.request.POST)
         elif self.request.method == 'POST':
-            data = self.request.POST
+            data = self.request.POST.copy()
+            next_param = self.get_next_param()
+            if next_param:
+                data.update({'next': next_param})
         else:
-            data = self.request.GET
+            data = self.request.GET.copy()
+            next_param = self.get_next_param()
+            if next_param:
+                data.update({'next': next_param})
         return data
+
+    def get_next_param(self):
+        next_param = self.request.META.get('HTTP_REFERER', None)
+        if next_param:
+            next_param = next_param.split('?next=')
+            next_param = next_param[1] if len(next_param) > 1 else None
+        return next_param
 
     def request_host(self):
         if self.request:
