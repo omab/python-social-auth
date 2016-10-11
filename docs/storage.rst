@@ -176,8 +176,10 @@ SQLAlchemy and Django mixins
 Currently there are partial implementations of mixins for `SQLAlchemy ORM`_ and
 `Django ORM`_ with common code used later on current implemented applications.
 
-**When using `SQLAlchemy ORM`_ and ``ZopeTransactionExtension``, it's
-recommended to use the transaction_ application to handle them.**
+.. note::
+
+    When using `SQLAlchemy ORM`_ and ``ZopeTransactionExtension``, it's
+    recommended to use the transaction_ application to handle them.
 
 Models Examples
 ---------------
