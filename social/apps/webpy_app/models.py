@@ -1,7 +1,7 @@
 """Flask SQLAlchemy ORM models for Social Auth"""
 import web
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -28,7 +28,7 @@ class WebpySocialBase(object):
 class UserSocialAuth(WebpySocialBase, SQLAlchemyUserMixin, SocialBase):
     """Social Auth association model"""
     uid = Column(String(UID_LENGTH))
-    user_id = Column(Integer, ForeignKey(User.id),
+    user_id = Column(User.id.type, ForeignKey(User.id),
                      nullable=False, index=True)
     user = relationship(User, backref='social_auth')
 

@@ -1,5 +1,5 @@
 """Flask SQLAlchemy ORM models for Social Auth"""
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy.ext.declarative import declarative_base
@@ -70,7 +70,7 @@ def init_social(app, session):
     _AppSession._set_session(session)
     UserSocialAuth.__table_args__ = (UniqueConstraint('provider', 'uid'),)
     UserSocialAuth.uid = Column(String(UID_LENGTH))
-    UserSocialAuth.user_id = Column(Integer, ForeignKey(User.id),
+    UserSocialAuth.user_id = Column(User.id.type, ForeignKey(User.id),
                                     nullable=False, index=True)
     UserSocialAuth.user = relationship(User, backref=backref('social_auth',
                                                              lazy='dynamic'))

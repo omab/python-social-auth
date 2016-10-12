@@ -1,5 +1,5 @@
 """Pyramid SQLAlchemy ORM models for Social Auth"""
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship, backref
 
 from social.utils import setting_name, module_member
