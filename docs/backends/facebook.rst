@@ -78,14 +78,6 @@ If you need to perform authentication from Facebook Canvas application:
 
 More info on the topic at `Facebook Canvas Application Authentication`_.
 
-
-Graph 2.0
----------
-
-If looking for `Graph 2.0`_ support, use the backends ``Facebook2OAuth2``
-(OAuth2) and/or ``Facebook2AppOAuth2`` (Canvas application).
-
 .. _Facebook development resources: http://developers.facebook.com/docs/authentication/
 .. _Facebook App Creation: http://developers.facebook.com/setup/
 .. _Facebook Canvas Application Authentication: http://www.ikrvss.ru/2011/09/22/django-social-auth-and-facebook-canvas-applications/
-.. _Graph 2.0: https://developers.facebook.com/blog/post/2014/04/30/the-new-facebook-login/
