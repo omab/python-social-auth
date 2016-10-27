@@ -10,8 +10,13 @@ from django.utils.http import urlquote
 from social.exceptions import SocialAuthBaseException
 from social.utils import social_logger
 
+try:
+    from django.utils.deprecation import MiddlewareMixin
+except ImportError:
+    MiddlewareMixin = object
 
-class SocialAuthExceptionMiddleware(object):
+
+class SocialAuthExceptionMiddleware(MiddlewareMixin):
     """Middleware that handles Social Auth AuthExceptions by providing the user
     with a message, logging an error, and redirecting to some next location.
 
