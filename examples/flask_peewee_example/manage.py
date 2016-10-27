@@ -5,7 +5,7 @@ from flask.ext.script import Server, Manager, Shell
 
 sys.path.append('..')
 
-from flask_example import app, database
+from flask_peewee_example import app, database
 
 
 manager = Manager(app)
