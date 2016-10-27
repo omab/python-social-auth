@@ -23,8 +23,7 @@ class LoadBackendsTest(BaseBackendUtilsTest):
             'social.backends.flickr.FlickrOAuth'
         ), force_load=True)
         keys = list(loaded_backends.keys())
-        keys.sort()
-        self.assertEqual(keys, ['facebook', 'flickr', 'github'])
+        self.assertEqual(keys, ['github', 'facebook', 'flickr'])
 
         backends = ()
         loaded_backends = load_backends(backends, force_load=True)

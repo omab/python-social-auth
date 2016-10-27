@@ -1,10 +1,12 @@
+from collections import OrderedDict
+
 from social.exceptions import MissingBackend
 from social.backends.base import BaseAuth
 from social.utils import module_member, user_is_authenticated
 
 
 # Cache for discovered backends.
-BACKENDSCACHE = {}
+BACKENDSCACHE = OrderedDict()
 
 
 def load_backends(backends, force_load=False):
@@ -27,7 +29,7 @@ def load_backends(backends, force_load=False):
     """
     global BACKENDSCACHE
     if force_load:
-        BACKENDSCACHE = {}
+        BACKENDSCACHE = OrderedDict()
     if not BACKENDSCACHE:
         for auth_backend in backends:
             backend = module_member(auth_backend)
