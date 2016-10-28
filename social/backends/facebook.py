@@ -14,16 +14,20 @@ from social.exceptions import AuthException, AuthCanceled, AuthUnknownError, \
                               AuthMissingParameter
 
 
+API_VERSION = 2.8
+GRAPH_BASE_URL = 'https://graph.facebook.com/v{0}'.format(API_VERSION)
+
+
 class FacebookOAuth2(BaseOAuth2):
     """Facebook OAuth2 authentication backend"""
     name = 'facebook'
     RESPONSE_TYPE = None
     SCOPE_SEPARATOR = ','
-    AUTHORIZATION_URL = 'https://www.facebook.com/v2.7/dialog/oauth'
-    ACCESS_TOKEN_URL = 'https://graph.facebook.com/v2.7/oauth/access_token'
-    REVOKE_TOKEN_URL = 'https://graph.facebook.com/v2.7/{uid}/permissions'
+    AUTHORIZATION_URL = 'https://www.facebook.com/v{0}/dialog/oauth'.format(API_VERSION)
+    ACCESS_TOKEN_URL = GRAPH_BASE_URL + '/oauth/access_token'
+    REVOKE_TOKEN_URL = GRAPH_BASE_URL + '/{uid}/permissions'
     REVOKE_TOKEN_METHOD = 'DELETE'
-    USER_DATA_URL = 'https://graph.facebook.com/v2.7/me'
+    USER_DATA_URL = GRAPH_BASE_URL + '/me'
     EXTRA_DATA = [
         ('id', 'id'),
         ('expires', 'expires')
