@@ -4,6 +4,8 @@
 
 [Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.21...HEAD)
 
+- Removed Facebook2OAuth2 and Facebook2AppOAuth2 as FacebookAppOAuth2 is now using Graph 2.0
+
 ## [v0.2.21](https://github.com/omab/python-social-auth/tree/v0.2.21) (2016-08-15)
 
 **Closed issues:**
