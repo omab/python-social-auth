@@ -50,8 +50,7 @@ class DjangoStrategy(BaseStrategy):
         return data
 
     def request_host(self):
-        if self.request:
-            return self.request.get_host()
+        return self.request.get_host()
 
     def request_is_secure(self):
         """Is the request using HTTPS?"""
@@ -63,7 +62,14 @@ class DjangoStrategy(BaseStrategy):
 
     def request_port(self):
         """Port in use for this request"""
-        return self.request.META['SERVER_PORT']
+        try:  # django >= 1.9
+            return self.request.get_port()
+        except AttributeError:  # django < 1.9
+            host_parts = self.request.get_host().split(':')
+            try:
+                return host_parts[1]
+            except IndexError:
+                return None
 
     def request_get(self):
         """Request GET data"""
