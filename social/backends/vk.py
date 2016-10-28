@@ -76,7 +76,7 @@ class VKontakteOpenAPI(BaseAuth):
 class VKOAuth2(BaseOAuth2):
     """VKOAuth2 authentication backend"""
     name = 'vk-oauth2'
-    ID_KEY = 'user_id'
+    ID_KEY = 'id'
     AUTHORIZATION_URL = 'http://oauth.vk.com/authorize'
     ACCESS_TOKEN_URL = 'https://oauth.vk.com/access_token'
     ACCESS_TOKEN_METHOD = 'POST'
@@ -163,7 +163,7 @@ class VKAppOAuth2(VKOAuth2):
                 is_user = self.data.get('is_app_user')
             elif user_check == 2:
                 is_user = vk_api(self, 'isAppUser',
-                                        {'uid': user_id}).get('response', 0)
+                                        {'user_id': user_id}).get('response', 0)
             if not int(is_user):
                 return None
 
@@ -172,7 +172,7 @@ class VKAppOAuth2(VKOAuth2):
             'backend': self,
             'request': self.strategy.request_data(),
             'response': {
-                'user_id': user_id,
+                self.ID_KEY: user_id,
             }
         }
         auth_data['response'].update(self.user_profile(user_id))
@@ -186,7 +186,7 @@ def vk_api(backend, method, data):
         http://goo.gl/yLcaa
     """
     # We need to perform server-side call if no access_token
-    data['v'] = backend.setting('API_VERSION', '3.0')
+    data['v'] = backend.setting('API_VERSION', '5.53')
     if 'access_token' not in data:
         key, secret = backend.get_key_and_secret()
         if 'api_id' not in data:
