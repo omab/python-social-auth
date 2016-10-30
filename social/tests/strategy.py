@@ -105,7 +105,7 @@ class TestStrategy(BaseStrategy):
             self.session_set('username', user.username)
         return user
 
-    def get_pipeline(self):
+    def get_pipeline(self, backend=None):
         return self.setting('PIPELINE', (
             'social.pipeline.social_auth.social_details',
             'social.pipeline.social_auth.social_uid',
@@ -116,4 +116,6 @@ class TestStrategy(BaseStrategy):
             'social.pipeline.user.create_user',
             'social.pipeline.social_auth.associate_user',
             'social.pipeline.social_auth.load_extra_data',
-            'social.pipeline.user.user_details'))
+            'social.pipeline.user.user_details'),
+            backend
+        )

@@ -94,11 +94,19 @@ class BaseStrategy(object):
     def openid_store(self):
         return OpenIdStore(self)
 
-    def get_pipeline(self):
-        return self.setting('PIPELINE', DEFAULT_AUTH_PIPELINE)
+    def get_pipeline(self, backend=None):
+        return self.setting(
+            'PIPELINE',
+            self.setting('PIPELINE', DEFAULT_AUTH_PIPELINE),
+            backend
+        )
 
-    def get_disconnect_pipeline(self):
-        return self.setting('DISCONNECT_PIPELINE', DEFAULT_DISCONNECT_PIPELINE)
+    def get_disconnect_pipeline(self, backend=None):
+        return self.setting(
+            'DISCONNECT_PIPELINE',
+            self.setting('DISCONNECT_PIPELINE', DEFAULT_DISCONNECT_PIPELINE),
+            backend
+        )
 
     def random_string(self, length=12, chars=ALLOWED_CHARS):
         # Implementation borrowed from django 1.4

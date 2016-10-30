@@ -4,6 +4,14 @@
 
 [Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.21...HEAD)
 
+**Closed issues:**
+
+- Allow for per provider pipelines [\#1016](https://github.com/omab/python-social-auth/issues/1016)
+
+**Merged pull requests:**
+
+- Added the ability to specify a pipeline on a per backend basis  [\#1019](https://github.com/omab/python-social-auth/pull/1019) ([keattang](https://github.com/keattang))
+
 ## [v0.2.21](https://github.com/omab/python-social-auth/tree/v0.2.21) (2016-08-15)
 
 **Closed issues:**

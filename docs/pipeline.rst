@@ -102,6 +102,10 @@ pipeline method must be provided that populates the ``user`` key. Example::
         'social.pipeline.user.user_details',
     )
 
+It is also possible to define pipelines on a per backend basis by defining a setting
+such as ``SOCIAL_AUTH_TWITTER_PIPELINE``. Backend specific pipelines will override
+the non specific pipelines (i.e. the default pipeline and ``SOCIAL_AUTH_PIPELINE``).
+
 Each pipeline function will receive the following parameters:
     * Current strategy (which gives access to current store, backend and request)
     * User ID given by authentication provider
@@ -109,7 +113,7 @@ Each pipeline function will receive the following parameters:
     * ``is_new`` flag (initialized as ``False``)
     * Any arguments passed to ``auth_complete`` backend method, default views
       pass these arguments:
-      
+
       * current logged in user (if it's logged in, otherwise ``None``)
       * current request
 
@@ -148,6 +152,8 @@ In order to override the disconnection pipeline, just define the setting::
         'social.pipeline.disconnect.disconnect',
     )
 
+Backend specific disconnection pipelines can also be defined with a setting such as
+``SOCIAL_AUTH_TIWTTER_DISCONNECT_PIPELINE``.
 
 Partial Pipeline
 ----------------
@@ -235,7 +241,7 @@ or even halt the whole process.
 Extending the pipeline implies:
 
     1. Writing a function
-    2. Locating the function in an accessible path 
+    2. Locating the function in an accessible path
        (accessible in the way that it can be imported)
     3. Overriding the default pipeline definition with one that includes
        newly created function.
@@ -243,7 +249,7 @@ Extending the pipeline implies:
 The part of writing the function is quite simple. However please be careful
 when placing your function in the pipeline definition, because order
 does matter in this case! Ordering of functions in ``SOCIAL_AUTH_PIPELINE``
-will determine the value of arguments that each function will receive. 
+will determine the value of arguments that each function will receive.
 For example, adding your function after ``social.pipeline.user.create_user``
 ensures that your function will get the user instance (created or already existent)
 instead of a ``None`` value.
