@@ -110,9 +110,9 @@ class KhanAcademyOAuth1(BrowserBasedOAuth1):
     def get_user_details(self, response):
         """Return user details from Khan Academy account"""
         return {
-            'username': response.get('key_email'),
-            'email': response.get('key_email'),
-            'fullname': '',
+            'username': response.get('email'),
+            'email': response.get('email'),
+            'fullname': response.get('nickname'),
             'first_name': '',
             'last_name': '',
             'user_id': response.get('user_id')

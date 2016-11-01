@@ -19,7 +19,7 @@ class KhanAcademyOAuth1Test(OAuth1Test):
         'oauth_callback_confirmed': 'true'
     })
     user_data_body = json.dumps({
-        "key_email": "foo@bar.com",
+        "email": "foo@bar.com",
         "user_id": "http://googleid.khanacademy.org/11111111111111",
     })
 
