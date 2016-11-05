@@ -14,9 +14,28 @@ publish:
 	python setup.py bdist_wheel --python-tag py2 upload
 	BUILD_VERSION=3 python setup.py bdist_wheel --python-tag py3 upload
 
+run-tox:
+	@ tox
+
+docker-tox-build:
+	@ docker build -t omab/psa-legacy .
+
+docker-tox: docker-tox-build
+	@ docker run -it --rm \
+		     --name psa-legacy-test \
+		     -v "`pwd`:/code" \
+		     -w /code omab/psa-legacy tox
+
+docker-shell: docker-tox-build
+	@ docker run -it --rm \
+		     --name psa-legacy-test \
+		     -v "`pwd`:/code" \
+		     -w /code omab/psa-legacy bash
+
 clean:
-	find . -name '*.py[co]' -delete
-	find . -name '__pycache__' -delete
-	rm -rf python_social_auth.egg-info dist build
+	@ find . -name '*.py[co]' -delete
+	@ find . -name '__pycache__' -delete
+	@ rm -rf *.egg-info dist build
+
 
 .PHONY: site docs publish
