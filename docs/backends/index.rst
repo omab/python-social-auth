@@ -116,6 +116,7 @@ Social backends
    podio
    qiita
    qq
+   quizlet
    rdio
    readability
    reddit
