@@ -47,18 +47,18 @@ class AbstractUserSocialAuth(models.Model, DjangoUserMixin):
         try:
             return cls.objects.select_related('user').get(provider=provider,
                                                           uid=uid)
-        except UserSocialAuth.DoesNotExist:
+        except cls.DoesNotExist:
             return None
 
     @classmethod
     def username_max_length(cls):
         username_field = cls.username_field()
-        field = UserSocialAuth.user_model()._meta.get_field(username_field)
+        field = cls.user_model()._meta.get_field(username_field)
         return field.max_length
 
     @classmethod
     def user_model(cls):
-        user_model = UserSocialAuth._meta.get_field('user').rel.to
+        user_model = cls._meta.get_field('user').rel.to
         if isinstance(user_model, six.string_types):
             app_label, model_name = user_model.split('.')
             return models.get_model(app_label, model_name)
