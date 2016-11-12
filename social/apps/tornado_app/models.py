@@ -1,5 +1,5 @@
 """Tornado SQLAlchemy ORM models for Social Auth"""
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship, backref
 
 from social.utils import setting_name, module_member
@@ -30,7 +30,7 @@ def init_social(Base, session, settings):
     class UserSocialAuth(_AppSession, Base, SQLAlchemyUserMixin):
         """Social Auth association model"""
         uid = Column(String(UID_LENGTH))
-        user_id = Column(Integer, ForeignKey(User.id),
+        user_id = Column(User.id.type, ForeignKey(User.id),
                          nullable=False, index=True)
         user = relationship(User, backref=backref('social_auth',
                                                   lazy='dynamic'))
