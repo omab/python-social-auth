@@ -93,6 +93,12 @@ In case you need a custom namespace, this setting is also needed::
 
     SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
+Templates
+---------
+
+Example of google-oauth2 backend usage in template::
+  
+    <a href="{% url "social:begin" "google-oauth2" %}">Google+</a>
 
 Template Context Processors
 ---------------------------
