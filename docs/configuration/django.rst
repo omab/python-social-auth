@@ -85,7 +85,7 @@ Add URLs entries::
 
     urlpatterns = patterns('',
         ...
-        url('', include('social.apps.django_app.urls', namespace='social'))
+        url('', include('social.apps.django_app.urls', namespace='social')),
         ...
     )
 
