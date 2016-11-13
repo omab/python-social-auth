@@ -85,6 +85,7 @@ or current ones extended):
     * Linkedin_ OAuth1
     * Live_ OAuth2
     * Livejournal_ OpenId
+    * Lyft_ OAuth2
     * LoginRadius_ OAuth2 and Application Auth
     * Mailru_ OAuth2
     * MapMyFitness_ OAuth2
@@ -267,6 +268,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Linkedin: https://www.linkedin.com
 .. _Live: https://live.com
 .. _Livejournal: http://livejournal.com
+.. _Lyft: http://lyft.com
 .. _Khan Academy: https://github.com/Khan/khan-api/wiki/Khan-Academy-API-Authentication
 .. _Mailru: https://mail.ru
 .. _MapMyFitness: http://www.mapmyfitness.com/
