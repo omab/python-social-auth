@@ -46,6 +46,9 @@ class AuthCanceled(AuthException):
         super(AuthCanceled, self).__init__(*args, **kwargs)
 
     def __str__(self):
+        msg = super(AuthCanceled, self).__str__()
+        if msg:
+            return 'Authentication process canceled: {0}'.format(msg)
         return 'Authentication process canceled'
 
 
