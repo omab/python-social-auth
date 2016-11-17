@@ -67,6 +67,11 @@ class AuthCanceledTest(BaseExceptionTestCase):
     expected_message = 'Authentication process canceled'
 
 
+class AuthCanceledWithExtraMessageTest(BaseExceptionTestCase):
+    exception = AuthCanceled('foobar', 'error_message')
+    expected_message = 'Authentication process canceled: error_message'
+
+
 class AuthUnknownErrorTest(BaseExceptionTestCase):
     exception = AuthUnknownError('foobar', 'some error')
     expected_message = 'An unknown error happened while ' \
