@@ -6,7 +6,9 @@ from social.exceptions import SocialAuthBaseException, WrongBackend, \
                               NotAllowedToDisconnect, AuthException, \
                               AuthCanceled, AuthUnknownError, \
                               AuthStateForbidden, AuthAlreadyAssociated, \
-                              AuthTokenRevoked
+                              AuthTokenRevoked, AuthForbidden, \
+                              AuthUnreachableProvider, InvalidEmail, \
+                              MissingBackend
 
 
 class BaseExceptionTestCase(unittest.TestCase):
@@ -91,3 +93,23 @@ class AuthAlreadyAssociatedTest(BaseExceptionTestCase):
 class AuthTokenRevokedTest(BaseExceptionTestCase):
     exception = AuthTokenRevoked('foobar')
     expected_message = 'User revoke access to the token'
+
+
+class AuthForbiddenTest(BaseExceptionTestCase):
+    exception = AuthForbidden('foobar')
+    expected_message = 'Your credentials aren\'t allowed'
+
+
+class AuthUnreachableProviderTest(BaseExceptionTestCase):
+    exception = AuthUnreachableProvider('foobar')
+    expected_message = 'The authentication provider could not be reached'
+
+
+class InvalidEmailTest(BaseExceptionTestCase):
+    exception = InvalidEmail('foobar')
+    expected_message = 'Email couldn\'t be validated'
+
+
+class MissingBackendTest(BaseExceptionTestCase):
+    exception = MissingBackend('backend')
+    expected_message = 'Missing backend "backend" entry'
