@@ -86,6 +86,7 @@ or current ones extended):
     * Live_ OAuth2
     * Livejournal_ OpenId
     * LoginRadius_ OAuth2 and Application Auth
+    * MailChimp_ OAuth2
     * Mailru_ OAuth2
     * MapMyFitness_ OAuth2
     * Mendeley_ OAuth1 http://mendeley.com
@@ -268,6 +269,7 @@ check `django-social-auth LICENSE`_ for details:
 .. _Live: https://live.com
 .. _Livejournal: http://livejournal.com
 .. _Khan Academy: https://github.com/Khan/khan-api/wiki/Khan-Academy-API-Authentication
+.. _MailChimp: https://apidocs.mailchimp.com/oauth2/
 .. _Mailru: https://mail.ru
 .. _MapMyFitness: http://www.mapmyfitness.com/
 .. _Mixcloud: https://www.mixcloud.com
