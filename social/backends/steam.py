@@ -19,7 +19,7 @@ class SteamOpenId(OpenIdAuth):
 
     def get_user_details(self, response):
         player = self.get_json(USER_INFO, params={
-            'key': self.setting('API_KEY'),
+            'key': self.setting('SOCIAL_AUTH_STEAM_KEY'),
             'steamids': self._user_id(response)
         })
         if len(player['response']['players']) > 0:
