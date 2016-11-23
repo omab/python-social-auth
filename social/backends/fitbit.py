@@ -61,5 +61,5 @@ class FitbitOAuth2(BaseOAuth2):
         return {
             'Authorization': 'Basic {0}'.format(base64.urlsafe_b64encode(
                 ('{0}:{1}'.format(*self.get_key_and_secret()).encode())
-            ))
+            ).decode())
         }
