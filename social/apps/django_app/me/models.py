@@ -32,7 +32,7 @@ def _get_user_model():
 
     try:
         # Custom user model support with MongoEngine 0.8
-        from mongoengine.django.mongo_auth.models import get_user_document
+        from django_mongoengine.mongo_auth.managers import get_user_document
         return get_user_document()
     except ImportError:
         return module_member('mongoengine.django.auth.User')
