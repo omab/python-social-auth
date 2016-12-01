@@ -53,6 +53,7 @@ class WeixinOAuth2(BaseOAuth2):
         appid, secret = self.get_key_and_secret()
         params = {
             'appid': appid,
+            'scope': 'snsapi_login',
             'redirect_uri': self.get_redirect_uri(state)
         }
         if self.STATE_PARAMETER and state:
