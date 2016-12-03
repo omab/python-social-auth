@@ -15,4 +15,8 @@ As for Dec 03 2016, this library is now deprecated, the codebase was
 split and migrated into the `python-social-auth organization`_,
 where a more organized development process is expected to take place.
 
+Details about moving towards the new setup is documented in the
+`migrating to social` document.
+
 .. _python-social-auth organization: https://github.com/python-social-auth
+.. _migrating to social: https://github.com/omab/python-social-auth/blob/master/MIGRATING_TO_SOCIAL.md
