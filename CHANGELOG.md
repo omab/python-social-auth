@@ -2,7 +2,11 @@
 
 ## [Unreleased](https://github.com/omab/python-social-auth/tree/HEAD)
 
-[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.2.21...HEAD)
+[Full Changelog](https://github.com/omab/python-social-auth/compare/v0.3.0...HEAD)
+
+## [v0.3.0](https://github.com/omab/python-social-auth/tree/v0.3.0) (2016-12-03)
+
+Deprecated in favor of [python-social-auth organization](https://github.com/python-social-auth)
 
 ## [v0.2.21](https://github.com/omab/python-social-auth/tree/v0.2.21) (2016-08-15)
 
