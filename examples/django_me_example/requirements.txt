@@ -1,3 +1,0 @@
-django>=1.4,<1.8
-mongoengine>=0.8.6
-python-social-auth

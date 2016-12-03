@@ -1,3 +1,0 @@
-Jinja2==2.6
-web.py==0.37
-python-social-auth

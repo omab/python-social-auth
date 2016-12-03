@@ -1,7 +1,0 @@
-Peewee
-Flask
-Flask-Login
-Flask-Script
-Werkzeug
-pysqlite
-Jinja2

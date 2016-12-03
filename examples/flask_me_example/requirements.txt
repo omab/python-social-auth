@@ -1,7 +1,0 @@
-Flask
-Flask-Login
-Flask-Script
-Werkzeug
-Jinja2
-mongoengine==0.8.4
-python-social-auth
