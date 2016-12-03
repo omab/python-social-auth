@@ -1,11 +1,10 @@
 import sys
-from os.path import abspath, dirname, join
+from os.path import abspath, dirname
 
 
 sys.path.insert(0, '../..')
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 ROOT_PATH = abspath(dirname(__file__))
 
@@ -46,11 +45,21 @@ STATICFILES_FINDERS = (
 
 SECRET_KEY = '#$5btppqih8=%ae^#&amp;7en#kyi!vh%he9rg=ed#hm6fnw9^=umc'
 
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -66,10 +75,6 @@ ROOT_URLCONF = 'example.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'example.wsgi.application'
-
-TEMPLATE_DIRS = (
-    join(ROOT_PATH, 'templates'),
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -108,15 +113,6 @@ LOGGING = {
 }
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.contrib.messages.context_processors.messages',
-    'social.apps.django_app.context_processors.backends',
-)
 
 AUTHENTICATION_BACKENDS = (
     'social.backends.amazon.AmazonOAuth2',

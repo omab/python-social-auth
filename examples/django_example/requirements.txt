@@ -1,2 +1,2 @@
-django>=1.4
+Django==1.10.2
 python-social-auth
