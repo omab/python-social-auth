@@ -22,6 +22,19 @@ Django users need to add the `social-auth-app-django`
 dependency. Those using `mongoengine`, need to add
 `social-auth-app-mongoengine`.
 
+### Settings
+
+- Update your references to `social.*` in your settings, most notably:
+  - `AUTHENTICATION_BACKENDS` are now under `social_core.*`
+    (e.g. `social_core.backends.facebook.FacebookOAuth2`).
+  - Context processors are now under `social_django`
+    (e.g. `social_django.context_processors.backends`).
+  - `MIDDLEWARE_CLASSES` are now under `social_django`
+    (e.g. `social_django.middleware.SocialAuthExceptionMiddleware`).
+  - If you have it overridden, `SOCIAL_AUTH_PIPELINE` setting.
+- Update your `INSTALLED_APPS` to include `social_django` instead of
+`social.apps.django_app.default`.
+
 ## Flask
 
 Flask users need to add `social-auth-app-flask`, and depending on the
