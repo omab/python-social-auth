@@ -1,6 +1,6 @@
 # Migrating from python-social-auth to split social
 
-Since Dec 03 2016, [python-socia-auth](https://github.com/omab/python-social-auth)
+Since Dec 03 2016, [python-social-auth](https://github.com/omab/python-social-auth)
 is marked as deprecated and the community is recommended to migrate
 towards the packages created in the [organization repository](https://github.com/python-social-auth/social-core).
 
