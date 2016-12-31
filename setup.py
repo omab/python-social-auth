@@ -82,6 +82,17 @@ setup(
     package_data={
         'social/tests': ['social/tests/*.txt']
     },
+    extras_require={
+        'django': ['social-auth-app-django'],
+        'django-mongoengine': ['social-auth-app-django-mongoengine'],
+        'flask': ['social-auth-app-flask', 'social-auth-app-flask-sqlalchemy'],
+        'flask-mongoengine': ['social-auth-app-flask-mongoengine'],
+        'flask-peewee': ['social-auth-app-flask-peewee'],
+        'cherrypy': ['social-auth-app-cherrypy'],
+        'pyramid': ['social-auth-app-pyramid'],
+        'tornado': ['social-auth-app-tornado'],
+        'webpy': ['social-auth-app-webpy']
+    },
     include_package_data=True,
     tests_require=tests_requirements,
     test_suite='social.tests',

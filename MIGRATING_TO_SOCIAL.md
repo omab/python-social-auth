@@ -14,7 +14,8 @@ the new libraries and defined a single dependency in the [requirements.txt](http
 file, `social-auth-core`, this aims to ease the transition to the new structure.
 
 But that won't solve everybody situation, people using the different
-frameworks also need to define their corresponding requirement.
+frameworks also need to define their corresponding requirement, or use
+one of the defined `extras` in the `setup.py` file.
 
 ## Django
 
@@ -35,6 +36,13 @@ dependency. Those using `mongoengine`, need to add
 - Update your `INSTALLED_APPS` to include `social_django` instead of
 `social.apps.django_app.default`.
 
+### Extras supported
+
+```
+$ pip install python-social-auth[django]
+$ pip install python-social-auth[django-mongoengine]
+```
+
 ## Flask
 
 Flask users need to add `social-auth-app-flask`, and depending on the
@@ -44,14 +52,53 @@ storage solution, add one of the following too:
   - `social-auth-app-flask-mongoengine` when using Mongoengine
   - `social-auth-app-flask-peewee` when using Peewee
 
+
+### Extras supported
+
+```
+$ pip install python-social-auth[flask]
+$ pip install python-social-auth[flask-mongoengine]
+$ pip install python-social-auth[flask-peewee]
+```
+
 ## Pyramid
 
 Pyramid users need to add `social-auth-app-pyramid` to their dependencies.
+
+### Extras supported
+
+```
+$ pip install python-social-auth[pyramid]
+```
 
 ## Tornado
 
 Tornado users need to add `social-auth-app-tornado` to their dependencies.
 
+### Extras supported
+
+```
+$ pip install python-social-auth[tornado]
+```
+
+
 ## Webpy
 
 Web.py users need to add `social-auth-app-webpy` to their dependencies.
+
+### Extras supported
+
+```
+$ pip install python-social-auth[webpy]
+```
+
+
+## Cherrypy
+
+Cherrypy users need to add `social-auth-app-cherrypy` to their dependencies.
+
+### Extras supported
+
+```
+$ pip install python-social-auth[cherrypy]
+```
