@@ -35,6 +35,8 @@ dependency. Those using `mongoengine`, need to add
   - If you have it overridden, `SOCIAL_AUTH_PIPELINE` setting.
 - Update your `INSTALLED_APPS` to include `social_django` instead of
 `social.apps.django_app.default`.
+- Update your urls patterns to include `'social_django.urls'` instead of
+  `'social.apps.django_app.urls'`.
 
 ### Extras supported
 
