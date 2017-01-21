@@ -8,7 +8,7 @@ Crafted using base code from django-social-auth, it implements a common interfac
 to define new authentication providers from third parties, and to bring support
 for more frameworks and ORMs.
 
-Deprecation notice - 03-12-2016
+Deprecation notice - 2016-12-03
 -------------------------------
 
 As for Dec 03 2016, this library is now deprecated, the codebase was
