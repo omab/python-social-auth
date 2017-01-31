@@ -23,6 +23,8 @@ Django users need to add the `social-auth-app-django`
 dependency. Those using `mongoengine`, need to add
 `social-auth-app-mongoengine`.
 
+**Note:** Migration will cause your users' session to expire and for the users to get logged out. They have to login again.
+
 ### Settings
 
 - Update your references to `social.*` in your settings, most notably:
