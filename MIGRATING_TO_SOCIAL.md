@@ -23,6 +23,37 @@ Django users need to add the `social-auth-app-django`
 dependency. Those using `mongoengine`, need to add
 `social-auth-app-mongoengine`.
 
+### Migrations
+
+Several errors were reported due to migrations not applying properly
+when migrating to the new app, most of them are caused because the app
+switched names a few times, from `default` to `social_auth`, and
+probably something else in between. That's the reason the migrations
+define the `replaces` attribute, that way Django can identify already
+applied migrations and not run them again.
+
+In order to make complete the move to the new project setup, first
+ensure to move to `python-social-auth==0.2.21`, run the migrations at
+that point, then continue with the move to the new project and run the
+migrations again. Steps:
+
+1. Update to `0.2.21`
+   ```
+   pip install "python-social-auth==0.2.21"
+   ```
+
+2. Run migrations
+   ```
+   python manage.py migrate
+   ```
+
+3. Move to the new project
+
+4. Run migrations again
+   ```
+   python manage.py migrate
+   ```
+
 ### Settings
 
 - Update your references to `social.*` in your settings, most notably:
