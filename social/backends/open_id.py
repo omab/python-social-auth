@@ -1,2 +1,2 @@
-from social_core.backends.open_id import OpenIdAuth, \
-    OpenIdConnectAssociation, OpenIdConnectAuth
+from social_core.backends.open_id import OpenIdAuth
+from social_core.backends.open_id_connect import OpenIdConnectAssociation, OpenIdConnectAuth
