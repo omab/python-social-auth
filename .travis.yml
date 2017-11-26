@@ -11,11 +11,11 @@ matrix:
     - python: "pypy"
       env:
         - TEST_REQUIREMENTS=social/tests/requirements-pypy.txt
-    - python: "3.3"
+    - python: "3.4"
       env:
         - REQUIREMENTS=requirements-python3.txt
         - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
-    - python: "3.4"
+    - python: "3.6"
       env:
         - REQUIREMENTS=requirements-python3.txt
         - TEST_REQUIREMENTS=social/tests/requirements-python3.txt
