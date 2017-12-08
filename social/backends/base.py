@@ -226,6 +226,10 @@ class BaseAuth(object):
         return response
 
     def get_json(self, url, *args, **kwargs):
+        print 'get_json: url=', url
+        print 'get_json: args=', args
+        print 'get_json: kwargs=', kwargs
+
         return self.request(url, *args, **kwargs).json()
 
     def get_querystring(self, url, *args, **kwargs):

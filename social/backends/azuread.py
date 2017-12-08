@@ -1,20 +1,22 @@
+import time
+
+from jwt import DecodeError, ExpiredSignature, decode as jwt_decode
+
+from ..exceptions import AuthTokenError
+from .oauth import BaseOAuth2
+
 """
 Copyright (c) 2015 Microsoft Open Technologies, Inc.
-
 All rights reserved.
-
 MIT License
-
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
-
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,20 +28,15 @@ SOFTWARE.
 
 """
 Azure AD OAuth2 backend, docs at:
-    http://psa.matiasaguirre.net/docs/backends/azuread.html
+    https://python-social-auth.readthedocs.io/en/latest/backends/azuread.html
 """
-import time
-
-from jwt import DecodeError, ExpiredSignature, decode as jwt_decode
-
-from social.exceptions import AuthTokenError
-from social.backends.oauth import BaseOAuth2
 
 
 class AzureADOAuth2(BaseOAuth2):
     name = 'azuread-oauth2'
     SCOPE_SEPARATOR = ' '
-    AUTHORIZATION_URL = 'https://login.microsoftonline.com/common/oauth2/authorize'
+    AUTHORIZATION_URL = \
+        'https://login.microsoftonline.com/common/oauth2/authorize'
     ACCESS_TOKEN_URL = 'https://login.microsoftonline.com/common/oauth2/token'
     ACCESS_TOKEN_METHOD = 'POST'
     REDIRECT_STATE = False
@@ -85,10 +82,10 @@ class AzureADOAuth2(BaseOAuth2):
     def auth_extra_arguments(self):
         """Return extra arguments needed on auth process. The defaults can be
         overriden by GET parameters."""
-        extra_arguments = {}
+        extra_arguments = super(AzureADOAuth2, self).auth_extra_arguments()
         resource = self.setting('RESOURCE')
         if resource:
-            extra_arguments = {'resource': resource}
+            extra_arguments.update({'resource': resource})
         return extra_arguments
 
     def extra_data(self, user, uid, response, details=None, *args, **kwargs):

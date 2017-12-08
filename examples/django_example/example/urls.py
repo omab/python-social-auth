@@ -1,11 +1,14 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from social.apps.django_app.views import complete as social_complete_view
+from django.views.decorators.csrf import csrf_exempt
 
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'example.app.views.home'),
+    url(r'^$', social_complete_view, kwargs=dict(backend='azuread-b2c')),
+    url(r'^home$', 'example.app.views.home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^email-sent/', 'example.app.views.validation_sent'),
     url(r'^login/$', 'example.app.views.home'),

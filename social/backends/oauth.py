@@ -11,6 +11,9 @@ from social.exceptions import AuthFailed, AuthCanceled, AuthUnknownError, \
 from social.backends.base import BaseAuth
 
 
+import logging
+logger = logging.getLogger(__name__)
+
 class OAuthAuth(BaseAuth):
     """OAuth authentication backend base class.
 
@@ -175,10 +178,14 @@ class BaseOAuth1(OAuthAuth):
     def auth_complete(self, *args, **kwargs):
         """Return user, might be logged in"""
         # Multiple unauthorized tokens are supported (see #521)
+        # raise Exception('Hello World')
+        print 'self.data: %s', self.data
         self.process_error(self.data)
         self.validate_state()
         token = self.get_unauthorized_token()
+        print 'unauth_token: %s', token
         access_token = self.access_token(token)
+        print 'access_token: %s', access_token
         return self.do_auth(access_token, *args, **kwargs)
 
     @handle_http_errors

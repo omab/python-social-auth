@@ -30,6 +30,17 @@
       {% endif %}
 
       <div class="social">
+
+      <div style="padding: 5px; margin: 5px; border: 1px solid gray; border-radius: 5px;">
+          <a class="btn btn-default" href="{% url "social:begin" backend="azuread-b2c" %}">
+              {# ?next=https://learn.easycareacademy.com/ #}
+              <i class="fa fa-car"></i>
+              Login with AzureAD B2C
+          </a>
+      </div>
+
+        <hr />
+
         {% for sublist in available_backends|social_backends %}
           <div class="row">
             {% for name, backend in sublist %}

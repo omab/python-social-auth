@@ -222,18 +222,31 @@ def setting_url(backend, *names):
                 return value
 
 
+class CustomAuthCanceled(AuthCanceled):
+    def __str__(self):
+        msg = super(CustomAuthCanceled, self).__str__()
+        return 'msg={msg} -\n- backend={backend} -\n- content={content}'.format(
+            msg=msg,
+            backend=self.backend,
+            content=self.response.content,
+        )
+
+
+
 def handle_http_errors(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         try:
+            print 'OMAR', func.__name__
             return func(*args, **kwargs)
         except requests.HTTPError as err:
-            if err.response.status_code == 400:
-                raise AuthCanceled(args[0], response=err.response)
-            elif err.response.status_code == 503:
-                raise AuthUnreachableProvider(args[0])
-            else:
-                raise
+            print err.response.content
+            # if err.response.status_code == 400:
+            #     raise CustomAuthCanceled(args[0], response=err.response)
+            # elif err.response.status_code == 503:
+            #     raise AuthUnreachableProvider(args[0])
+            # else:
+            raise
     return wrapper
 
 
