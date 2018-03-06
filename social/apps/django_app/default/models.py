@@ -71,7 +71,7 @@ class UserSocialAuth(AbstractUserSocialAuth):
     class Meta:
         """Meta data"""
         unique_together = ('provider', 'uid')
-        db_table = 'social_auth_usersocialauth'
+        db_table = 'new2_social_auth_usersocialauth'
 
 
 class Nonce(models.Model, DjangoNonceMixin):
@@ -82,7 +82,7 @@ class Nonce(models.Model, DjangoNonceMixin):
 
     class Meta:
         unique_together = ('server_url', 'timestamp', 'salt')
-        db_table = 'social_auth_nonce'
+        db_table = 'new2_social_auth_nonce'
 
 
 class Association(models.Model, DjangoAssociationMixin):
@@ -95,7 +95,7 @@ class Association(models.Model, DjangoAssociationMixin):
     assoc_type = models.CharField(max_length=64)
 
     class Meta:
-        db_table = 'social_auth_association'
+        db_table = 'new2_social_auth_association'
         unique_together = (
             ('server_url', 'handle',)
         )
@@ -107,7 +107,7 @@ class Code(models.Model, DjangoCodeMixin):
     verified = models.BooleanField(default=False)
 
     class Meta:
-        db_table = 'social_auth_code'
+        db_table = 'new2_social_auth_code'
         unique_together = ('email', 'code')
 
 

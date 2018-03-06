@@ -3,7 +3,7 @@ from django.apps import AppConfig
 
 class PythonSocialAuthConfig(AppConfig):
     name = 'social.apps.django_app.default'
-    label = 'social_auth'
+    label = 'social_auth2'
     verbose_name = 'Python Social Auth'
 
     def ready(self):
