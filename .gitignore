@@ -41,3 +41,6 @@ _build/
 fabfile.py
 
 .DS_Store
+
+# PyCharm
+.idea/

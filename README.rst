@@ -1,3 +1,9 @@
+This is an old fork of Python Social Auth, which has in turn been superceded by
+https://github.com/python-social-auth . It is no longer actively maintained. Usage
+of this fork has been removed in edX Platform as of the Hawthorn release. This
+repository will be archived in accordance with OEP-14_ when named releases of edX
+Platform that rely on it fall out of support.
+
 Python Social Auth
 ==================
 
@@ -189,14 +195,14 @@ Or::
     $ cd python-social-auth
     $ sudo python setup.py install
 
-    
+
 Upgrading
 ---------
 
 Django with South
 ~~~~~~~~~~~~~~~~~
 
-Upgrading from 0.1 to 0.2 is likely to cause problems trying to apply a migration when the tables 
+Upgrading from 0.1 to 0.2 is likely to cause problems trying to apply a migration when the tables
 already exist. In this case a fake migration needs to be applied::
 
     $ python manage.py migrate --fake default
@@ -300,3 +306,4 @@ check `django-social-auth LICENSE`_ for details:
 .. _six: http://pythonhosted.org/six/
 .. _requests: http://docs.python-requests.org/en/latest/
 .. _PixelPin: http://pixelpin.co.uk
+.. _OEP-14: https://open-edx-proposals.readthedocs.io/en/latest/oep-0014-proc-archive-repos.html
