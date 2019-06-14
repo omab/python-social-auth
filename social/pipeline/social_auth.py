@@ -14,9 +14,13 @@ def auth_allowed(backend, details, response, *args, **kwargs):
     if not backend.auth_allowed(response, details):
         raise AuthForbidden(backend)
 
+def fix_weixin_provider(provider):
+    if provider == 'weixinapp':
+        provider = 'weixin'
+    return provider
 
 def social_user(backend, uid, user=None, *args, **kwargs):
-    provider = backend.name
+    provider = fix_weixin_provider(backend.name)
     social = backend.strategy.storage.user.get_social_auth(provider, uid)
     if social:
         if user and social.user != user:
@@ -29,12 +33,12 @@ def social_user(backend, uid, user=None, *args, **kwargs):
             'is_new': user is None,
             'new_association': social is None}
 
-
 def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
     if user and not social:
         try:
+            provider = fix_weixin_provider(backend.name)
             social = backend.strategy.storage.user.create_social_auth(
-                user, uid, backend.name
+                user, uid, provider
             )
         except Exception as err:
             if not backend.strategy.storage.is_integrity_error(err):

@@ -13,7 +13,7 @@ from social.exceptions import AuthCanceled, AuthUnknownError
 class WeixinOAuth2(BaseOAuth2):
     """Weixin OAuth authentication backend"""
     name = 'weixin'
-    ID_KEY = 'openid'
+    ID_KEY = 'unionid'
     AUTHORIZATION_URL = 'https://open.weixin.qq.com/connect/qrconnect'
     ACCESS_TOKEN_URL = 'https://api.weixin.qq.com/sns/oauth2/access_token'
     ACCESS_TOKEN_METHOD = 'POST'
@@ -22,6 +22,10 @@ class WeixinOAuth2(BaseOAuth2):
         ('nickname', 'username'),
         ('headimgurl', 'profile_image_url'),
     ]
+
+    @property
+    def scope(self):
+        return self.setting('scope', 'snsapi_login')
 
     def get_user_details(self, response):
         """Return user details from Weixin. API URL is:
@@ -39,7 +43,7 @@ class WeixinOAuth2(BaseOAuth2):
     def user_data(self, access_token, *args, **kwargs):
         data = self.get_json('https://api.weixin.qq.com/sns/userinfo', params={
             'access_token': access_token,
-            'openid': kwargs['response']['openid']
+            'unionid': kwargs['response']['unionid']
         })
         nickname = data.get('nickname')
         if nickname:
@@ -53,7 +57,8 @@ class WeixinOAuth2(BaseOAuth2):
         appid, secret = self.get_key_and_secret()
         params = {
             'appid': appid,
-            'redirect_uri': self.get_redirect_uri(state)
+            'redirect_uri': self.get_redirect_uri(state),
+            'scope': self.scope
         }
         if self.STATE_PARAMETER and state:
             params['state'] = state
@@ -111,7 +116,7 @@ class WeixinOAuth2APP(WeixinOAuth2):
     Can't use in web, only in weixin app
     """
     name = 'weixinapp'
-    ID_KEY = 'openid'
+    ID_KEY = 'unionid'
     AUTHORIZATION_URL = 'https://open.weixin.qq.com/connect/oauth2/authorize'
     ACCESS_TOKEN_URL = 'https://api.weixin.qq.com/sns/oauth2/access_token'
     ACCESS_TOKEN_METHOD = 'POST'
