@@ -1,4 +1,5 @@
-# Migrating from python-social-auth to split social
+# KAMPANAT THUMWONG
+ from python-social-auth to split social
 
 Since Dec 03 2016, [python-social-auth](https://github.com/omab/python-social-auth)
 is marked as deprecated and the community is recommended to migrate
